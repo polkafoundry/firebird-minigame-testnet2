@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0
+
 pragma solidity 0.8.4;
 
 import "@openzeppelin/contracts-upgradeable/utils/introspection/ERC165Upgradeable.sol";
@@ -13,14 +15,12 @@ import "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/IERC721Upgradeable.sol";
 import "./interface/IBirdBetting.sol";
-import "./interface/INFTEpicWar.sol";
-import "./TransferHelper.sol";
 
-contract NFTWEscrow is
+contract SBirdBetting is
   Initializable,
   OwnableUpgradeable,
   ERC165Upgradeable,
-  INFTEscrow,
+  IBirdBetting,
   AccessControlUpgradeable,
   ReentrancyGuardUpgradeable,
   ERC721HolderUpgradeable
@@ -48,15 +48,34 @@ contract NFTWEscrow is
     string[] betPlace;
   }
 
-  // user match ID => bet type => bet statistics
-  mapping(uint16 => mapping(string => string[])) public betStatistics;
+  // match ID => bet type => bet statistics
+  mapping(uint16 => mapping(string => uint16[])) public betStatistics;
+
+  // user address => match ID => is claimed
   mapping(address => mapping(uint16 => bool)) public claimInMatch;
 
+  // match ID => match info
+  mapping(uint16 => MatchInfo) public matchInfo;
+  struct MatchInfo {
+    uint256 startTime;
+    string homeName;
+    uint8 homeScore;
+    string awayName;
+    uint8 awayScore;
+  }
+
+  // user address => match ID => is claimed
+  mapping(address => mapping(uint16 => PredictResult)) public userPredictByMatch;
+  struct PredictResult {
+    uint8 homeScore;
+    uint8 awayScore;
+    uint256 time;
+  }
 
   mapping(address => uint256) public TokenClaimTimeStamp;
   mapping(address => uint256) public TokenClaimNonces;
 
-function __SBirdBetting_init(address _token, address _fundWallet,) public initializer {
+function __SBirdBetting_init(address _token, address _fundWallet) public initializer {
   require(_token != address(0), "Betting token address not found");
   __Ownable_init();
   _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
@@ -66,37 +85,58 @@ function __SBirdBetting_init(address _token, address _fundWallet,) public initia
 
 }
 
-function setBetStatistics(uint16 matchID, string betType, string[] statistics) external onlyRole(DEFAULT_ADMIN_ROLE) {
-  require(statistics.length === 3, "Bet statistics is incorrect");
-  betStatistics[matchID][betType] = statistics;
+function setBetStatistics(uint16 _matchID, string calldata _betType, uint16[] calldata _statistics) external onlyRole(DEFAULT_ADMIN_ROLE) {
+  require(_statistics.length == 3, "Bet statistics is incorrect");
+  betStatistics[_matchID][_betType] = _statistics;
 
-  emit UpdateBetStatistics(matchID, betType, statistics);
+  emit UpdateBetStatistics(_matchID, _betType, _statistics);
 }
 
-function betting(uint16 matchID, uint256 amount, string betType, string betPlace)
+function predict(uint16 _matchID, uint8 _homeScore, uint8 _awayScore)
+    external
+    virtual
+    nonReentrant
+{
+    MatchInfo storage mInfo = matchInfo[_matchID];
+    require(block.timestamp < mInfo.startTime, "Can predict before match start");
+    userPredictByMatch[msg.sender][_matchID] = PredictResult(
+      _homeScore,
+      _awayScore,
+      block.timestamp
+    );
+
+    emit UserPredicting(msg.sender, _matchID, _homeScore, _awayScore, block.timestamp);
+}
+
+function betting(uint16 _matchID, uint256 _amount, string calldata _betType, string calldata _betPlace)
         external
         virtual
         nonReentrant
     {
-        require(EPIC_ERC20_ADDR != address(0), "Rewards token not set");
-        require(userBettingInMatch[matchID][betType] + amount <= maxBetAmount, "Exceed amount in bet");
-        
-        userBettingInMatch[matchID][betType].totalAmount += amount;
-        userBettingInMatch[matchID][betType].betAmount.push(amount);
-        userBettingInMatch[matchID][betType].betPlace.push(betPlace);
+        require(BETTING_TOKEN_ADDRESS != address(0), "Rewards token not set");
+        require(userBettingInMatch[msg.sender][_matchID][_betType].totalAmount + _amount <= maxBetAmount, "Exceed amount in bet");
+        uint256[] storage newBetAmount = userBettingInMatch[msg.sender][_matchID][_betType].betAmount;
+        newBetAmount.push(_amount);
+        string[] storage newBetPlace = userBettingInMatch[msg.sender][_matchID][_betType].betPlace;
+        newBetPlace.push(_betPlace);
+        userBettingInMatch[msg.sender][_matchID][_betType] = UserBetDetail(
+          userBettingInMatch[msg.sender][_matchID][_betType].totalAmount += _amount,
+          newBetAmount,
+          newBetPlace
+        );
 
-        IERC20Upgradeable(BETTING_TOKEN_ADDRESS).transferFrom(msg.sender, fundWallet, amount);
-        claimInMatch[msg.sender].matchID = false
-        emit UserBetting(msg.sender, matchID, amount, betType, betPlace);
+        IERC20Upgradeable(BETTING_TOKEN_ADDRESS).transferFrom(msg.sender, fundWallet, _amount);
+        claimInMatch[msg.sender][_matchID] = false;
+        emit UserBetting(msg.sender, _matchID, _amount, _betType, _betPlace);
     }
 
   function tokenClaim(
-    string matchID,
-    uint256 amount,
+    uint16 _matchID,
+    uint256 _amount,
     EIP712Signature calldata _signature
   ) external nonReentrant {
-    require(amount > 0, "Amount is incorrect");
-    require(claimInMatch[msg.sender]matchID === false, "Token claimed");
+    require(_amount > 0, "Amount is incorrect");
+    require(claimInMatch[msg.sender][_matchID] == false, "Token claimed");
     require(_signature.deadline == 0 || _signature.deadline >= block.timestamp, "Signature expired");
     require((TokenClaimTimeStamp[msg.sender] + spacerTime) <= block.timestamp, "Claim within spacer time");
     
@@ -106,7 +146,7 @@ function betting(uint16 matchID, uint256 amount, string betType, string betPlace
         "\x19\x01",
         domainSeparator,
         keccak256(
-          abi.encode(CLAIM_TOKEN_WITH_SIG_TYPEHASH, amount, TokenClaimNonces[msg.sender]++, _signature.deadline)
+          abi.encode(CLAIM_TOKEN_WITH_SIG_TYPEHASH, _amount, TokenClaimNonces[msg.sender]++, _signature.deadline)
         )
       )
     );
@@ -117,10 +157,10 @@ function betting(uint16 matchID, uint256 amount, string betType, string betPlace
 
     IERC20Upgradeable(BETTING_TOKEN_ADDRESS).transferFrom(fundWallet, msg.sender, _amount);
 
-    claimInMatch[msg.sender].matchID = true
+    claimInMatch[msg.sender][_matchID] = true;
     TokenClaimTimeStamp[msg.sender] = block.timestamp;
 
-    emit UserClaim(matchID, amount, _signature.deadline);
+    emit UserClaim(_matchID, _amount, msg.sender, _signature.deadline);
   }
 
   // signing key does not require high security and can be put on an API server and rotated periodically, as signatures are issued dynamically
@@ -148,14 +188,6 @@ function betting(uint16 matchID, uint256 amount, string betType, string betPlace
       );
   }
 
-  function _transfer(
-    address from,
-    address to,
-    uint256 amount
-  ) internal {
-    IERC20Upgradeable(currency).transferFrom(from, to, _amount);
-  }
-
   function supportsInterface(bytes4 interfaceId)
     public
     view
@@ -163,7 +195,7 @@ function betting(uint16 matchID, uint256 amount, string betType, string betPlace
     override(ERC165Upgradeable, AccessControlUpgradeable)
     returns (bool)
   {
-    return interfaceId == type(INFTEscrow).interfaceId || super.supportsInterface(interfaceId);
+    return interfaceId == type(IBirdBetting).interfaceId || super.supportsInterface(interfaceId);
   }
 
 function grantAdminRole(address account)
