@@ -32,7 +32,7 @@ contract NFTWEscrow is
   bytes32 public constant CLAIM_TOKEN_WITH_SIG_TYPEHASH =
     keccak256("TokenClaim(uint256 amount,uint256 nonce,uint256 deadline)");
   uint256 private spacerTime;
-  uint256 private maxBetAmount;
+  uint256 public maxBetAmount;
   address public fundWallet;
 
   // user address => match ID => bet type => match beting detail
@@ -50,6 +50,7 @@ contract NFTWEscrow is
 
   // user match ID => bet type => bet statistics
   mapping(uint16 => mapping(string => string[])) public betStatistics;
+  mapping(address => mapping(uint16 => bool)) public claimInMatch;
 
 
   mapping(address => uint256) public TokenClaimTimeStamp;
@@ -85,7 +86,7 @@ function betting(uint16 matchID, uint256 amount, string betType, string betPlace
         userBettingInMatch[matchID][betType].betPlace.push(betPlace);
 
         IERC20Upgradeable(BETTING_TOKEN_ADDRESS).transferFrom(msg.sender, fundWallet, amount);
-
+        claimInMatch[msg.sender].matchID = false
         emit UserBetting(msg.sender, matchID, amount, betType, betPlace);
     }
 
@@ -95,9 +96,10 @@ function betting(uint16 matchID, uint256 amount, string betType, string betPlace
     EIP712Signature calldata _signature
   ) external nonReentrant {
     require(amount > 0, "Amount is incorrect");
+    require(claimInMatch[msg.sender]matchID === false, "Token claimed");
     require(_signature.deadline == 0 || _signature.deadline >= block.timestamp, "Signature expired");
     require((TokenClaimTimeStamp[msg.sender] + spacerTime) <= block.timestamp, "Claim within spacer time");
-
+    
     bytes32 domainSeparator = _calculateDomainSeparator();
     bytes32 digest = keccak256(
       abi.encodePacked(
@@ -115,6 +117,7 @@ function betting(uint16 matchID, uint256 amount, string betType, string betPlace
 
     IERC20Upgradeable(BETTING_TOKEN_ADDRESS).transferFrom(fundWallet, msg.sender, _amount);
 
+    claimInMatch[msg.sender].matchID = true
     TokenClaimTimeStamp[msg.sender] = block.timestamp;
 
     emit UserClaim(matchID, amount, _signature.deadline);
