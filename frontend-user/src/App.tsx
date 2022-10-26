@@ -1,7 +1,8 @@
 import "./App.css";
+import createRoutes from "./routes";
 
 function App() {
-  return <div className="App">Firebird Worldcup Mini Game</div>;
+  return <>{createRoutes()}</>;
 }
 
 export default App;
