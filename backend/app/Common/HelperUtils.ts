@@ -1,13 +1,7 @@
 const isDevelopment = process.env.NODE_ENV === 'development'
 const Const = require('@ioc:App/Common/Const')
-const MARKETPLACE_SMART_CONTRACT = process.env.MARKETPLACE_SMART_CONTRACT
-const MARKETPLACE_ABI = require('../../blockchain_configs/contracts/Marketplace.json')
-const NFT_SMART_CONTRACT = process.env.NFT_SMART_CONTRACT
-const NFT_ABI = require('../../blockchain_configs/contracts/EpicWarNFT.json')
-const BOX_SMART_CONTRACT = process.env.BOX_SMART_CONTRACT
-const BOX_ABI = require('../../blockchain_configs/contracts/EpicWarBox.json')
-const GAME_SMART_CONTRACT = process.env.GAME_SMART_CONTRACT
-const GAME_ABI = require('../../blockchain_configs/contracts/NFTWEscrow.json')
+const BETTING_SMART_CONTRACT = process.env.BETTING_SMART_CONTRACT
+const BETTING_ABI = require('../../blockchain_configs/contracts/SBirdBetting.json')
 
 const getWeb3ProviderLink = () => {
   if (isDevelopment) {
@@ -49,55 +43,13 @@ const getWeb3Provider = async () => {
   return networkToWeb3[Const.NETWORK_AVAILABLE.POLYGON]
 }
 
-const getMarketplaceInstance = async () => {
-  const pool = MARKETPLACE_SMART_CONTRACT
+const getBettingContractInstance = async () => {
+  const pool = BETTING_SMART_CONTRACT
   if (!pool) {
     return null
   }
   const web3 = await getWeb3Provider()
-  const instance = new web3.eth.Contract(MARKETPLACE_ABI.abi, pool)
-  if (!instance) {
-    return null
-  }
-
-  return instance
-}
-
-const getNFTInstance = async () => {
-  const pool = NFT_SMART_CONTRACT
-  if (!pool) {
-    return null
-  }
-  const web3 = await getWeb3Provider()
-  const instance = new web3.eth.Contract(NFT_ABI.abi, pool)
-  if (!instance) {
-    return null
-  }
-
-  return instance
-}
-
-const getBoxInstance = async () => {
-  const pool = BOX_SMART_CONTRACT
-  if (!pool) {
-    return null
-  }
-  const web3 = await getWeb3Provider()
-  const instance = new web3.eth.Contract(BOX_ABI.abi, pool)
-  if (!instance) {
-    return null
-  }
-
-  return instance
-}
-
-const getGameSwapInstance = async () => {
-  const pool = GAME_SMART_CONTRACT
-  if (!pool) {
-    return null
-  }
-  const web3 = await getWeb3Provider()
-  const instance = new web3.eth.Contract(GAME_ABI.abi, pool)
+  const instance = new web3.eth.Contract(BETTING_ABI.abi, pool)
   if (!instance) {
     return null
   }
@@ -106,9 +58,6 @@ const getGameSwapInstance = async () => {
 }
 
 module.exports = {
-  getMarketplaceInstance,
   getWeb3Provider,
-  getNFTInstance,
-  getBoxInstance,
-  getGameSwapInstance,
+  getBettingContractInstance,
 }

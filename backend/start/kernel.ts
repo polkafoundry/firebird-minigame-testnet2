@@ -11,7 +11,7 @@
 
 import Server from '@ioc:Adonis/Core/Server'
 
-const FetchBoxEventInitTask = require('@ioc:App/Tasks/FetchBoxTask')
+const FetchMatchInfoInitTask = require('@ioc:App/Tasks/FetchMatchInfoTask')
 
 /*
 |--------------------------------------------------------------------------
@@ -48,7 +48,7 @@ Server.middleware.registerNamed({
 
 new Promise(() => {
   // Scheduler.run();
-  FetchBoxEventInitTask.initTask()
+  FetchMatchInfoInitTask.initTask()
 
   return
 }).then(() => {})

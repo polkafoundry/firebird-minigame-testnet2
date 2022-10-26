@@ -1,21 +1,21 @@
-import Job from '../Jobs/FetchBoxJob'
+import Job from '../Jobs/FetchMatchInfoJob'
 
-const BOX_START_BLOCK = process.env.BOX_START_BLOCK
+const BETTING_START_BLOCK = process.env.BETTING_START_BLOCK
 import Bull from '@ioc:Rocketseat/Bull'
 
-const BOX_CREATED = 'BoxCreated'
-const BOX_OPENED = 'BoxOpened'
-const BOX_TRANSFER = 'Transfer'
+const CREATE_MATCH = 'CreateMatch'
+const UPDATE_MATCH_STATISTICS = 'UpdateMatchStatistics'
+const UPDATE_MATCH_INFO = 'UpdateMatchInfo'
 
-let ARRAY_EVENTS = [BOX_CREATED, BOX_OPENED, BOX_TRANSFER]
+let ARRAY_EVENTS = [CREATE_MATCH, UPDATE_MATCH_STATISTICS, UPDATE_MATCH_INFO]
 
 const initTask = async () => {
-  if (!BOX_START_BLOCK) {
+  if (!BETTING_START_BLOCK) {
     return
   }
 
   try {
-    let currentBlock = BOX_START_BLOCK
+    let currentBlock = BETTING_START_BLOCK
 
     for (const eventType of ARRAY_EVENTS) {
       let data = {

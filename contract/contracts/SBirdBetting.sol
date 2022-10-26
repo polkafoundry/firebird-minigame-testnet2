@@ -43,38 +43,16 @@ contract SBirdBetting is
     //            odds: home draw away
     mapping(address => mapping(uint16 => mapping(string => UserBetDetail)))
         public userBettingInMatch;
-    struct UserBetDetail {
-        uint256 totalAmount;
-        uint256[] betAmount;
-        string[] betPlace;
-    }
-
-    // match ID => bet type => bet statistics
-    mapping(uint16 => mapping(string => uint16[])) public betStatistics;
 
     // user address => match ID => is claimed
     mapping(address => mapping(uint16 => bool)) public claimInMatch;
 
     // match ID => match info
-    mapping(uint16 => MatchInfo) public matchByID;
-    struct MatchInfo {
-        uint16[3] ouStatistics;
-        uint16[3] oddsStatistics;
-        uint256 startTime;
-        string homeName;
-        uint8 homeScore;
-        string awayName;
-        uint8 awayScore;
-    }
+    mapping(uint16 => MatchData) public matchByID;
 
     // user address => match ID => is claimed
     mapping(address => mapping(uint16 => PredictResult))
         public userPredictByMatch;
-    struct PredictResult {
-        uint8 homeScore;
-        uint8 awayScore;
-        uint256 time;
-    }
 
     mapping(address => uint256) public TokenClaimTimeStamp;
     mapping(address => uint256) public TokenClaimNonces;
@@ -93,48 +71,32 @@ contract SBirdBetting is
 
     function setMatchInfo(
         uint16 _matchID,
-        uint16[3] calldata _ouStatistics,
-        uint16[3] calldata _oddsStatistics,
-        uint256 _startTime,
-        string calldata _homeName,
-        uint8 _homeScore,
-        string calldata _awayName,
-        uint8 _awayScore
+        MatchStatistics memory _mSta,
+        MatchInfo memory _mInf
     ) external onlyRole(DEFAULT_ADMIN_ROLE) {
-        require(_ouStatistics.length == 3, "OU statistics is incorrect");
-        require(_oddsStatistics.length == 3, "ODDS statistics is incorrect");
+        matchByID[_matchID] = MatchData(_mSta, _mInf);
 
-        matchByID[_matchID] = MatchInfo(
-            _ouStatistics,
-            _oddsStatistics,
-            _startTime,
-            _homeName,
-            _homeScore,
-            _awayName,
-            _awayScore
-        );
-
-        emit CreateMatch(
-            _matchID,
-            _ouStatistics,
-            _oddsStatistics,
-            _startTime,
-            _homeName,
-            _homeScore,
-            _awayName,
-            _awayScore
-        );
+        emit CreateMatch(_matchID, _mSta, _mInf);
     }
 
-    function updateBetStatistics(
-        uint16 _matchID,
-        uint16[3] calldata _ouStatistics,
-        uint16[3] calldata _oddsStatistics
-    ) external onlyRole(DEFAULT_ADMIN_ROLE) {
-        MatchInfo storage mInfo = matchByID[_matchID];
-        mInfo.ouStatistics = _ouStatistics;
-        mInfo.oddsStatistics = _oddsStatistics;
-        emit UpdateBetStatistics(_matchID, _ouStatistics, _oddsStatistics);
+    function updateMatchStatistics(uint16 _matchID, MatchStatistics memory mSta)
+        external
+        onlyRole(DEFAULT_ADMIN_ROLE)
+    {
+        MatchData storage mData = matchByID[_matchID];
+        mData.mSta = mSta;
+
+        emit UpdateMatchStatistics(_matchID, mSta);
+    }
+
+    function updateMatchInfo(uint16 _matchID, MatchInfo memory _mInf)
+        external
+        onlyRole(DEFAULT_ADMIN_ROLE)
+    {
+        MatchData storage mData = matchByID[_matchID];
+        mData.mInf = _mInf;
+
+        emit UpdateMatchInfo(_matchID, _mInf);
     }
 
     function predict(
@@ -142,9 +104,9 @@ contract SBirdBetting is
         uint8 _homeScore,
         uint8 _awayScore
     ) external virtual nonReentrant {
-        MatchInfo storage mInfo = matchByID[_matchID];
+        MatchData storage mData = matchByID[_matchID];
         require(
-            block.timestamp < mInfo.startTime,
+            block.timestamp < mData.mInf.startTime,
             "Can predict before match start"
         );
         userPredictByMatch[msg.sender][_matchID] = PredictResult(
@@ -175,10 +137,9 @@ contract SBirdBetting is
                 maxBetAmount,
             "Exceed amount in bet"
         );
-
-        MatchInfo storage mInfo = matchByID[_matchID];
+        MatchData storage mData = matchByID[_matchID];
         require(
-            block.timestamp < mInfo.startTime,
+            block.timestamp < mData.mInf.startTime,
             "Can predict before match start"
         );
 

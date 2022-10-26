@@ -1,3 +1,3 @@
-const jobs = ['App/Jobs/FetchBoxJob']
+const jobs = ['App/Jobs/FetchMatchInfoJob']
 
 export default jobs

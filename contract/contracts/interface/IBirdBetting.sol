@@ -14,21 +14,53 @@ interface IBirdBetting {
         bytes32 s;
     }
 
-    event CreateMatch(
-        uint16 matchID,
-        uint16[3] ouStatistics,
-        uint16[3] oddsStatistics,
-        uint256 startTime,
-        string homeName,
-        uint8 homeScore,
-        string awayName,
-        uint8 awayScore
-    );
-    event UpdateBetStatistics(
-        uint16 matchID,
-        uint16[3] ouStatistics,
-        uint16[3] oddsStatistics
-    );
+    struct UserBetDetail {
+        uint256 totalAmount;
+        uint256[] betAmount;
+        string[] betPlace;
+    }
+
+    struct MatchStatistics {
+        uint16 ouHtHome;
+        uint16 ouHtRatio;
+        uint16 ouHtAway;
+        uint16 ouFtHome;
+        uint16 ouFtRatio;
+        uint16 ouFtAway;
+        uint16 oddsHtHome;
+        uint16 oddsHtDraw;
+        uint16 oddsHtAway;
+        uint16 oddsFtHome;
+        uint16 oddsFtDraw;
+        uint16 oddsFtAway;
+    }
+
+    struct MatchInfo {
+        uint8 homeScore;
+        uint8 awayScore;
+        uint256 startTime;
+        string homeName;
+        string awayName;
+        string location;
+        string round;
+    }
+
+    struct MatchData {
+        MatchStatistics mSta;
+        MatchInfo mInf;
+    }
+
+    struct PredictResult {
+        uint8 homeScore;
+        uint8 awayScore;
+        uint256 time;
+    }
+
+    event CreateMatch(uint16 matchID, MatchStatistics mSta, MatchInfo mInf);
+
+    event UpdateMatchStatistics(uint16 matchID, MatchStatistics mSta);
+
+    event UpdateMatchInfo(uint16 matchID, MatchInfo mInf);
 
     event UserPredicting(
         address indexed user,
@@ -51,3 +83,6 @@ interface IBirdBetting {
         uint256 deadline
     );
 }
+
+// [2090, 3580, 3600, 2660, 2130, 4150, 2080, 2500, 1900, 2080, 1000, 1890]
+// [4, 3, 1666724400, "BENFICA", "JUVENTUS", "BENFICA", "CHAMPIONS LEAGUE - ROUND 5"]
