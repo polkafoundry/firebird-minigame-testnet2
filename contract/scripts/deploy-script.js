@@ -1,43 +1,41 @@
+/* eslint-disable no-undef */
+/* eslint-disable no-process-exit */
 // We require the Hardhat Runtime Environment explicitly here. This is optional
 // but useful for running the script in a standalone fashion through `node <script>`.
 //
 // When running the script with `npx hardhat run <script>` you'll find the Hardhat
 // Runtime Environment's members available in the global scope.
-const { generateKey } = require("crypto");
 const hre = require("hardhat");
 
 async function main() {
-  // Hardhat always runs the compile task when running scripts with its command
-  // line interface.
-  //
-  // If this script is run directly using `node` you may want to call compile
-  // manually to make sure everything is compiled
-  // await hre.run('compile');
+  const tokenAddress = "0x2FBE4c9399c279002c0a2e37593d99B555F25824";
+  const fundAddress = "0x58562da9cAD0BC44DC6D19E209da93Be834c28B8";
+  const maxAmount = 1000000000000000000000;
 
-  // We get the contract to deploy
-  const [deployer] = await hre.ethers.getSigners();
+  const ContractFactory = await hre.ethers.getContractFactory("SBirdBetting");
+  const Contract = await upgrades.deployProxy(ContractFactory, ["SBirdBetting", "EWBOX", tokenAddress, fundAddress], {
+    initializer: "__SBirdBetting_init",
+  });
 
-  const GameContract = await hre.ethers.getContractFactory("NFTWEscrow");
+  const bettingContract = await Contract.deployed();
+  console.log("Betting contract deployed to:", bettingContract.address);
 
-  gameContract = await (
-    await upgrades.deployProxy(
-      // @ts-ignore
-      GameContract,
-      ["0x32A6d358466B7F7ef17A6021F5DcCd0Fd6E73c10", "0x6aeC333716b2618276b5C52e052c0CdD7f5307A4"],
-      { initializer: "__NFTWEscrow_init" }
-    )
-  ).deployed();
+  // set max bet amount
+  const setBetAmount = await bettingContract.setMaxBetAmount(maxAmount);
+  console.log("set max bet amount", setBetAmount.hash);
 
-  console.log("Deploying contracts with the account:", deployer.address);
+  // set box contract from random contract
+  // const setBoxContract = await randomNumberContract.setBoxContract(
+  //   boxContract.address
+  // );
+  // console.log("set box contract", setBoxContract.hash);
+  // 1. Send LINK to randomNumberContract
 
-  console.log("Account balance:", (await deployer.getBalance()).toString());
-
-  console.log("game contract address:", gameContract.address);
-  await gameContract.connect(deployer).setSigner("0x49F6e43d1A5eAe3Ed6bCE7B3b0B9b8f03cCf45eC");
+  // 2 Call requestRandomNumber from box contract
+  // const grantNFTMinterRole = await nftContract.grantMinterRole(boxContract.address);
+  // console.log("grantNFTMinterRole", grantNFTMinterRole.hash);
 }
 
-// We recommend this pattern to be able to use async/await everywhere
-// and properly handle errors.
 main()
   .then(() => process.exit(0))
   .catch((error) => {

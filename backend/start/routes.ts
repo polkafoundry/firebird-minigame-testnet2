@@ -21,7 +21,9 @@
 import Route from '@ioc:Adonis/Core/Route'
 
 Route.get('/', () => "It's working")
-Route.group(() => {}).prefix('/api/v1')
+Route.group(() => {
+  Route.post('match/get-list-match', 'MatchController.getListMatch')
+}).prefix('/api/v1')
 
 Route.group(() => {})
   .prefix('/api/v1')

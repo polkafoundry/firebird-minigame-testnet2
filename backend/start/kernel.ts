@@ -15,6 +15,8 @@ const FetchBoxEventInitTask = require('@ioc:App/Tasks/FetchBoxTask')
 import { fetchUpcomingMatchJob } from 'App/Jobs/FetchUpcomingMatchJob'
 import { fetchLiveMatchJob } from 'App/Jobs/FetchLiveMatchJob'
 
+const FetchMatchInfoInitTask = require('@ioc:App/Tasks/FetchMatchInfoTask')
+
 /*
 |--------------------------------------------------------------------------
 | Global middleware
@@ -50,8 +52,8 @@ Server.middleware.registerNamed({
 
 new Promise(() => {
   // Scheduler.run();
-  FetchBoxEventInitTask.initTask()
   fetchUpcomingMatchJob({})
   fetchLiveMatchJob()
+  FetchMatchInfoInitTask.initTask()
   return
 }).then(() => {})

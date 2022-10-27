@@ -56,9 +56,48 @@ export default class Match extends BaseModel {
   @column()
   public create_match_status: number
 
+  //bet statistics
+  @column({ columnName: 'ou_ht_home' })
+  public ou_ht_home: number
+
+  @column({ columnName: 'ou_ht_ratio' })
+  public ou_ht_ratio: number
+
+  @column({ columnName: 'ou_ht_away' })
+  public ou_ht_away: number
+
+  @column({ columnName: 'ou_ft_home' })
+  public ou_ft_home: number
+
+  @column({ columnName: 'ou_ft_ratio' })
+  public ou_ft_ratio: number
+
+  @column({ columnName: 'ou_ft_away' })
+  public ou_ft_away: number
+
+  @column({ columnName: 'odds_ht_home' })
+  public odds_ht_home: number
+
+  @column({ columnName: 'odds_ht_draw' })
+  public odds_ht_draw: number
+
+  @column({ columnName: 'odds_ht_away' })
+  public odds_ht_away: number
+
+  @column({ columnName: 'odds_ft_home' })
+  public odds_ft_home: number
+
+  @column({ columnName: 'odds_ft_draw' })
+  public odds_ft_draw: number
+
+  @column({ columnName: 'odds_ft_away' })
+  public odds_ft_away: number
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
 }
+
+module.exports = Match
