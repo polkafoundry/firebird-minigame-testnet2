@@ -1,5 +1,4 @@
 import { JobContract } from '@ioc:Rocketseat/Bull'
-import axios from 'axios'
 import { updateMatchJob } from './UpdateMatchJob'
 import MatchApiService from 'App/Services/MatchApiService'
 
@@ -15,7 +14,6 @@ import MatchApiService from 'App/Services/MatchApiService'
 | https://docs.bullmq.io/
 */
 import Bull from '@ioc:Rocketseat/Bull'
-
 
 /* Ranges from 1 (highest priority) to MAX_INT (lowest priority). */
 const priority = 1
@@ -61,12 +59,15 @@ export default class FetchUpcomingMatchJob implements JobContract {
     const matches = await this._getMatches(data.seed)
     // console.log({ matches })
     console.log(matches.length)
-    matches.map(match => updateMatchJob(match))
+    matches.map((match) => updateMatchJob(match))
   }
   private async _getMatches(seed: any) {
     try {
       let data = []
-      const url = process.env.NODE_ENV == 'production' ? 'https://api.sofascore.com/api/v1/unique-tournament/16/season/41087/events/next/' : 'https://api.sofascore.com/api/v1/unique-tournament/17/season/41886/events/next/'
+      const url =
+        process.env.NODE_ENV == 'production'
+          ? 'https://api.sofascore.com/api/v1/unique-tournament/16/season/41087/events/next/'
+          : 'https://api.sofascore.com/api/v1/unique-tournament/17/season/41886/events/next/'
       let page = 0
       const matchApiService = new MatchApiService()
       while (true) {
@@ -75,35 +76,37 @@ export default class FetchUpcomingMatchJob implements JobContract {
         console.log(res.events)
         console.log(res.events.length)
         console.log(res.events[0])
-        data = data.concat(res.events.map(event => {
-          return {
-            tournament: event.tournament?.slug,
-            home_team_name: event.homeTeam.name,
-            home_team_slug: event.homeTeam.slug,
-            away_team_name: event.awayTeam.name,
-            away_team_slug: event.awayTeam.slug,
-            status: event.status?.code,
-            status_type: event.status?.type,
-            winner: event.winnerCode,
-            round: event.roundInfo.round,
-            result: JSON.stringify({
-              home_score: event.homeScore,
-              away_score: event.awayScore,
-              injury: event.injury,
-              time: event.time
-            }),
-            slug: event.slug,
-            start_time: event.startTimestamp,
-            custom_id: event.customId,
-            match_id: event.id
-          }
-        }))
+        data = data.concat(
+          res.events.map((event) => {
+            return {
+              tournament: event.tournament?.slug,
+              home_team_name: event.homeTeam.name,
+              home_team_slug: event.homeTeam.slug,
+              away_team_name: event.awayTeam.name,
+              away_team_slug: event.awayTeam.slug,
+              status: event.status?.code,
+              status_type: event.status?.type,
+              winner: event.winnerCode,
+              round: event.roundInfo.round,
+              result: JSON.stringify({
+                home_score: event.homeScore,
+                away_score: event.awayScore,
+                injury: event.injury,
+                time: event.time,
+              }),
+              slug: event.slug,
+              start_time: event.startTimestamp,
+              custom_id: event.customId,
+              match_id: event.id,
+            }
+          })
+        )
         console.log(res.hasNextPage)
         console.log({ seed })
-        console.log(res.events.some(event => event.status?.code != 100))
+        console.log(res.events.some((event) => event.status?.code != 100))
         if (!res.hasNextPage) break
         if (seed) continue
-        if (res.events.some(event => event.status?.code != 100)) break
+        if (res.events.some((event) => event.status?.code != 100)) break
       }
 
       return Promise.resolve(data)

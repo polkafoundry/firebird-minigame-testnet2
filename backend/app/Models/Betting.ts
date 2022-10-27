@@ -20,7 +20,7 @@ class Betting extends BaseModel {
 
   // over - under goal number
   @column({ columnName: 'ou_statistics' })
-  public bet_statistics: number
+  public ou_statistics: number
 
   @column({ columnName: 'bet_amount' })
   public bet_amount: number

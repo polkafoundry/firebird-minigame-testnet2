@@ -47,14 +47,16 @@ export const fetchLiveMatchJob = async () => {
 export default class FetchLiveMatchJob implements JobContract {
   public key = 'FetchLiveMatchJob'
 
-  public async handle(job) {
+  public async handle() {
     // Do somethign with you job data
-    const liveMatches = await (new MatchService()).getLiveMatch()
+    const liveMatches = await new MatchService().getLiveMatch()
     console.log(liveMatches)
-    await Promise.all(liveMatches.map(match => this._updateLiveMatch(match)))
+    await Promise.all(liveMatches.map((match) => this._updateLiveMatch(match)))
   }
   private async _updateLiveMatch(match) {
-    const matchData: any = await (new MatchApiService()).getData({ url: `https://api.sofascore.com/api/v1/event/${match.match_id}` })
+    const matchData: any = await new MatchApiService().getData({
+      url: `https://api.sofascore.com/api/v1/event/${match.match_id}`,
+    })
 
     return updateMatchJob({
       id: match.id,
@@ -65,7 +67,7 @@ export default class FetchLiveMatchJob implements JobContract {
         home_score: matchData.event?.homeScore,
         away_score: matchData.event?.awayScore,
         injury: matchData.event?.injury,
-        time: matchData.event?.time
+        time: matchData.event?.time,
       }),
     })
   }
