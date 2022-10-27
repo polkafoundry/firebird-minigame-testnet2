@@ -12,6 +12,8 @@
 import Server from '@ioc:Adonis/Core/Server'
 
 const FetchBoxEventInitTask = require('@ioc:App/Tasks/FetchBoxTask')
+import { fetchUpcomingMatchJob } from 'App/Jobs/FetchUpcomingMatchJob'
+import { fetchLiveMatchJob } from 'App/Jobs/FetchLiveMatchJob'
 
 /*
 |--------------------------------------------------------------------------
@@ -49,6 +51,7 @@ Server.middleware.registerNamed({
 new Promise(() => {
   // Scheduler.run();
   FetchBoxEventInitTask.initTask()
-
+  fetchUpcomingMatchJob({})
+  fetchLiveMatchJob()
   return
 }).then(() => {})

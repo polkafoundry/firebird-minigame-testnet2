@@ -1,19 +1,18 @@
 const isDevelopment = process.env.NODE_ENV === 'development'
 const Const = require('@ioc:App/Common/Const')
-const MARKETPLACE_SMART_CONTRACT = process.env.MARKETPLACE_SMART_CONTRACT
-const MARKETPLACE_ABI = require('../../blockchain_configs/contracts/Marketplace.json')
-const NFT_SMART_CONTRACT = process.env.NFT_SMART_CONTRACT
-const NFT_ABI = require('../../blockchain_configs/contracts/EpicWarNFT.json')
+// const MARKETPLACE_SMART_CONTRACT = process.env.MARKETPLACE_SMART_CONTRACT
+// const MARKETPLACE_ABI = require('../../blockchain_configs/contracts/Marketplace.json')
+// const NFT_SMART_CONTRACT = process.env.NFT_SMART_CONTRACT
+// const NFT_ABI = require('../../blockchain_configs/contracts/EpicWarNFT.json')
 const BOX_SMART_CONTRACT = process.env.BOX_SMART_CONTRACT
 const BOX_ABI = require('../../blockchain_configs/contracts/EpicWarBox.json')
-const GAME_SMART_CONTRACT = process.env.GAME_SMART_CONTRACT
-const GAME_ABI = require('../../blockchain_configs/contracts/NFTWEscrow.json')
+// const GAME_SMART_CONTRACT = process.env.GAME_SMART_CONTRACT
+// const GAME_ABI = require('../../blockchain_configs/contracts/NFTWEscrow.json')
 
 const getWeb3ProviderLink = () => {
   if (isDevelopment) {
     const WEB3_API_URLS = [
-      'https://eth-ropsten.alchemyapi.io/v2/clWfEqNDy9m2iBROe_HWlXeiDSYpW_vX',
-      'https://eth-ropsten.alchemyapi.io/v2/clWfEqNDy9m2iBROe_HWlXeiDSYpW_vX',
+      'https://rpc.firefly.firebirdchain.com/',
     ]
     const randomElement = WEB3_API_URLS[Math.floor(Math.random() * WEB3_API_URLS.length)]
     return randomElement
@@ -49,33 +48,33 @@ const getWeb3Provider = async () => {
   return networkToWeb3[Const.NETWORK_AVAILABLE.POLYGON]
 }
 
-const getMarketplaceInstance = async () => {
-  const pool = MARKETPLACE_SMART_CONTRACT
-  if (!pool) {
-    return null
-  }
-  const web3 = await getWeb3Provider()
-  const instance = new web3.eth.Contract(MARKETPLACE_ABI.abi, pool)
-  if (!instance) {
-    return null
-  }
+// const getMarketplaceInstance = async () => {
+//   const pool = MARKETPLACE_SMART_CONTRACT
+//   if (!pool) {
+//     return null
+//   }
+//   const web3 = await getWeb3Provider()
+//   const instance = new web3.eth.Contract(MARKETPLACE_ABI.abi, pool)
+//   if (!instance) {
+//     return null
+//   }
 
-  return instance
-}
+//   return instance
+// }
 
-const getNFTInstance = async () => {
-  const pool = NFT_SMART_CONTRACT
-  if (!pool) {
-    return null
-  }
-  const web3 = await getWeb3Provider()
-  const instance = new web3.eth.Contract(NFT_ABI.abi, pool)
-  if (!instance) {
-    return null
-  }
+// const getNFTInstance = async () => {
+//   const pool = NFT_SMART_CONTRACT
+//   if (!pool) {
+//     return null
+//   }
+//   const web3 = await getWeb3Provider()
+//   const instance = new web3.eth.Contract(NFT_ABI.abi, pool)
+//   if (!instance) {
+//     return null
+//   }
 
-  return instance
-}
+//   return instance
+// }
 
 const getBoxInstance = async () => {
   const pool = BOX_SMART_CONTRACT
@@ -91,24 +90,24 @@ const getBoxInstance = async () => {
   return instance
 }
 
-const getGameSwapInstance = async () => {
-  const pool = GAME_SMART_CONTRACT
-  if (!pool) {
-    return null
-  }
-  const web3 = await getWeb3Provider()
-  const instance = new web3.eth.Contract(GAME_ABI.abi, pool)
-  if (!instance) {
-    return null
-  }
+// const getGameSwapInstance = async () => {
+//   const pool = GAME_SMART_CONTRACT
+//   if (!pool) {
+//     return null
+//   }
+//   const web3 = await getWeb3Provider()
+//   const instance = new web3.eth.Contract(GAME_ABI.abi, pool)
+//   if (!instance) {
+//     return null
+//   }
 
-  return instance
-}
+//   return instance
+// }
 
 module.exports = {
-  getMarketplaceInstance,
+  // getMarketplaceInstance,
   getWeb3Provider,
-  getNFTInstance,
+  // getNFTInstance,
   getBoxInstance,
-  getGameSwapInstance,
+  // getGameSwapInstance,
 }
