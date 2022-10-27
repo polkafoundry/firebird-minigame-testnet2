@@ -39,24 +39,30 @@ class Match extends BaseModel {
   @column({ columnName: 'away_score' })
   public away_score: number
 
+  @column({ columnName: 'stadium' })
+  public stadium: string
+
+  @column({ columnName: 'round_name' })
+  public round_name: string
+
   //bet statistics
-  @column({ columnName: 'ouht_home' })
-  public ouht_home: number
+  @column({ columnName: 'ou_ht_home' })
+  public ou_ht_home: number
 
-  @column({ columnName: 'ouht_ratio' })
-  public ouht_ratio: number
+  @column({ columnName: 'ou_ht_ratio' })
+  public ou_ht_ratio: number
 
-  @column({ columnName: 'ouht_away' })
-  public ouht_away: number
+  @column({ columnName: 'ou_ht_away' })
+  public ou_ht_away: number
 
-  @column({ columnName: 'ouft_home' })
-  public ouft_home: number
+  @column({ columnName: 'ou_ft_home' })
+  public ou_ft_home: number
 
-  @column({ columnName: 'ouft_ratio' })
-  public ouft_ratio: number
+  @column({ columnName: 'ou_ft_ratio' })
+  public ou_ft_ratio: number
 
-  @column({ columnName: 'ouft_away' })
-  public ouft_away: number
+  @column({ columnName: 'ou_ft_away' })
+  public ou_ft_away: number
 
   @column({ columnName: 'odds_ht_home' })
   public odds_ht_home: number

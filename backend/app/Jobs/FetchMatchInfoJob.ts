@@ -108,13 +108,17 @@ export default class FetchMatchInfoJob implements JobContract {
           data.home_score = event.returnValues.mInf.homeScore
           data.away_name = event.returnValues.mInf.awayName
           data.away_score = event.returnValues.mInf.awayScore
+          data.away_score = event.returnValues.mInf.awayScore
+          data.away_score = event.returnValues.mInf.awayScore
+          data.stadium = event.returnValues.mInf.location
+          data.round_name = event.returnValues.mInf.round
 
-          data.ouht_home = event.returnValues.mSta.ouHtHome
-          data.ouht_ratio = event.returnValues.mSta.ouHtRatio
-          data.ouht_away = event.returnValues.mSta.ouHtAway
-          data.ouft_home = event.returnValues.mSta.ouFtHome
-          data.ouft_ratio = event.returnValues.mSta.ouFtRatio
-          data.ouft_away = event.returnValues.mSta.ouFtAway
+          data.ou_ht_home = event.returnValues.mSta.ouHtHome
+          data.ou_ht_ratio = event.returnValues.mSta.ouHtRatio
+          data.ou_ht_away = event.returnValues.mSta.ouHtAway
+          data.ou_ft_home = event.returnValues.mSta.ouFtHome
+          data.ou_ft_ratio = event.returnValues.mSta.ouFtRatio
+          data.ou_ft_away = event.returnValues.mSta.ouFtAway
           data.odds_ht_home = event.returnValues.mSta.oddsHtHome
           data.odds_ht_draw = event.returnValues.mSta.oddsHtDraw
           data.odds_ht_away = event.returnValues.mSta.oddsHtAway

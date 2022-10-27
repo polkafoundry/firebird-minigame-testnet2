@@ -15,9 +15,8 @@ interface IBirdBetting {
     }
 
     struct UserBetDetail {
-        uint256 totalAmount;
-        uint256[] betAmount;
-        string[] betPlace;
+        uint256 amount;
+        string place;
     }
 
     struct MatchStatistics {
@@ -84,5 +83,5 @@ interface IBirdBetting {
     );
 }
 
-// [2090, 3580, 3600, 2660, 2130, 4150, 2080, 2500, 1900, 2080, 1000, 1890]
-// [4, 3, 1666724400, "BENFICA", "JUVENTUS", "BENFICA", "CHAMPIONS LEAGUE - ROUND 5"]
+// [1740, 500, 2190, 1980, 2250, 1940, 4470, 2110, 2940, 3860, 3500, 2250]
+// [0, 0, 1669219200, "QATAR", "ECUADOR", "Al Bayt Stadium", "WORLD CUP - ROUND 1"]

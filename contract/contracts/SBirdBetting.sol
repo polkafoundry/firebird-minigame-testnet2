@@ -131,31 +131,21 @@ contract SBirdBetting is
         string calldata _betPlace
     ) external virtual nonReentrant {
         require(BETTING_TOKEN_ADDRESS != address(0), "Rewards token not set");
+        require(maxBetAmount != 0, "Bet amount not set");
         require(
-            userBettingInMatch[msg.sender][_matchID][_betType].totalAmount +
-                _amount <=
-                maxBetAmount,
-            "Exceed amount in bet"
+            userBettingInMatch[msg.sender][_matchID][_betType].amount == 0,
+            "You were betting in this bet"
         );
+        require(_amount <= maxBetAmount, "Exceed amount in bet");
         MatchData storage mData = matchByID[_matchID];
         require(
             block.timestamp < mData.mInf.startTime,
-            "Can predict before match start"
+            "Can betting before match start"
         );
 
-        uint256[] storage newBetAmount = userBettingInMatch[msg.sender][
-            _matchID
-        ][_betType].betAmount;
-        newBetAmount.push(_amount);
-        string[] storage newBetPlace = userBettingInMatch[msg.sender][_matchID][
-            _betType
-        ].betPlace;
-        newBetPlace.push(_betPlace);
         userBettingInMatch[msg.sender][_matchID][_betType] = UserBetDetail(
-            userBettingInMatch[msg.sender][_matchID][_betType]
-                .totalAmount += _amount,
-            newBetAmount,
-            newBetPlace
+            _amount,
+            _betPlace
         );
 
         IERC20Upgradeable(BETTING_TOKEN_ADDRESS).transferFrom(
@@ -229,8 +219,8 @@ contract SBirdBetting is
         spacerTime = spacer;
     }
 
-    function setMaxBetAmount(uint256 spacer) external onlyRole(OWNER_ROLE) {
-        spacerTime = spacer;
+    function setMaxBetAmount(uint256 _amount) external onlyRole(OWNER_ROLE) {
+        maxBetAmount = _amount;
     }
 
     function _calculateDomainSeparator() internal view returns (bytes32) {
@@ -240,7 +230,7 @@ contract SBirdBetting is
                     keccak256(
                         "EIP712Domain(string name,string version,address verifyingContract)"
                     ),
-                    keccak256(bytes("EpicGame")),
+                    keccak256(bytes("FirebirdGame")),
                     keccak256(bytes("1")),
                     address(this)
                 )
