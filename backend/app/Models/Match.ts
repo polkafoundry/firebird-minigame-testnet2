@@ -1,49 +1,60 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
 
-class Match extends BaseModel {
-  public static table = 'matchs'
+export default class Match extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 
-  @column({ columnName: 'transaction_hash', serializeAs: null })
-  public transaction_hash: string
+  @column()
+  public tournament: string
 
-  @column({ columnName: 'transaction_index', serializeAs: null })
-  public transaction_index: number
+  @column()
+  public home_team_name: string
 
-  @column({ columnName: 'block_number', serializeAs: null })
-  public block_number: number
+  @column()
+  public home_team_slug: string
 
-  @column({ columnName: 'dispatch_at' })
-  public dispatch_at: number
+  @column()
+  public away_team_name: string
 
-  @column({ columnName: 'event_type' })
-  public event_type: string
+  @column()
+  public away_team_slug: string
 
-  @column({ columnName: 'match_id' })
-  public match_id: number
+  @column()
+  public status: number
 
-  @column({ columnName: 'start_time' })
+  @column()
+  public status_type: string
+
+  @column()
+  public winner: number
+
+  @column()
+  public round: number
+
+  @column()
+  public result: string
+
+  @column()
+  public slug: string
+
+  @column()
   public start_time: number
 
-  @column({ columnName: 'home_name' })
-  public home_name: string
+  @column()
+  public custom_id: string
 
-  @column({ columnName: 'home_score' })
-  public home_score: number
+  @column()
+  public match_id: number
 
-  @column({ columnName: 'away_name' })
-  public away_name: string
+  @column()
+  public is_create_match_contract: boolean
 
-  @column({ columnName: 'away_score' })
-  public away_score: number
+  @column()
+  public create_match_tx: string
 
-  @column({ columnName: 'stadium' })
-  public stadium: string
-
-  @column({ columnName: 'round_name' })
-  public round_name: string
+  @column()
+  public create_match_status: number
 
   //bet statistics
   @column({ columnName: 'ou_ht_home' })
