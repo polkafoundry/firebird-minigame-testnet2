@@ -3,7 +3,6 @@ import Bull from '@ioc:Rocketseat/Bull'
 
 // const MatchModel = require('@ioc:App/Models/Match')
 
-import MatchModel from 'App/Models/Match'
 import MatchService from 'App/Services/MatchService'
 
 /*
@@ -49,7 +48,9 @@ export default class UpdateMatchJob implements JobContract {
       const { data } = job
       // Do somethign with you job data
       console.log({ data })
-      const match = await (new MatchService).getMatchByIdOrSlug(data)
+      const MatchModel = require('@ioc:App/Models/Match')
+
+      const match = await new MatchService().getMatchByIdOrSlug(data)
       console.log({ match })
       if (!match) {
         await MatchModel.create(data)

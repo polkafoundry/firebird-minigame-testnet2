@@ -1,7 +1,6 @@
 import { JobContract } from '@ioc:Rocketseat/Bull'
 import Logger from '@ioc:Adonis/Core/Logger'
 const RedisMatchInfoUtils = require('@ioc:App/Common/RedisMatchInfoUtils')
-const MatchModel = require('@ioc:App/Models/Match')
 const HelperUtils = require('@ioc:App/Common/HelperUtils')
 // import CrawlException from 'App/Exceptions/CrawlException'
 
@@ -94,6 +93,8 @@ export default class FetchMatchInfoJob implements JobContract {
 
     for (const event of events) {
       const blockData = await provider.eth.getBlock(event.blockNumber)
+      const MatchModel = require('@ioc:App/Models/Match')
+
       let data = new MatchModel()
       data.transaction_hash = event.transactionHash
       data.transaction_index = event.transactionIndex
