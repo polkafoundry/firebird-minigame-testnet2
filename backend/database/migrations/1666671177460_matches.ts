@@ -3,7 +3,7 @@ import BaseSchema from '@ioc:Adonis/Lucid/Schema'
 export default class Matches extends BaseSchema {
   protected tableName = 'matches'
 
-  public async up () {
+  public async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
       table.string('tournament')
@@ -16,7 +16,7 @@ export default class Matches extends BaseSchema {
       table.integer('winner')
       table.integer('round')
       table.text('result')
-      table.string('slug').notNullable().unique()
+      table.string('slug').notNullable()
       table.integer('start_time').unsigned()
       table.string('custom_id').notNullable().unique()
       table.integer('match_id').unsigned().notNullable().unique()
@@ -34,7 +34,7 @@ export default class Matches extends BaseSchema {
     })
   }
 
-  public async down () {
+  public async down() {
     this.schema.dropTable(this.tableName)
   }
 }
