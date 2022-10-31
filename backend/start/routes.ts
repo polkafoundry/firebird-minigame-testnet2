@@ -20,10 +20,13 @@
 
 import Route from '@ioc:Adonis/Core/Route'
 
-Route.get('/', () => "It's working")
+Route.get('/', () => "It's workingaaaaa")
+
 Route.group(() => {
   Route.post('match/get-list-match', 'MatchController.getListMatch')
   Route.post('betting/calculate', 'BettingsController.bettingCalculate')
+  Route.get('/match/upcoming', 'MatchController.getUpcomingMatch')
+  Route.get('/match/live', 'MatchController.getLiveMatch')
 }).prefix('/api/v1')
 
 Route.group(() => {})
