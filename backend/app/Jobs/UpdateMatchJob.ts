@@ -24,7 +24,6 @@ const priority = 2
 const attempts = 5
 
 export const updateMatchJob = async (match) => {
-  console.log({ match })
   try {
     const jobKey = new UpdateMatchJob().key
     await Bull.getByKey(jobKey).bull.add(jobKey, match, {
@@ -47,10 +46,14 @@ export default class UpdateMatchJob implements JobContract {
     try {
       const { data } = job
       // Do somethign with you job data
-      console.log({ data })
       const MatchModel = require('@ioc:App/Models/Match')
 
-      const match = await new MatchService().getMatchByIdOrSlug(data)
+      let options = { id: data.id, custom_id: data.custom_id, match_id: data.match_id, round: data.round, slug: data.slug }
+      Object.keys(options).forEach(item => {
+        if (!options[item]) delete options[item]
+      })
+      console.log({ options })
+      const match = await new MatchService().getMatchByIdOrSlug(options)
       console.log({ match })
       if (!match) {
         await MatchModel.create(data)

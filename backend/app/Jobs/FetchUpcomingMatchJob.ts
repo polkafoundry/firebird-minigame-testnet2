@@ -79,7 +79,7 @@ export default class FetchUpcomingMatchJob implements JobContract {
         data = data.concat(
           res.events.map((event) => {
             return {
-              tournament: event.tournament?.slug,
+              tournament: event.tournament?.name,
               home_team_name: event.homeTeam.name,
               home_team_slug: event.homeTeam.slug,
               away_team_name: event.awayTeam.name,

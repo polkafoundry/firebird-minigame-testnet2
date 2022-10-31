@@ -35,14 +35,19 @@ export default class MatchService {
     return Promise.resolve(JSON.parse(JSON.stringify(liveMatches)))
   }
   async getMatchByIdOrSlug(params) {
-    return this.buildQueryService(params)
-      .orWhere((builder) => {
-        builder.where('custom_id', params.custom_id || '').where('match_id', params.match_id || '')
+    let query = this.buildQueryService(params)
+    if (params.custom_id != null && params.match_id != null) {
+      query = query.orWhere((builder) => {
+        builder.where('custom_id', params.custom_id).where('match_id', params.match_id)
       })
-      .orWhere((builder) => {
-        builder.where('round', params.round || '').where('slug', params.slug || '')
+    }
+    if (params.round != null && params.slug != null) {
+      query = query.orWhere((builder) => {
+        builder.where('round', params.round).where('slug', params.slug)
       })
-      .first()
+    }
+    const match = await query.first()
+    return match
   }
   public async findByMatchId(request): Promise<any> {
     return request.params()
