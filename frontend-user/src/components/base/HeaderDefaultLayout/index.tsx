@@ -2,6 +2,8 @@ import clsx from "clsx";
 import { useState } from "react";
 
 import { useLocation } from "react-router-dom";
+import Button from "../Button";
+import ConnectWalletDialog from "../ConnectWalletDialog";
 
 type RouteTypes = {
   label: string;
@@ -29,16 +31,25 @@ const routes: Array<RouteTypes> = [
 
 const HeaderDefaultLayout = () => {
   const location = useLocation();
-  const [open, setOpen] = useState<boolean>(false);
+  const [openConnectWallet, setOpenWalletModal] = useState<boolean>(false);
+  const [openMenuMobile, setOpenMenuMobile] = useState<boolean>(false);
 
-  console.log(location);
+  // console.log(location);
 
   const handleOpenHeader = () => {
-    setOpen((prevState) => !prevState);
+    setOpenMenuMobile((prevState) => !prevState);
+  };
+
+  const openConnectModal = () => {
+    setOpenWalletModal(true);
+  };
+
+  const closeConnectModal = () => {
+    setOpenWalletModal(false);
   };
 
   const renderHeaderMobile = () => {
-    if (!open) return <></>;
+    if (!openMenuMobile) return <></>;
 
     return (
       <div className="fixed top-0 left-0 w-full h-screen overflow-y-auto bg-[#04060C] flex flex-col p-5 pb-8 z-50">
@@ -79,10 +90,10 @@ const HeaderDefaultLayout = () => {
   };
 
   return (
-    <>
+    <div className="w-full bg-gray-400 absolute h-20 flex justify-center">
       <nav
         className={clsx(
-          "absolute -translate-x-1/2 left-1/2 h-20 w-full flex items-center justify-between max-w-screen-main text-white",
+          "w-full h-full flex items-center justify-between max-w-screen-main text-white",
           "md:px-[120px]",
           "xs:px-[60px]",
           "pl-5 pr-6",
@@ -92,7 +103,7 @@ const HeaderDefaultLayout = () => {
           <img src="/images/logo-text.svg" alt="" />
         </a>
         <div className={clsx("gap-5 hidden", "md:flex")}>
-          {routes.map((item: RouteTypes, index: number) => (
+          {/* {routes.map((item: RouteTypes, index: number) => (
             <a
               key={index}
               href={item.uri}
@@ -102,7 +113,10 @@ const HeaderDefaultLayout = () => {
             >
               {item.label}
             </a>
-          ))}
+          ))} */}
+          <Button className="bg-main px-5" onClick={openConnectModal}>
+            Connect Wallet
+          </Button>
         </div>
         <div
           className={clsx("block cursor-pointer", "md:hidden")}
@@ -113,7 +127,12 @@ const HeaderDefaultLayout = () => {
       </nav>
 
       {renderHeaderMobile()}
-    </>
+
+      <ConnectWalletDialog
+        open={openConnectWallet}
+        closeDialog={closeConnectModal}
+      />
+    </div>
   );
 };
 
