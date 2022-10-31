@@ -36,7 +36,7 @@ contract SBirdBetting is
     address public fundWallet;
 
     // user address => match ID => bet type => match beting detail
-    // bet type: hdc45 ou45 odds45 hdc90 ou90 odds90
+    // bet type: ou_ht odds_ht ou_ft odds_ft
     // bet place:
     //            hdc:  home away
     //            ou:   over under
@@ -72,11 +72,12 @@ contract SBirdBetting is
     function setMatchInfo(
         uint16 _matchID,
         MatchStatistics memory _mSta,
-        MatchInfo memory _mInf
+        MatchInfo memory _mInf,
+        uint256 _sofaMatchID
     ) external onlyRole(DEFAULT_ADMIN_ROLE) {
         matchByID[_matchID] = MatchData(_mSta, _mInf);
 
-        emit CreateMatch(_matchID, _mSta, _mInf);
+        emit CreateMatch(_matchID, _mSta, _mInf, _sofaMatchID);
     }
 
     function updateMatchStatistics(uint16 _matchID, MatchStatistics memory mSta)
@@ -127,8 +128,8 @@ contract SBirdBetting is
     function betting(
         uint16 _matchID,
         uint256 _amount,
-        string calldata _betType,
-        string calldata _betPlace
+        string memory _betType,
+        string memory _betPlace
     ) external virtual nonReentrant {
         require(BETTING_TOKEN_ADDRESS != address(0), "Rewards token not set");
         require(maxBetAmount != 0, "Bet amount not set");
@@ -154,7 +155,14 @@ contract SBirdBetting is
             _amount
         );
         claimInMatch[msg.sender][_matchID] = false;
-        emit UserBetting(msg.sender, _matchID, _amount, _betType, _betPlace);
+        emit UserBetting(
+            msg.sender,
+            _matchID,
+            _amount,
+            _betType,
+            _betPlace,
+            false
+        );
     }
 
     function tokenClaim(
@@ -221,6 +229,17 @@ contract SBirdBetting is
 
     function setMaxBetAmount(uint256 _amount) external onlyRole(OWNER_ROLE) {
         maxBetAmount = _amount;
+    }
+
+    function setFundAddress(address _fund) external onlyRole(OWNER_ROLE) {
+        fundWallet = _fund;
+    }
+
+    function setTokenAddress(address _tokenAddress)
+        external
+        onlyRole(OWNER_ROLE)
+    {
+        BETTING_TOKEN_ADDRESS = _tokenAddress;
     }
 
     function _calculateDomainSeparator() internal view returns (bytes32) {

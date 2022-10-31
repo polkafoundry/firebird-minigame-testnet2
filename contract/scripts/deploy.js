@@ -10,10 +10,10 @@ const hre = require("hardhat");
 async function main() {
   const tokenAddress = "0x2FBE4c9399c279002c0a2e37593d99B555F25824";
   const fundAddress = "0x58562da9cAD0BC44DC6D19E209da93Be834c28B8";
-  const maxAmount = 1000000000000000000000;
+  const maxAmount = "1000000000000000000000";
 
   const ContractFactory = await hre.ethers.getContractFactory("SBirdBetting");
-  const Contract = await upgrades.deployProxy(ContractFactory, ["SBirdBetting", "EWBOX", tokenAddress, fundAddress], {
+  const Contract = await upgrades.deployProxy(ContractFactory, [tokenAddress, fundAddress], {
     initializer: "__SBirdBetting_init",
   });
 
@@ -24,16 +24,14 @@ async function main() {
   const setBetAmount = await bettingContract.setMaxBetAmount(maxAmount);
   console.log("set max bet amount", setBetAmount.hash);
 
-  // set box contract from random contract
-  // const setBoxContract = await randomNumberContract.setBoxContract(
-  //   boxContract.address
-  // );
-  // console.log("set box contract", setBoxContract.hash);
-  // 1. Send LINK to randomNumberContract
-
-  // 2 Call requestRandomNumber from box contract
-  // const grantNFTMinterRole = await nftContract.grantMinterRole(boxContract.address);
-  // console.log("grantNFTMinterRole", grantNFTMinterRole.hash);
+  // set max bet amount
+  const setMatchInfo = await bettingContract.setMatchInfo(
+    1,
+    [1740, 500, 2190, 1980, 2250, 1940, 4470, 2110, 2940, 3860, 3500, 2250],
+    [0, 0, 0, 0, 1669219200, "QATAR", "ECUADOR", "Al Bayt Stadium", "WORLD CUP - ROUND 1", false, false],
+    1234
+  );
+  console.log("setMatchInfo", setMatchInfo.hash);
 }
 
 main()
