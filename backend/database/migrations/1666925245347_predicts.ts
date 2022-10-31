@@ -1,7 +1,7 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
 
-export default class Bettings extends BaseSchema {
-  protected tableName = 'bettings'
+export default class Predicts extends BaseSchema {
+  protected tableName = 'predicts'
 
   public async up() {
     this.schema.createTable(this.tableName, (table) => {
@@ -14,14 +14,10 @@ export default class Bettings extends BaseSchema {
       table.string('event_type')
 
       table.integer('match_id').notNullable()
-      table.string('bet_type').notNullable()
-      table.string('bet_place').notNullable()
-      table.decimal('bet_amount', 40, 0)
-      table.integer('bet_statistics')
-      table.integer('ou_statistics')
-      table.string('result') //win - lose - draw
-      table.decimal('result_num', 40, 0)
-      table.boolean('has_claim').notNullable().defaultTo(false)
+      table.string('home_score').notNullable()
+      table.string('away_score').notNullable()
+      table.integer('predict_time').notNullable()
+
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */

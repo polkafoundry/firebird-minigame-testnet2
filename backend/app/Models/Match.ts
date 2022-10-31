@@ -2,78 +2,82 @@ import { DateTime } from 'luxon'
 import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
 
 class Match extends BaseModel {
+  public static table = 'matchs'
   @column({ isPrimary: true })
   public id: number
 
-  @column()
-  public tournament: string
+  @column({ columnName: 'transaction_hash', serializeAs: null })
+  public transaction_hash: string
 
-  @column()
-  public home_team_name: string
+  @column({ columnName: 'transaction_index', serializeAs: null })
+  public transaction_index: number
 
-  @column()
-  public home_team_slug: string
+  @column({ columnName: 'block_number', serializeAs: null })
+  public block_number: number
 
-  @column()
-  public away_team_name: string
+  @column({ columnName: 'dispatch_at' })
+  public dispatch_at: number
 
-  @column()
-  public away_team_slug: string
+  @column({ columnName: 'event_type' })
+  public event_type: string
 
-  @column()
-  public status: number
-
-  @column()
-  public status_type: string
-
-  @column()
-  public winner: number
-
-  @column()
-  public round: number
-
-  @column()
-  public result: string
-
-  @column()
-  public slug: string
-
-  @column()
-  public start_time: number
-
-  @column()
-  public custom_id: string
-
-  @column()
+  @column({ columnName: 'match_id' })
   public match_id: number
 
-  @column()
-  public is_create_match_contract: boolean
+  @column({ columnName: 'sofa_match_id' })
+  public sofa_match_id: number
 
-  @column()
-  public create_match_tx: string
+  @column({ columnName: 'start_time' })
+  public start_time: number
 
-  @column()
-  public create_match_status: number
+  @column({ columnName: 'home_name' })
+  public home_name: string
+
+  @column({ columnName: 'ht_home_score' })
+  public ht_home_score: number
+
+  @column({ columnName: 'ft_home_score' })
+  public ft_home_score: number
+
+  @column({ columnName: 'away_name' })
+  public away_name: string
+
+  @column({ columnName: 'ht_away_score' })
+  public ht_away_score: number
+
+  @column({ columnName: 'ft_away_score' })
+  public ft_away_score: number
+
+  @column({ columnName: 'stadium' })
+  public stadium: string
+
+  @column({ columnName: 'round_name' })
+  public round_name: string
+
+  @column({ columnName: 'is_half_time' })
+  public is_half_time: boolean
+
+  @column({ columnName: 'is_full_time' })
+  public is_full_time: boolean
 
   //bet statistics
-  @column({ columnName: 'ou_ht_home' })
-  public ou_ht_home: number
+  @column({ columnName: 'ou_ht_over' })
+  public ou_ht_over: number
 
   @column({ columnName: 'ou_ht_ratio' })
   public ou_ht_ratio: number
 
-  @column({ columnName: 'ou_ht_away' })
-  public ou_ht_away: number
+  @column({ columnName: 'ou_ht_under' })
+  public ou_ht_under: number
 
-  @column({ columnName: 'ou_ft_home' })
-  public ou_ft_home: number
+  @column({ columnName: 'ou_ft_over' })
+  public ou_ft_over: number
 
   @column({ columnName: 'ou_ft_ratio' })
   public ou_ft_ratio: number
 
-  @column({ columnName: 'ou_ft_away' })
-  public ou_ft_away: number
+  @column({ columnName: 'ou_ft_under' })
+  public ou_ft_under: number
 
   @column({ columnName: 'odds_ht_home' })
   public odds_ht_home: number

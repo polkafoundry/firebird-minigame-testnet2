@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
 
-class Betting extends BaseModel {
+class Predict extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 
@@ -23,31 +23,14 @@ class Betting extends BaseModel {
   @column({ columnName: 'match_id' })
   public match_id: number
 
-  @column({ columnName: 'bet_type' })
-  public bet_type: string
+  @column({ columnName: 'home_score' })
+  public home_score: number
 
-  @column({ columnName: 'bet_place' })
-  public bet_place: string
+  @column({ columnName: 'away_score' })
+  public away_score: number
 
-  @column({ columnName: 'bet_amount' })
-  public bet_amount: number
-
-  // bet value
-  @column({ columnName: 'bet_statistics' })
-  public bet_statistics: number
-
-  // over - under goal number
-  @column({ columnName: 'ou_statistics' })
-  public ou_statistics: number
-
-  @column({ columnName: 'result' })
-  public result: string
-
-  @column({ columnName: 'result_num' })
-  public result_num: number
-
-  @column({ columnName: 'has_claim' })
-  public has_claim: boolean
+  @column({ columnName: 'predict_time' })
+  public predict_time: number
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
@@ -56,4 +39,4 @@ class Betting extends BaseModel {
   public updatedAt: DateTime
 }
 
-module.exports = Betting
+module.exports = Predict

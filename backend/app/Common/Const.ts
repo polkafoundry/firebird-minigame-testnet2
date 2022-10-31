@@ -20,7 +20,7 @@ module.exports = Object.freeze({
     ERC721: 'erc721',
     MYSTERY_BOX: 'box',
   },
-  WEB3_API_URL: 'https://rpc.firefly.firebirdchain.com/',
+  WEB3_API_URL: 'https://rpc.testnet-firebird.polkafoundry.com/',
   WEB3_BSC_API_URL: 'https://data-seed-prebsc-1-s1.binance.org:8545',
   WEB3_POLYGON_API_URL: 'https://rpc.testnet-firebird.polkafoundry.com',
   OFFER_STATUS: {
@@ -79,5 +79,5 @@ module.exports = Object.freeze({
   REDIS_KEY_REFUND_TOKEN_LAST_SUCCESS: 'epic_last_success_refund_token',
   SBIRD_CONTRACT_ADDERSS: process.env.SBIRD_CONTRACT_ADDERSS,
   PRIVATE_KEY: process.env.PRIVATE_KEY,
-  PROXY_LIST: process.env.PROXY_LIST ? JSON.parse(process.env.PROXY_LIST) : []
+  PROXY_LIST: process.env.PROXY_LIST ? JSON.parse(process.env.PROXY_LIST) : [],
 })

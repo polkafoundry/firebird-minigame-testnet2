@@ -1,9 +1,9 @@
 import InvalidParamException from 'App/Exceptions/InvalidParamException'
 
 export default class MatchService {
-  MatchModel = require('@ioc:App/Models/Match')
+  public MatchModel = require('@ioc:App/Models/Match')
 
-  buildQueryService(params) {
+  public buildQueryService(params) {
     let builder = this.MatchModel.query()
     if ('ids' in params && Array.isArray(params.ids)) {
       builder = builder.whereIn('id', params.ids)
@@ -22,7 +22,7 @@ export default class MatchService {
     }
     return builder
   }
-  async getLiveMatch() {
+  public async getLiveMatch() {
     const currentTime = Math.floor(Date.now() / 1000)
     const liveMatches = await this.MatchModel.query()
       .whereNotIn('status', [0, 100, 90, 60])
@@ -31,7 +31,7 @@ export default class MatchService {
       })
     return Promise.resolve(JSON.parse(JSON.stringify(liveMatches)))
   }
-  async getMatchByIdOrSlug(params) {
+  public async getMatchByIdOrSlug(params) {
     return this.buildQueryService(params)
       .orWhere((builder) => {
         builder.where('custom_id', params.custom_id || '').where('match_id', params.match_id || '')
