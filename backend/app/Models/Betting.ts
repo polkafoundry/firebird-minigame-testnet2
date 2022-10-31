@@ -20,6 +20,9 @@ class Betting extends BaseModel {
   @column({ columnName: 'event_type' })
   public event_type: string
 
+  @column({ columnName: 'user_address' })
+  public user_address: string
+
   @column({ columnName: 'match_id' })
   public match_id: number
 

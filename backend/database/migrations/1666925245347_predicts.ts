@@ -13,6 +13,7 @@ export default class Predicts extends BaseSchema {
       table.integer('dispatch_at').notNullable()
       table.string('event_type')
 
+      table.string('user_address').notNullable()
       table.integer('match_id').notNullable()
       table.string('home_score').notNullable()
       table.string('away_score').notNullable()

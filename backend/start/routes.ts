@@ -24,9 +24,14 @@ Route.get('/', () => "It's workingaaaaa")
 
 Route.group(() => {
   Route.post('match/get-list-match', 'MatchController.getListMatch')
-  Route.post('betting/calculate', 'BettingsController.bettingCalculate')
   Route.get('/match/upcoming', 'MatchController.getUpcomingMatch')
   Route.get('/match/live', 'MatchController.getLiveMatch')
+
+  Route.post('betting/ou-ht-calculate', 'BettingsController.ouHTCalculate')
+  Route.post('betting/ou-ft-calculate', 'BettingsController.ouFTCalculate')
+  Route.post('betting/odds-ht-calculate', 'BettingsController.oddsHTCalculate')
+  Route.post('betting/odds-ft-calculate', 'BettingsController.oddsFTCalculate')
+  Route.post('betting/predict-pick-winner', 'BettingsController.predictPickWinner')
 }).prefix('/api/v1')
 
 Route.group(() => {})
