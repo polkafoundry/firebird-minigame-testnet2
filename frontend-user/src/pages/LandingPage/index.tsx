@@ -1,9 +1,12 @@
 import LandingLayout from "../../components/layout/LandingLayout";
+import TableSelectMatch from "./TableSelectMatch";
 
 const LangdingPage = () => {
   return (
     <LandingLayout>
-      <div className="w-full pt-20">Landing Page</div>
+      <div className="flex justify-center mb-10">
+        <TableSelectMatch />
+      </div>
     </LandingLayout>
   );
 };
