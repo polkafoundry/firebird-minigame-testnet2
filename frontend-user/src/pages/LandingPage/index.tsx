@@ -1,11 +1,13 @@
 import LandingLayout from "../../components/layout/LandingLayout";
+import Questions from "./Questions";
 import TableSelectMatch from "./TableSelectMatch";
 
 const LangdingPage = () => {
   return (
     <LandingLayout>
-      <div className="flex justify-center mb-10">
+      <div className="flex flex-col items-center mb-10">
         <TableSelectMatch />
+        <Questions />
       </div>
     </LandingLayout>
   );
