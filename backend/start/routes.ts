@@ -32,6 +32,8 @@ Route.group(() => {
   Route.post('betting/odds-ht-calculate', 'BettingsController.oddsHTCalculate')
   Route.post('betting/odds-ft-calculate', 'BettingsController.oddsFTCalculate')
   Route.post('betting/predict-pick-winner', 'BettingsController.predictPickWinner')
+
+  Route.get('/claim/get-sig', 'ClaimController.claimToken')
 }).prefix('/api/v1')
 
 Route.group(() => {})

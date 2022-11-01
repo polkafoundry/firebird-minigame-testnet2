@@ -15,6 +15,7 @@ import "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/IERC721Upgradeable.sol";
 import "./interface/IBirdBetting.sol";
+import "./SCalculate.sol";
 
 contract SBirdBetting is
     Initializable,
@@ -30,7 +31,9 @@ contract SBirdBetting is
     address private signer;
     bytes32 private constant OWNER_ROLE = keccak256("OWNER_ROLE");
     bytes32 public constant CLAIM_TOKEN_WITH_SIG_TYPEHASH =
-        keccak256("TokenClaim(uint256 amount,uint256 nonce,uint256 deadline)");
+        keccak256(
+            "TokenClaim(uint16 matchID,string betType, uint256 amount,uint256 nonce,uint256 deadline)"
+        );
     uint256 private spacerTime;
     uint256 public maxBetAmount;
     address public fundWallet;
@@ -38,7 +41,6 @@ contract SBirdBetting is
     // user address => match ID => bet type => match beting detail
     // bet type: ou_ht odds_ht ou_ft odds_ft
     // bet place:
-    //            hdc:  home away
     //            ou:   over under
     //            odds: home draw away
     mapping(address => mapping(uint16 => mapping(string => UserBetDetail)))
@@ -146,7 +148,8 @@ contract SBirdBetting is
 
         userBettingInMatch[msg.sender][_matchID][_betType] = UserBetDetail(
             _amount,
-            _betPlace
+            _betPlace,
+            false
         );
 
         IERC20Upgradeable(BETTING_TOKEN_ADDRESS).transferFrom(
@@ -167,6 +170,7 @@ contract SBirdBetting is
 
     function tokenClaim(
         uint16 _matchID,
+        string memory _betType,
         uint256 _amount,
         EIP712Signature calldata _signature
     ) external nonReentrant {
@@ -215,7 +219,13 @@ contract SBirdBetting is
         claimInMatch[msg.sender][_matchID] = true;
         TokenClaimTimeStamp[msg.sender] = block.timestamp;
 
-        emit UserClaim(_matchID, _amount, msg.sender, _signature.deadline);
+        emit UserClaim(
+            _matchID,
+            _betType,
+            _amount,
+            msg.sender,
+            _signature.deadline
+        );
     }
 
     // signing key does not require high security and can be put on an API server and rotated periodically, as signatures are issued dynamically
