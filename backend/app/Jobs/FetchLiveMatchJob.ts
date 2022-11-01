@@ -55,20 +55,25 @@ export default class FetchLiveMatchJob implements JobContract {
   }
   private async _updateLiveMatch(match) {
     const matchData: any = await new MatchApiService().getData({
-      url: `https://api.sofascore.com/api/v1/event/${match.match_id}`,
+      url: `https://api.sofascore.com/api/v1/event/${match.sofa_match_id}`,
     })
-
-    return updateMatchJob({
+    console.log('matchData: ', JSON.stringify(matchData))
+    let data: any = {
       id: match.id,
-      status: matchData.event?.status?.code,
-      status_type: matchData.event?.status?.type,
-      winner: matchData.event?.winnerCode,
-      result: JSON.stringify({
-        home_score: matchData.event?.homeScore,
-        away_score: matchData.event?.awayScore,
-        injury: matchData.event?.injury,
-        time: matchData.event?.time,
-      }),
-    })
+      ht_home_score: matchData.event?.homeScore?.period1,
+      ft_home_score: matchData.event?.homeScore?.normaltime,
+      ht_away_score: matchData.event?.awayScore?.period1,
+      ft_away_score: matchData.event?.awayScore?.normaltime,
+    }
+
+    if (matchData.event?.status?.code == 6) {
+      data.is_half_time = true
+    }
+    if (matchData.event?.status?.code == 100) {
+      data.is_half_time = true
+      data.is_full_time = true
+    }
+
+    return updateMatchJob(data)
   }
 }

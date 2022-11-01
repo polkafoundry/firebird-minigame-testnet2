@@ -21,7 +21,7 @@ import MatchService from 'App/Services/MatchService'
 const priority = 2
 /* Repeat after this amount of milliseconds */
 /* The total number of attempts to try the job until it completes.*/
-const attempts = 5
+const attempts = 10
 
 export const updateMatchJob = async (match) => {
   console.log({ match })
@@ -57,10 +57,13 @@ export default class UpdateMatchJob implements JobContract {
         return
       }
 
-      match.status = data.status
-      match.status_type = data.status_type
-      match.winner = data.winner
-      match.result = data.result
+      match.ht_home_score = data.ht_home_score || 0
+      match.ft_home_score = data.ft_home_score || 0
+      match.ht_away_score = data.ht_away_score || 0
+      match.ft_away_score = data.ft_away_score || 0
+      match.is_half_time = data.is_half_time || false
+      match.is_full_time = data.is_full_time || false
+
       await match.save()
     } catch (error) {
       console.log('error UpdateMatchJob: ', error.message)

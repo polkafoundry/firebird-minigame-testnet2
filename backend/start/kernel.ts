@@ -12,7 +12,7 @@
 import Server from '@ioc:Adonis/Core/Server'
 
 // import { fetchUpcomingMatchJob } from 'App/Jobs/FetchUpcomingMatchJob'
-// import { fetchLiveMatchJob } from 'App/Jobs/FetchLiveMatchJob'
+import { fetchLiveMatchJob } from 'App/Jobs/FetchLiveMatchJob'
 
 const FetchMatchInfoInitTask = require('@ioc:App/Tasks/FetchMatchInfoTask')
 
@@ -52,7 +52,7 @@ Server.middleware.registerNamed({
 new Promise(() => {
   // Scheduler.run();
   // fetchUpcomingMatchJob({})
-  // fetchLiveMatchJob()
+  fetchLiveMatchJob()
   FetchMatchInfoInitTask.initTask()
   return
-}).then(() => {})
+}).then(() => { })
