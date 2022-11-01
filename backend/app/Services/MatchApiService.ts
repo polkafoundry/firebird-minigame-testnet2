@@ -14,14 +14,14 @@ export default class MatchService {
                     res = await axios({
                         method: 'get',
                         url,
-                        timeout: 1000 * 5,  // 5 milisecond
+                        timeout: 1000 * 10,  // 10 second
                         proxy: {
                             protocol: 'http',
                             host: randProxy.split(':')[0],
                             port: randProxy.split(':')[1]
                         }
                     })
-                    if(typeof res.data != 'object') throw new Error('error response')
+                    if (typeof res.data != 'object') throw new Error('error response')
                     return resolve(res.data)
                 } catch (error) {
                     console.log('error get data from api: ', error.message)
