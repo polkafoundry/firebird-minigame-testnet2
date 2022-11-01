@@ -80,4 +80,10 @@ module.exports = Object.freeze({
   SBIRD_CONTRACT_ADDERSS: process.env.SBIRD_CONTRACT_ADDERSS,
   PRIVATE_KEY: process.env.PRIVATE_KEY,
   PROXY_LIST: process.env.PROXY_LIST ? JSON.parse(process.env.PROXY_LIST) : [],
+  BET_TYPE: {
+    OU_HT: 'ou_ht',
+    ODDS_HT: 'odds_ht',
+    OU_FT: 'ou_ft',
+    ODDS_FT: 'odds_ft'
+  }
 })

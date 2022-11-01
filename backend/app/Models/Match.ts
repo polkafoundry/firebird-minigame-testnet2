@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
 
-class Match extends BaseModel {
+export default class Match extends BaseModel {
   public static table = 'matchs'
   @column({ isPrimary: true })
   public id: number
