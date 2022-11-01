@@ -8,4 +8,11 @@ export default class MatchController {
   public async getListMatch({ request }) {
     return await MatchService.getListMatch(request)
   }
+
+  public async getUpcomingMatch({ request }) {
+    return await MatchService.getUpcomingMatch(request)
+  }
+  public async getLiveMatch({ request }) {
+    return await MatchService.getLiveMatch(request)
+  }
 }

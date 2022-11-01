@@ -6,9 +6,7 @@ const BETTING_ABI = require('../../blockchain_configs/contracts/SBirdBetting.jso
 
 const getWeb3ProviderLink = () => {
   if (isDevelopment) {
-    const WEB3_API_URLS = [
-      'https://rpc.firefly.firebirdchain.com/',
-    ]
+    const WEB3_API_URLS = ['https://rpc.testnet-firebird.polkafoundry.com/']
     const randomElement = WEB3_API_URLS[Math.floor(Math.random() * WEB3_API_URLS.length)]
     return randomElement
   } else {
@@ -54,8 +52,8 @@ const getBettingContractInstance = async () => {
     return null
   }
 
-   return instance
- }
+  return instance
+}
 
 module.exports = {
   getWeb3Provider,

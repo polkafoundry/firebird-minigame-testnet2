@@ -11,10 +11,7 @@ async function main() {
   // We get the contract to deploy
   const [deployer] = await hre.ethers.getSigners();
   const GameContractFactory = await ethers.getContractFactory("NFTWEscrow");
-  const gamecontract = await upgrades.upgradeProxy(
-    "0x27E0bEfF6F7BBe26EB84ba48dAB2870ef3a25332",
-    GameContractFactory
-  );
+  const gamecontract = await upgrades.upgradeProxy("0x27E0bEfF6F7BBe26EB84ba48dAB2870ef3a25332", GameContractFactory);
   console.log("game contract upgraded:", gamecontract.address);
 }
 

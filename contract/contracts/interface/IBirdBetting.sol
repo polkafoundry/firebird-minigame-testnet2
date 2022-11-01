@@ -17,15 +17,16 @@ interface IBirdBetting {
     struct UserBetDetail {
         uint256 amount;
         string place;
+        bool isClaimed;
     }
 
     struct MatchStatistics {
-        uint16 ouHtHome;
+        uint16 ouHtOver;
         uint16 ouHtRatio;
-        uint16 ouHtAway;
-        uint16 ouFtHome;
+        uint16 ouHtUnder;
+        uint16 ouFtOver;
         uint16 ouFtRatio;
-        uint16 ouFtAway;
+        uint16 ouFtUnder;
         uint16 oddsHtHome;
         uint16 oddsHtDraw;
         uint16 oddsHtAway;
@@ -35,13 +36,17 @@ interface IBirdBetting {
     }
 
     struct MatchInfo {
-        uint8 homeScore;
-        uint8 awayScore;
+        uint8 ht_homeScore;
+        uint8 ht_awayScore;
+        uint8 ft_homeScore;
+        uint8 ft_awayScore;
         uint256 startTime;
         string homeName;
         string awayName;
         string location;
         string round;
+        bool isHalfTime;
+        bool isFinished;
     }
 
     struct MatchData {
@@ -55,7 +60,12 @@ interface IBirdBetting {
         uint256 time;
     }
 
-    event CreateMatch(uint16 matchID, MatchStatistics mSta, MatchInfo mInf);
+    event CreateMatch(
+        uint16 matchID,
+        MatchStatistics mSta,
+        MatchInfo mInf,
+        uint256 sofaMatchID
+    );
 
     event UpdateMatchStatistics(uint16 matchID, MatchStatistics mSta);
 
@@ -73,10 +83,12 @@ interface IBirdBetting {
         uint16 matchID,
         uint256 amount,
         string betType,
-        string betPlace
+        string betPlace,
+        bool claimed
     );
     event UserClaim(
         uint16 matchID,
+        string betType,
         uint256 amount,
         address indexed user,
         uint256 deadline
