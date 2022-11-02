@@ -1,8 +1,9 @@
 {
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "project": "tsconfig.json",
-    "sourceType": "module"
+    "project": "**/tsconfig.json",
+    "sourceType": "module",
+    "tsconfigRootDir": "__dirname"
   },
   "plugins": ["react", "react-hooks", "@typescript-eslint"],
   "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
