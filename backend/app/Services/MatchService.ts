@@ -20,8 +20,11 @@ export default class MatchService {
     if ('create_match_status' in params) {
       builder = builder.where('create_match_status', params.create_match_status)
     }
-    if ('status' in params) {
-      builder = builder.where('status', params.status)
+    if ('is_half_time' in params) {
+      builder = builder.where('is_half_time', params.is_half_time)
+    }
+    if ('is_full_time' in params) {
+      builder = builder.where('is_full_time', params.is_full_time)
     }
     return builder
   }
@@ -62,7 +65,7 @@ export default class MatchService {
 
     if (isNaN(page) || isNaN(size) || parseInt(page) <= 0 || parseInt(size) <= 0)
       throw new InvalidParamException('page or size must be specified as positive number')
-    const matches = await this.buildQueryService({ status: 0 }).orderBy('start_time', 'ASC').paginate(page, size)
+    const matches = await this.buildQueryService({ is_half_time: false, is_full_time: false }).orderBy('start_time', 'ASC').paginate(page, size)
 
     return matches
   }

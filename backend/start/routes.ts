@@ -23,7 +23,7 @@ import Route from '@ioc:Adonis/Core/Route'
 Route.get('/', () => "It's workingaaaaa")
 
 Route.group(() => {
-  Route.post('match/get-list-match', 'MatchController.getListMatch')
+  Route.post('/match/get-list-match', 'MatchController.getListMatch')
   Route.get('/match/upcoming', 'MatchController.getUpcomingMatch')
   Route.get('/match/live', 'MatchController.getLiveMatch')
   Route.get('/match/detail/:match_id', 'MatchController.getMatchDetail')
