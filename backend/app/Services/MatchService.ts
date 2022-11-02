@@ -62,10 +62,10 @@ export default class MatchService {
   public async getUpcomingMatch(request) {
     const page = request.input('page') || 1
     const size = request.input('size') || 10
-
+    const currentTime = Math.floor(Date.now() / 1000)
     if (isNaN(page) || isNaN(size) || parseInt(page) <= 0 || parseInt(size) <= 0)
       throw new InvalidParamException('page or size must be specified as positive number')
-    const matches = await this.buildQueryService({ is_half_time: false, is_full_time: false }).orderBy('start_time', 'ASC').paginate(page, size)
+    const matches = await this.buildQueryService({ is_half_time: false, is_full_time: false }).where('start_time', '>=', currentTime).orderBy('start_time', 'ASC').paginate(page, size)
 
     return matches
   }
