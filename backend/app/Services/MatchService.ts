@@ -49,13 +49,13 @@ export default class MatchService {
     return this.buildQueryService({ id }).first()
   }
 
-  public async getListMatch(params): Promise<any> {
-    const page = params.input('page') || 1
-    const size = params.input('size') || 10
+  public async getListMatch(request): Promise<any> {
+    const page = request.input('page') || 1
+    const size = request.input('size') || 10
 
     if (isNaN(page) || isNaN(size) || parseInt(page) <= 0 || parseInt(size) <= 0)
       throw new InvalidParamException('page or size must be specified as positive number')
-    const matchs = await this.buildQueryService(params).paginate(page, size)
+    const matchs = await this.buildQueryService({}).paginate(page, size)
 
     return matchs
   }
