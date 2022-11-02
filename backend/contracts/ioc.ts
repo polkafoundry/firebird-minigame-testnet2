@@ -9,3 +9,9 @@ declare module '@ioc:Firebird/BettingService' {
   const BettingService: BettingServiceInterface
   export default BettingService
 }
+
+declare module '@ioc:Firebird/ClaimService' {
+  import ClaimServiceInterface from 'Contracts/interfaces/ClaimService.interface'
+  const ClaimService: ClaimServiceInterface
+  export default ClaimService
+}

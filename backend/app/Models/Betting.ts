@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
 
-class Betting extends BaseModel {
+export default class Betting extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 
@@ -19,6 +19,9 @@ class Betting extends BaseModel {
 
   @column({ columnName: 'event_type' })
   public event_type: string
+
+  @column({ columnName: 'user_address' })
+  public user_address: string
 
   @column({ columnName: 'match_id' })
   public match_id: number

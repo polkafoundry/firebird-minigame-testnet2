@@ -1,6 +1,7 @@
 import { ApplicationContract } from '@ioc:Adonis/Core/Application'
 import MatchService from 'App/Services/MatchService'
 import BettingService from 'App/Services/BettingService'
+import ClaimService from 'App/Services/ClaimService'
 
 export default class AppProvider {
   constructor(protected app: ApplicationContract) {}
@@ -9,6 +10,7 @@ export default class AppProvider {
     // Register your own bindings
     this.app.container.singleton('Firebird/MatchService', () => new MatchService())
     this.app.container.singleton('Firebird/BettingService', () => new BettingService())
+    this.app.container.singleton('Firebird/ClaimService', () => new ClaimService())
   }
 
   public async boot() {

@@ -1,27 +1,78 @@
-import BaseException from 'App/Exceptions/BaseException'
+import { JobContract } from '@ioc:Rocketseat/Bull'
 
-export default class BettingService {
-  public async ouHTCalculate(request): Promise<any> {
-    const matchID = request.input('match_id')
-    if (!matchID) {
-      throw new BaseException('Match ID is required')
-    }
-    const MatchModel = require('@ioc:App/Models/Match')
-    const BettingModel = require('@ioc:App/Models/Betting')
+/*
+|--------------------------------------------------------------------------
+| Job setup
+|--------------------------------------------------------------------------
+|
+| This is the basic setup for creating a job, but you can override
+| some settings.
+|
+| You can get more details by looking at the bullmq documentation.
+| https://docs.bullmq.io/
+*/
+import Bull from '@ioc:Rocketseat/Bull'
+import BettingModel from 'App/Models/Betting'
+import MatchModel from 'App/Models/Match'
+const Const = require('@ioc:App/Common/Const')
 
-    const match = await MatchModel.query().where('match_id', matchID).first()
-    if (!match) {
-      throw new BaseException('match not found')
+/* Ranges from 1 (highest priority) to MAX_INT (lowest priority). */
+const priority = 2
+/* The total number of attempts to try the job until it completes.*/
+const attempts = 1
+
+export const calcBettingJob = async (data) => {
+  try {
+    const jobKey = new CalcBettingJob().key
+    await Bull.getByKey(jobKey).bull.add(jobKey, data, {
+      priority: priority,
+      removeOnComplete: true,
+      removeOnFail: true,
+      attempts: attempts,
+    })
+  } catch (e) {
+    console.log('error: ', e.message)
+    console.error()
+  } finally {
+  }
+}
+
+export default class CalcBettingJob implements JobContract {
+  public key = 'CalcBettingJob'
+
+  public async handle(job) {
+    const { data } = job
+    console.log('CalcBettingJob: ', data)
+    // Do somethign with you job data
+    const [match, bettings] = await Promise.all([
+      MatchModel.query().where('id', data.matchId).first(),
+      BettingModel.query().where('match_id', data.matchId).where('bet_type', data.betType).where('is_calculated', false).limit(100)
+    ])
+    console.log('CalcBettingJob: ', match)
+    console.log({ bettings })
+    if (!match) return
+    if (!bettings.length) {
+      const checkingField = {
+        [Const.BET_TYPE.OU_HT]: 'is_calculated_ou_ht',
+        [Const.BET_TYPE.OU_FT]: 'is_calculated_ou_ft',
+        [Const.BET_TYPE.ODDS_HT]: 'is_calculated_odds_ht',
+        [Const.BET_TYPE.ODDS_FT]: 'is_calculated_odds_ft',
+      }
+      const updateObject = {}
+      updateObject[checkingField[data.betType]] = true
+      console.log({ updateObject })
+      return await MatchModel.query().where('id', data.matchId).update(updateObject)
     }
-    if (!match?.is_half_time) {
-      throw new BaseException('match not half time')
+
+    const calcFunction = {
+      [Const.BET_TYPE.OU_HT]: this._calcOuHtBet,
+      [Const.BET_TYPE.OU_FT]: this._calcOuFtBet,
+      [Const.BET_TYPE.ODDS_HT]: this._calcOddsHtBet,
+      [Const.BET_TYPE.ODDS_FT]: this._calcOddsFtBet,
     }
-    const ouHTBets = await BettingModel.query()
-      .where('match_id', matchID)
-      .andWhere('bet_type', 'ou_ht')
-    if (!ouHTBets) {
-      throw new BaseException('not found bet in match')
-    }
+    await calcFunction[data.betType](match, bettings)
+  }
+  private async _calcOuHtBet(match, ouHTBets) {
     for (let i = 0; i < ouHTBets.length; i++) {
       let amount = ouHTBets[i]?.bet_amount
       if (match.ou_ht_ratio > match.ht_home_score + match.ht_away_score) {
@@ -34,6 +85,7 @@ export default class BettingService {
             result: ouHTBets[i]?.bet_place === 'under' ? 'win' : 'lose',
             result_num:
               ouHTBets[i]?.bet_place === 'under' ? (match.ou_ht_over - 1) * amount : -amount,
+            is_calculated: true
           })
       } else if (match.ou_ht_ratio < match.ht_home_score + match.ht_away_score) {
         // ratio < total score
@@ -45,6 +97,7 @@ export default class BettingService {
             result: ouHTBets[i]?.bet_place === 'over' ? 'win' : 'lose',
             result_num:
               ouHTBets[i]?.bet_place === 'over' ? (match.ou_ht_over - 1) * amount : -amount,
+            is_calculated: true
           })
       } else {
         //ratio = total score
@@ -53,33 +106,12 @@ export default class BettingService {
           ou_statistics: match.ou_ht_ratio,
           result: 'draw',
           result_num: 0,
+          is_calculated: true
         })
       }
     }
-    return ouHTBets
   }
-  public async ouFTCalculate(request): Promise<any> {
-    const matchID = request.input('match_id')
-    if (!matchID) {
-      throw new BaseException('Match ID is required')
-    }
-    const MatchModel = require('@ioc:App/Models/Match')
-    const BettingModel = require('@ioc:App/Models/Betting')
-
-    const match = await MatchModel.query().where('match_id', matchID).first()
-    if (!match) {
-      throw new BaseException('match not found')
-    }
-    if (!match?.is_full_time) {
-      throw new BaseException('match not fulltime')
-    }
-
-    const ouFTBets = await BettingModel.query()
-      .where('match_id', matchID)
-      .andWhere('bet_type', 'ou_ft')
-    if (!ouFTBets) {
-      throw new BaseException('not found bet in match')
-    }
+  private async _calcOuFtBet(match, ouFTBets) {
     for (let i = 0; i < ouFTBets.length; i++) {
       let amount = ouFTBets[i]?.bet_amount
       if (match.ou_ft_ratio > match.ft_home_score + match.ft_away_score) {
@@ -92,6 +124,7 @@ export default class BettingService {
             result: ouFTBets[i]?.bet_place === 'under' ? 'win' : 'lose',
             result_num:
               ouFTBets[i]?.bet_place === 'under' ? (match.ou_ft_over - 1) * amount : -amount,
+            is_calculated: true
           })
       } else if (match.ou_ht_ratio < match.ht_home_score + match.ht_away_score) {
         // ratio < total score
@@ -103,6 +136,7 @@ export default class BettingService {
             result: ouFTBets[i]?.bet_place === 'over' ? 'win' : 'lose',
             result_num:
               ouFTBets[i]?.bet_place === 'over' ? (match.ou_ft_over - 1) * amount : -amount,
+            is_calculated: true
           })
       } else {
         //ratio = total score
@@ -111,33 +145,12 @@ export default class BettingService {
           ou_statistics: match.ou_ft_ratio,
           result: 'draw',
           result_num: 0,
+          is_calculated: true
         })
       }
     }
-    return ouFTBets
   }
-  public async oddsHTCalculate(request): Promise<any> {
-    const matchID = request.input('match_id')
-    if (!matchID) {
-      throw new BaseException('Match ID is required')
-    }
-    const MatchModel = require('@ioc:App/Models/Match')
-    const BettingModel = require('@ioc:App/Models/Betting')
-
-    const match = await MatchModel.query().where('match_id', matchID).first()
-    if (!match) {
-      throw new BaseException('match not found')
-    }
-    if (!match?.is_half_time) {
-      throw new BaseException('match not half time')
-    }
-
-    const oddsHTBets = await BettingModel.query()
-      .where('match_id', matchID)
-      .andWhere('bet_type', 'odds_ht')
-    if (!oddsHTBets) {
-      throw new BaseException('not found bet in match')
-    }
+  private async _calcOddsHtBet(match, oddsHTBets) {
     for (let i = 0; i < oddsHTBets.length; i++) {
       let amount = oddsHTBets[i]?.bet_amount
       if (match.ht_home_score > match.ht_away_score) {
@@ -149,11 +162,12 @@ export default class BettingService {
               oddsHTBets[i]?.bet_place === 'home'
                 ? match.odds_ht_home
                 : oddsHTBets[i]?.bet_place === 'away'
-                ? match.odds_ht_away
-                : match.odds_ht_draw,
+                  ? match.odds_ht_away
+                  : match.odds_ht_draw,
             result: oddsHTBets[i]?.bet_place === 'home' ? 'win' : 'lose',
             result_num:
               oddsHTBets[i]?.bet_place === 'home' ? (match.odds_ht_home - 1) * amount : -amount,
+            is_calculated: true
           })
       } else if (match.ht_home_score < match.ht_away_score) {
         // away win
@@ -164,11 +178,12 @@ export default class BettingService {
               oddsHTBets[i]?.bet_place === 'home'
                 ? match.odds_ht_home
                 : oddsHTBets[i]?.bet_place === 'away'
-                ? match.odds_ht_away
-                : match.odds_ht_draw,
+                  ? match.odds_ht_away
+                  : match.odds_ht_draw,
             result: oddsHTBets[i]?.bet_place === 'away' ? 'win' : 'lose',
             result_num:
               oddsHTBets[i]?.bet_place === 'away' ? (match.odds_ht_away - 1) * amount : -amount,
+            is_calculated: true
           })
       } else {
         //draw
@@ -179,38 +194,17 @@ export default class BettingService {
               oddsHTBets[i]?.bet_place === 'home'
                 ? match.odds_ht_home
                 : oddsHTBets[i]?.bet_place === 'away'
-                ? match.odds_ht_away
-                : match.odds_ht_draw,
+                  ? match.odds_ht_away
+                  : match.odds_ht_draw,
             result: oddsHTBets[i]?.bet_place === 'draw' ? 'win' : 'lose',
             result_num:
               oddsHTBets[i]?.bet_place === 'draw' ? match.odds_ht_draw * amount - amount : -amount,
+            is_calculated: true
           })
       }
     }
-    return oddsHTBets
   }
-  public async oddsFTCalculate(request): Promise<any> {
-    const matchID = request.input('match_id')
-    if (!matchID) {
-      throw new BaseException('Match ID is required')
-    }
-    const MatchModel = require('@ioc:App/Models/Match')
-    const BettingModel = require('@ioc:App/Models/Betting')
-
-    const match = await MatchModel.query().where('match_id', matchID).first()
-    if (!match) {
-      throw new BaseException('match not found')
-    }
-    if (!match?.is_full_time) {
-      throw new BaseException('match not fulltime')
-    }
-
-    const oddsFTBets = await BettingModel.query()
-      .where('match_id', matchID)
-      .andWhere('bet_type', 'odds_ft')
-    if (!oddsFTBets) {
-      throw new BaseException('not found bet in match')
-    }
+  private async _calcOddsFtBet(match, oddsFTBets) {
     for (let i = 0; i < oddsFTBets.length; i++) {
       let amount = oddsFTBets[i]?.bet_amount
       if (match.ft_home_score > match.ft_away_score) {
@@ -222,11 +216,12 @@ export default class BettingService {
               oddsFTBets[i]?.bet_place === 'home'
                 ? match.odds_ft_home
                 : oddsFTBets[i]?.bet_place === 'away'
-                ? match.odds_ft_away
-                : match.odds_ft_draw,
+                  ? match.odds_ft_away
+                  : match.odds_ft_draw,
             result: oddsFTBets[i]?.bet_place === 'home' ? 'win' : 'lose',
             result_num:
               oddsFTBets[i]?.bet_place === 'home' ? (match.odds_ft_home - 1) * amount : -amount,
+            is_calculated: true
           })
       } else if (match.ft_home_score < match.ft_away_score) {
         // away win
@@ -237,11 +232,12 @@ export default class BettingService {
               oddsFTBets[i]?.bet_place === 'home'
                 ? match.odds_ft_home
                 : oddsFTBets[i]?.bet_place === 'away'
-                ? match.odds_ft_away
-                : match.odds_ft_draw,
+                  ? match.odds_ft_away
+                  : match.odds_ft_draw,
             result: oddsFTBets[i]?.bet_place === 'away' ? 'win' : 'lose',
             result_num:
               oddsFTBets[i]?.bet_place === 'away' ? (match.odds_ft_away - 1) * amount : -amount,
+            is_calculated: true
           })
       } else {
         //draw
@@ -252,40 +248,14 @@ export default class BettingService {
               oddsFTBets[i]?.bet_place === 'home'
                 ? match.odds_ft_home
                 : oddsFTBets[i]?.bet_place === 'away'
-                ? match.odds_ft_away
-                : match.odds_ft_draw,
+                  ? match.odds_ft_away
+                  : match.odds_ft_draw,
             result: oddsFTBets[i]?.bet_place === 'draw' ? 'win' : 'lose',
             result_num:
               oddsFTBets[i]?.bet_place === 'draw' ? (match.odds_ft_draw - 1) * amount : -amount,
+            is_calculated: true
           })
       }
     }
-    return oddsFTBets
-  }
-  public async predictPickWinner(request): Promise<any> {
-    const matchID = request.input('match_id')
-    if (!matchID) {
-      throw new BaseException('Match ID is required')
-    }
-    const MatchModel = require('@ioc:App/Models/Match')
-    const PredictModel = require('@ioc:App/Models/Predict')
-
-    const match = await MatchModel.query().where('match_id', matchID).first()
-    if (!match) {
-      throw new BaseException('match not found')
-    }
-    if (!match?.is_full_time) {
-      throw new BaseException('match not fulltime')
-    }
-
-    const userPredict = await PredictModel.query()
-      .where('match_id', matchID)
-      .andWhere('home_score', match?.ft_home_score)
-      .andWhere('away_score', match?.ft_away_score)
-    if (!userPredict) {
-      throw new BaseException('not found predict in match')
-    }
-
-    return userPredict
   }
 }

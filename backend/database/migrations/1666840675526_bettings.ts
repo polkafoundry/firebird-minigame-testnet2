@@ -13,12 +13,13 @@ export default class Bettings extends BaseSchema {
       table.integer('dispatch_at').notNullable()
       table.string('event_type')
 
+      table.string('user_address').notNullable()
       table.integer('match_id').notNullable()
       table.string('bet_type').notNullable()
       table.string('bet_place').notNullable()
       table.decimal('bet_amount', 40, 0)
-      table.integer('bet_statistics')
-      table.integer('ou_statistics')
+      table.decimal('bet_statistics')
+      table.decimal('ou_statistics')
       table.string('result') //win - lose - draw
       table.decimal('result_num', 40, 0)
       table.boolean('has_claim').notNullable().defaultTo(false)

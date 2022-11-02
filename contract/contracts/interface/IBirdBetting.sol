@@ -17,6 +17,7 @@ interface IBirdBetting {
     struct UserBetDetail {
         uint256 amount;
         string place;
+        bool isClaimed;
     }
 
     struct MatchStatistics {
@@ -83,10 +84,11 @@ interface IBirdBetting {
         uint256 amount,
         string betType,
         string betPlace,
-        bool isClaimed
+        bool claimed
     );
     event UserClaim(
         uint16 matchID,
+        string betType,
         uint256 amount,
         address indexed user,
         uint256 deadline

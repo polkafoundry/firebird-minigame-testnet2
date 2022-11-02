@@ -28,20 +28,18 @@ export default class MatchService {
   public async getLiveMatch() {
     const currentTime = Math.floor(Date.now() / 1000)
     const liveMatches = await this.MatchModel.query()
-      .whereNotIn('status', [0, 100, 90, 60])
-      .orWhere((builder) => {
-        builder.where('status', 0).where('start_time', '<=', currentTime)
-      })
+      .where('is_full_time', false)
+      .where('start_time', '<=', currentTime)
     return Promise.resolve(JSON.parse(JSON.stringify(liveMatches)))
   }
   public async getMatchByIdOrSlug(params) {
     return this.buildQueryService(params)
-      .orWhere((builder) => {
-        builder.where('custom_id', params.custom_id || '').where('match_id', params.match_id || '')
-      })
-      .orWhere((builder) => {
-        builder.where('round', params.round || '').where('slug', params.slug || '')
-      })
+      // .orWhere((builder) => {
+      //   builder.where('custom_id', params.custom_id || '').where('match_id', params.match_id || '')
+      // })
+      // .orWhere((builder) => {
+      //   builder.where('round', params.round || '').where('slug', params.slug || '')
+      // })
       .first()
   }
   public async findByMatchId(request): Promise<any> {
