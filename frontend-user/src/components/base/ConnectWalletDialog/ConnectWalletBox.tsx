@@ -1,8 +1,8 @@
 import { AbstractConnector } from "@web3-react/abstract-connector";
 import clsx from "clsx";
 import { isMobile } from "react-device-detect";
-import React from "react";
 import { WalletInfo } from "../../../constants/connectors";
+import styles from "./dialog.module.scss";
 
 type ConnectWalletBoxProps = {
   wallet?: WalletInfo;
@@ -12,8 +12,7 @@ type ConnectWalletBoxProps = {
 };
 
 const ConnectWalletBox = (props: ConnectWalletBoxProps) => {
-  const { connectWalletLoading, handleProviderChosen, wallet, walletName } =
-    props;
+  const { connectWalletLoading, handleProviderChosen, wallet } = props;
 
   const handleWalletChange = () => {
     wallet &&
@@ -23,16 +22,16 @@ const ConnectWalletBox = (props: ConnectWalletBoxProps) => {
 
   if (!wallet) return <></>;
 
-  const { name, icon, disableIcon } = wallet;
-  const selectingWallet = walletName && walletName.indexOf(name) >= 0;
+  const { name, icon } = wallet;
+  // const selectingWallet = walletName && walletName.indexOf(name) >= 0;
 
   return (
     <div
       className={clsx(
         "flex flex-col max-w-[108px] min-w-[96px] w-full gap-2 rounded bg-[#373737] items-center px-2 py-3 cursor-pointer justify-between",
-        {
-          "border-[#5EFF8B] border-[1px]": selectingWallet,
-        },
+        // {
+        //   "border-[#5EFF8B] border-[1px]": selectingWallet,
+        // },
       )}
       onClick={() => {
         if (isMobile && wallet?.deepLink) {
@@ -42,8 +41,13 @@ const ConnectWalletBox = (props: ConnectWalletBoxProps) => {
         handleWalletChange();
       }}
     >
-      {connectWalletLoading && selectingWallet ? (
-        <img src="/images/loading.svg" alt="" />
+      {connectWalletLoading ? (
+        // <img src="/images/loading.svg" alt="" />
+        <div className={styles.loading}>
+          <div className={styles.rhombus}></div>
+          <div className={styles.rhombus}></div>
+          <div className={styles.rhombus}></div>
+        </div>
       ) : (
         <img src={icon} alt="" />
       )}

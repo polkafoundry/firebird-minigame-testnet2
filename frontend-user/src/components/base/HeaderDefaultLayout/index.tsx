@@ -1,9 +1,10 @@
 import clsx from "clsx";
-import { useState } from "react";
-
+import { useContext, useState } from "react";
 import { useLocation } from "react-router-dom";
+import { WalletContext } from "../../../context/WalletContext";
+import { useMyWeb3 } from "../../../hooks/useMyWeb3";
+import { displayWalletAddress } from "../../../utils";
 import Button from "../Button";
-import ConnectWalletDialog from "../ConnectWalletDialog";
 
 type RouteTypes = {
   label: string;
@@ -12,40 +13,38 @@ type RouteTypes = {
 
 const routes: Array<RouteTypes> = [
   {
-    label: "Bird nest",
-    uri: "/bird-nest",
+    label: "Firefly Testnet",
+    uri: "https://faucet.firefly.firebirdchain.com/",
   },
   {
-    label: "Community",
-    uri: "/community",
+    label: "Firebird Cup",
+    uri: "/",
   },
   {
-    label: "Documentation",
-    uri: "https://docs.firebirdchain.com/",
+    label: "Leaderboard",
+    uri: "/leaderboard",
   },
   {
-    label: "FAQ",
-    uri: "/faq",
+    label: "My History",
+    uri: "my-history",
   },
 ];
 
 const HeaderDefaultLayout = () => {
-  const location = useLocation();
-  const [openConnectWallet, setOpenWalletModal] = useState<boolean>(false);
-  const [openMenuMobile, setOpenMenuMobile] = useState<boolean>(false);
+  const { setShowModal, connectedAccount } = useContext(WalletContext);
+  const { isWrongChain, nativeCurrency, realTimeBalance } = useMyWeb3();
 
-  // console.log(location);
+  const [openMenuMobile, setOpenMenuMobile] = useState<boolean>(false);
+  const location = useLocation();
+
+  console.log(location);
 
   const handleOpenHeader = () => {
     setOpenMenuMobile((prevState) => !prevState);
   };
 
   const openConnectModal = () => {
-    setOpenWalletModal(true);
-  };
-
-  const closeConnectModal = () => {
-    setOpenWalletModal(false);
+    setShowModal && setShowModal(true);
   };
 
   const renderHeaderMobile = () => {
@@ -67,8 +66,8 @@ const HeaderDefaultLayout = () => {
             <a
               key={index}
               href={item.uri}
-              className={clsx("hover:tracking-wider duration-500", {
-                // "text-main": asPath === item.uri,
+              className={clsx({
+                "text-main": location.pathname === item.uri,
               })}
             >
               {item.label}
@@ -102,20 +101,34 @@ const HeaderDefaultLayout = () => {
         <a href="/">
           <img src="/images/logo-text.svg" alt="" />
         </a>
-        <div className={clsx("gap-5 hidden", "md:flex")}>
-          {/* {routes.map((item: RouteTypes, index: number) => (
+        <div className={clsx("gap-5 hidden", "md:flex md:items-center")}>
+          {routes.map((item: RouteTypes, index: number) => (
             <a
               key={index}
               href={item.uri}
-              className={clsx("hover:tracking-wider duration-500", {
-                // "text-main": asPath === item.uri,
+              className={clsx({
+                "text-main": location.pathname === item.uri,
               })}
             >
               {item.label}
             </a>
-          ))} */}
-          <Button className="bg-main px-5" onClick={openConnectModal}>
-            Connect Wallet
+          ))}
+          <Button
+            className="bg-main p-[2px] h-10 rounded-md"
+            onClick={openConnectModal}
+          >
+            {connectedAccount ? (
+              <div className="flex text-sm h-full">
+                <div className="px-[10px] flex items-center font-semibold">
+                  {`${isWrongChain ? 0 : realTimeBalance} ${nativeCurrency}`}
+                </div>
+                <div className="flex bg-black items-center rounded-md px-2">
+                  {displayWalletAddress(connectedAccount)}
+                </div>
+              </div>
+            ) : (
+              <span className="font-semibold">Connect Wallet</span>
+            )}
           </Button>
         </div>
         <div
@@ -127,11 +140,6 @@ const HeaderDefaultLayout = () => {
       </nav>
 
       {renderHeaderMobile()}
-
-      <ConnectWalletDialog
-        open={openConnectWallet}
-        closeDialog={closeConnectModal}
-      />
     </div>
   );
 };
