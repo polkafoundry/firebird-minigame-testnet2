@@ -45,8 +45,12 @@ export default class MatchService {
       // })
       .first()
   }
-  public async findByMatchId(id): Promise<any> {
-    return this.buildQueryService({ id }).first()
+  public async findByMatchId({ id, wallet_address }): Promise<any> {
+    return this.buildQueryService({ id })
+      .preload('bettings', query => {
+        query.where('user_address', wallet_address || null)
+      })
+      .first()
   }
 
   public async getListMatch(request): Promise<any> {
@@ -55,8 +59,9 @@ export default class MatchService {
 
     if (isNaN(page) || isNaN(size) || parseInt(page) <= 0 || parseInt(size) <= 0)
       throw new InvalidParamException('page or size must be specified as positive number')
-    const matchs = await this.buildQueryService({}).paginate(page, size)
-
+    let matchs = await this.buildQueryService({}).preload('bettings', query => {
+      query.where('user_address', request.input('wallet_address') || null)
+    }).paginate(page, size)
     return matchs
   }
   public async getUpcomingMatch(request) {
@@ -65,7 +70,12 @@ export default class MatchService {
     const currentTime = Math.floor(Date.now() / 1000)
     if (isNaN(page) || isNaN(size) || parseInt(page) <= 0 || parseInt(size) <= 0)
       throw new InvalidParamException('page or size must be specified as positive number')
-    const matches = await this.buildQueryService({ is_half_time: false, is_full_time: false }).where('start_time', '>=', currentTime).orderBy('start_time', 'ASC').paginate(page, size)
+    const matches = await this.buildQueryService({ is_half_time: false, is_full_time: false })
+      .where('start_time', '>=', currentTime)
+      .preload('bettings', query => {
+        query.where('user_address', request.input('wallet_address') || null)
+      })
+      .orderBy('start_time', 'ASC').paginate(page, size)
 
     return matches
   }

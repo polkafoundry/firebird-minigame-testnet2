@@ -33,9 +33,9 @@ export default class MatchController {
     }
 
   }
-  public async getMatchDetail({ params }) {
+  public async getMatchDetail({ request, params }) {
     try {
-      const match = await MatchService.findByMatchId(params.match_id)
+      const match = await MatchService.findByMatchId({ id: params.match_id, wallet_address: request.input('wallet_address') })
       if (!match) return HelperUtils.responseBadRequest('Match id not found')
       return HelperUtils.responseSuccess(match)
     } catch (error) {
