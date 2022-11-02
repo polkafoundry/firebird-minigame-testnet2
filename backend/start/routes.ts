@@ -26,6 +26,7 @@ Route.group(() => {
   Route.post('match/get-list-match', 'MatchController.getListMatch')
   Route.get('/match/upcoming', 'MatchController.getUpcomingMatch')
   Route.get('/match/live', 'MatchController.getLiveMatch')
+  Route.get('/match/detail/:match_id', 'MatchController.getMatchDetail')
 
   Route.post('betting/ou-ht-calculate', 'BettingsController.ouHTCalculate')
   Route.post('betting/ou-ft-calculate', 'BettingsController.ouFTCalculate')
@@ -36,6 +37,6 @@ Route.group(() => {
   Route.get('/claim/get-sig', 'ClaimController.claimToken')
 }).prefix('/api/v1')
 
-Route.group(() => {})
+Route.group(() => { })
   .prefix('/api/v1')
   .middleware('checkSignature')

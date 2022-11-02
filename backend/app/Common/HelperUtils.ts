@@ -55,7 +55,43 @@ const getBettingContractInstance = async () => {
   return instance
 }
 
+const responseErrorInternal = (message) => {
+  return {
+    status: 500,
+    message: message || 'Sorry there seems to be a server error!',
+    data: null,
+  }
+};
+
+const responseNotFound = (message) => {
+  return {
+    status: 404,
+    message: message || 'Not Found !',
+    data: null,
+  }
+};
+
+const responseBadRequest = (message) => {
+  return {
+    status: 400,
+    message: message || 'Looks like this is unkown request, please try again or contact us.',
+    data: null,
+  }
+};
+
+const responseSuccess = (data = null, message) => {
+  return {
+    status: 200,
+    message: message || 'Success !',
+    data,
+  }
+};
+
 module.exports = {
   getWeb3Provider,
   getBettingContractInstance,
+  responseErrorInternal,
+  responseNotFound,
+  responseBadRequest,
+  responseSuccess
 }
