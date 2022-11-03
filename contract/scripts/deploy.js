@@ -25,13 +25,13 @@ async function main() {
   console.log("set max bet amount", setBetAmount.hash);
 
   // set max bet amount
-  const setMatchInfo = await bettingContract.setMatchInfo(
-    1,
-    [1740, 500, 2190, 1980, 2250, 1940, 4470, 2110, 2940, 3860, 3500, 2250],
-    [0, 0, 0, 0, 1669219200, "QATAR", "ECUADOR", "Al Bayt Stadium", "WORLD CUP - ROUND 1", false, false],
-    1234
-  );
-  console.log("setMatchInfo", setMatchInfo.hash);
+  // const setMatchInfo = await bettingContract.setMatchInfo(
+  //   1,
+  //   [1740, 500, 2190, 1980, 2250, 1940, 4470, 2110, 2940, 3860, 3500, 2250],
+  //   [0, 0, 0, 0, 1669219200, "QATAR", "ECUADOR", "Al Bayt Stadium", "WORLD CUP - ROUND 1", false, false],
+  //   1234
+  // );
+  // console.log("setMatchInfo", setMatchInfo.hash);
 }
 
 main()

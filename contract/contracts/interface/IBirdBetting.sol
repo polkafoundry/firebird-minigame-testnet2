@@ -42,7 +42,9 @@ interface IBirdBetting {
         uint8 ft_awayScore;
         uint256 startTime;
         string homeName;
+        string homeIcon;
         string awayName;
+        string awayIcon;
         string location;
         string round;
         bool isHalfTime;
