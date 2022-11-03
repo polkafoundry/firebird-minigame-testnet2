@@ -1,6 +1,5 @@
 import { useContext } from "react";
 import Button from "../../../../components/base/Button";
-import ButtonLink from "../../../../components/base/ButtonLink";
 import { quickGuide } from "../../../../constants";
 import { WalletContext } from "../../../../context/WalletContext";
 import { useMyWeb3 } from "../../../../hooks/useMyWeb3";
