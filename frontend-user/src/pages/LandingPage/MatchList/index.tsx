@@ -162,6 +162,7 @@ const MatchList = () => {
             onChange={handleChangePredicted}
             className="bg-orange-200 w-[160px] rounded-xl border"
             itemsClassName="bg-orange-200 rounded-xl"
+            bgColor="orange"
           />
           <DropDown
             label="Status"
@@ -170,6 +171,7 @@ const MatchList = () => {
             onChange={handleChangeStatus}
             className="bg-orange-200 w-[160px] rounded-xl border ml-5"
             itemsClassName="bg-orange-200 rounded-xl"
+            bgColor="orange"
           />
         </div>
       </div>
