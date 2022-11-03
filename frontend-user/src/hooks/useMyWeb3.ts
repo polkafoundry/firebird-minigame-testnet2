@@ -18,16 +18,22 @@ export const useMyWeb3 = () => {
     realTimeBalance: string;
     nativeCurrency: string;
     isWrongChain: boolean;
+    account: string;
   }>({
     realTimeBalance: "0",
     nativeCurrency: "PKF",
     isWrongChain: false,
+    account: "",
   });
 
   const { data: balance, mutate } = useSWR(["getBalance", account, "latest"], {
     fetcher: fetcher(library),
   });
   const TIME_TO_REFETCH_BALANCE = 2000;
+
+  useEffect(() => {
+    setState((preState: any) => ({ ...preState, account: account }));
+  }, [account]);
 
   // auto refetch balance
   useEffect(() => {
