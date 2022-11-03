@@ -59,12 +59,12 @@ const HowToJoin = () => {
                   {displayWalletAddress(account)}
                 </p>
               ) : (
-                <Button
-                  className="h-auto rounded-xl font-semibold underline text-sm"
+                <div
+                  className="h-auto cursor-pointer rounded-xl font-semibold underline text-sm"
                   onClick={() => setShowModal && setShowModal(true)}
                 >
                   Connect Account
-                </Button>
+                </div>
               )}
             </li>
 
@@ -80,12 +80,12 @@ const HowToJoin = () => {
               {predictConditions.network ? (
                 <p className="m-0 font-semibold">Firefly Testnet</p>
               ) : (
-                <Button
-                  className="h-auto rounded-xl font-semibold underline text-sm"
+                <div
+                  className="h-auto cursor-pointer rounded-xl font-semibold underline text-sm"
                   onClick={() => requestSupportNetwork()}
                 >
                   Switch Network
-                </Button>
+                </div>
               )}
             </li>
 
@@ -101,12 +101,14 @@ const HowToJoin = () => {
               {predictConditions.birdToken ? (
                 <p className="m-0 font-semibold">{`${fakeBirdToken} $BIRD`}</p>
               ) : (
-                <ButtonLink
-                  to="https://faucet.firefly.firebirdchain.com/"
+                <a
+                  href="https://faucet.firefly.firebirdchain.com/"
+                  target={"_blank"}
+                  rel="norefferer"
                   className="h-auto rounded-xl font-semibold underline text-sm"
                 >
                   Faucet $BIRD
-                </ButtonLink>
+                </a>
               )}
             </li>
 
@@ -122,12 +124,14 @@ const HowToJoin = () => {
               {predictConditions.gasFee ? (
                 <p className="m-0 font-semibold">{`${realTimeBalance} $${nativeCurrency}`}</p>
               ) : (
-                <ButtonLink
-                  to="https://faucet.firefly.firebirdchain.com/"
+                <a
+                  href="https://faucet.firefly.firebirdchain.com/"
+                  target={"_blank"}
+                  rel="norefferer"
                   className="h-auto rounded-xl font-semibold underline text-sm"
                 >
                   Faucet $PKF
-                </ButtonLink>
+                </a>
               )}
             </li>
           </ul>

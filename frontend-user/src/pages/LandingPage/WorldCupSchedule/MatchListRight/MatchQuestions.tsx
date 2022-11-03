@@ -1,7 +1,7 @@
 import { Disclosure } from "@headlessui/react";
 import clsx from "clsx";
 import { useState } from "react";
-import { NUMBER_PATTERN, SCORE_PATTER } from "../../../constants";
+import { NUMBER_PATTERN, SCORE_PATTER } from "../../../../constants";
 
 type QuestionProps = {
   title: string;
@@ -40,7 +40,7 @@ const Question = (props: QuestionProps) => {
   const { title, children, handleSubmit, isSubmitted } = props;
 
   return (
-    <Disclosure>
+    <Disclosure defaultOpen>
       {({ open }) => (
         <div className="mt-4 border rounded-lg">
           <Disclosure.Button className="block w-full select-none cursor-pointer p-6">
@@ -212,7 +212,7 @@ const DepositAmount = (props: DepositAmountProps) => {
     }
   };
 
-  console.log("depositAmount, ", depositAmount, winRate);
+  // console.log("depositAmount, ", depositAmount, winRate);
 
   return (
     <>
@@ -233,7 +233,7 @@ const DepositAmount = (props: DepositAmountProps) => {
         <div className="flex items-center border mt-5 py-2 px-5">
           <input
             type="text"
-            className="flex-1"
+            className="flex-1 outline-none"
             value={depositAmount}
             onChange={onChange}
           />
@@ -341,7 +341,7 @@ const ResultMatch = (props: ResultMatchProps) => {
   );
 };
 
-const Questions = () => {
+const MatchQuestions = () => {
   const [inputTeam1, setInputTeam1] = useState<string>("0");
   const [inputTeam2, setInputTeam2] = useState<string>("0");
   const [optionWhoWin, setOptionWhoWin] = useState<number>(0);
@@ -365,10 +365,10 @@ const Questions = () => {
   };
 
   const question1 = {
-    isSubmitted: true,
+    isSubmitted: false,
     error: "",
     // error: "Not enough PKF to pay for the gas fee. Click here to faucet.",
-    matchStatus: MATCH_STATUS.PREDICTED,
+    matchStatus: MATCH_STATUS.NOT_PREDICTED,
   };
   const renderQuestion1 = () => (
     <Question
@@ -657,6 +657,9 @@ const Questions = () => {
 
   return (
     <div className="w-full p-5">
+      <span className="">
+        Select questions, predict the match & submit your answer.{" "}
+      </span>
       {renderQuestion1()}
       {renderQuestion2()}
       {renderQuestion3()}
@@ -665,4 +668,4 @@ const Questions = () => {
   );
 };
 
-export default Questions;
+export default MatchQuestions;

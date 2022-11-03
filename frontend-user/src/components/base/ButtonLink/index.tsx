@@ -11,7 +11,7 @@ type ButtonLinkProps = {
 const buttonStyles = {
   hoverAnimated: "duration-500 hover:tracking-widest",
   button:
-    "flex h-14 items-center tracking-wider text-lg font-birdMedium cursor-pointer",
+    "flex h-10 items-center tracking-wider text-lg font-birdMedium cursor-pointer",
 };
 
 const ButtonLink = (props: ButtonLinkProps) => {
