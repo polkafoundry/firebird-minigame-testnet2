@@ -110,7 +110,17 @@
           },
           {
             "internalType": "string",
+            "name": "homeIcon",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
             "name": "awayName",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "awayIcon",
             "type": "string"
           },
           {
@@ -299,7 +309,17 @@
           },
           {
             "internalType": "string",
+            "name": "homeIcon",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
             "name": "awayName",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "awayIcon",
             "type": "string"
           },
           {
@@ -862,7 +882,17 @@
           },
           {
             "internalType": "string",
+            "name": "homeIcon",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
             "name": "awayName",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "awayIcon",
             "type": "string"
           },
           {
@@ -1154,7 +1184,17 @@
           },
           {
             "internalType": "string",
+            "name": "homeIcon",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
             "name": "awayName",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "awayIcon",
             "type": "string"
           },
           {
@@ -1368,7 +1408,17 @@
           },
           {
             "internalType": "string",
+            "name": "homeIcon",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
             "name": "awayName",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "awayIcon",
             "type": "string"
           },
           {

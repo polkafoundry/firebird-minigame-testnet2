@@ -1,7 +1,7 @@
 var XLSX = require("xlsx");
 
 const matchData = async () => {
-  var workbook = await XLSX.readFile("./data/round_table_matchs.xlsx");
+  var workbook = await XLSX.readFile("./data/round_table_matchs1.xlsx");
   var sheet_name_list = workbook.SheetNames;
   var xlData = await XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]);
   var matchInfo = [];
@@ -10,18 +10,18 @@ const matchData = async () => {
     let mData = {
       mID: xlData[i]?.match_id,
       mSta: [
-        xlData[i]?.ou_ht_over * 1000,
-        xlData[i]?.ou_ht_ratio * 1000,
-        xlData[i]?.ou_ht_under * 1000,
-        xlData[i]?.ou_ft_over * 1000,
-        xlData[i]?.ou_ft_ratio * 1000,
-        xlData[i]?.ou_ft_under * 1000,
-        xlData[i]?.odds_ht_home * 1000,
-        xlData[i]?.odds_ht_draw * 1000,
-        xlData[i]?.odds_ht_away * 1000,
-        xlData[i]?.odds_ft_home * 1000,
-        xlData[i]?.odds_ft_draw * 1000,
-        xlData[i]?.odds_ft_away * 1000,
+        Math.round(xlData[i]?.ou_ht_over * 1000),
+        Math.round(xlData[i]?.ou_ht_ratio * 1000),
+        Math.round(xlData[i]?.ou_ht_under * 1000),
+        Math.round(xlData[i]?.ou_ft_over * 1000),
+        Math.round(xlData[i]?.ou_ft_ratio * 1000),
+        Math.round(xlData[i]?.ou_ft_under * 1000),
+        Math.round(xlData[i]?.odds_ht_home * 1000),
+        Math.round(xlData[i]?.odds_ht_draw * 1000),
+        Math.round(xlData[i]?.odds_ht_away * 1000),
+        Math.round(xlData[i]?.odds_ft_home * 1000),
+        Math.round(xlData[i]?.odds_ft_draw * 1000),
+        Math.round(xlData[i]?.odds_ft_away * 1000),
       ],
       mInf: [
         xlData[i]?.ht_home_score,
@@ -30,9 +30,11 @@ const matchData = async () => {
         xlData[i]?.ft_away_score,
         xlData[i]?.start_time,
         xlData[i]?.home_name,
+        xlData[i]?.home_icon.toString(),
         xlData[i]?.away_name,
+        xlData[i]?.away_icon.toString(),
         xlData[i]?.stadium,
-        xlData[i]?.round_name,
+        xlData[i]?.round_name.toString(),
         xlData[i]?.is_half_time,
         xlData[i]?.is_full_time,
       ],
@@ -40,6 +42,7 @@ const matchData = async () => {
     };
     matchInfo.push(mData);
   }
+  console.log(matchInfo);
   return matchInfo;
 };
 

@@ -5,6 +5,7 @@ const {
   BIRD_CONTRACT_ADDRESS,
   PKF_FAUCET_TOKEN,
   PKF_FAUCET_SYMBOL,
+  PRIVATE_KEY,
 } = require("../config.js");
 const { sBirdAbi, birdTokenAbi } = require("../abi/index");
 const { walletData } = require("./ReadXLSX");
@@ -17,9 +18,9 @@ let web3;
 let walletAddress;
 
 const StupidBot = async () => {
-  await faucet();
+  // await faucet();
   // await approve();
-  // await betting(1);
+  await betting(15);
   // await claim(1);
 };
 
@@ -102,35 +103,43 @@ const betting = async (matchID) => {
     // console.log("xxx", wlData);
     web3 = getWeb3();
     betContract = new web3.eth.Contract(sBirdAbi, BETTING_CONTRACT_ADDRESS);
+    walletAddress = web3.eth.accounts.privateKeyToAccount(PRIVATE_KEY).address;
 
-    for (let i = 0; i < wlData.adds.length; i++) {
+    for (let i = 0; i < 1; i++) {
       if (wlData.adds.length === wlData.prik.length) {
         //predict
-        let predictData = betContract.methods
-          .betting(matchID, randomScore().home_score, randomScore().away_score)
-          .encodeABI();
-        await callTransaction(web3, predictData, wlData.prik[i], wlData.adds[i], BETTING_CONTRACT_ADDRESS);
-
+        // let predictData = betContract.methods
+        //   .betting(matchID, randomScore().home_score, randomScore().away_score)
+        //   .encodeABI();
+        // await callTransaction(web3, predictData, wlData.prik[i], wlData.adds[i], BETTING_CONTRACT_ADDRESS);
+        let x = randomBet().ou_ht;
+        let xx = randomBet().ou_ft;
+        let xxx = randomBet().odds_ht;
+        let xxxx = randomBet().odds_ft;
+        console.log(x);
+        console.log(xx);
+        console.log(xxx);
+        console.log(xxxx);
         //bet
         let ouHTData = betContract.methods
-          .betting(matchID, "1000000000000000000000", "ou_ht", randomBet().ou_ht)
+          .betting(matchID, "500000000000000000000", "ou_ht", randomBet().ou_ht)
           .encodeABI();
-        await callTransaction(web3, ouHTData, wlData.prik[i], wlData.adds[i], BETTING_CONTRACT_ADDRESS);
+        await callTransaction(web3, ouHTData, PRIVATE_KEY, walletAddress, BETTING_CONTRACT_ADDRESS);
 
         let ouFTData = betContract.methods
-          .betting(matchID, "1000000000000000000000", "ou_ft", randomBet().ou_ft)
+          .betting(matchID, "600000000000000000000", "ou_ft", randomBet().ou_ft)
           .encodeABI();
-        await callTransaction(web3, ouFTData, wlData.prik[i], wlData.adds[i], BETTING_CONTRACT_ADDRESS);
+        await callTransaction(web3, ouFTData, PRIVATE_KEY, walletAddress, BETTING_CONTRACT_ADDRESS);
 
         let oddsHTData = betContract.methods
-          .betting(matchID, "1000000000000000000000", "odds_ht", randomBet().odds_ht)
+          .betting(matchID, "700000000000000000000", "odds_ht", randomBet().odds_ht)
           .encodeABI();
-        await callTransaction(web3, oddsHTData, wlData.prik[i], wlData.adds[i], BETTING_CONTRACT_ADDRESS);
+        await callTransaction(web3, oddsHTData, PRIVATE_KEY, walletAddress, BETTING_CONTRACT_ADDRESS);
 
         let oddsFTData = betContract.methods
-          .betting(matchID, "1000000000000000000000", "odds_ft", randomBet().odds_ft)
+          .betting(matchID, "800000000000000000000", "odds_ft", randomBet().odds_ft)
           .encodeABI();
-        await callTransaction(web3, oddsFTData, wlData.prik[i], wlData.adds[i], BETTING_CONTRACT_ADDRESS);
+        await callTransaction(web3, oddsFTData, PRIVATE_KEY, walletAddress, BETTING_CONTRACT_ADDRESS);
       }
     }
   } catch (e) {
