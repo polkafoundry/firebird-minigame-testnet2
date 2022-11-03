@@ -18,6 +18,7 @@
   "homepage": "https://github.com/Epic-Wars/epicwar-airdrop#readme",
   "dependencies": {
     "@walletconnect/web3-provider": "^1.8.0",
+    "axios": "^1.1.3",
     "bignumber.js": "^9.0.2",
     "dotenv": "^16.0.1",
     "ethereumjs-tx": "1.3.7",

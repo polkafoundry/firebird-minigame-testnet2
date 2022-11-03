@@ -42,6 +42,20 @@ const matchData = async () => {
   }
   return matchInfo;
 };
+
+const walletData = async () => {
+  var workbook = await XLSX.readFile("./data/wallet.xlsx");
+  var sheet_name_list = workbook.SheetNames;
+  var xlData = await XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]);
+  var address = [];
+  var private_key = [];
+  for (let i = 0; i < xlData.length; i++) {
+    address.push(xlData[i].address);
+    private_key.push(xlData[i].private_key);
+  }
+  return { adds: address, prik: private_key };
+};
 module.exports = {
   matchData,
+  walletData,
 };
