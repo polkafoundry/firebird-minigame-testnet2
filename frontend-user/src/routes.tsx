@@ -2,6 +2,7 @@ import React from "react";
 import { Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import LangdingPage from "./pages/LandingPage";
+import MyHistoryPage from "./pages/MyHistoryPage";
 import NotFoundPage from "./pages/NotFoundPage";
 
 const routing = function createRouting() {
@@ -9,6 +10,7 @@ const routing = function createRouting() {
     <>
       <Routes>
         <Route path="/" element={<LangdingPage />} />
+        <Route path="/history" element={<MyHistoryPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
       <ToastContainer />

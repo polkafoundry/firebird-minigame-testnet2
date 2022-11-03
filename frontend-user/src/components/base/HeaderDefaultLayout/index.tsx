@@ -26,7 +26,7 @@ const routes: Array<RouteTypes> = [
   },
   {
     label: "My History",
-    uri: "my-history",
+    uri: "/history",
   },
 ];
 
@@ -36,8 +36,6 @@ const HeaderDefaultLayout = () => {
 
   const [openMenuMobile, setOpenMenuMobile] = useState<boolean>(false);
   const location = useLocation();
-
-  console.log(location);
 
   const handleOpenHeader = () => {
     setOpenMenuMobile((prevState) => !prevState);

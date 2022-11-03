@@ -1,6 +1,8 @@
 import clsx from "clsx";
 
-type ButtonProps = {
+type ButtonLinkProps = {
+  to: string;
+  target?: React.HTMLAttributeAnchorTarget;
   className?: string;
   children: any;
   onClick?: () => void;
@@ -12,11 +14,13 @@ const buttonStyles = {
     "flex h-14 items-center tracking-wider text-lg font-birdMedium cursor-pointer",
 };
 
-const Button = (props: ButtonProps) => {
-  const { className = "", children, onClick } = props;
+const ButtonLink = (props: ButtonLinkProps) => {
+  const { to, target, className = "", children, onClick } = props;
 
   return (
-    <div
+    <a
+      href={to}
+      target={target ?? "_blank"}
       className={clsx(
         buttonStyles.button,
         // buttonStyles.hoverAnimated,
@@ -25,8 +29,8 @@ const Button = (props: ButtonProps) => {
       onClick={onClick}
     >
       {children}
-    </div>
+    </a>
   );
 };
 
-export default Button;
+export default ButtonLink;
