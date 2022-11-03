@@ -110,6 +110,7 @@ const InputNumber = (props: InputNumberProps) => {
       )}
       disabled={type !== MATCH_STATUS.NOT_PREDICTED}
       value={input}
+      placeholder="0"
       onChange={onChange}
     />
   );
@@ -342,8 +343,8 @@ const ResultMatch = (props: ResultMatchProps) => {
 };
 
 const MatchQuestions = () => {
-  const [inputTeam1, setInputTeam1] = useState<string>("0");
-  const [inputTeam2, setInputTeam2] = useState<string>("0");
+  const [inputTeam1, setInputTeam1] = useState<string>("");
+  const [inputTeam2, setInputTeam2] = useState<string>("");
   const [optionWhoWin, setOptionWhoWin] = useState<number>(0);
   const [depositAmount, setDepositAmount] = useState<string>("0");
 
