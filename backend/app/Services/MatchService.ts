@@ -33,14 +33,16 @@ export default class MatchService {
     return Promise.resolve(JSON.parse(JSON.stringify(liveMatches)))
   }
   public async getMatchByIdOrSlug(params) {
-    return this.buildQueryService(params)
-      // .orWhere((builder) => {
-      //   builder.where('custom_id', params.custom_id || '').where('match_id', params.match_id || '')
-      // })
-      // .orWhere((builder) => {
-      //   builder.where('round', params.round || '').where('slug', params.slug || '')
-      // })
-      .first()
+    return (
+      this.buildQueryService(params)
+        // .orWhere((builder) => {
+        //   builder.where('custom_id', params.custom_id || '').where('match_id', params.match_id || '')
+        // })
+        // .orWhere((builder) => {
+        //   builder.where('round', params.round || '').where('slug', params.slug || '')
+        // })
+        .first()
+    )
   }
   public async findByMatchId(request): Promise<any> {
     return request.params()
@@ -66,7 +68,9 @@ export default class MatchService {
 
     if (isNaN(page) || isNaN(size) || parseInt(page) <= 0 || parseInt(size) <= 0)
       throw new InvalidParamException('page or size must be specified as positive number')
-    const matches = await this.buildQueryService({ status: 0 }).orderBy('start_time', 'ASC').paginate(page, size)
+    const matches = await this.buildQueryService({ status: 0 })
+      .orderBy('start_time', 'ASC')
+      .paginate(page, size)
 
     return matches
   }

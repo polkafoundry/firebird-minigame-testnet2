@@ -97,46 +97,53 @@ export default class FetchMatchInfoJob implements JobContract {
       fromBlock: from,
       toBlock: to,
     })
-    console.log('xxxxx', from, to, events)
     for (const event of events) {
       const blockData = await provider.eth.getBlock(event.blockNumber)
-      console.log('xxxxx', event_type)
       switch (event_type) {
         case CREATE_MATCH:
-          let data = new MatchModel()
-          data.transaction_hash = event.transactionHash
-          data.transaction_index = event.transactionIndex
-          data.block_number = event.blockNumber
-          data.dispatch_at = blockData.timestamp
-          data.event_type = event_type
-          data.match_id = event.returnValues.matchID
-          data.start_time = event.returnValues.mInf.startTime
-          data.sofa_match_id = event.returnValues.sofaMatchID
-          data.home_name = event.returnValues.mInf.homeName
-          data.ht_home_score = event.returnValues.mInf.ht_homeScore
-          data.ft_home_score = event.returnValues.mInf.ft_homeScore
-          data.away_name = event.returnValues.mInf.awayName
-          data.ht_away_score = event.returnValues.mInf.ht_awayScore
-          data.ft_away_score = event.returnValues.mInf.ft_awayScore
-          data.stadium = event.returnValues.mInf.location
-          data.round_name = event.returnValues.mInf.round
-          data.is_half_time = event.returnValues.mInf.isHalfTime
-          data.is_full_time = event.returnValues.mInf.isFinished
+          const match = await MatchModel.query()
+            .where('match_id', event.returnValues.matchID)
+            .first()
+          if (!match) {
+            let data = new MatchModel()
+            data.transaction_hash = event.transactionHash
+            data.transaction_index = event.transactionIndex
+            data.block_number = event.blockNumber
+            data.dispatch_at = blockData.timestamp
+            data.event_type = event_type
+            data.match_id = event.returnValues.matchID
+            data.start_time = event.returnValues.mInf.startTime
+            data.sofa_match_id = event.returnValues.sofaMatchID
+            data.home_name = event.returnValues.mInf.homeName
+            data.home_icon = event.returnValues.mInf.homeIcon
+            data.ht_home_score = event.returnValues.mInf.ht_homeScore
+            data.ft_home_score = event.returnValues.mInf.ft_homeScore
+            data.away_name = event.returnValues.mInf.awayName
+            data.away_icon = event.returnValues.mInf.awayIcon
+            data.ht_away_score = event.returnValues.mInf.ht_awayScore
+            data.ft_away_score = event.returnValues.mInf.ft_awayScore
+            data.stadium = event.returnValues.mInf.location
+            data.round_name = event.returnValues.mInf.round
+            data.is_half_time = event.returnValues.mInf.isHalfTime
+            data.is_full_time = event.returnValues.mInf.isFinished
 
-          data.ou_ht_over = event.returnValues.mSta.ouHtOver / 1000
-          data.ou_ht_ratio = event.returnValues.mSta.ouHtRatio / 1000
-          data.ou_ht_under = event.returnValues.mSta.ouHtUnder / 1000
-          data.ou_ft_over = event.returnValues.mSta.ouFtOver / 1000
-          data.ou_ft_ratio = event.returnValues.mSta.ouFtRatio / 1000
-          data.ou_ft_under = event.returnValues.mSta.ouFtUnder / 1000
-          data.odds_ht_home = event.returnValues.mSta.oddsHtHome / 1000
-          data.odds_ht_draw = event.returnValues.mSta.oddsHtDraw / 1000
-          data.odds_ht_away = event.returnValues.mSta.oddsHtAway / 1000
-          data.odds_ft_home = event.returnValues.mSta.oddsFtHome / 1000
-          data.odds_ft_draw = event.returnValues.mSta.oddsFtDraw / 1000
-          data.odds_ft_away = event.returnValues.mSta.oddsFtAway / 1000
+            data.ou_ht_over = event.returnValues.mSta.ouHtOver / 1000
+            data.ou_ht_ratio = event.returnValues.mSta.ouHtRatio / 1000
+            data.ou_ht_under = event.returnValues.mSta.ouHtUnder / 1000
+            data.ou_ft_over = event.returnValues.mSta.ouFtOver / 1000
+            data.ou_ft_ratio = event.returnValues.mSta.ouFtRatio / 1000
+            data.ou_ft_under = event.returnValues.mSta.ouFtUnder / 1000
+            data.odds_ht_home = event.returnValues.mSta.oddsHtHome / 1000
+            data.odds_ht_draw = event.returnValues.mSta.oddsHtDraw / 1000
+            data.odds_ht_away = event.returnValues.mSta.oddsHtAway / 1000
+            data.odds_ft_home = event.returnValues.mSta.oddsFtHome / 1000
+            data.odds_ft_draw = event.returnValues.mSta.oddsFtDraw / 1000
+            data.odds_ft_away = event.returnValues.mSta.oddsFtAway / 1000
 
-          await data.save()
+            await data.save()
+          } else {
+            Logger.error(`fetch ${event_type} duplicate ${event.returnValues.matchID}`)
+          }
           break
         case UPDATE_MATCH_STATISTICS:
           await MatchModel.query()
@@ -170,19 +177,43 @@ export default class FetchMatchInfoJob implements JobContract {
           })
           break
         case USER_BETTING:
-          let bettingData = new BettingModel()
-          bettingData.transaction_hash = event.transactionHash
-          bettingData.transaction_index = event.transactionIndex
-          bettingData.block_number = event.blockNumber
-          bettingData.dispatch_at = blockData.timestamp
-          bettingData.event_type = event_type
-          bettingData.user_address = event.returnValues.user
-          bettingData.match_id = event.returnValues.matchID
-          bettingData.bet_type = event.returnValues.betType
-          bettingData.bet_place = event.returnValues.betPlace
-          bettingData.bet_amount = event.returnValues.amount
+          const userBetting = await BettingModel.query()
+            .where('match_id', event.returnValues.matchID)
+            .andWhere('user_address', event.returnValues.user)
+            .andWhere('bet_type', event.returnValues.betType)
+            .first()
+          if (userBetting) {
+            await BettingModel.query()
+              .where('match_id', event.returnValues.matchID)
+              .andWhere('user_address', event.returnValues.user)
+              .andWhere('bet_type', event.returnValues.betType)
+              .update({
+                transaction_hash: event.transactionHash,
+                transaction_index: event.transactionIndex,
+                block_number: event.blockNumber,
+                dispatch_at: blockData.timestamp,
+                event_type: event_type,
+                user_address: event.returnValues.user,
+                match_id: event.returnValues.matchID,
+                bet_type: event.returnValues.betType,
+                bet_place: event.returnValues.betPlace,
+                bet_amount: event.returnValues.amount,
+              })
+          } else {
+            let bettingData = new BettingModel()
+            bettingData.transaction_hash = event.transactionHash
+            bettingData.transaction_index = event.transactionIndex
+            bettingData.block_number = event.blockNumber
+            bettingData.dispatch_at = blockData.timestamp
+            bettingData.event_type = event_type
+            bettingData.user_address = event.returnValues.user
+            bettingData.match_id = event.returnValues.matchID
+            bettingData.bet_type = event.returnValues.betType
+            bettingData.bet_place = event.returnValues.betPlace
+            bettingData.bet_amount = event.returnValues.amount
+            await bettingData.save()
+          }
 
-          await bettingData.save()
           break
         case USER_PREDICT:
           const userPredict = await PredictModel.query()

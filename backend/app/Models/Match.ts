@@ -33,6 +33,9 @@ export default class Match extends BaseModel {
   @column({ columnName: 'home_name' })
   public home_name: string
 
+  @column({ columnName: 'home_icon' })
+  public home_icon: string
+
   @column({ columnName: 'ht_home_score' })
   public ht_home_score: number
 
@@ -41,6 +44,9 @@ export default class Match extends BaseModel {
 
   @column({ columnName: 'away_name' })
   public away_name: string
+
+  @column({ columnName: 'away_icon' })
+  public away_icon: string
 
   @column({ columnName: 'ht_away_score' })
   public ht_away_score: number
