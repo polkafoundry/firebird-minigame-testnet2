@@ -1,4 +1,10 @@
 export const API_BASE_URL = process.env.REACT_BASE_URL + "/api";
+export const URLS = {
+  HOME: "/",
+  LEADERBOARD: "/leaderboard",
+  HISTORY: "/history",
+  FAUCET_TESTNET: "https://faucet.firefly.firebirdchain.com/",
+};
 
 // only accept number [0-9] and less than 2 digits
 export const SCORE_PATTER = /^\d{1,2}$/;
