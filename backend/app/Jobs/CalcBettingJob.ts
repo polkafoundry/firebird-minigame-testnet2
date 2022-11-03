@@ -46,7 +46,11 @@ export default class CalcBettingJob implements JobContract {
     // Do somethign with you job data
     const [match, bettings] = await Promise.all([
       MatchModel.query().where('id', data.matchId).first(),
-      BettingModel.query().where('match_id', data.matchId).where('bet_type', data.betType).where('is_calculated', false).limit(100)
+      BettingModel.query()
+        .where('match_id', data.matchId)
+        .where('bet_type', data.betType)
+        .where('is_calculated', false)
+        .limit(100),
     ])
     console.log('CalcBettingJob: ', match)
     console.log({ bettings })
@@ -84,8 +88,8 @@ export default class CalcBettingJob implements JobContract {
             ou_statistics: match.ou_ht_ratio,
             result: ouHTBets[i]?.bet_place === 'under' ? 'win' : 'lose',
             result_num:
-              ouHTBets[i]?.bet_place === 'under' ? (match.ou_ht_over - 1) * amount : -amount,
-            is_calculated: true
+              ouHTBets[i]?.bet_place === 'under' ? match.ou_ht_over * amount - amount : -amount,
+            is_calculated: true,
           })
       } else if (match.ou_ht_ratio < match.ht_home_score + match.ht_away_score) {
         // ratio < total score
@@ -96,8 +100,8 @@ export default class CalcBettingJob implements JobContract {
             ou_statistics: match.ou_ht_ratio,
             result: ouHTBets[i]?.bet_place === 'over' ? 'win' : 'lose',
             result_num:
-              ouHTBets[i]?.bet_place === 'over' ? (match.ou_ht_over - 1) * amount : -amount,
-            is_calculated: true
+              ouHTBets[i]?.bet_place === 'over' ? match.ou_ht_over * amount - amount : -amount,
+            is_calculated: true,
           })
       } else {
         //ratio = total score
@@ -106,7 +110,7 @@ export default class CalcBettingJob implements JobContract {
           ou_statistics: match.ou_ht_ratio,
           result: 'draw',
           result_num: 0,
-          is_calculated: true
+          is_calculated: true,
         })
       }
     }
@@ -123,8 +127,8 @@ export default class CalcBettingJob implements JobContract {
             ou_statistics: match.ou_ft_ratio,
             result: ouFTBets[i]?.bet_place === 'under' ? 'win' : 'lose',
             result_num:
-              ouFTBets[i]?.bet_place === 'under' ? (match.ou_ft_over - 1) * amount : -amount,
-            is_calculated: true
+              ouFTBets[i]?.bet_place === 'under' ? match.ou_ft_over * amount - amount : -amount,
+            is_calculated: true,
           })
       } else if (match.ou_ht_ratio < match.ht_home_score + match.ht_away_score) {
         // ratio < total score
@@ -135,8 +139,8 @@ export default class CalcBettingJob implements JobContract {
             ou_statistics: match.ou_ft_ratio,
             result: ouFTBets[i]?.bet_place === 'over' ? 'win' : 'lose',
             result_num:
-              ouFTBets[i]?.bet_place === 'over' ? (match.ou_ft_over - 1) * amount : -amount,
-            is_calculated: true
+              ouFTBets[i]?.bet_place === 'over' ? match.ou_ft_over * amount - amount : -amount,
+            is_calculated: true,
           })
       } else {
         //ratio = total score
@@ -145,7 +149,7 @@ export default class CalcBettingJob implements JobContract {
           ou_statistics: match.ou_ft_ratio,
           result: 'draw',
           result_num: 0,
-          is_calculated: true
+          is_calculated: true,
         })
       }
     }
@@ -162,12 +166,12 @@ export default class CalcBettingJob implements JobContract {
               oddsHTBets[i]?.bet_place === 'home'
                 ? match.odds_ht_home
                 : oddsHTBets[i]?.bet_place === 'away'
-                  ? match.odds_ht_away
-                  : match.odds_ht_draw,
+                ? match.odds_ht_away
+                : match.odds_ht_draw,
             result: oddsHTBets[i]?.bet_place === 'home' ? 'win' : 'lose',
             result_num:
-              oddsHTBets[i]?.bet_place === 'home' ? (match.odds_ht_home - 1) * amount : -amount,
-            is_calculated: true
+              oddsHTBets[i]?.bet_place === 'home' ? match.odds_ht_home * amount - amount : -amount,
+            is_calculated: true,
           })
       } else if (match.ht_home_score < match.ht_away_score) {
         // away win
@@ -178,12 +182,12 @@ export default class CalcBettingJob implements JobContract {
               oddsHTBets[i]?.bet_place === 'home'
                 ? match.odds_ht_home
                 : oddsHTBets[i]?.bet_place === 'away'
-                  ? match.odds_ht_away
-                  : match.odds_ht_draw,
+                ? match.odds_ht_away
+                : match.odds_ht_draw,
             result: oddsHTBets[i]?.bet_place === 'away' ? 'win' : 'lose',
             result_num:
-              oddsHTBets[i]?.bet_place === 'away' ? (match.odds_ht_away - 1) * amount : -amount,
-            is_calculated: true
+              oddsHTBets[i]?.bet_place === 'away' ? match.odds_ht_away * amount - amount : -amount,
+            is_calculated: true,
           })
       } else {
         //draw
@@ -194,12 +198,12 @@ export default class CalcBettingJob implements JobContract {
               oddsHTBets[i]?.bet_place === 'home'
                 ? match.odds_ht_home
                 : oddsHTBets[i]?.bet_place === 'away'
-                  ? match.odds_ht_away
-                  : match.odds_ht_draw,
+                ? match.odds_ht_away
+                : match.odds_ht_draw,
             result: oddsHTBets[i]?.bet_place === 'draw' ? 'win' : 'lose',
             result_num:
               oddsHTBets[i]?.bet_place === 'draw' ? match.odds_ht_draw * amount - amount : -amount,
-            is_calculated: true
+            is_calculated: true,
           })
       }
     }
@@ -216,12 +220,12 @@ export default class CalcBettingJob implements JobContract {
               oddsFTBets[i]?.bet_place === 'home'
                 ? match.odds_ft_home
                 : oddsFTBets[i]?.bet_place === 'away'
-                  ? match.odds_ft_away
-                  : match.odds_ft_draw,
+                ? match.odds_ft_away
+                : match.odds_ft_draw,
             result: oddsFTBets[i]?.bet_place === 'home' ? 'win' : 'lose',
             result_num:
-              oddsFTBets[i]?.bet_place === 'home' ? (match.odds_ft_home - 1) * amount : -amount,
-            is_calculated: true
+              oddsFTBets[i]?.bet_place === 'home' ? match.odds_ft_home * amount - amount : -amount,
+            is_calculated: true,
           })
       } else if (match.ft_home_score < match.ft_away_score) {
         // away win
@@ -232,12 +236,12 @@ export default class CalcBettingJob implements JobContract {
               oddsFTBets[i]?.bet_place === 'home'
                 ? match.odds_ft_home
                 : oddsFTBets[i]?.bet_place === 'away'
-                  ? match.odds_ft_away
-                  : match.odds_ft_draw,
+                ? match.odds_ft_away
+                : match.odds_ft_draw,
             result: oddsFTBets[i]?.bet_place === 'away' ? 'win' : 'lose',
             result_num:
-              oddsFTBets[i]?.bet_place === 'away' ? (match.odds_ft_away - 1) * amount : -amount,
-            is_calculated: true
+              oddsFTBets[i]?.bet_place === 'away' ? match.odds_ft_away * amount - amount : -amount,
+            is_calculated: true,
           })
       } else {
         //draw
@@ -248,12 +252,12 @@ export default class CalcBettingJob implements JobContract {
               oddsFTBets[i]?.bet_place === 'home'
                 ? match.odds_ft_home
                 : oddsFTBets[i]?.bet_place === 'away'
-                  ? match.odds_ft_away
-                  : match.odds_ft_draw,
+                ? match.odds_ft_away
+                : match.odds_ft_draw,
             result: oddsFTBets[i]?.bet_place === 'draw' ? 'win' : 'lose',
             result_num:
-              oddsFTBets[i]?.bet_place === 'draw' ? (match.odds_ft_draw - 1) * amount : -amount,
-            is_calculated: true
+              oddsFTBets[i]?.bet_place === 'draw' ? match.odds_ft_draw * amount - amount : -amount,
+            is_calculated: true,
           })
       }
     }
