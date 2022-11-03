@@ -1,13 +1,14 @@
 import LandingLayout from "../../components/layout/LandingLayout";
-import Questions from "./Questions";
-import TableSelectMatch from "./TableSelectMatch";
+import HomeBanner from "./HomeBanner";
+import WorldCupSchedule from "./WorldCupSchedule";
 
 const LangdingPage = () => {
   return (
     <LandingLayout>
-      <div className="flex flex-col items-center mb-10 pt-20">
-        {/* <TableSelectMatch /> */}
-        <Questions />
+      <HomeBanner />
+
+      <div className="flex flex-col w-full max-w-screen-main mx-auto">
+        <WorldCupSchedule />
       </div>
     </LandingLayout>
   );

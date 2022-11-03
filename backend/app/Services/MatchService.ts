@@ -20,8 +20,11 @@ export default class MatchService {
     if ('create_match_status' in params) {
       builder = builder.where('create_match_status', params.create_match_status)
     }
-    if ('status' in params) {
-      builder = builder.where('status', params.status)
+    if ('is_half_time' in params) {
+      builder = builder.where('is_half_time', params.is_half_time)
+    }
+    if ('is_full_time' in params) {
+      builder = builder.where('is_full_time', params.is_full_time)
     }
     return builder
   }
@@ -44,8 +47,12 @@ export default class MatchService {
         .first()
     )
   }
-  public async findByMatchId(request): Promise<any> {
-    return request.params()
+  public async findByMatchId({ id, wallet_address }): Promise<any> {
+    return this.buildQueryService({ id })
+      .preload('bettings', (query) => {
+        query.where('user_address', wallet_address || null)
+      })
+      .first()
   }
 
   public async getListMatch(request): Promise<any> {
@@ -54,21 +61,24 @@ export default class MatchService {
 
     if (isNaN(page) || isNaN(size) || parseInt(page) <= 0 || parseInt(size) <= 0)
       throw new InvalidParamException('page or size must be specified as positive number')
-    // const MatchModel = require('@ioc:App/Models/Match')
-    // let query = MatchModel.query()
-    // let listMatch = await query.where('box_id', boxId).where('is_opened', 0).first()
-    const Database = require('@ioc:Adonis/Lucid/Database')
-    const matchs = await Database.from('matches').paginate(page, size)
-
+    let matchs = await this.buildQueryService({})
+      .preload('bettings', (query) => {
+        query.where('user_address', request.input('wallet_address') || null)
+      })
+      .paginate(page, size)
     return matchs
   }
   public async getUpcomingMatch(request) {
     const page = request.input('page') || 1
     const size = request.input('size') || 10
-
+    const currentTime = Math.floor(Date.now() / 1000)
     if (isNaN(page) || isNaN(size) || parseInt(page) <= 0 || parseInt(size) <= 0)
       throw new InvalidParamException('page or size must be specified as positive number')
-    const matches = await this.buildQueryService({ status: 0 })
+    const matches = await this.buildQueryService({ is_half_time: false, is_full_time: false })
+      .where('start_time', '>=', currentTime)
+      .preload('bettings', (query) => {
+        query.where('user_address', request.input('wallet_address') || null)
+      })
       .orderBy('start_time', 'ASC')
       .paginate(page, size)
 

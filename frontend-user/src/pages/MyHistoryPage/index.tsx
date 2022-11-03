@@ -1,8 +1,6 @@
 import clsx from "clsx";
 import { useEffect, useState } from "react";
-import Button from "../../components/base/Button";
 import DefaultLayout from "../../components/layout/DefaultLayout";
-import { quickGuide } from "../../constants";
 import HistoryTable from "./HistoryTable";
 import HowToJoin from "./HowToJoin";
 

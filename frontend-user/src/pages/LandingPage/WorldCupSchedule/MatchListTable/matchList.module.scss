@@ -1,0 +1,19 @@
+.tableRow > div:first-child {
+  width: 69px;
+}
+.tableRow > div:nth-child(2) {
+  width: 306px;
+}
+.tableRow > div:nth-child(3) {
+  width: 60px;
+  text-align: center;
+}
+.tableRow > div:nth-child(4) {
+  width: 80px;
+  text-align: center;
+}
+.tableRow > div:last-child {
+  width: 70px;
+  display: flex;
+  justify-content: center;
+}
