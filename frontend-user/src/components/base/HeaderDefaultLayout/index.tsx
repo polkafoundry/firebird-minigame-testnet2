@@ -1,7 +1,10 @@
 import clsx from "clsx";
-import { useState } from "react";
-
+import { useContext, useState } from "react";
 import { useLocation } from "react-router-dom";
+import { WalletContext } from "../../../context/WalletContext";
+import { useMyWeb3 } from "../../../hooks/useMyWeb3";
+import { displayWalletAddress } from "../../../utils";
+import Button from "../Button";
 
 type RouteTypes = {
   label: string;
@@ -10,35 +13,40 @@ type RouteTypes = {
 
 const routes: Array<RouteTypes> = [
   {
-    label: "Bird nest",
-    uri: "/bird-nest",
+    label: "Firefly Testnet",
+    uri: "https://faucet.firefly.firebirdchain.com/",
   },
   {
-    label: "Community",
-    uri: "/community",
+    label: "Firebird Cup",
+    uri: "/",
   },
   {
-    label: "Documentation",
-    uri: "https://docs.firebirdchain.com/",
+    label: "Leaderboard",
+    uri: "/leaderboard",
   },
   {
-    label: "FAQ",
-    uri: "/faq",
+    label: "My History",
+    uri: "/history",
   },
 ];
 
 const HeaderDefaultLayout = () => {
-  const location = useLocation();
-  const [open, setOpen] = useState<boolean>(false);
+  const { setShowModal, connectedAccount } = useContext(WalletContext);
+  const { isWrongChain, nativeCurrency, realTimeBalance } = useMyWeb3();
 
-  console.log(location);
+  const [openMenuMobile, setOpenMenuMobile] = useState<boolean>(false);
+  const location = useLocation();
 
   const handleOpenHeader = () => {
-    setOpen((prevState) => !prevState);
+    setOpenMenuMobile((prevState) => !prevState);
+  };
+
+  const openConnectModal = () => {
+    setShowModal && setShowModal(true);
   };
 
   const renderHeaderMobile = () => {
-    if (!open) return <></>;
+    if (!openMenuMobile) return <></>;
 
     return (
       <div className="fixed top-0 left-0 w-full h-screen overflow-y-auto bg-[#04060C] flex flex-col p-5 pb-8 z-50">
@@ -56,8 +64,8 @@ const HeaderDefaultLayout = () => {
             <a
               key={index}
               href={item.uri}
-              className={clsx("hover:tracking-wider duration-500", {
-                // "text-main": asPath === item.uri,
+              className={clsx({
+                "text-main": location.pathname === item.uri,
               })}
             >
               {item.label}
@@ -79,10 +87,10 @@ const HeaderDefaultLayout = () => {
   };
 
   return (
-    <>
+    <div className="w-full bg-gray-400 absolute h-20 flex justify-center">
       <nav
         className={clsx(
-          "absolute -translate-x-1/2 left-1/2 h-20 w-full flex items-center justify-between max-w-screen-main text-white",
+          "w-full h-full flex items-center justify-between max-w-screen-main text-white",
           "md:px-[120px]",
           "xs:px-[60px]",
           "pl-5 pr-6",
@@ -91,18 +99,35 @@ const HeaderDefaultLayout = () => {
         <a href="/">
           <img src="/images/logo-text.svg" alt="" />
         </a>
-        <div className={clsx("gap-5 hidden", "md:flex")}>
+        <div className={clsx("gap-5 hidden", "md:flex md:items-center")}>
           {routes.map((item: RouteTypes, index: number) => (
             <a
               key={index}
               href={item.uri}
-              className={clsx("hover:tracking-wider duration-500", {
-                // "text-main": asPath === item.uri,
+              className={clsx({
+                "text-main": location.pathname === item.uri,
               })}
             >
               {item.label}
             </a>
           ))}
+          <Button
+            className="bg-main p-[2px] h-10 rounded-md"
+            onClick={openConnectModal}
+          >
+            {connectedAccount ? (
+              <div className="flex text-sm h-full">
+                <div className="px-[10px] flex items-center font-semibold">
+                  {`${isWrongChain ? 0 : realTimeBalance} ${nativeCurrency}`}
+                </div>
+                <div className="flex bg-black items-center rounded-md px-2">
+                  {displayWalletAddress(connectedAccount)}
+                </div>
+              </div>
+            ) : (
+              <span className="font-semibold">Connect Wallet</span>
+            )}
+          </Button>
         </div>
         <div
           className={clsx("block cursor-pointer", "md:hidden")}
@@ -113,7 +138,7 @@ const HeaderDefaultLayout = () => {
       </nav>
 
       {renderHeaderMobile()}
-    </>
+    </div>
   );
 };
 
