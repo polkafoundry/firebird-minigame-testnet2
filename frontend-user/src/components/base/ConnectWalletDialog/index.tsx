@@ -1,10 +1,9 @@
-import clsx from "clsx";
+import { Dialog } from "@headlessui/react";
 import { SUPPORTED_WALLETS } from "../../../constants/connectors";
 import { useMyWeb3 } from "../../../hooks/useMyWeb3";
 import { displayWalletAddress } from "../../../utils";
 import Button from "../Button";
 import ConnectWalletBox from "./ConnectWalletBox";
-import styles from "./dialog.module.scss";
 
 type ConnectWalletDialogTypes = {
   open: boolean;
@@ -37,13 +36,11 @@ const ConnectWalletDialog = (props: ConnectWalletDialogTypes) => {
     disconnectWallet && disconnectWallet();
   };
 
-  if (!open) return <></>;
-
   const renderWalletInfo = () => {
     return (
       <div className="flex flex-col w-full">
         <p className="text-2xl font-semibold text-center">Account</p>
-        <div className="flex justify-between">
+        <div className="flex justify-between mt-4">
           <span className="">{displayWalletAddress(connectedAccount)}</span>
 
           <Button
@@ -95,15 +92,11 @@ const ConnectWalletDialog = (props: ConnectWalletDialogTypes) => {
   };
 
   return (
-    <div className="fixed top-0 left-0 w-screen h-screen z-[999] text-white">
-      <div className={styles.dialogBackdrop}></div>
-      <div className="flex h-full">
-        <div
-          className={clsx(
-            styles.dialogContainer,
-            "w-full h-fit relative m-auto bg-[#242424] max-w-[360px] p-10 rounded-2xl",
-          )}
-        >
+    <Dialog open={open} onClose={closeDialog} className="relative z-50">
+      <div className="fixed inset-0 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
+
+        <Dialog.Panel className="w-full h-fit relative m-auto bg-[#242424] text-white max-w-[360px] p-10 rounded-2xl">
           <img
             src="/images/icon-close.svg"
             alt=""
@@ -112,9 +105,9 @@ const ConnectWalletDialog = (props: ConnectWalletDialogTypes) => {
           />
 
           {connectedAccount ? renderWalletInfo() : renderWalletConnect()}
-        </div>
+        </Dialog.Panel>
       </div>
-    </div>
+    </Dialog>
   );
 };
 

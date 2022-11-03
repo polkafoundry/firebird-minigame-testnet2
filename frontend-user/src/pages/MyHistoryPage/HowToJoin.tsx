@@ -1,11 +1,11 @@
-import { useWeb3React } from "@web3-react/core";
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Button from "../../components/base/Button";
 import ButtonLink from "../../components/base/ButtonLink";
 import { quickGuide } from "../../constants";
 import { WalletContext } from "../../context/WalletContext";
 import { useMyWeb3 } from "../../hooks/useMyWeb3";
 import { displayWalletAddress } from "../../utils";
+import { requestSupportNetwork } from "../../utils/setupNetwork";
 
 const iconCheck = "/images/icon-correct-answer.svg";
 const iconUnCheck = "/images/icon-wrong-answer.svg";
@@ -82,7 +82,7 @@ const HowToJoin = () => {
               ) : (
                 <Button
                   className="h-auto rounded-xl font-semibold underline text-sm"
-                  onClick={() => setShowModal && setShowModal(true)}
+                  onClick={() => requestSupportNetwork()}
                 >
                   Switch Network
                 </Button>

@@ -1,12 +1,9 @@
 import { AbstractConnector } from "@web3-react/abstract-connector";
 import { InjectedConnector } from "@web3-react/injected-connector";
-import { BIRD_CHAIN_ID } from "./networks";
 
 const METAMASK_DEEPLINK = process.env.REACT_APP_METAMASK_DEEPLINK;
 
-export const injected = new InjectedConnector({
-  supportedChainIds: [+BIRD_CHAIN_ID],
-});
+export const injected = new InjectedConnector({});
 
 export interface WalletInfo {
   connector: AbstractConnector;
