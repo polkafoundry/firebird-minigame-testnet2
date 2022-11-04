@@ -14,7 +14,7 @@ type DropDownProps = {
   onChange: (data: any) => void;
   className?: string;
   itemsClassName?: string;
-  bgColor: "black" | "orange";
+  bgColor?: "black" | "orange";
 };
 
 const DropDown = (props: DropDownProps) => {
@@ -25,7 +25,7 @@ const DropDown = (props: DropDownProps) => {
     onChange,
     className,
     itemsClassName,
-    bgColor,
+    bgColor = "orange",
   } = props;
   const selectedItem = items.find((item) => item.value === selectedValue);
   const backgroundColor = bgColor === "black" ? "bg-black" : "bg-orange-200";
