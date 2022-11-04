@@ -16,7 +16,7 @@ const fakeDetail = {
   dateTime: "20th Nov 22, 23:00",
   stadium: "Al Bayt",
   firstTeamName: "Quatar",
-  firstTeamScore: "2",
+  firstTeamScore: "0",
   firstTeamLogo: "/images/fake-team-logo.png",
   secondTeamName: "Ecuador",
   secondTeamScore: "0",

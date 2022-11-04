@@ -1,4 +1,5 @@
 import { BET_TYPE, QUESTION_STATUS } from "../../../../../constants";
+import { getImgSrc } from "../../utils";
 import { getOptionIndexByBetPlace } from "./components/utils";
 import FirstQuestion from "./FirstQuestion";
 import SecondQuestion from "./SecondQuestion";
@@ -59,19 +60,13 @@ const MatchQuestions = (props: MatchQuestionProps) => {
     options: [
       {
         label: dataQuestion?.home_name,
-        icon:
-          process.env.REACT_APP_ICON_NATIONAL +
-          dataQuestion?.home_icon +
-          ".png",
+        icon: getImgSrc(dataQuestion?.home_icon),
         winRate: dataQuestion?.odds_ht_home,
       },
       { label: "Draw", winRate: dataQuestion?.odds_ht_draw },
       {
         label: dataQuestion?.away_name,
-        icon:
-          process.env.REACT_APP_ICON_NATIONAL +
-          dataQuestion?.away_icon +
-          ".png",
+        icon: getImgSrc(dataQuestion?.away_icon),
         winRate: dataQuestion?.odds_ht_away,
       },
     ],
@@ -94,19 +89,13 @@ const MatchQuestions = (props: MatchQuestionProps) => {
     options: [
       {
         label: dataQuestion?.home_name,
-        icon:
-          process.env.REACT_APP_ICON_NATIONAL +
-          dataQuestion?.home_icon +
-          ".png",
+        icon: getImgSrc(dataQuestion?.home_icon),
         winRate: dataQuestion?.odds_ft_home,
       },
       { label: "Draw", winRate: dataQuestion?.odds_ft_draw },
       {
         label: dataQuestion?.away_name,
-        icon:
-          process.env.REACT_APP_ICON_NATIONAL +
-          dataQuestion?.away_icon +
-          ".png",
+        icon: getImgSrc(dataQuestion?.away_icon),
         winRate: dataQuestion?.odds_ft_away,
       },
     ],
