@@ -26,6 +26,9 @@ export default class MatchService {
     if ('is_full_time' in params) {
       builder = builder.where('is_full_time', params.is_full_time)
     }
+    if ('round_name' in params) {
+      builder = builder.where('round_name', params.round_name)
+    }
     return builder
   }
   public async getLiveMatch() {
@@ -52,6 +55,9 @@ export default class MatchService {
       .preload('bettings', (query) => {
         query.where('user_address', wallet_address || null)
       })
+      .preload('predicts', (query) => {
+        query.where('user_address', wallet_address || null)
+      })
       .first()
   }
 
@@ -59,14 +65,31 @@ export default class MatchService {
     const page = request.input('page') || 1
     const size = request.input('size') || 10
 
+    const params = request.all()
+
     if (isNaN(page) || isNaN(size) || parseInt(page) <= 0 || parseInt(size) <= 0)
       throw new InvalidParamException('page or size must be specified as positive number')
-    let matchs = await this.buildQueryService({})
+    let matches = await this.buildQueryService(params)
       .preload('bettings', (query) => {
+        query.where('user_address', params.wallet_address || null)
+      })
+      .preload('predicts', (query) => {
         query.where('user_address', request.input('wallet_address') || null)
       })
       .paginate(page, size)
-    return matchs
+    matches = JSON.parse(JSON.stringify(matches))
+    return {
+      ...matches,
+      data: matches.data.map(match => {
+        let obj = {
+          ...match,
+          is_completed_bet: (match.bettings.length + match.predicts.length) == 5
+        }
+        delete obj.bettings
+        delete obj.predicts
+        return obj
+      })
+    }
   }
   public async getUpcomingMatch(request) {
     const page = request.input('page') || 1
@@ -74,14 +97,29 @@ export default class MatchService {
     const currentTime = Math.floor(Date.now() / 1000)
     if (isNaN(page) || isNaN(size) || parseInt(page) <= 0 || parseInt(size) <= 0)
       throw new InvalidParamException('page or size must be specified as positive number')
-    const matches = await this.buildQueryService({ is_half_time: false, is_full_time: false })
+    let matches = await this.buildQueryService({ is_half_time: false, is_full_time: false })
       .where('start_time', '>=', currentTime)
       .preload('bettings', (query) => {
+        query.where('user_address', request.input('wallet_address') || null)
+      })
+      .preload('predicts', (query) => {
         query.where('user_address', request.input('wallet_address') || null)
       })
       .orderBy('start_time', 'ASC')
       .paginate(page, size)
 
-    return matches
+    matches = JSON.parse(JSON.stringify(matches))
+    return {
+      ...matches,
+      data: matches.data.map(match => {
+        let obj = {
+          ...match,
+          is_completed_bet: (match.bettings.length + match.predicts.length) == 5
+        }
+        delete obj.bettings
+        delete obj.predicts
+        return obj
+      })
+    }
   }
 }

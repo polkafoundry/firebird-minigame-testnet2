@@ -191,7 +191,13 @@ const matchList = {
   ],
 };
 
-const MatchListTable = () => {
+type MatchListTableProps = {
+  handleSelectMatch: (id: number) => void;
+};
+
+const MatchListTable = (props: MatchListTableProps) => {
+  const { handleSelectMatch } = props;
+
   const [groupStageIndex, setGroupStageIndex] = useState<number>(0);
 
   const nextGroup = () => {
@@ -201,10 +207,6 @@ const MatchListTable = () => {
 
   const previousGroup = () => {
     if (groupStageIndex >= 1) setGroupStageIndex(groupStageIndex - 1);
-  };
-
-  const handleSelectMatch = (id: number) => {
-    console.log("id", id);
   };
 
   return (

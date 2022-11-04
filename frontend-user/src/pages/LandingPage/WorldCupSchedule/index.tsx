@@ -1,7 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DropDown from "../../../components/base/DropDown";
+import useFetch from "../../../hooks/useFetch";
+import { useMyWeb3 } from "../../../hooks/useMyWeb3";
 import MatchListRight from "./MatchListRight";
 import MatchListTable from "./MatchListTable";
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const queryString = require("query-string");
 
 const predictedOptions = [
   { label: "Predicted: All", value: 0 },
@@ -18,15 +22,39 @@ const statusOptions = [
 type FilterTypes = {
   predicted: number;
   status: number;
+  page: number;
+  size: number;
+  wallet_address: string;
 };
 
 const WorldCupSchedule = () => {
-  // all state here
+  const { account } = useMyWeb3();
 
+  const [selectedMatchId, setSelectedMatchId] = useState<number | undefined>();
   const [filter, setFilter] = useState<FilterTypes>({
     predicted: 0,
     status: 0,
+    page: 1,
+    size: 20,
+    wallet_address: "",
   });
+
+  const { data, loading } = useFetch(
+    "/match/get-list-match?" + queryString.stringify({ ...filter }),
+  );
+
+  useEffect(() => {
+    console.log("fetching", data);
+  }, [loading]);
+
+  useEffect(() => {
+    if (!account) return;
+
+    setFilter((prevFilter: FilterTypes) => ({
+      ...prevFilter,
+      wallet_address: account,
+    }));
+  }, [account]);
 
   const handleChangePredicted = (value: any) => {
     setFilter((prevFilter: FilterTypes) => ({
@@ -42,8 +70,12 @@ const WorldCupSchedule = () => {
     }));
   };
 
+  const handleSelectMatch = (id: number) => {
+    setSelectedMatchId(id);
+  };
+
   return (
-    <div className="flex flex-col py-20">
+    <div className="flex flex-col py-20 mt-10">
       <p className="m-0 text-4xl font-semibold text-center">
         2022 Qatar World Cup Schedule
       </p>
@@ -73,10 +105,10 @@ const WorldCupSchedule = () => {
 
       <div className="flex mt-5 relative">
         <div className="w-[55%] sticky top-10 h-fit">
-          <MatchListTable />
+          <MatchListTable handleSelectMatch={handleSelectMatch} />
         </div>
         <div className="w-[45%]">
-          <MatchListRight matchDetail={{}} />
+          <MatchListRight matchId={selectedMatchId} />
         </div>
       </div>
     </div>

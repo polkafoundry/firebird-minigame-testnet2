@@ -1,5 +1,7 @@
 import clsx from "clsx";
 import { useEffect } from "react";
+import MatchName from "../../components/base/Table/MatchName";
+import MatchPredict from "../../components/base/Table/MatchPredict";
 import styles from "./historyTable.module.scss";
 
 type HistoryTableTypes = {
@@ -22,26 +24,6 @@ const HistoryTable = (props: HistoryTableTypes) => {
   const renderLoading = () => {
     return <div className="">Loading ... </div>;
   };
-
-  const renderResultText = (result: boolean) => (
-    <>
-      <img
-        src={
-          result
-            ? "/images/icon-correct-answer.svg"
-            : "/images/icon-wrong-answer.svg"
-        }
-      />
-      <span
-        className={clsx(
-          result ? "text-green-500" : "text-red-500",
-          "font-semibold ml-1",
-        )}
-      >
-        {result ? "Correct" : "Incorrect"}
-      </span>
-    </>
-  );
 
   const renderClaimButton = () => (
     <button className="bg-black text-white px-5 rounded-xl py-2">
@@ -75,31 +57,21 @@ const HistoryTable = (props: HistoryTableTypes) => {
         >
           {!isWhoWinTable && (
             <>
-              <div className="flex space-x-2">
-                <img src={rowData.team1?.icon} alt="" />
-                <span className="font-semibold">{rowData.team1?.name} vs</span>
-                <img src={rowData.team2?.icon} alt="" />
-                <span className="font-semibold">{rowData.team2?.name}</span>
-              </div>
+              <MatchName team1={rowData.team1} team2={rowData.team2} />
               <div>{rowData.answer}</div>
               <div>{rowData.datetime}</div>
-              <div className="flex">{renderResultText(rowData.result)}</div>
+              <MatchPredict isCorrect={rowData.result} />
               <div>{rowData.winWhitelist ? "Yes" : "No"}</div>
               <div>${rowData.earnedReward}</div>
             </>
           )}
           {isWhoWinTable && (
             <>
-              <div className="flex space-x-2">
-                <img src={rowData.team1?.icon} alt="" />
-                <span className="font-semibold">{rowData.team1?.name} vs</span>
-                <img src={rowData.team2?.icon} alt="" />
-                <span className="font-semibold">{rowData.team2?.name}</span>
-              </div>
+              <MatchName team1={rowData.team1} team2={rowData.team2} />
               <div>{rowData.question}</div>
               <div>{rowData.answer}</div>
               <div>{rowData.datetime}</div>
-              <div className="flex">{renderResultText(rowData.result)}</div>
+              <MatchPredict isCorrect={rowData.result} />
               <div>{rowData.deposited} $BIRD</div>
               <div>{rowData.earned} $BIRD</div>
               <div>{rowData.amount} $BIRD</div>

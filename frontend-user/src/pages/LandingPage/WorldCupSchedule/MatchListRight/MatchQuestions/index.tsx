@@ -49,7 +49,7 @@ const fakeQuestion3 = {
   ],
   options: [
     { label: "Lower", winRate: "1.90", description: "≤ 1 goals scored" },
-    { label: "Total 1.5 goals" },
+    { label: "Total 1.5 goals", isDisableClick: true },
     { label: "Higher", winRate: "2.0", description: "> 2 goals scored" },
   ],
   results: {

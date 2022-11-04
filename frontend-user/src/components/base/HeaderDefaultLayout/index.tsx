@@ -88,7 +88,7 @@ const HeaderDefaultLayout = () => {
   };
 
   return (
-    <div className="w-full bg-gray-400 absolute h-20 flex justify-center">
+    <div className="w-full bg-black absolute h-20 flex justify-center">
       <nav
         className={clsx(
           "w-full h-full flex items-center justify-between max-w-screen-main text-white",
@@ -105,9 +105,11 @@ const HeaderDefaultLayout = () => {
             <a
               key={index}
               href={item.uri}
-              className={clsx({
-                "text-main": location.pathname === item.uri,
-              })}
+              className={clsx(
+                location.pathname === item.uri
+                  ? "text-main font-semibold"
+                  : "hover:text-red-500",
+              )}
             >
               {item.label}
             </a>

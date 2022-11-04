@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import { useEffect, useState } from "react";
 import DropDown from "../../components/base/DropDown";
+import Pagination from "../../components/base/Pagination";
 import DefaultLayout from "../../components/layout/DefaultLayout";
 import HistoryTable from "./HistoryTable";
 import HowToJoin from "./HowToJoin";
@@ -226,6 +227,7 @@ const MyHistoryPage = () => {
   });
   const [resultSelected, setResultSelected] = useState<number>();
   const [claimSelected, setClaimSelected] = useState<number>();
+  const [currentPage, setCurrentPage] = useState<number>(1);
 
   const handleChangeResult = (value: any) => {
     setResultSelected(value);
@@ -246,6 +248,10 @@ const MyHistoryPage = () => {
       ...prevFilter,
       [e.target.name]: e.target.value,
     }));
+  };
+
+  const handleChangePage = (value: number) => {
+    setCurrentPage(value);
   };
 
   return (
@@ -327,6 +333,14 @@ const MyHistoryPage = () => {
                   isWhoWinTable={navActived !== valueNav.GOALS}
                 />
               </div>
+
+              <Pagination
+                className="justify-center mt-10"
+                currentPage={currentPage}
+                totalCount={100}
+                pageSize={5}
+                onPageChange={handleChangePage}
+              />
             </div>
           </div>
 
