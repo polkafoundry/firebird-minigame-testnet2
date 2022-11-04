@@ -1,6 +1,8 @@
 import clsx from "clsx";
+import moment from "moment";
 import { useEffect, useState } from "react";
 import useFetch from "../../../../hooks/useFetch";
+import { getImgSrc } from "../utils";
 import MatchQuestions from "./MatchQuestions";
 import MatchGuide from "./MathGuide";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -30,7 +32,7 @@ const nav = [
 const MatchListRight = (props: MatchListRightProps) => {
   const { matchId } = props;
 
-  const { data: questions } = useFetch<any>(
+  const { data } = useFetch<any>(
     "/match/detail/" +
       matchId +
       "?" +
@@ -39,50 +41,56 @@ const MatchListRight = (props: MatchListRightProps) => {
       }),
   );
 
-  console.log("questionData :>> ", questions);
+  const matchData = data?.data;
+
+  const startTime = new Date(matchData?.start_time * 1000);
+  const matchTime = moment(startTime).format("Do MMM YY, HH:MM");
+
+  console.log("questionData :>> ", data);
 
   const [selectedNav, setSelectedNav] = useState<number>(1);
-  // const [matchDetail, setMatchDetail] = useState<any>({});
 
   useEffect(() => {
     if (!matchId) return;
     console.log(matchId);
   }, [matchId]);
 
-  const isEnded = true;
+  const isEnded = moment(startTime).diff(new Date(), "hours") < 1;
 
   return (
     <div className="flex flex-col rounded-lg ml-6 border-2 border-gray-600">
       <div className="flex flex-col items-center justify-center text-center h-auto min-h-[280px] bg-gray-700 text-white">
-        {questions && questions?.data ? (
+        {data && matchData ? (
           <>
-            <span className="">{fakeDetail?.dateTime}</span>
-            <span className="">{fakeDetail?.stadium}</span>
+            <span className="">{matchTime}</span>
+            <span className="">{matchData?.stadium}</span>
             <div className="flex justify-between w-full max-w-[360px]">
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col items-center gap-2 flex-1">
                 <img
-                  src={fakeDetail.firstTeamLogo}
-                  className="w-[65px] h-65px] rounded-full"
+                  src={getImgSrc(matchData.home_icon)}
+                  className="w-[65px] h-[65px] m-auto rounded-full"
                   alt=""
                 />
-                <span className="text-xl">{fakeDetail.firstTeamName}</span>
+                <span className="text-xl">{matchData.home_name}</span>
               </div>
-              <span className="leading-[65px] text-[52px] font-semibold">
-                {fakeDetail.firstTeamScore}
-              </span>
-              <span className="leading-[65px] text-[52px] font-semibold">
-                :
-              </span>
-              <span className="leading-[65px] text-[52px] font-semibold">
-                {fakeDetail.secondTeamScore}
-              </span>
-              <div className="flex flex-col gap-2">
+              <div>
+                <span className="leading-[65px] text-[52px] font-semibold">
+                  {fakeDetail.firstTeamScore}
+                </span>
+                <span className="leading-[65px] text-[52px] font-semibold">
+                  :
+                </span>
+                <span className="leading-[65px] text-[52px] font-semibold">
+                  {fakeDetail.secondTeamScore}
+                </span>
+              </div>
+              <div className="flex flex-col gap-2 flex-1">
                 <img
-                  src={fakeDetail.secondTeamLogo}
-                  className="w-[65px] h-65px] rounded-full"
+                  src={getImgSrc(matchData.away_icon)}
+                  className="w-[65px] h-[65px] m-auto rounded-full"
                   alt=""
                 />
-                <span className="text-xl">{fakeDetail.secondTeamName}</span>
+                <span className="text-xl">{matchData.away_name}</span>
               </div>
             </div>
 
@@ -94,7 +102,9 @@ const MatchListRight = (props: MatchListRightProps) => {
             >
               {isEnded
                 ? "Prediction for this match has been closed."
-                : `Predictions will be closed at ${fakeDetail.endTime}`}
+                : `Predictions will be closed at ${moment(startTime)
+                    .add(1, "hours")
+                    .format("Do MMM YY, HH:MM")}`}
             </div>
           </>
         ) : (
@@ -123,7 +133,7 @@ const MatchListRight = (props: MatchListRightProps) => {
       </div>
 
       {selectedNav === 1 ? (
-        <MatchQuestions dataQuestion={questions?.data} />
+        <MatchQuestions dataQuestion={matchData} />
       ) : (
         <MatchGuide isDetailGuide />
       )}
