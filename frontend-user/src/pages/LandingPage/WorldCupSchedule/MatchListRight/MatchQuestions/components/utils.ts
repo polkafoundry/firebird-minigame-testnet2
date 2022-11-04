@@ -17,3 +17,18 @@ export const getOptionColorFromIndex = (
   }
   return defaultClass;
 };
+
+export const getOptionIndexByBetPlace = (bet_place: string) => {
+  switch (bet_place) {
+    case "home":
+      return 0;
+    case "draw":
+      return 1;
+    case "away":
+      return 2;
+    case "under":
+      return 0;
+    case "over":
+      return 2;
+  }
+};
