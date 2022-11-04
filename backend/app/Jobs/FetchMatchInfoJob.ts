@@ -5,6 +5,7 @@ const HelperUtils = require('@ioc:App/Common/HelperUtils')
 const MatchModel = require('@ioc:App/Models/Match')
 const BettingModel = require('@ioc:App/Models/Betting')
 const PredictModel = require('@ioc:App/Models/Predict')
+const BetCountModel = require('@ioc:App/Models/BetCount')
 
 // import CrawlException from 'App/Exceptions/CrawlException'
 
@@ -213,7 +214,25 @@ export default class FetchMatchInfoJob implements JobContract {
             bettingData.bet_amount = event.returnValues.amount
             await bettingData.save()
           }
+          let bets = await BetCountModel.query()
+            .where('match_id', event.returnValues.matchID)
+            .andWhere('user_address', event.returnValues.user)
+            .first()
 
+          if (bets) {
+            await BetCountModel.query()
+              .where('match_id', event.returnValues.matchID)
+              .andWhere('user_address', event.returnValues.user)
+              .update({
+                bet_count: bets.bet_count + 1,
+              })
+          } else {
+            let betCountData = new BetCountModel()
+            betCountData.match_id = event.returnValues.matchID
+            betCountData.user_address = event.returnValues.user
+            betCountData.bet_count = 1
+            await betCountData.save()
+          }
           break
         case USER_PREDICT:
           const userPredict = await PredictModel.query()
@@ -250,7 +269,25 @@ export default class FetchMatchInfoJob implements JobContract {
             predictData.predict_time = event.returnValues.time
             await predictData.save()
           }
+          let betss = await BetCountModel.query()
+            .where('match_id', event.returnValues.matchID)
+            .andWhere('user_address', event.returnValues.user)
+            .first()
 
+          if (betss) {
+            await BetCountModel.query()
+              .where('match_id', event.returnValues.matchID)
+              .andWhere('user_address', event.returnValues.user)
+              .update({
+                bet_count: betss.bet_count + 1,
+              })
+          } else {
+            let betCountData = new BetCountModel()
+            betCountData.match_id = event.returnValues.matchID
+            betCountData.user_address = event.returnValues.user
+            betCountData.bet_count = 1
+            await betCountData.save()
+          }
           break
         default:
           console.log('FetchBoxJob: event not supported', event_type)

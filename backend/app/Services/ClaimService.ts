@@ -1,5 +1,5 @@
 import InvalidParamException from 'App/Exceptions/InvalidParamException'
-import BaseException from 'App/Exceptions/BaseException'
+import BusinessException from 'App/Exceptions/BusinessException'
 
 import { ethers, Wallet } from 'ethers'
 import { fromRpcSig } from 'ethereumjs-util'
@@ -9,25 +9,39 @@ export default class BettingService {
   public async claimToken(request, response): Promise<any> {
     const matchID = request.input('match_id')
     const betType = request.input('bet_type')
-    const amount = request.input('amount')
     const walletAddress = request.input('wallet')
-    if (isNaN(amount) || parseInt(amount) <= 0)
-      throw new InvalidParamException('Invalid withdraw amount')
+    const amount = request.input('amount')
+
     if (!walletAddress) throw new InvalidParamException('Wallet address required')
 
     const HelperUtils = require('@ioc:App/Common/HelperUtils')
 
     // verify withdraw to game backend
     try {
-      const bettingContract = await HelperUtils.getBettingContractInstance()
-      const nonce = parseInt(await bettingContract.methods.TokenClaimNonces(walletAddress).call())
-      const signature = await this.signWithdrawToken(nonce, amount, matchID, betType)
+      const BettingModel = require('@ioc:App/Models/Betting')
+      const betInfo = await BettingModel.query()
+        .where('match_id', matchID)
+        .andWhere('user_address', walletAddress)
+        .andWhere('bet_type', betType)
+        .first()
+      let am = Number(betInfo.result_num)
+      console.log(am)
+      // return { betInfo }
 
-      // create transaction logs to keep track withdraw process
+      if (
+        amount.toLocaleString('fullwide', { useGrouping: false }) ===
+        betInfo.result_num.toLocaleString('fullwide', { useGrouping: false })
+      ) {
+        const bettingContract = await HelperUtils.getBettingContractInstance()
+        const nonce = parseInt(await bettingContract.methods.TokenClaimNonces(walletAddress).call())
+        const signature = await this.signWithdrawToken(nonce, amount, matchID, betType)
 
-      return { signature }
+        return { signature }
+      } else {
+        return new BusinessException('Bet is not calculate or amount not avaiable')
+      }
     } catch (error) {
-      throw new BaseException(error.response?.data?.message || 'Can not get data')
+      throw new BusinessException(error)
     }
   }
   private async signWithdrawToken(

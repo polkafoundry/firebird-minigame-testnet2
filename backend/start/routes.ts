@@ -34,9 +34,9 @@ Route.group(() => {
   Route.post('betting/odds-ft-calculate', 'BettingsController.oddsFTCalculate')
   Route.post('betting/predict-pick-winner', 'BettingsController.predictPickWinner')
 
-  Route.get('/claim/get-sig', 'ClaimController.claimToken')
+  Route.post('/claim/get-sig', 'ClaimController.claimToken')
 }).prefix('/api/v1')
 
-Route.group(() => { })
+Route.group(() => {})
   .prefix('/api/v1')
   .middleware('checkSignature')
