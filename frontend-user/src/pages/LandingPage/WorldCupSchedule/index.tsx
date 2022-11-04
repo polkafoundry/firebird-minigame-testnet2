@@ -72,7 +72,7 @@ const WorldCupSchedule = () => {
   };
 
   return (
-    <div className="flex flex-col py-20">
+    <div className="flex flex-col py-20 mt-10">
       <p className="m-0 text-4xl font-semibold text-center">
         2022 Qatar World Cup Schedule
       </p>

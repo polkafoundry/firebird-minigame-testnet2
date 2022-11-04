@@ -1,11 +1,10 @@
 import LandingLayout from "../../components/layout/LandingLayout";
-import HomeBanner from "./HomeBanner";
 import WorldCupSchedule from "./WorldCupSchedule";
 
 const LangdingPage = () => {
   return (
     <LandingLayout>
-      <HomeBanner />
+      {/* <HomeBanner /> */}
 
       <div className="flex flex-col w-full max-w-screen-main mx-auto">
         <WorldCupSchedule />
