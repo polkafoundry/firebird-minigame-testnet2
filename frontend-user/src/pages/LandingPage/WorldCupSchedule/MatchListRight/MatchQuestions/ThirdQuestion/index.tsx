@@ -44,14 +44,17 @@ const ThirdQuestion = (props: QuestionProps) => {
                   dataQuestion?.isSubmitted
                     ? "pointer-events-none"
                     : "cursor-pointer",
-                  getOptionColorFromIndex(
-                    dataQuestion,
-                    index,
-                    "",
-                    optionWhoWin,
-                  ),
+                  !option.isDisableClick &&
+                    getOptionColorFromIndex(
+                      dataQuestion,
+                      index,
+                      "",
+                      optionWhoWin,
+                    ),
                 )}
-                onClick={() => handleChangeOptionWhoWin(index)}
+                onClick={() =>
+                  !option.isDisableClick && handleChangeOptionWhoWin(index)
+                }
               />
               <span className="text-sm text-yellow-400 mt-1 h-5">
                 {optionWhoWin === index && option.description}
