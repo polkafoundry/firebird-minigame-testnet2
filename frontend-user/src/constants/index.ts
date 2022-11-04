@@ -31,3 +31,10 @@ export const MATCH_STATUS = {
   NOT_YET: "Not yet",
   ENDED: "Ended",
 };
+
+export const BET_TYPE = {
+  OVER_UNDER_HALF_TIME: "ou_ht",
+  OVER_UNDER_FULL_TIME: "ou_ft",
+  ODD_EVEN_HALF_TIME: "odds_ht",
+  ODD_EVEN_FULL_TIME: "odds_ft",
+};

@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import { useState } from "react";
 import { QuestionProps } from "..";
+import { QUESTION_STATUS } from "../../../../../../constants";
 import BorderBox from "../components/BorderBox";
 import DepositAmount from "../components/DepositAmount";
 import Question from "../components/Question";
@@ -8,7 +9,12 @@ import ResultMatch from "../components/ResultMatch";
 import { getOptionColorFromIndex } from "../components/utils";
 
 const SecondQuestion = (props: QuestionProps) => {
-  const { dataQuestion = {} } = props;
+  const { dataQuestion = {}, title } = props;
+  const isSubmitted = dataQuestion && true;
+  const matchStatus = !dataQuestion
+    ? QUESTION_STATUS.NOT_PREDICTED
+    : QUESTION_STATUS.PREDICTED;
+  const errors: string[] = [];
   const [optionWhoWin, setOptionWhoWin] = useState<number>(0);
   const [depositAmount, setDepositAmount] = useState<string>("0");
 
@@ -24,9 +30,9 @@ const SecondQuestion = (props: QuestionProps) => {
 
   return (
     <Question
-      title="2. Who will in? "
+      title={title}
       handleSubmit={handleSubmit}
-      isSubmitted={dataQuestion?.isSubmitted}
+      isSubmitted={isSubmitted}
     >
       <div>
         <div className="flex items-start">
@@ -39,9 +45,7 @@ const SecondQuestion = (props: QuestionProps) => {
                 label={option.label}
                 icon={option.icon}
                 className={clsx(
-                  dataQuestion?.isSubmitted
-                    ? "pointer-events-none"
-                    : "cursor-pointer",
+                  isSubmitted ? "pointer-events-none" : "cursor-pointer",
                   getOptionColorFromIndex(
                     dataQuestion,
                     index,
@@ -68,15 +72,17 @@ const SecondQuestion = (props: QuestionProps) => {
           ))}
         </div>
 
-        {!dataQuestion?.isSubmitted && (
+        {!isSubmitted && (
           <DepositAmount
             depositAmount={depositAmount}
             handleChangeDepositAmount={handleChangeDepositAmount}
-            errors={dataQuestion?.errors}
+            errors={errors}
             winRate={dataQuestion?.options[optionWhoWin].winRate}
           />
         )}
-        {dataQuestion?.isSubmitted && <ResultMatch questions={dataQuestion} />}
+        {isSubmitted && (
+          <ResultMatch questions={dataQuestion} matchStatus={matchStatus} />
+        )}
       </div>
     </Question>
   );

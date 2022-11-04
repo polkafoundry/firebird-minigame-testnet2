@@ -14,7 +14,7 @@ const Question = (props: QuestionProps) => {
       {({ open }) => (
         <div className="mt-4 border rounded-lg">
           <Disclosure.Button className="block w-full select-none cursor-pointer p-6">
-            <div className="text-sm leading-6 text-slate-900 font-semibold flex justify-between">
+            <div className="text-sm leading-6 text-slate-900 font-semibold flex justify-between text-left">
               <span>{title}</span>
               <img
                 src="./images/icon-arrow-down.svg"

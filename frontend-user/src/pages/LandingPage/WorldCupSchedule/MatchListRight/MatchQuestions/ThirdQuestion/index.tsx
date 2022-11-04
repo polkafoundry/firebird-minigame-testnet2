@@ -8,7 +8,7 @@ import ResultMatch from "../components/ResultMatch";
 import { getOptionColorFromIndex } from "../components/utils";
 
 const ThirdQuestion = (props: QuestionProps) => {
-  const { dataQuestion = {} } = props;
+  const { dataQuestion = {}, title } = props;
   const [optionWhoWin, setOptionWhoWin] = useState<number>(0);
   const [depositAmount, setDepositAmount] = useState<string>("0");
 
@@ -25,7 +25,7 @@ const ThirdQuestion = (props: QuestionProps) => {
 
   return (
     <Question
-      title="3. Will the 1st half total goals be higher or lower than the total goals below?"
+      title={title}
       handleSubmit={handleSubmit}
       isSubmitted={dataQuestion?.isSubmitted}
     >

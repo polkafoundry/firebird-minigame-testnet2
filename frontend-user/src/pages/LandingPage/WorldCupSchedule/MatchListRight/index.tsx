@@ -1,7 +1,11 @@
 import clsx from "clsx";
 import { useEffect, useState } from "react";
+import useFetch from "../../../../hooks/useFetch";
+import { useMyWeb3 } from "../../../../hooks/useMyWeb3";
 import MatchQuestions from "./MatchQuestions";
 import MatchGuide from "./MathGuide";
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const queryString = require("query-string");
 
 type MatchListRightProps = {
   matchId: number | undefined;
@@ -26,9 +30,21 @@ const nav = [
 
 const MatchListRight = (props: MatchListRightProps) => {
   const { matchId } = props;
+  const { account } = useMyWeb3();
+
+  const { data: questions, loading } = useFetch<any>(
+    "/match/detail/" +
+      matchId +
+      "?" +
+      queryString.stringify({
+        wallet_address: "0xf6541439A90E7e340E913A2D70Dc1Ee283D1E90A",
+      }),
+  );
+
+  console.log("questionData :>> ", questions);
 
   const [selectedNav, setSelectedNav] = useState<number>(1);
-  const [matchDetail, setMatchDetail] = useState<any>({});
+  // const [matchDetail, setMatchDetail] = useState<any>({});
 
   useEffect(() => {
     if (!matchId) return;
@@ -40,7 +56,7 @@ const MatchListRight = (props: MatchListRightProps) => {
   return (
     <div className="flex flex-col rounded-lg ml-6 border-2 border-gray-600">
       <div className="flex flex-col items-center justify-center text-center h-auto min-h-[280px] bg-gray-700 text-white">
-        {matchDetail ? (
+        {questions && questions?.data ? (
           <>
             <span className="">{fakeDetail?.dateTime}</span>
             <span className="">{fakeDetail?.stadium}</span>
@@ -108,7 +124,11 @@ const MatchListRight = (props: MatchListRightProps) => {
         ))}
       </div>
 
-      {selectedNav === 1 ? <MatchQuestions /> : <MatchGuide isDetailGuide />}
+      {selectedNav === 1 ? (
+        <MatchQuestions dataQuestion={questions?.data} />
+      ) : (
+        <MatchGuide isDetailGuide />
+      )}
     </div>
   );
 };
