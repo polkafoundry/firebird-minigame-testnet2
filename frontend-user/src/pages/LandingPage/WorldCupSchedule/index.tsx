@@ -71,8 +71,8 @@ const WorldCupSchedule = () => {
         </div>
       </div>
 
-      <div className="flex mt-5">
-        <div className="w-[55%]">
+      <div className="flex mt-5 relative">
+        <div className="w-[55%] sticky top-10 h-fit">
           <MatchListTable />
         </div>
         <div className="w-[45%]">
