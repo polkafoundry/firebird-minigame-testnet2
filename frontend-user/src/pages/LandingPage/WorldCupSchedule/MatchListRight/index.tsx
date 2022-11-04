@@ -101,7 +101,7 @@ const MatchListRight = (props: MatchListRightProps) => {
         ))}
       </div>
 
-      {selectedNav === 1 ? <MatchQuestions /> : <MatchGuide />}
+      {selectedNav === 1 ? <MatchQuestions /> : <MatchGuide isDetailGuide />}
     </div>
   );
 };
