@@ -2,6 +2,7 @@ import { JobContract } from '@ioc:Rocketseat/Bull'
 import MatchService from 'App/Services/MatchService'
 import MatchApiService from 'App/Services/MatchApiService'
 import { updateMatchJob } from 'App/Jobs/UpdateMatchJob'
+const Const = require('@ioc:App/Common/Const')
 
 /*
 |--------------------------------------------------------------------------
@@ -67,11 +68,18 @@ export default class FetchLiveMatchJob implements JobContract {
     }
 
     if (matchData.event?.status?.code == 6) {
+      data.match_status = Const.MATCH_STATUS.LIVE
+    }
+    if ([7, 31].includes(matchData.event?.status?.code)) {
       data.is_half_time = true
     }
     if (matchData.event?.status?.code == 100) {
       data.is_half_time = true
       data.is_full_time = true
+      data.match_status = Const.MATCH_STATUS.FINISHED
+    }
+    if (matchData.event?.status?.code == 60) {
+      data.match_status = Const.MATCH_STATUS.POSTPONED
     }
 
     return updateMatchJob(data)

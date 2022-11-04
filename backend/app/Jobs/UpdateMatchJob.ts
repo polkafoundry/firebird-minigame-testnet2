@@ -50,7 +50,7 @@ export default class UpdateMatchJob implements JobContract {
       console.log({ data })
       const MatchModel = require('@ioc:App/Models/Match')
 
-      const match = await new MatchService().getMatchByIdOrSlug(data)
+      const match = await new MatchService().getMatchByIdOrSlug({ id: data.id })
       console.log({ match })
       if (!match) {
         await MatchModel.create(data)
@@ -63,6 +63,7 @@ export default class UpdateMatchJob implements JobContract {
       match.ft_away_score = data.ft_away_score || 0
       match.is_half_time = data.is_half_time || false
       match.is_full_time = data.is_full_time || false
+      if (data.match_status) match.match_status = data.match_status
 
       await match.save()
     } catch (error) {
