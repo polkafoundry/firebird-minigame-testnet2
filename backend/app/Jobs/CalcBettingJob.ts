@@ -44,19 +44,29 @@ export default class CalcBettingJob implements JobContract {
     const { data } = job
     console.log('CalcBettingJob: ', data)
     // Do somethign with you job data
+    const MAX_BETTING_CALC = 5000
     let [match, bettings] = await Promise.all([
       MatchModel.query().where('match_id', data.matchId).first(),
       BettingModel.query()
         .where('match_id', data.matchId)
         .where('bet_type', data.betType)
         .where('is_calculated', false)
-        .limit(100),
+        .limit(MAX_BETTING_CALC),
     ])
     bettings = JSON.parse(JSON.stringify(bettings))
     console.log('CalcBettingJob: ', match)
     console.log({ bettings })
     if (!match) return
-    if (!bettings.length) {
+
+    const calcFunction = {
+      [Const.BET_TYPE.OU_HT]: this._calcOuHtBet,
+      [Const.BET_TYPE.OU_FT]: this._calcOuFtBet,
+      [Const.BET_TYPE.ODDS_HT]: this._calcOddsHtBet,
+      [Const.BET_TYPE.ODDS_FT]: this._calcOddsFtBet,
+    }
+    await calcFunction[data.betType](match, bettings)
+
+    if (bettings.length < MAX_BETTING_CALC) {
       const checkingField = {
         [Const.BET_TYPE.OU_HT]: 'is_calculated_ou_ht',
         [Const.BET_TYPE.OU_FT]: 'is_calculated_ou_ft',
@@ -66,16 +76,8 @@ export default class CalcBettingJob implements JobContract {
       const updateObject = {}
       updateObject[checkingField[data.betType]] = true
       console.log({ updateObject })
-      return await MatchModel.query().where('id', data.matchId).update(updateObject)
+      await MatchModel.query().where('match_id', data.matchId).update(updateObject)
     }
-
-    const calcFunction = {
-      [Const.BET_TYPE.OU_HT]: this._calcOuHtBet,
-      [Const.BET_TYPE.OU_FT]: this._calcOuFtBet,
-      [Const.BET_TYPE.ODDS_HT]: this._calcOddsHtBet,
-      [Const.BET_TYPE.ODDS_FT]: this._calcOddsFtBet,
-    }
-    await calcFunction[data.betType](match, bettings)
   }
   private async _calcOuHtBet(match, ouHTBets) {
     for (let i = 0; i < ouHTBets.length; i++) {
@@ -167,8 +169,8 @@ export default class CalcBettingJob implements JobContract {
               oddsHTBets[i]?.bet_place === 'home'
                 ? match.odds_ht_home
                 : oddsHTBets[i]?.bet_place === 'away'
-                ? match.odds_ht_away
-                : match.odds_ht_draw,
+                  ? match.odds_ht_away
+                  : match.odds_ht_draw,
             result: oddsHTBets[i]?.bet_place === 'home' ? 'win' : 'lose',
             result_num:
               oddsHTBets[i]?.bet_place === 'home' ? match.odds_ht_home * amount - amount : -amount,
@@ -183,8 +185,8 @@ export default class CalcBettingJob implements JobContract {
               oddsHTBets[i]?.bet_place === 'home'
                 ? match.odds_ht_home
                 : oddsHTBets[i]?.bet_place === 'away'
-                ? match.odds_ht_away
-                : match.odds_ht_draw,
+                  ? match.odds_ht_away
+                  : match.odds_ht_draw,
             result: oddsHTBets[i]?.bet_place === 'away' ? 'win' : 'lose',
             result_num:
               oddsHTBets[i]?.bet_place === 'away' ? match.odds_ht_away * amount - amount : -amount,
@@ -199,8 +201,8 @@ export default class CalcBettingJob implements JobContract {
               oddsHTBets[i]?.bet_place === 'home'
                 ? match.odds_ht_home
                 : oddsHTBets[i]?.bet_place === 'away'
-                ? match.odds_ht_away
-                : match.odds_ht_draw,
+                  ? match.odds_ht_away
+                  : match.odds_ht_draw,
             result: oddsHTBets[i]?.bet_place === 'draw' ? 'win' : 'lose',
             result_num:
               oddsHTBets[i]?.bet_place === 'draw' ? match.odds_ht_draw * amount - amount : -amount,
@@ -221,8 +223,8 @@ export default class CalcBettingJob implements JobContract {
               oddsFTBets[i]?.bet_place === 'home'
                 ? match.odds_ft_home
                 : oddsFTBets[i]?.bet_place === 'away'
-                ? match.odds_ft_away
-                : match.odds_ft_draw,
+                  ? match.odds_ft_away
+                  : match.odds_ft_draw,
             result: oddsFTBets[i]?.bet_place === 'home' ? 'win' : 'lose',
             result_num:
               oddsFTBets[i]?.bet_place === 'home' ? match.odds_ft_home * amount - amount : -amount,
@@ -237,8 +239,8 @@ export default class CalcBettingJob implements JobContract {
               oddsFTBets[i]?.bet_place === 'home'
                 ? match.odds_ft_home
                 : oddsFTBets[i]?.bet_place === 'away'
-                ? match.odds_ft_away
-                : match.odds_ft_draw,
+                  ? match.odds_ft_away
+                  : match.odds_ft_draw,
             result: oddsFTBets[i]?.bet_place === 'away' ? 'win' : 'lose',
             result_num:
               oddsFTBets[i]?.bet_place === 'away' ? match.odds_ft_away * amount - amount : -amount,
@@ -253,8 +255,8 @@ export default class CalcBettingJob implements JobContract {
               oddsFTBets[i]?.bet_place === 'home'
                 ? match.odds_ft_home
                 : oddsFTBets[i]?.bet_place === 'away'
-                ? match.odds_ft_away
-                : match.odds_ft_draw,
+                  ? match.odds_ft_away
+                  : match.odds_ft_draw,
             result: oddsFTBets[i]?.bet_place === 'draw' ? 'win' : 'lose',
             result_num:
               oddsFTBets[i]?.bet_place === 'draw' ? match.odds_ft_draw * amount - amount : -amount,
