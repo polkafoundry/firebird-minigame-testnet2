@@ -268,25 +268,26 @@ export default class FetchMatchInfoJob implements JobContract {
             predictData.away_score = event.returnValues.awayScore
             predictData.predict_time = event.returnValues.time
             await predictData.save()
-          }
-          let betss = await BetCountModel.query()
-            .where('match_id', event.returnValues.matchID)
-            .andWhere('user_address', event.returnValues.user)
-            .first()
 
-          if (betss) {
-            await BetCountModel.query()
+            let betss = await BetCountModel.query()
               .where('match_id', event.returnValues.matchID)
               .andWhere('user_address', event.returnValues.user)
-              .update({
-                bet_count: betss.bet_count + 1,
-              })
-          } else {
-            let betCountData = new BetCountModel()
-            betCountData.match_id = event.returnValues.matchID
-            betCountData.user_address = event.returnValues.user
-            betCountData.bet_count = 1
-            await betCountData.save()
+              .first()
+
+            if (betss) {
+              await BetCountModel.query()
+                .where('match_id', event.returnValues.matchID)
+                .andWhere('user_address', event.returnValues.user)
+                .update({
+                  bet_count: betss.bet_count + 1,
+                })
+            } else {
+              let betCountData = new BetCountModel()
+              betCountData.match_id = event.returnValues.matchID
+              betCountData.user_address = event.returnValues.user
+              betCountData.bet_count = 1
+              await betCountData.save()
+            }
           }
           break
         default:
