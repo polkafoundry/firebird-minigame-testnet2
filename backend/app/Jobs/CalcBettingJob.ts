@@ -44,14 +44,15 @@ export default class CalcBettingJob implements JobContract {
     const { data } = job
     console.log('CalcBettingJob: ', data)
     // Do somethign with you job data
-    const [match, bettings] = await Promise.all([
-      MatchModel.query().where('id', data.matchId).first(),
+    let [match, bettings] = await Promise.all([
+      MatchModel.query().where('match_id', data.matchId).first(),
       BettingModel.query()
         .where('match_id', data.matchId)
         .where('bet_type', data.betType)
         .where('is_calculated', false)
         .limit(100),
     ])
+    bettings = JSON.parse(JSON.stringify(bettings))
     console.log('CalcBettingJob: ', match)
     console.log({ bettings })
     if (!match) return

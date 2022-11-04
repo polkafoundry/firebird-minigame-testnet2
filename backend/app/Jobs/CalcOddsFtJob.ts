@@ -19,7 +19,7 @@ const Const = require('@ioc:App/Common/Const')
 /* Ranges from 1 (highest priority) to MAX_INT (lowest priority). */
 const priority = 2
 /* Repeat after this amount of milliseconds */
-const repeatEvery = 1 * 60 * 1000 // 1m
+const repeatEvery = 0.2 * 60 * 1000 // 1m
 /* The total number of attempts to try the job until it completes.*/
 const attempts = 1
 
@@ -50,10 +50,13 @@ export default class CalcOddsFtJob implements JobContract {
   public async handle(job) {
     const { data } = job
     // Do somethign with you job data
-    const match = await MatchModel.query().where('is_calculated_odds_ft', false).where('is_half_time', true).first()
+    const match = await MatchModel.query()
+      .where('is_calculated_odds_ft', false)
+      .where('is_half_time', true)
+      .first()
     console.log('CalcOddsFtJob: ', match)
     if (!match) return
 
-    calcBettingJob({ matchId: match.id, betType: Const.BET_TYPE.ODDS_FT })
+    calcBettingJob({ matchId: match.match_id, betType: Const.BET_TYPE.ODDS_FT })
   }
 }
