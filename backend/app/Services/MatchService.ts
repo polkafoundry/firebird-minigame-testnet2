@@ -26,6 +26,9 @@ export default class MatchService {
     if ('is_full_time' in params) {
       builder = builder.where('is_full_time', params.is_full_time)
     }
+    if ('round_name' in params) {
+      builder = builder.where('round_name', params.round_name)
+    }
     return builder
   }
   public async getLiveMatch() {
@@ -59,9 +62,11 @@ export default class MatchService {
     const page = request.input('page') || 1
     const size = request.input('size') || 10
 
+    const params = request.all()
+
     if (isNaN(page) || isNaN(size) || parseInt(page) <= 0 || parseInt(size) <= 0)
       throw new InvalidParamException('page or size must be specified as positive number')
-    let matchs = await this.buildQueryService({})
+    let matchs = await this.buildQueryService(params)
       .preload('bettings', (query) => {
         query.where('user_address', request.input('wallet_address') || null)
       })
