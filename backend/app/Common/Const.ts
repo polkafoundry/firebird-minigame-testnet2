@@ -85,5 +85,11 @@ module.exports = Object.freeze({
     ODDS_HT: 'odds_ht',
     OU_FT: 'ou_ft',
     ODDS_FT: 'odds_ft'
+  },
+  MATCH_STATUS: {
+    UPCOMING: 'upcoming',
+    LIVE: 'live',
+    FINISHED: 'finished',
+    POSTPONED: 'postponed'
   }
 })

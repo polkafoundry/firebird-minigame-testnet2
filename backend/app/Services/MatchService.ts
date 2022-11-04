@@ -1,4 +1,5 @@
 import InvalidParamException from 'App/Exceptions/InvalidParamException'
+const Const = require('@ioc:App/Common/Const')
 
 export default class MatchService {
   public MatchModel = require('@ioc:App/Models/Match')
@@ -29,13 +30,19 @@ export default class MatchService {
     if ('round_name' in params) {
       builder = builder.where('round_name', params.round_name)
     }
+    if ('match_status' in params) {
+      builder = builder.where('match_status', params.match_status)
+    }
     return builder
   }
   public async getLiveMatch() {
     const currentTime = Math.floor(Date.now() / 1000)
     const liveMatches = await this.MatchModel.query()
-      .where('is_full_time', false)
-      .where('start_time', '<=', currentTime)
+      .where('match_status', Const.MATCH_STATUS.LIVE)
+      .orWhere(builder => {
+        builder.where('is_full_time', false)
+          .where('start_time', '<=', currentTime)
+      })
     return Promise.resolve(JSON.parse(JSON.stringify(liveMatches)))
   }
   public async getMatchByIdOrSlug(params) {
@@ -51,14 +58,24 @@ export default class MatchService {
     )
   }
   public async findByMatchId({ id, wallet_address }): Promise<any> {
-    return this.buildQueryService({ id })
+    let match = await this.buildQueryService({ id })
       .preload('bettings', (query) => {
         query.where('user_address', wallet_address || null)
       })
       .preload('predicts', (query) => {
         query.where('user_address', wallet_address || null)
       })
+      .preload('bet_count', (query) => {
+        query.where('user_address', wallet_address || null)
+      })
       .first()
+    match = JSON.parse(JSON.stringify(match))
+    const obj = {
+      ...match,
+      is_completed_bet: match.bet_count ? match.bet_count.bet_count == 5 : false
+    }
+    delete match.bet_count
+    return obj
   }
 
   public async getListMatch(request): Promise<any> {
@@ -74,7 +91,10 @@ export default class MatchService {
         query.where('user_address', params.wallet_address || null)
       })
       .preload('predicts', (query) => {
-        query.where('user_address', request.input('wallet_address') || null)
+        query.where('user_address', params.wallet_address || null)
+      })
+      .preload('bet_count', (query) => {
+        query.where('user_address', params.wallet_address || null)
       })
       .paginate(page, size)
     matches = JSON.parse(JSON.stringify(matches))
@@ -83,7 +103,7 @@ export default class MatchService {
       data: matches.data.map(match => {
         let obj = {
           ...match,
-          is_completed_bet: (match.bettings.length + match.predicts.length) == 5
+          is_completed_bet: match.bet_count ? match.bet_count.bet_count == 5 : false
         }
         delete obj.bettings
         delete obj.predicts
@@ -105,6 +125,9 @@ export default class MatchService {
       .preload('predicts', (query) => {
         query.where('user_address', request.input('wallet_address') || null)
       })
+      .preload('bet_count', (query) => {
+        query.where('user_address', request.input('wallet_address') || null)
+      })
       .orderBy('start_time', 'ASC')
       .paginate(page, size)
 
@@ -114,7 +137,7 @@ export default class MatchService {
       data: matches.data.map(match => {
         let obj = {
           ...match,
-          is_completed_bet: (match.bettings.length + match.predicts.length) == 5
+          is_completed_bet: match.bet_count ? match.bet_count.bet_count == 5 : false
         }
         delete obj.bettings
         delete obj.predicts

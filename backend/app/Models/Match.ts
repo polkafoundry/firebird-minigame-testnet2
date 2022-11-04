@@ -1,7 +1,8 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, HasMany, hasMany } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, HasMany, hasMany, HasOne, hasOne } from '@ioc:Adonis/Lucid/Orm'
 import Betting from 'App/Models/Betting'
 import Predicts from 'App/Models/Predict'
+import BetCount from 'App/Models/BetCount'
 
 export default class Match extends BaseModel {
   public static table = 'matchs'
@@ -105,6 +106,9 @@ export default class Match extends BaseModel {
   @column({ columnName: 'odds_ft_away' })
   public odds_ft_away: number
 
+  @column({ columnName: 'match_status' })
+  public match_status: string
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
@@ -116,6 +120,12 @@ export default class Match extends BaseModel {
     foreignKey: 'match_id',
   })
   public bettings: HasMany<typeof Betting>
+
+  @hasOne(() => BetCount, {
+    localKey: 'match_id',
+    foreignKey: 'match_id',
+  })
+  public bet_count: HasOne<typeof BetCount>
 
   @hasMany(() => Predicts, {
     localKey: 'match_id',
