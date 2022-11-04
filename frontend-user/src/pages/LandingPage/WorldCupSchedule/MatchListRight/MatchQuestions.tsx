@@ -101,7 +101,7 @@ const InputNumber = (props: InputNumberProps) => {
     <input
       type="text"
       className={clsx(
-        "w-14 h-10 p-2 text-3xl font-semibold text-center bg-white",
+        "w-14 h-10 p-2 text-3xl font-semibold text-center bg-white outline-none",
         type === MATCH_STATUS.NOT_PREDICTED && "border",
         type === MATCH_STATUS.CORRECT_ANSWER && "text-green-600",
         type === MATCH_STATUS.WRONG_ANSWER && "text-red-600",
@@ -541,6 +541,7 @@ const MatchQuestions = () => {
                   label={option.label}
                   icon={option.icon}
                   className={clsx(
+                    "w-[160px]",
                     question3.isSubmitted
                       ? "pointer-events-none"
                       : "cursor-pointer",
@@ -619,6 +620,7 @@ const MatchQuestions = () => {
                   label={option.label}
                   icon={option.icon}
                   className={clsx(
+                    "w-[160px]",
                     question4.isSubmitted
                       ? "pointer-events-none"
                       : "cursor-pointer",

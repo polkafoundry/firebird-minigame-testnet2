@@ -1,0 +1,70 @@
+.matchScoreRow {
+  & > div:first-child {
+    min-width: 220px;
+    flex: 3;
+  }
+  & > div:nth-child(2) {
+    min-width: 70px;
+    flex: 2;
+  }
+  & > div:nth-child(3) {
+    min-width: 150px;
+    flex: 2.5;
+  }
+  & > div:nth-child(4) {
+    min-width: 100px;
+    flex: 2;
+  }
+  & > div:nth-child(5) {
+    min-width: 120px;
+    flex: 2;
+  }
+  & > div:last-child {
+    min-width: 120px;
+    flex: 2;
+  }
+}
+
+.whoWinRow {
+  & > div:first-child {
+    min-width: 220px;
+    flex: 3;
+  }
+  & > div:nth-child(2) {
+    min-width: 85px;
+    flex: 1;
+  }
+  & > div:nth-child(3) {
+    min-width: 70px;
+    flex: 1;
+  }
+  & > div:nth-child(4) {
+    min-width: 150px;
+    flex: 2;
+  }
+  & > div:nth-child(5) {
+    min-width: 100px;
+    flex: 1;
+  }
+  & > div:nth-child(6) {
+    min-width: 90px;
+    flex: 1;
+    text-align: center;
+  }
+  & > div:nth-child(7) {
+    min-width: 90px;
+    flex: 1;
+    text-align: center;
+  }
+  & > div:nth-child(8) {
+    min-width: 90px;
+    flex: 1;
+    text-align: center;
+  }
+
+  & > div:last-child {
+    min-width: 150px;
+    flex: 2;
+    text-align: center;
+  }
+}
