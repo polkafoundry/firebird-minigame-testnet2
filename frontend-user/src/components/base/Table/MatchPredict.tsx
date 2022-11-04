@@ -14,7 +14,7 @@ const MatchPredict = (props: MatchPredictProps) => {
   const iconSize = isDisplayText ? "w-[18px] h-[18px]" : "w-[27px] h-[27px]";
 
   return (
-    <div>
+    <div className="flex items-center">
       <img src={iconSrc} alt="" className={iconSize} />
       {isDisplayText && (
         <span className={clsx(textColor, "font-semibold ml-1")}>
