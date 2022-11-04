@@ -17,3 +17,17 @@ export const quickGuide = [
   "The match results will be updated.",
   "Check the leadeborad menu to see your rank.",
 ];
+
+export enum QUESTION_STATUS {
+  NOT_PREDICTED,
+  PREDICTED,
+  CORRECT_ANSWER,
+  WRONG_ANSWER,
+  WINNER,
+}
+
+export const MATCH_STATUS = {
+  ON_GOING: "On going",
+  NOT_YET: "Not yet",
+  ENDED: "Ended",
+};

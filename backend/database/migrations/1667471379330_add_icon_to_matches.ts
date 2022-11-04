@@ -12,10 +12,8 @@ export default class AddIconToMatches extends BaseSchema {
 
   public async down() {
     this.schema.table(this.tableName, (table) => {
-      table.dropColumn('is_calculated_ou_ht')
-      table.dropColumn('is_calculated_ou_ft')
-      table.dropColumn('is_calculated_odds_ht')
-      table.dropColumn('is_calculated_odds_ft')
+      table.dropColumn('home_icon')
+      table.dropColumn('away_icon')
     })
   }
 }

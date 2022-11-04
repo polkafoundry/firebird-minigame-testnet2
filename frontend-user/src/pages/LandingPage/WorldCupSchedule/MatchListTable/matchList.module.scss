@@ -1,3 +1,26 @@
+// .tableRow > div:first-child {
+//   width: 12%;
+//   max-width: 100px;
+// }
+// .tableRow > div:nth-child(2) {
+//   width: 306px;
+//   flex: 1;
+// }
+// .tableRow > div:nth-child(3) {
+//   width: 10%;
+//   max-width: 80px;
+//   text-align: center;
+// }
+// .tableRow > div:nth-child(4) {
+//   width: 14%;
+//   max-width: 120px;
+//   text-align: center;
+// }
+// .tableRow > div:last-child {
+//   width: 12%;
+//   max-width: 100px;
+//   display: flex;
+//   justify-content: center;
 .tableRow {
   & > div:first-child {
     min-width: 69px;

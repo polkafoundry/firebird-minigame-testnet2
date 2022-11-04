@@ -1,7 +1,7 @@
 import clsx from "clsx";
-import React, { useState } from "react";
-import MatchGuide from "./MatchGuide";
+import { useState } from "react";
 import MatchQuestions from "./MatchQuestions";
+import MatchGuide from "./MathGuide";
 
 type MatchListRightProps = {
   matchDetail: any;

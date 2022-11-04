@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { MATCH_STATUS } from "../../../constants/match";
+import { MATCH_STATUS } from "../../../constants";
 
 type MatchStatusProps = {
   status: typeof MATCH_STATUS[keyof typeof MATCH_STATUS];

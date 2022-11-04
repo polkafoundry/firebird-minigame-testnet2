@@ -11,14 +11,15 @@ const MATCH_STATUS = {
   ENDED: "Ended",
 };
 
+const headingTable = [
+  { label: "Time" },
+  { label: "Match" },
+  { label: "Score", className: "text-center" },
+  { label: "Status", className: "text-center" },
+  { label: "Predicted", className: "text-center" },
+];
+
 const matchList = {
-  headingTable: [
-    { label: "Time", width: 69 },
-    { label: "Match", width: 306 },
-    { label: "Score", width: 60, className: "text-center" },
-    { label: "Status", width: 80, className: "text-center" },
-    { label: "Predicted", width: 70, className: "text-center" },
-  ],
   data: [
     {
       groupStage: "Group stage - Round 1",
@@ -202,6 +203,10 @@ const MatchListTable = () => {
     if (groupStageIndex >= 1) setGroupStageIndex(groupStageIndex - 1);
   };
 
+  const handleSelectMatch = (id: number) => {
+    console.log("id", id);
+  };
+
   return (
     <div className="">
       <div className="flex justify-between items-start p-5 bg-gray-500 text-white">
@@ -231,12 +236,13 @@ const MatchListTable = () => {
             styles.tableRow,
           )}
         >
-          {matchList.headingTable.map((heading) => (
+          {headingTable.map((heading) => (
             <div key={heading.label} className={heading.className}>
               {heading.label}
             </div>
           ))}
         </div>
+
         {matchList.data[groupStageIndex].matchGroups.map((matchInfo) => (
           <div key={matchInfo.date} className="min-w-fit">
             <div className="bg-gray-300 px-5 py-1 font-semibold">
@@ -246,9 +252,10 @@ const MatchListTable = () => {
               <div
                 key={match.id}
                 className={clsx(
-                  "flex items-center px-5 py-2 border",
+                  "flex px-5 py-2 border cursor-pointer hover:bg-orange-300 transition-all duration-300",
                   styles.tableRow,
                 )}
+                onClick={() => handleSelectMatch(match?.id)}
               >
                 <div>{match.time}</div>
                 <MatchName team1={match.team1} team2={match.team2} />
