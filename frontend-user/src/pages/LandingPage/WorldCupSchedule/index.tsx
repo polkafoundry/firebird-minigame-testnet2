@@ -30,8 +30,7 @@ type FilterTypes = {
 const WorldCupSchedule = () => {
   const { account } = useMyWeb3();
 
-  // all state here
-
+  const [selectedMatchId, setSelectedMatchId] = useState<number | undefined>();
   const [filter, setFilter] = useState<FilterTypes>({
     predicted: 0,
     status: 0,
@@ -71,6 +70,10 @@ const WorldCupSchedule = () => {
     }));
   };
 
+  const handleSelectMatch = (id: number) => {
+    setSelectedMatchId(id);
+  };
+
   return (
     <div className="flex flex-col py-20 mt-10">
       <p className="m-0 text-4xl font-semibold text-center">
@@ -102,10 +105,10 @@ const WorldCupSchedule = () => {
 
       <div className="flex mt-5 relative">
         <div className="w-[55%] sticky top-10 h-fit">
-          <MatchListTable />
+          <MatchListTable handleSelectMatch={handleSelectMatch} />
         </div>
         <div className="w-[45%]">
-          <MatchListRight matchDetail={{}} />
+          <MatchListRight matchId={selectedMatchId} />
         </div>
       </div>
     </div>

@@ -1,10 +1,10 @@
 import clsx from "clsx";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import MatchQuestions from "./MatchQuestions";
 import MatchGuide from "./MathGuide";
 
 type MatchListRightProps = {
-  matchDetail: any;
+  matchId: number | undefined;
 };
 
 const fakeDetail = {
@@ -25,8 +25,15 @@ const nav = [
 ];
 
 const MatchListRight = (props: MatchListRightProps) => {
-  const { matchDetail } = props;
+  const { matchId } = props;
+
   const [selectedNav, setSelectedNav] = useState<number>(1);
+  const [matchDetail, setMatchDetail] = useState<any>({});
+
+  useEffect(() => {
+    if (!matchId) return;
+    console.log(matchId);
+  }, [matchId]);
 
   const isEnded = true;
 
