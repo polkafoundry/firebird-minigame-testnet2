@@ -1,5 +1,8 @@
 import clsx from "clsx";
 import { useState } from "react";
+import MatchName from "../../../../components/base/Table/MatchName";
+import MatchPredict from "../../../../components/base/Table/MatchPredict";
+import MatchStatus from "../../../../components/base/Table/MatchStatus";
 import styles from "./matchList.module.scss";
 
 const MATCH_STATUS = {
@@ -226,11 +229,10 @@ const MatchListTable = () => {
           onClick={nextGroup}
         />
       </div>
-
-      <div className="border">
+      <div className="border overflow-x-auto">
         <div
           className={clsx(
-            "flex bg-gray-400 p-5 font-semibold",
+            "flex bg-gray-400 p-5 font-semibold min-w-fit",
             styles.tableRow,
           )}
         >
@@ -242,7 +244,7 @@ const MatchListTable = () => {
         </div>
 
         {matchList.data[groupStageIndex].matchGroups.map((matchInfo) => (
-          <div key={matchInfo.date} className="">
+          <div key={matchInfo.date} className="min-w-fit">
             <div className="bg-gray-300 px-5 py-1 font-semibold">
               {matchInfo.date}
             </div>
@@ -256,23 +258,13 @@ const MatchListTable = () => {
                 onClick={() => handleSelectMatch(match?.id)}
               >
                 <div>{match.time}</div>
-                <div className="flex space-x-2">
-                  <img src={match.team1?.icon} alt="" />
-                  <span>{match.team1?.name} vs</span>
-                  <img src={match.team2?.icon} alt="" />
-                  <span>{match.team2?.name}</span>
-                </div>
+                <MatchName team1={match.team1} team2={match.team2} />
                 <div>{match.score}</div>
-                <div>{match.status}</div>
-                <div>
-                  <img
-                    src={
-                      match.predicted
-                        ? "/images/icon-correct-answer.svg"
-                        : "/images/icon-wrong-answer.svg"
-                    }
-                  />
-                </div>
+                <MatchStatus status={match.status} />
+                <MatchPredict
+                  isCorrect={match.predicted}
+                  isDisplayText={false}
+                />
               </div>
             ))}
             <div></div>
