@@ -52,7 +52,7 @@ export default class CalcOddsFtJob implements JobContract {
     // Do somethign with you job data
     const match = await MatchModel.query()
       .where('is_calculated_odds_ft', false)
-      .where('is_half_time', true)
+      .where('is_full_time', true)
       .first()
     console.log('CalcOddsFtJob: ', match)
     if (!match) return
