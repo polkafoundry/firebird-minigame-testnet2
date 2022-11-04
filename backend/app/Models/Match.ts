@@ -1,6 +1,7 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column, HasMany, hasMany } from '@ioc:Adonis/Lucid/Orm'
 import Betting from 'App/Models/Betting'
+import Predicts from 'App/Models/Predict'
 
 export default class Match extends BaseModel {
   public static table = 'matchs'
@@ -111,9 +112,16 @@ export default class Match extends BaseModel {
   public updatedAt: DateTime
 
   @hasMany(() => Betting, {
+    localKey: 'match_id',
     foreignKey: 'match_id',
   })
   public bettings: HasMany<typeof Betting>
+
+  @hasMany(() => Predicts, {
+    localKey: 'match_id',
+    foreignKey: 'match_id',
+  })
+  public predicts: HasMany<typeof Predicts>
 }
 
 module.exports = Match
