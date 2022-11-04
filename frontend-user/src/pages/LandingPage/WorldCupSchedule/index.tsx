@@ -1,7 +1,10 @@
+import moment from "moment";
 import { useEffect, useState } from "react";
 import DropDown from "../../../components/base/DropDown";
+import { API_BASE_LOGO_TEAM } from "../../../constants";
 import useFetch from "../../../hooks/useFetch";
 import { useMyWeb3 } from "../../../hooks/useMyWeb3";
+import { groupArrayById } from "../../../utils";
 import MatchListRight from "./MatchListRight";
 import MatchListTable from "./MatchListTable";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -24,6 +27,7 @@ type FilterTypes = {
   status: number;
   page: number;
   size: number;
+  round_name: number;
   wallet_address: string;
 };
 
@@ -31,21 +35,49 @@ const WorldCupSchedule = () => {
   const { account } = useMyWeb3();
 
   const [selectedMatchId, setSelectedMatchId] = useState<number | undefined>();
+  const [dataTable, setDataTable] = useState<any[]>([]);
   const [filter, setFilter] = useState<FilterTypes>({
     predicted: 0,
     status: 0,
     page: 1,
     size: 20,
     wallet_address: "",
+    round_name: 15,
   });
 
-  const { data, loading } = useFetch(
+  const { data, loading } = useFetch<any>(
     "/match/get-list-match?" + queryString.stringify({ ...filter }),
   );
 
   useEffect(() => {
-    console.log("fetching", data);
-  }, [loading]);
+    const rawData = data?.data?.data.map((item: any) => {
+      return {
+        ...item,
+        dateString: moment(new Date(item?.start_time * 1000)).format(
+          "MMM DD - dddd",
+        ),
+        homeTeam: {
+          name: item?.home_name,
+          icon: API_BASE_LOGO_TEAM + item?.home_icon + ".png",
+        },
+        awayTeam: {
+          name: item?.away_name,
+          icon: API_BASE_LOGO_TEAM + item?.away_icon + ".png",
+        },
+      };
+    });
+    const groupData = groupArrayById(rawData, "dateString");
+
+    const newTableData = [];
+    for (const [key, value] of Object.entries(groupData)) {
+      newTableData.push({
+        date: key,
+        matches: value,
+        groupRound: "Group stage - Round 1",
+      });
+    }
+    setDataTable(newTableData);
+  }, [data]);
 
   useEffect(() => {
     if (!account) return;
@@ -105,7 +137,11 @@ const WorldCupSchedule = () => {
 
       <div className="flex mt-5 relative">
         <div className="w-[55%] sticky top-10 h-fit">
-          <MatchListTable handleSelectMatch={handleSelectMatch} />
+          <MatchListTable
+            handleSelectMatch={handleSelectMatch}
+            dataTable={dataTable}
+            loading={loading}
+          />
         </div>
         <div className="w-[45%]">
           <MatchListRight matchId={selectedMatchId} />

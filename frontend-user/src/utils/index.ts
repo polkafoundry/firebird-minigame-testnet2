@@ -20,3 +20,16 @@ export async function checkMetaMaskIsUnlocked() {
 
   return unlocked;
 }
+
+export function groupArrayById(arr = [], key: string) {
+  return key
+    ? arr.reduce(
+        (currentItem: any, result: any) => (
+          !currentItem[result[key]] && (currentItem[result[key]] = []),
+          currentItem[result[key]].push(result),
+          currentItem
+        ),
+        {},
+      )
+    : {};
+}

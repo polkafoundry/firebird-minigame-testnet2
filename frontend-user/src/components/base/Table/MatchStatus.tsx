@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { MATCH_STATUS } from "../../../constants";
+import { MATCH_STATUS, MATCH_STATUS_TEXT } from "../../../constants";
 
 type MatchStatusProps = {
   status: typeof MATCH_STATUS[keyof typeof MATCH_STATUS];
@@ -10,13 +10,15 @@ const MatchStatus = (props: MatchStatusProps) => {
   const { status, className = "" } = props;
   const getBackgroundColor = () => {
     switch (status) {
-      case MATCH_STATUS.ON_GOING:
+      case MATCH_STATUS.LIVE:
         return "bg-green-200";
 
-      case MATCH_STATUS.NOT_YET:
+      case MATCH_STATUS.UPCOMING:
         return "bg-pink-200";
 
-      case MATCH_STATUS.ENDED:
+      case MATCH_STATUS.FINISHED:
+        return "bg-gray-200";
+      default:
         return "bg-gray-200";
     }
   };
@@ -31,7 +33,7 @@ const MatchStatus = (props: MatchStatusProps) => {
         className,
       )}
     >
-      {status}
+      {MATCH_STATUS_TEXT[status]}
     </div>
   );
 };

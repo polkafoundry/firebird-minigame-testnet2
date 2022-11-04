@@ -28,9 +28,17 @@ export enum QUESTION_STATUS {
 }
 
 export const MATCH_STATUS = {
-  ON_GOING: "On going",
-  NOT_YET: "Not yet",
-  ENDED: "Ended",
+  UPCOMING: "upcoming",
+  LIVE: "live",
+  FINISHED: "finished",
+  POSTPONED: "postponed",
+};
+
+export const MATCH_STATUS_TEXT = {
+  [MATCH_STATUS.UPCOMING]: "Not yet",
+  [MATCH_STATUS.LIVE]: "On going",
+  [MATCH_STATUS.FINISHED]: "Ended",
+  [MATCH_STATUS.POSTPONED]: "Post poned",
 };
 
 export const BET_TYPE = {
