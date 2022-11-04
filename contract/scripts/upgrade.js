@@ -10,9 +10,9 @@ async function main() {
 
   // We get the contract to deploy
   const [deployer] = await hre.ethers.getSigners();
-  const GameContractFactory = await ethers.getContractFactory("NFTWEscrow");
-  const gamecontract = await upgrades.upgradeProxy("0x27E0bEfF6F7BBe26EB84ba48dAB2870ef3a25332", GameContractFactory);
-  console.log("game contract upgraded:", gamecontract.address);
+  const sBirdContract = await ethers.getContractFactory("SBirdBetting");
+  const upgradeContract = await upgrades.upgradeProxy("0xF74E67CE9936a6ABb06C0770C1b3b1644e5aA101", sBirdContract);
+  console.log("sbird contract upgraded:", upgradeContract.address);
 }
 
 // We recommend this pattern to be able to use async/await everywhere

@@ -62,7 +62,7 @@ contract SBirdBetting is
         public
         initializer
     {
-        require(_token != address(0), "Betting token address not found");
+        require(_token != address(0), "BIRD token address not found");
         __Ownable_init();
         _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _setupRole(OWNER_ROLE, msg.sender);
@@ -133,16 +133,16 @@ contract SBirdBetting is
         string memory _betPlace
     ) external virtual nonReentrant {
         require(BETTING_TOKEN_ADDRESS != address(0), "Rewards token not set");
-        require(maxBetAmount != 0, "Bet amount not set");
+        require(maxBetAmount != 0, "Max amount not set");
         require(
             userBettingInMatch[msg.sender][_matchID][_betType].amount == 0,
-            "You were betting in this bet"
+            "You were predict in this bet"
         );
-        require(_amount <= maxBetAmount, "Exceed amount in bet");
+        require(_amount <= maxBetAmount, "Exceed amount in pool");
         MatchData storage mData = matchByID[_matchID];
         require(
             block.timestamp < mData.mInf.startTime,
-            "Can betting before match start"
+            "Can predict before match start"
         );
 
         userBettingInMatch[msg.sender][_matchID][_betType] = UserBetDetail(
@@ -156,7 +156,6 @@ contract SBirdBetting is
             fundWallet,
             _amount
         );
-        claimInMatch[msg.sender][_matchID] = false;
         emit UserBetting(
             msg.sender,
             _matchID,
@@ -174,7 +173,10 @@ contract SBirdBetting is
         EIP712Signature calldata _signature
     ) external nonReentrant {
         require(_amount > 0, "Amount is incorrect");
-        require(claimInMatch[msg.sender][_matchID] == false, "Token claimed");
+        require(
+            !userBettingInMatch[msg.sender][_matchID][_betType].isClaimed,
+            "BIRD claimed"
+        );
         require(
             _signature.deadline == 0 || _signature.deadline >= block.timestamp,
             "Signature expired"
@@ -214,8 +216,7 @@ contract SBirdBetting is
             msg.sender,
             _amount
         );
-
-        claimInMatch[msg.sender][_matchID] = true;
+        userBettingInMatch[msg.sender][_matchID][_betType].isClaimed = true;
         TokenClaimTimeStamp[msg.sender] = block.timestamp;
 
         emit UserClaim(

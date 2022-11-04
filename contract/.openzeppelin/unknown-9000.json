@@ -3508,6 +3508,524 @@
           }
         }
       }
+    },
+    "4d9873abeee5eb02b7b2bc65c45bdf49c460457f94635f0249fc969adc6b59ac": {
+      "address": "0x9E588a33CBc49515cCfFD005C9f132B65F6D1986",
+      "txHash": "0x618a8e7729073865e0ed72ebf03842ba08b009d9f48b56a5133d947d8572c0da",
+      "layout": {
+        "solcVersion": "0.8.4",
+        "storage": [
+          {
+            "label": "_initialized",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_uint8",
+            "contract": "Initializable",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:62",
+            "retypedFrom": "bool"
+          },
+          {
+            "label": "_initializing",
+            "offset": 1,
+            "slot": "0",
+            "type": "t_bool",
+            "contract": "Initializable",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:67"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_array(t_uint256)50_storage",
+            "contract": "ContextUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol:36"
+          },
+          {
+            "label": "_owner",
+            "offset": 0,
+            "slot": "51",
+            "type": "t_address",
+            "contract": "OwnableUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:22"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "52",
+            "type": "t_array(t_uint256)49_storage",
+            "contract": "OwnableUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:94"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "101",
+            "type": "t_array(t_uint256)50_storage",
+            "contract": "ERC165Upgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/utils/introspection/ERC165Upgradeable.sol:41"
+          },
+          {
+            "label": "_roles",
+            "offset": 0,
+            "slot": "151",
+            "type": "t_mapping(t_bytes32,t_struct(RoleData)34_storage)",
+            "contract": "AccessControlUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol:61"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "152",
+            "type": "t_array(t_uint256)49_storage",
+            "contract": "AccessControlUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol:259"
+          },
+          {
+            "label": "_status",
+            "offset": 0,
+            "slot": "201",
+            "type": "t_uint256",
+            "contract": "ReentrancyGuardUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol:38"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "202",
+            "type": "t_array(t_uint256)49_storage",
+            "contract": "ReentrancyGuardUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol:74"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "251",
+            "type": "t_array(t_uint256)50_storage",
+            "contract": "ERC721HolderUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/token/ERC721/utils/ERC721HolderUpgradeable.sol:40"
+          },
+          {
+            "label": "BETTING_TOKEN_ADDRESS",
+            "offset": 0,
+            "slot": "301",
+            "type": "t_address",
+            "contract": "SBirdBetting",
+            "src": "contracts/SBirdBetting.sol:29"
+          },
+          {
+            "label": "signer",
+            "offset": 0,
+            "slot": "302",
+            "type": "t_address",
+            "contract": "SBirdBetting",
+            "src": "contracts/SBirdBetting.sol:30"
+          },
+          {
+            "label": "spacerTime",
+            "offset": 0,
+            "slot": "303",
+            "type": "t_uint256",
+            "contract": "SBirdBetting",
+            "src": "contracts/SBirdBetting.sol:36"
+          },
+          {
+            "label": "maxBetAmount",
+            "offset": 0,
+            "slot": "304",
+            "type": "t_uint256",
+            "contract": "SBirdBetting",
+            "src": "contracts/SBirdBetting.sol:37"
+          },
+          {
+            "label": "fundWallet",
+            "offset": 0,
+            "slot": "305",
+            "type": "t_address",
+            "contract": "SBirdBetting",
+            "src": "contracts/SBirdBetting.sol:38"
+          },
+          {
+            "label": "userBettingInMatch",
+            "offset": 0,
+            "slot": "306",
+            "type": "t_mapping(t_address,t_mapping(t_uint16,t_mapping(t_string_memory_ptr,t_struct(UserBetDetail)7129_storage)))",
+            "contract": "SBirdBetting",
+            "src": "contracts/SBirdBetting.sol:45"
+          },
+          {
+            "label": "claimInMatch",
+            "offset": 0,
+            "slot": "307",
+            "type": "t_mapping(t_address,t_mapping(t_uint16,t_bool))",
+            "contract": "SBirdBetting",
+            "src": "contracts/SBirdBetting.sol:49"
+          },
+          {
+            "label": "matchByID",
+            "offset": 0,
+            "slot": "308",
+            "type": "t_mapping(t_uint16,t_struct(MatchData)7188_storage)",
+            "contract": "SBirdBetting",
+            "src": "contracts/SBirdBetting.sol:52"
+          },
+          {
+            "label": "userPredictByMatch",
+            "offset": 0,
+            "slot": "309",
+            "type": "t_mapping(t_address,t_mapping(t_uint16,t_struct(PredictResult)7195_storage))",
+            "contract": "SBirdBetting",
+            "src": "contracts/SBirdBetting.sol:55"
+          },
+          {
+            "label": "TokenClaimTimeStamp",
+            "offset": 0,
+            "slot": "310",
+            "type": "t_mapping(t_address,t_uint256)",
+            "contract": "SBirdBetting",
+            "src": "contracts/SBirdBetting.sol:58"
+          },
+          {
+            "label": "TokenClaimNonces",
+            "offset": 0,
+            "slot": "311",
+            "type": "t_mapping(t_address,t_uint256)",
+            "contract": "SBirdBetting",
+            "src": "contracts/SBirdBetting.sol:59"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]",
+            "numberOfBytes": "1568"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]",
+            "numberOfBytes": "1600"
+          },
+          "t_bool": {
+            "label": "bool",
+            "numberOfBytes": "1"
+          },
+          "t_bytes32": {
+            "label": "bytes32",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_bool)": {
+            "label": "mapping(address => bool)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_mapping(t_uint16,t_bool))": {
+            "label": "mapping(address => mapping(uint16 => bool))",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_mapping(t_uint16,t_mapping(t_string_memory_ptr,t_struct(UserBetDetail)7129_storage)))": {
+            "label": "mapping(address => mapping(uint16 => mapping(string => struct IBirdBetting.UserBetDetail)))",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_mapping(t_uint16,t_struct(PredictResult)7195_storage))": {
+            "label": "mapping(address => mapping(uint16 => struct IBirdBetting.PredictResult))",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_uint256)": {
+            "label": "mapping(address => uint256)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_bytes32,t_struct(RoleData)34_storage)": {
+            "label": "mapping(bytes32 => struct AccessControlUpgradeable.RoleData)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_string_memory_ptr,t_struct(UserBetDetail)7129_storage)": {
+            "label": "mapping(string => struct IBirdBetting.UserBetDetail)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint16,t_bool)": {
+            "label": "mapping(uint16 => bool)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint16,t_mapping(t_string_memory_ptr,t_struct(UserBetDetail)7129_storage))": {
+            "label": "mapping(uint16 => mapping(string => struct IBirdBetting.UserBetDetail))",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint16,t_struct(MatchData)7188_storage)": {
+            "label": "mapping(uint16 => struct IBirdBetting.MatchData)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint16,t_struct(PredictResult)7195_storage)": {
+            "label": "mapping(uint16 => struct IBirdBetting.PredictResult)",
+            "numberOfBytes": "32"
+          },
+          "t_string_memory_ptr": {
+            "label": "string",
+            "numberOfBytes": "32"
+          },
+          "t_string_storage": {
+            "label": "string",
+            "numberOfBytes": "32"
+          },
+          "t_struct(MatchData)7188_storage": {
+            "label": "struct IBirdBetting.MatchData",
+            "members": [
+              {
+                "label": "mSta",
+                "type": "t_struct(MatchStatistics)7154_storage",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "mInf",
+                "type": "t_struct(MatchInfo)7181_storage",
+                "offset": 0,
+                "slot": "1"
+              }
+            ],
+            "numberOfBytes": "320"
+          },
+          "t_struct(MatchInfo)7181_storage": {
+            "label": "struct IBirdBetting.MatchInfo",
+            "members": [
+              {
+                "label": "ht_homeScore",
+                "type": "t_uint8",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "ht_awayScore",
+                "type": "t_uint8",
+                "offset": 1,
+                "slot": "0"
+              },
+              {
+                "label": "ft_homeScore",
+                "type": "t_uint8",
+                "offset": 2,
+                "slot": "0"
+              },
+              {
+                "label": "ft_awayScore",
+                "type": "t_uint8",
+                "offset": 3,
+                "slot": "0"
+              },
+              {
+                "label": "startTime",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "1"
+              },
+              {
+                "label": "homeName",
+                "type": "t_string_storage",
+                "offset": 0,
+                "slot": "2"
+              },
+              {
+                "label": "homeIcon",
+                "type": "t_string_storage",
+                "offset": 0,
+                "slot": "3"
+              },
+              {
+                "label": "awayName",
+                "type": "t_string_storage",
+                "offset": 0,
+                "slot": "4"
+              },
+              {
+                "label": "awayIcon",
+                "type": "t_string_storage",
+                "offset": 0,
+                "slot": "5"
+              },
+              {
+                "label": "location",
+                "type": "t_string_storage",
+                "offset": 0,
+                "slot": "6"
+              },
+              {
+                "label": "round",
+                "type": "t_string_storage",
+                "offset": 0,
+                "slot": "7"
+              },
+              {
+                "label": "isHalfTime",
+                "type": "t_bool",
+                "offset": 0,
+                "slot": "8"
+              },
+              {
+                "label": "isFinished",
+                "type": "t_bool",
+                "offset": 1,
+                "slot": "8"
+              }
+            ],
+            "numberOfBytes": "288"
+          },
+          "t_struct(MatchStatistics)7154_storage": {
+            "label": "struct IBirdBetting.MatchStatistics",
+            "members": [
+              {
+                "label": "ouHtOver",
+                "type": "t_uint16",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "ouHtRatio",
+                "type": "t_uint16",
+                "offset": 2,
+                "slot": "0"
+              },
+              {
+                "label": "ouHtUnder",
+                "type": "t_uint16",
+                "offset": 4,
+                "slot": "0"
+              },
+              {
+                "label": "ouFtOver",
+                "type": "t_uint16",
+                "offset": 6,
+                "slot": "0"
+              },
+              {
+                "label": "ouFtRatio",
+                "type": "t_uint16",
+                "offset": 8,
+                "slot": "0"
+              },
+              {
+                "label": "ouFtUnder",
+                "type": "t_uint16",
+                "offset": 10,
+                "slot": "0"
+              },
+              {
+                "label": "oddsHtHome",
+                "type": "t_uint16",
+                "offset": 12,
+                "slot": "0"
+              },
+              {
+                "label": "oddsHtDraw",
+                "type": "t_uint16",
+                "offset": 14,
+                "slot": "0"
+              },
+              {
+                "label": "oddsHtAway",
+                "type": "t_uint16",
+                "offset": 16,
+                "slot": "0"
+              },
+              {
+                "label": "oddsFtHome",
+                "type": "t_uint16",
+                "offset": 18,
+                "slot": "0"
+              },
+              {
+                "label": "oddsFtDraw",
+                "type": "t_uint16",
+                "offset": 20,
+                "slot": "0"
+              },
+              {
+                "label": "oddsFtAway",
+                "type": "t_uint16",
+                "offset": 22,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_struct(PredictResult)7195_storage": {
+            "label": "struct IBirdBetting.PredictResult",
+            "members": [
+              {
+                "label": "homeScore",
+                "type": "t_uint8",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "awayScore",
+                "type": "t_uint8",
+                "offset": 1,
+                "slot": "0"
+              },
+              {
+                "label": "time",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "1"
+              }
+            ],
+            "numberOfBytes": "64"
+          },
+          "t_struct(RoleData)34_storage": {
+            "label": "struct AccessControlUpgradeable.RoleData",
+            "members": [
+              {
+                "label": "members",
+                "type": "t_mapping(t_address,t_bool)",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "adminRole",
+                "type": "t_bytes32",
+                "offset": 0,
+                "slot": "1"
+              }
+            ],
+            "numberOfBytes": "64"
+          },
+          "t_struct(UserBetDetail)7129_storage": {
+            "label": "struct IBirdBetting.UserBetDetail",
+            "members": [
+              {
+                "label": "amount",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "place",
+                "type": "t_string_storage",
+                "offset": 0,
+                "slot": "1"
+              },
+              {
+                "label": "isClaimed",
+                "type": "t_bool",
+                "offset": 0,
+                "slot": "2"
+              }
+            ],
+            "numberOfBytes": "96"
+          },
+          "t_uint16": {
+            "label": "uint16",
+            "numberOfBytes": "2"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          },
+          "t_uint8": {
+            "label": "uint8",
+            "numberOfBytes": "1"
+          }
+        }
+      }
     }
   }
 }
