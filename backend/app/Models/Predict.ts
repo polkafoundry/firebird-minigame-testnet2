@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
 
-class Predict extends BaseModel {
+export default class Predict extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 
