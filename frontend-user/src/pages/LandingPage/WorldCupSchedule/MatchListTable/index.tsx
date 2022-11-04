@@ -1,15 +1,10 @@
 import clsx from "clsx";
-import { useState } from "react";
+import moment from "moment";
+import { useEffect, useState } from "react";
 import MatchName from "../../../../components/base/Table/MatchName";
 import MatchPredict from "../../../../components/base/Table/MatchPredict";
 import MatchStatus from "../../../../components/base/Table/MatchStatus";
 import styles from "./matchList.module.scss";
-
-const MATCH_STATUS = {
-  ON_GOING: "On going",
-  NOT_YET: "Not yet",
-  ENDED: "Ended",
-};
 
 const headingTable = [
   { label: "Time" },
@@ -19,194 +14,35 @@ const headingTable = [
   { label: "Predicted", className: "text-center" },
 ];
 
-const matchList = {
-  data: [
-    {
-      groupStage: "Group stage - Round 1",
-      groupTime: "Nov. 20 - 24",
-      matchGroups: [
-        {
-          date: "Nov 21 - Monday",
-          matchs: [
-            {
-              id: 1,
-              time: "23:00",
-              team1: { name: "Quatar", icon: "/images/icon-qatar.svg" },
-              team2: { name: "Ecuador", icon: "/images/icon-ecuador.svg" },
-              score: "0:0",
-              status: MATCH_STATUS.ON_GOING,
-              predicted: false,
-            },
-            {
-              id: 2,
-              time: "24:00",
-              team1: { name: "Quatar", icon: "/images/icon-qatar.svg" },
-              team2: { name: "Ecuador", icon: "/images/icon-ecuador.svg" },
-              score: "0:0",
-              status: MATCH_STATUS.ON_GOING,
-              predicted: false,
-            },
-            {
-              id: 3,
-              time: "23:00",
-              team1: { name: "Quatar", icon: "/images/icon-qatar.svg" },
-              team2: { name: "Ecuador", icon: "/images/icon-ecuador.svg" },
-              score: "0:0",
-              status: MATCH_STATUS.ON_GOING,
-              predicted: false,
-            },
-            {
-              id: 4,
-              time: "24:00",
-              team1: { name: "Quatar", icon: "/images/icon-qatar.svg" },
-              team2: { name: "Ecuador", icon: "/images/icon-ecuador.svg" },
-              score: "0:0",
-              status: MATCH_STATUS.ON_GOING,
-              predicted: false,
-            },
-          ],
-        },
-        {
-          date: "Nov 22 - Tuesday",
-          matchs: [
-            {
-              id: 5,
-              time: "23:00",
-              team1: { name: "Quatar", icon: "/images/icon-qatar.svg" },
-              team2: { name: "Ecuador", icon: "/images/icon-ecuador.svg" },
-              score: "-:-",
-              status: MATCH_STATUS.NOT_YET,
-              predicted: false,
-            },
-            {
-              id: 6,
-              time: "24:00",
-              team1: { name: "Quatar", icon: "/images/icon-qatar.svg" },
-              team2: { name: "Ecuador", icon: "/images/icon-ecuador.svg" },
-              score: "0:0",
-              status: MATCH_STATUS.ENDED,
-              predicted: true,
-            },
-            {
-              id: 7,
-              time: "23:00",
-              team1: { name: "Quatar", icon: "/images/icon-qatar.svg" },
-              team2: { name: "Ecuador", icon: "/images/icon-ecuador.svg" },
-              score: "-:-",
-              status: MATCH_STATUS.NOT_YET,
-              predicted: false,
-            },
-            {
-              id: 8,
-              time: "24:00",
-              team1: { name: "Quatar", icon: "/images/icon-qatar.svg" },
-              team2: { name: "Ecuador", icon: "/images/icon-ecuador.svg" },
-              score: "0:0",
-              status: MATCH_STATUS.ENDED,
-              predicted: true,
-            },
-          ],
-        },
-      ],
-    },
-    {
-      groupStage: "Group stage - Round 2",
-      groupTime: "Nov. 24 - 28",
-      matchGroups: [
-        {
-          date: "Nov 24 - Monday",
-          matchs: [
-            {
-              id: 15,
-              time: "23:00",
-              team1: { name: "Quatar", icon: "/images/icon-qatar.svg" },
-              team2: { name: "Ecuador", icon: "/images/icon-ecuador.svg" },
-              score: "0:0",
-              status: MATCH_STATUS.ON_GOING,
-              predicted: false,
-            },
-            {
-              id: 16,
-              time: "24:00",
-              team1: { name: "Quatar", icon: "/images/icon-qatar.svg" },
-              team2: { name: "Ecuador", icon: "/images/icon-ecuador.svg" },
-              score: "0:0",
-              status: MATCH_STATUS.NOT_YET,
-              predicted: false,
-            },
-            {
-              id: 25,
-              time: "23:00",
-              team1: { name: "Quatar", icon: "/images/icon-qatar.svg" },
-              team2: { name: "Ecuador", icon: "/images/icon-ecuador.svg" },
-              score: "0:0",
-              status: MATCH_STATUS.ON_GOING,
-              predicted: false,
-            },
-            {
-              id: 26,
-              time: "24:00",
-              team1: { name: "Quatar", icon: "/images/icon-qatar.svg" },
-              team2: { name: "Ecuador", icon: "/images/icon-ecuador.svg" },
-              score: "0:0",
-              status: MATCH_STATUS.NOT_YET,
-              predicted: false,
-            },
-          ],
-        },
-        {
-          date: "Nov 26 - Tuesday",
-          matchs: [
-            {
-              id: 27,
-              time: "24:00",
-              team1: { name: "Quatar", icon: "/images/icon-qatar.svg" },
-              team2: { name: "Ecuador", icon: "/images/icon-ecuador.svg" },
-              score: "0:0",
-              status: MATCH_STATUS.ENDED,
-              predicted: true,
-            },
-            {
-              id: 37,
-              time: "24:00",
-              team1: { name: "Quatar", icon: "/images/icon-qatar.svg" },
-              team2: { name: "Ecuador", icon: "/images/icon-ecuador.svg" },
-              score: "0:0",
-              status: MATCH_STATUS.ENDED,
-              predicted: true,
-            },
-            {
-              id: 47,
-              time: "24:00",
-              team1: { name: "Quatar", icon: "/images/icon-qatar.svg" },
-              team2: { name: "Ecuador", icon: "/images/icon-ecuador.svg" },
-              score: "0:0",
-              status: MATCH_STATUS.ENDED,
-              predicted: true,
-            },
-          ],
-        },
-      ],
-    },
-  ],
-};
-
 type MatchListTableProps = {
   handleSelectMatch: (id: number) => void;
+  loading: boolean;
+  dataTable: Array<any>;
 };
 
 const MatchListTable = (props: MatchListTableProps) => {
-  const { handleSelectMatch } = props;
+  const { handleSelectMatch, loading, dataTable = [] } = props;
+
+  useEffect(() => {
+    console.log("dataTable", dataTable);
+  }, [dataTable]);
 
   const [groupStageIndex, setGroupStageIndex] = useState<number>(0);
 
   const nextGroup = () => {
-    if (groupStageIndex < matchList.data.length - 1)
-      setGroupStageIndex(groupStageIndex + 1);
+    if (groupStageIndex < dataTable.length - 1)
+      setGroupStageIndex((prevState: any) => prevState + 1);
   };
 
   const previousGroup = () => {
-    if (groupStageIndex >= 1) setGroupStageIndex(groupStageIndex - 1);
+    if (groupStageIndex >= 1)
+      setGroupStageIndex((prevState: any) => prevState - 1);
+  };
+
+  const getMatchTime = (time: any) => {
+    if (!time) return "N/A";
+
+    return moment(new Date(time * 1000)).format("HH:MM");
   };
 
   return (
@@ -220,9 +56,9 @@ const MatchListTable = (props: MatchListTableProps) => {
         />
         <div className="flex flex-col items-center">
           <span className="text-xl font-semibold">
-            {matchList.data[groupStageIndex].groupStage}
+            {dataTable ? dataTable[groupStageIndex]?.groupRound : "N/A"}
           </span>
-          <span>{matchList.data[groupStageIndex].groupTime}</span>
+          <span>{dataTable ? dataTable[groupStageIndex]?.date : "N/A"}</span>
         </div>
         <img
           src="/images/icon-previous.svg"
@@ -245,33 +81,39 @@ const MatchListTable = (props: MatchListTableProps) => {
           ))}
         </div>
 
-        {matchList.data[groupStageIndex].matchGroups.map((matchInfo) => (
-          <div key={matchInfo.date} className="min-w-fit">
-            <div className="bg-gray-300 px-5 py-1 font-semibold">
-              {matchInfo.date}
-            </div>
-            {matchInfo.matchs.map((match) => (
-              <div
-                key={match.id}
-                className={clsx(
-                  "flex px-5 py-2 border cursor-pointer hover:bg-orange-300 transition-all duration-300",
-                  styles.tableRow,
-                )}
-                onClick={() => handleSelectMatch(match?.id)}
-              >
-                <div>{match.time}</div>
-                <MatchName team1={match.team1} team2={match.team2} />
-                <div>{match.score}</div>
-                <MatchStatus status={match.status} />
-                <MatchPredict
-                  isCorrect={match.predicted}
-                  isDisplayText={false}
-                />
+        {loading ? (
+          <div>Loading ...</div>
+        ) : (
+          dataTable?.map((matchInfo: any, index: number) => (
+            <div key={index} className="min-w-fit">
+              <div className="bg-gray-300 px-5 py-1 font-semibold">
+                {matchInfo?.date}
               </div>
-            ))}
-            <div></div>
-          </div>
-        ))}
+              {matchInfo?.matches?.map((match: any) => (
+                <div
+                  key={match?.id}
+                  className={clsx(
+                    "flex px-5 py-2 border cursor-pointer hover:bg-orange-300 transition-all duration-300",
+                    styles.tableRow,
+                  )}
+                  onClick={() => handleSelectMatch(match?.id)}
+                >
+                  <div className="flex items-center">
+                    {getMatchTime(match?.start_time)}
+                  </div>
+                  <MatchName team1={match?.homeTeam} team2={match?.awayTeam} />
+                  <div>{`${match?.ft_home_score}:${match?.ft_away_score}`}</div>
+                  <MatchStatus status={match?.match_status} />
+                  <MatchPredict
+                    isCorrect={match?.is_completed_bet}
+                    isDisplayText={false}
+                  />
+                </div>
+              ))}
+              <div></div>
+            </div>
+          ))
+        )}
       </div>
     </div>
   );

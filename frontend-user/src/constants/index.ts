@@ -1,3 +1,4 @@
+export const API_BASE_LOGO_TEAM = process.env.REACT_APP_API_LOGO_TEAM;
 export const API_BASE_URL = process.env.REACT_APP_API_BASE_URL + "/api/v1";
 export const URLS = {
   HOME: "/",
@@ -27,7 +28,22 @@ export enum QUESTION_STATUS {
 }
 
 export const MATCH_STATUS = {
-  ON_GOING: "On going",
-  NOT_YET: "Not yet",
-  ENDED: "Ended",
+  UPCOMING: "upcoming",
+  LIVE: "live",
+  FINISHED: "finished",
+  POSTPONED: "postponed",
+};
+
+export const MATCH_STATUS_TEXT = {
+  [MATCH_STATUS.UPCOMING]: "Not yet",
+  [MATCH_STATUS.LIVE]: "On going",
+  [MATCH_STATUS.FINISHED]: "Ended",
+  [MATCH_STATUS.POSTPONED]: "Post poned",
+};
+
+export const BET_TYPE = {
+  OVER_UNDER_HALF_TIME: "ou_ht",
+  OVER_UNDER_FULL_TIME: "ou_ft",
+  ODD_EVEN_HALF_TIME: "odds_ht",
+  ODD_EVEN_FULL_TIME: "odds_ft",
 };

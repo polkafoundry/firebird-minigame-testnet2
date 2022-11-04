@@ -1,41 +1,13 @@
-import { QUESTION_STATUS } from "../../../../../constants";
+import { BET_TYPE, QUESTION_STATUS } from "../../../../../constants";
+import { getImgSrc } from "../../utils";
+import { getOptionIndexByBetPlace } from "./components/utils";
 import FirstQuestion from "./FirstQuestion";
 import SecondQuestion from "./SecondQuestion";
 import ThirdQuestion from "./ThirdQuestion";
 
 export type QuestionProps = {
   dataQuestion: any;
-};
-
-const fakeQuestion1 = {
-  isSubmitted: false,
-  error: "",
-  // error: "Not enough PKF to pay for the gas fee. Click here to faucet.",
-  matchStatus: QUESTION_STATUS.NOT_PREDICTED,
-};
-
-const fakeQuestion2 = {
-  isSubmitted: false,
-  matchStatus: QUESTION_STATUS.WRONG_ANSWER,
-  errors: [],
-  // errors: [
-  //   "Not enough BIRD to deposit.  Click here to faucet.",
-  //   "Not enough PKF to pay for the gas fee.  Click here to faucet.",
-  //   "The maximum total deposit amount for 1 question is 1,000 $BIRD.",
-  // ],
-  options: [
-    { label: "Qatar", icon: "/images/icon-qatar.svg", winRate: "9.72" },
-    { label: "Draw", winRate: "6.13" },
-    { label: "Ecuador", icon: "/images/icon-ecuador.svg", winRate: "1.27" },
-  ],
-  results: {
-    optionSelected: 0,
-    optionEnded: 1,
-    deposit: "100",
-    earned: "872",
-    claim: "972",
-    isClaimed: false,
-  },
+  title: string;
 };
 
 const fakeQuestion3 = {
@@ -62,17 +34,113 @@ const fakeQuestion3 = {
   },
 };
 
-const MatchQuestions = () => {
+type MatchQuestionProps = {
+  dataQuestion: any;
+};
+
+const MatchQuestions = (props: MatchQuestionProps) => {
+  const { dataQuestion } = props;
+  const predictsData = dataQuestion?.predicts || [];
+  const bettingsData = dataQuestion?.bettings || [];
+
+  const question1 = predictsData[predictsData.length - 1];
+
+  console.log("predicts", predictsData);
+  let question2 = bettingsData.filter(
+    (betting: any) => betting.bet_type === BET_TYPE.ODD_EVEN_HALF_TIME,
+  );
+
+  question2 = {
+    ...question2,
+    // errors: [
+    //   "Not enough BIRD to deposit.  Click here to faucet.",
+    //   "Not enough PKF to pay for the gas fee.  Click here to faucet.",
+    //   "The maximum total deposit amount for 1 question is 1,000 $BIRD.",
+    // ],
+    options: [
+      {
+        label: dataQuestion?.home_name,
+        icon: getImgSrc(dataQuestion?.home_icon),
+        winRate: dataQuestion?.odds_ht_home,
+      },
+      { label: "Draw", winRate: dataQuestion?.odds_ht_draw },
+      {
+        label: dataQuestion?.away_name,
+        icon: getImgSrc(dataQuestion?.away_icon),
+        winRate: dataQuestion?.odds_ht_away,
+      },
+    ],
+    results: {
+      optionSelected: getOptionIndexByBetPlace(dataQuestion?.bet_place),
+      optionEnded: 1,
+      deposit: "100",
+      earned: "0",
+      claim: "0",
+      isClaimed: false,
+    },
+  };
+
+  let question3 = bettingsData.filter(
+    (betting: any) => betting.bet_type === BET_TYPE.ODD_EVEN_FULL_TIME,
+  );
+
+  question3 = {
+    ...question3,
+    options: [
+      {
+        label: dataQuestion?.home_name,
+        icon: getImgSrc(dataQuestion?.home_icon),
+        winRate: dataQuestion?.odds_ft_home,
+      },
+      { label: "Draw", winRate: dataQuestion?.odds_ft_draw },
+      {
+        label: dataQuestion?.away_name,
+        icon: getImgSrc(dataQuestion?.away_icon),
+        winRate: dataQuestion?.odds_ft_away,
+      },
+    ],
+    results: {
+      optionSelected: getOptionIndexByBetPlace(dataQuestion?.bet_place),
+      optionEnded: 1,
+      deposit: "100",
+      earned: "0",
+      claim: "0",
+      isClaimed: false,
+    },
+  };
+  // const question4 = bettingsData.filter(
+  //   (betting: any) => betting.bet_type === BET_TYPE.OVER_UNDER_HALF_TIME,
+  // );
+  // const question5 = bettingsData.filter(
+  //   (betting: any) => betting.bet_type === BET_TYPE.OVER_UNDER_HALF_TIME,
+  // );
+
   return (
     <div className="w-full p-5">
       <span className="">
         Select questions, predict the match & submit your answer.{" "}
       </span>
 
-      <FirstQuestion dataQuestion={fakeQuestion1} />
-      <SecondQuestion dataQuestion={fakeQuestion2} />
-      <ThirdQuestion dataQuestion={fakeQuestion3} />
-      <ThirdQuestion dataQuestion={fakeQuestion3} />
+      <FirstQuestion
+        dataQuestion={question1}
+        title="1. What will the match score be?"
+      />
+      <SecondQuestion
+        dataQuestion={question2}
+        title="2. Who will win the 1st half?"
+      />
+      <SecondQuestion
+        dataQuestion={question3}
+        title="3. Who will win the full match?"
+      />
+      <ThirdQuestion
+        dataQuestion={fakeQuestion3}
+        title="4. Will the 1st half total goals be higher or lower than the total goals below?"
+      />
+      <ThirdQuestion
+        dataQuestion={fakeQuestion3}
+        title="5. Will the full match total goals be higher or lower than the total goals below?"
+      />
       {/* <FourthQuestion /> */}
     </div>
   );
