@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import moment from "moment";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import MatchName from "../../../../components/base/Table/MatchName";
 import MatchPredict from "../../../../components/base/Table/MatchPredict";
 import MatchStatus from "../../../../components/base/Table/MatchStatus";
@@ -18,14 +18,11 @@ type MatchListTableProps = {
   handleSelectMatch: (id: number) => void;
   loading: boolean;
   dataTable: Array<any>;
+  selectedMatchId: number | undefined;
 };
 
 const MatchListTable = (props: MatchListTableProps) => {
-  const { handleSelectMatch, loading, dataTable = [] } = props;
-
-  useEffect(() => {
-    console.log("dataTable", dataTable);
-  }, [dataTable]);
+  const { handleSelectMatch, loading, dataTable = [], selectedMatchId } = props;
 
   const [groupStageIndex, setGroupStageIndex] = useState<number>(0);
 
@@ -95,6 +92,7 @@ const MatchListTable = (props: MatchListTableProps) => {
                   className={clsx(
                     "flex px-5 py-2 border cursor-pointer hover:bg-orange-300 transition-all duration-300",
                     styles.tableRow,
+                    selectedMatchId === match?.id ? "bg-amber-200" : "",
                   )}
                   onClick={() => handleSelectMatch(match?.id)}
                 >

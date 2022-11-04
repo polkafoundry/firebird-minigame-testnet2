@@ -70,9 +70,9 @@ const DepositAmount = (props: DepositAmountProps) => {
           )}
         </ul>
       )}
-      {errors.length ? (
+      {errors?.length ? (
         <ul className="mt-10">
-          {errors.map((error: any) => (
+          {errors?.map((error: any) => (
             <li key={error} className="text-red-600 font-semibold mt-2">
               {error}
             </li>

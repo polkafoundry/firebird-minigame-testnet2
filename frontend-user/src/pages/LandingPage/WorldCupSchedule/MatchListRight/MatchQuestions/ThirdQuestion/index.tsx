@@ -30,17 +30,16 @@ const ThirdQuestion = (props: QuestionProps) => {
       isSubmitted={dataQuestion?.isSubmitted}
     >
       <div>
-        <div className="flex items-start">
-          {dataQuestion?.options.map((option: any, index: number) => (
+        <div className="flex items-start justify-between">
+          {dataQuestion?.options?.map((option: any, index: number) => (
             <div
               key={option.label}
-              className="flex flex-col items-center mr-10 last:mr-0"
+              className="flex flex-col items-center w-full max-w-[120px]"
             >
               <BorderBox
                 label={option.label}
                 icon={option.icon}
                 className={clsx(
-                  "w-[160px]",
                   dataQuestion?.isSubmitted
                     ? "pointer-events-none"
                     : "cursor-pointer",
@@ -81,7 +80,11 @@ const ThirdQuestion = (props: QuestionProps) => {
             depositAmount={depositAmount}
             handleChangeDepositAmount={handleChangeDepositAmount}
             errors={dataQuestion?.errors}
-            winRate={dataQuestion?.options[optionWhoWin].winRate}
+            winRate={
+              dataQuestion?.options
+                ? dataQuestion?.options[optionWhoWin]?.winRate
+                : 0
+            }
           />
         )}
         {dataQuestion?.isSubmitted && <ResultMatch questions={dataQuestion} />}

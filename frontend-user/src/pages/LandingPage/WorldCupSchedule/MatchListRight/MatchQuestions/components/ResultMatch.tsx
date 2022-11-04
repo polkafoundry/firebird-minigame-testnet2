@@ -12,7 +12,7 @@ const ResultMatch = (props: ResultMatchProps) => {
         <div className="flex flex-col">
           <span>Deposit Amount:</span>
           <span className="font-semibold">
-            {questions.results.deposit} $BIRD
+            {questions?.results?.deposit} $BIRD
           </span>
         </div>
         <div className="flex flex-col">
@@ -43,18 +43,18 @@ const ResultMatch = (props: ResultMatchProps) => {
         <div className="flex flex-col">
           <span>Earned amount</span>
           <span className="font-semibold">
-            {questions.results.earned
-              ? questions.results.earned + " $BIRD"
+            {questions?.results?.earned
+              ? questions?.results?.earned + " $BIRD"
               : "Updating..."}
           </span>
         </div>
         <div className="flex flex-col">
           <span>Amount to claim</span>
           <span className="font-semibold">
-            {questions.results.claim
-              ? questions.results.claim +
+            {questions?.results?.claim
+              ? questions?.results?.claim +
                 " $BIRD" +
-                (questions.results.isClaimed ? " (Claimed)" : "")
+                (questions?.results?.isClaimed ? " (Claimed)" : "")
               : "Updating..."}
           </span>
         </div>
@@ -62,8 +62,8 @@ const ResultMatch = (props: ResultMatchProps) => {
       {matchStatus === QUESTION_STATUS.CORRECT_ANSWER ||
         (matchStatus === QUESTION_STATUS.WRONG_ANSWER && (
           <div className="mt-5 flex">
-            {Number(questions.results.claim) > 0 &&
-              !questions.results.isClaimed && (
+            {Number(questions?.results?.claim) > 0 &&
+              !questions?.results?.isClaimed && (
                 <button className="px-10 py-2 bg-black text-white rounded-xl mr-10">
                   Claim token
                 </button>

@@ -35,11 +35,14 @@ const SecondQuestion = (props: QuestionProps) => {
       isSubmitted={isSubmitted}
     >
       <div>
-        <div className="flex items-start">
-          {dataQuestion?.options.map((option: any, index: number) => (
+        <div className="flex items-start justify-between">
+          {dataQuestion?.options?.map((option: any, index: number) => (
             <div
-              key={option.label}
-              className="flex flex-col items-center mr-10 last:mr-0"
+              key={index}
+              className={clsx(
+                "flex flex-col items-center w-full",
+                option?.label === "Draw" ? "max-w-[100px]" : "max-w-[180px]",
+              )}
             >
               <BorderBox
                 label={option.label}
@@ -77,7 +80,11 @@ const SecondQuestion = (props: QuestionProps) => {
             depositAmount={depositAmount}
             handleChangeDepositAmount={handleChangeDepositAmount}
             errors={errors}
-            winRate={dataQuestion?.options[optionWhoWin].winRate}
+            winRate={
+              dataQuestion?.options
+                ? dataQuestion?.options[optionWhoWin].winRate
+                : 0
+            }
           />
         )}
         {isSubmitted && (

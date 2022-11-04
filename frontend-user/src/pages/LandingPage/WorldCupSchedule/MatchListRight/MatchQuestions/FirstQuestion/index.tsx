@@ -35,22 +35,28 @@ const FirstQuestion = (props: QuestionProps) => {
       isSubmitted={isSubmitted}
     >
       <div>
-        <div className="flex items-center">
-          <BorderBox label="Qatar" icon="/images/icon-qatar.svg" />
-          <div className="flex space-x-5 items-baseline mx-10">
+        <div className="flex items-center justify-between">
+          <BorderBox
+            label={dataQuestion?.home_name}
+            icon={dataQuestion?.home_icon}
+          />
+          <div className="flex space-x-5 items-baseline">
             <InputNumber
-              input={dataQuestion.home_score || inputTeam1}
+              input={dataQuestion?.home_score || inputTeam1}
               handleChange={handleChangeInputTeam1}
               type={matchStatus}
             />
             <span className="text-4xl font-semibold block">:</span>
             <InputNumber
-              input={dataQuestion.away_score || inputTeam2}
+              input={dataQuestion?.away_score || inputTeam2}
               handleChange={handleChangeInputTeam2}
               type={matchStatus}
             />
           </div>
-          <BorderBox label="Ecuador" icon="/images/icon-ecuador.svg" />
+          <BorderBox
+            label={dataQuestion.away_name}
+            icon={dataQuestion.away_icon}
+          />
         </div>
         {error && <p className="text-red-600 font-semibold mt-2">{error}</p>}
         <div>{isSubmitted && <NotificationBox type={matchStatus} />}</div>
