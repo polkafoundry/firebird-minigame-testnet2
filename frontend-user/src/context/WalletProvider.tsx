@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import ConnectWalletDialog from "../components/base/ConnectWalletDialog";
 import { SUPPORTED_WALLETS } from "../constants/connectors";
 import useProviderConnects from "../hooks/useProviderConnects";
+import { checkMetaMaskIsUnlocked } from "../utils";
 import { WalletContext } from "./WalletContext";
 
 const WalletProvider = (props: any) => {
@@ -23,12 +24,17 @@ const WalletProvider = (props: any) => {
 
   // auto activate accoung from localStorage
   useEffect(() => {
-    const storedWallet = localStorage.getItem("walletconnect");
+    const activateStoredWallet = async () => {
+      // check metamask is unlocked
+      const unlocked = await checkMetaMaskIsUnlocked();
+      const storedWallet = localStorage.getItem("walletconnect");
+      if (storedWallet && unlocked) {
+        const defaultWallet = SUPPORTED_WALLETS.METAMASK;
+        tryActivate(defaultWallet.connector);
+      }
+    };
 
-    if (storedWallet) {
-      const defaultWallet = SUPPORTED_WALLETS.METAMASK;
-      tryActivate(defaultWallet.connector);
-    }
+    activateStoredWallet();
   }, []);
 
   const logout = () => {
