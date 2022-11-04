@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import { useContext, useState } from "react";
 import { useLocation } from "react-router-dom";
+import { URLS } from "../../../constants";
 import { WalletContext } from "../../../context/WalletContext";
 import { useMyWeb3 } from "../../../hooks/useMyWeb3";
 import { displayWalletAddress } from "../../../utils";
@@ -14,19 +15,19 @@ type RouteTypes = {
 const routes: Array<RouteTypes> = [
   {
     label: "Firefly Testnet",
-    uri: "https://faucet.firefly.firebirdchain.com/",
+    uri: URLS.FAUCET_TESTNET,
   },
   {
     label: "Firebird Cup",
-    uri: "/",
+    uri: URLS.HOME,
   },
   {
     label: "Leaderboard",
-    uri: "/leaderboard",
+    uri: URLS.LEADERBOARD,
   },
   {
     label: "My History",
-    uri: "/history",
+    uri: URLS.HISTORY,
   },
 ];
 

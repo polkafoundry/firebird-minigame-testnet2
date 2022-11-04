@@ -14,6 +14,7 @@ type DropDownProps = {
   onChange: (data: any) => void;
   className?: string;
   itemsClassName?: string;
+  bgColor?: "black" | "orange";
 };
 
 const DropDown = (props: DropDownProps) => {
@@ -24,13 +25,23 @@ const DropDown = (props: DropDownProps) => {
     onChange,
     className,
     itemsClassName,
+    bgColor = "orange",
   } = props;
   const selectedItem = items.find((item) => item.value === selectedValue);
+  const backgroundColor = bgColor === "black" ? "bg-black" : "bg-orange-200";
+  const textColor = bgColor === "black" ? "text-white" : "text-gray-700";
+  const activeStyle =
+    bgColor === "black" ? "bg-white text-black" : "bg-white text-gray-900";
 
   return (
     <Menu
       as="div"
-      className={clsx("relative inline-block text-left", className)}
+      className={clsx(
+        "relative inline-block text-left",
+        backgroundColor,
+        textColor,
+        className,
+      )}
     >
       {({ open }) => (
         <>
@@ -39,7 +50,11 @@ const DropDown = (props: DropDownProps) => {
               {selectedItem?.label || label}
               <img
                 className={clsx("cursor-pointer", open && "rotate-180")}
-                src="/images/icon-arrow-down.svg"
+                src={
+                  bgColor === "black"
+                    ? "/images/icon-arrow-down-white.svg"
+                    : "/images/icon-arrow-down.svg"
+                }
                 alt=""
               />
             </Menu.Button>
@@ -58,6 +73,8 @@ const DropDown = (props: DropDownProps) => {
               className={clsx(
                 "absolute right-0 left-0 z-10 mt-2 origin-top-right overflow-hidden",
                 itemsClassName,
+                backgroundColor,
+                textColor,
               )}
             >
               <ul className="py-1">
@@ -68,9 +85,7 @@ const DropDown = (props: DropDownProps) => {
                       {({ active }) => (
                         <li
                           className={clsx(
-                            active
-                              ? "bg-gray-100 text-gray-900"
-                              : "text-gray-700",
+                            active ? activeStyle : textColor,
                             "block px-4 py-2 text-sm cursor-pointer hover:text-birdRed",
                           )}
                           onClick={() => {
