@@ -1,7 +1,6 @@
 import clsx from "clsx";
 import { useEffect, useState } from "react";
 import useFetch from "../../../../hooks/useFetch";
-import { useMyWeb3 } from "../../../../hooks/useMyWeb3";
 import MatchQuestions from "./MatchQuestions";
 import MatchGuide from "./MathGuide";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -30,9 +29,8 @@ const nav = [
 
 const MatchListRight = (props: MatchListRightProps) => {
   const { matchId } = props;
-  const { account } = useMyWeb3();
 
-  const { data: questions, loading } = useFetch<any>(
+  const { data: questions } = useFetch<any>(
     "/match/detail/" +
       matchId +
       "?" +
