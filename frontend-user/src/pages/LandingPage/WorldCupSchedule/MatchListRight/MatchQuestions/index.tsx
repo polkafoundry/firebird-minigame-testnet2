@@ -119,12 +119,12 @@ const MatchQuestions = (props: MatchQuestionProps) => {
       isClaimed: false,
     },
   };
-  const question4 = bettingsData.filter(
-    (betting: any) => betting.bet_type === BET_TYPE.OVER_UNDER_HALF_TIME,
-  );
-  const question5 = bettingsData.filter(
-    (betting: any) => betting.bet_type === BET_TYPE.OVER_UNDER_HALF_TIME,
-  );
+  // const question4 = bettingsData.filter(
+  //   (betting: any) => betting.bet_type === BET_TYPE.OVER_UNDER_HALF_TIME,
+  // );
+  // const question5 = bettingsData.filter(
+  //   (betting: any) => betting.bet_type === BET_TYPE.OVER_UNDER_HALF_TIME,
+  // );
 
   return (
     <div className="w-full p-5">

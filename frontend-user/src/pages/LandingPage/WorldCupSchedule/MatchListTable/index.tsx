@@ -98,7 +98,9 @@ const MatchListTable = (props: MatchListTableProps) => {
                   )}
                   onClick={() => handleSelectMatch(match?.id)}
                 >
-                  <div>{getMatchTime(match?.start_time)}</div>
+                  <div className="flex items-center">
+                    {getMatchTime(match?.start_time)}
+                  </div>
                   <MatchName team1={match?.homeTeam} team2={match?.awayTeam} />
                   <div>{`${match?.ft_home_score}:${match?.ft_away_score}`}</div>
                   <MatchStatus status={match?.match_status} />
