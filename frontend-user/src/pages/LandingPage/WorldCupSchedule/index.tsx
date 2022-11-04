@@ -1,7 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DropDown from "../../../components/base/DropDown";
+import useFetch from "../../../hooks/useFetch";
+import { useMyWeb3 } from "../../../hooks/useMyWeb3";
 import MatchListRight from "./MatchListRight";
 import MatchListTable from "./MatchListTable";
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const queryString = require("query-string");
 
 const predictedOptions = [
   { label: "Predicted: All", value: 0 },
@@ -18,15 +22,40 @@ const statusOptions = [
 type FilterTypes = {
   predicted: number;
   status: number;
+  page: number;
+  size: number;
+  wallet_address: string;
 };
 
 const WorldCupSchedule = () => {
+  const { account } = useMyWeb3();
+
   // all state here
 
   const [filter, setFilter] = useState<FilterTypes>({
     predicted: 0,
     status: 0,
+    page: 1,
+    size: 20,
+    wallet_address: "",
   });
+
+  const { data, loading } = useFetch(
+    "/match/get-list-match?" + queryString.stringify({ ...filter }),
+  );
+
+  useEffect(() => {
+    console.log("fetching", data);
+  }, [loading]);
+
+  useEffect(() => {
+    if (!account) return;
+
+    setFilter((prevFilter: FilterTypes) => ({
+      ...prevFilter,
+      wallet_address: account,
+    }));
+  }, [account]);
 
   const handleChangePredicted = (value: any) => {
     setFilter((prevFilter: FilterTypes) => ({
