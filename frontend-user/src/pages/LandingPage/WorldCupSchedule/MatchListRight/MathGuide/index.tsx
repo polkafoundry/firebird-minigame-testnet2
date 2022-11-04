@@ -1,11 +1,11 @@
 import { useContext } from "react";
-import Button from "../../../../components/base/Button";
-import { quickGuide } from "../../../../constants";
-import { WalletContext } from "../../../../context/WalletContext";
-import { useMyWeb3 } from "../../../../hooks/useMyWeb3";
-import usePredictConditions from "../../../../hooks/usePredictConditions";
-import { displayWalletAddress } from "../../../../utils";
-import { requestSupportNetwork } from "../../../../utils/setupNetwork";
+import Button from "../../../../../components/base/Button";
+import { quickGuide } from "../../../../../constants";
+import { WalletContext } from "../../../../../context/WalletContext";
+import { useMyWeb3 } from "../../../../../hooks/useMyWeb3";
+import usePredictConditions from "../../../../../hooks/usePredictConditions";
+import { displayWalletAddress } from "../../../../../utils";
+import { requestSupportNetwork } from "../../../../../utils/setupNetwork";
 
 const iconCheck = "/images/icon-correct-answer.svg";
 const iconUnCheck = "/images/icon-wrong-answer.svg";
