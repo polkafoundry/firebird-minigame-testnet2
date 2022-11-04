@@ -69,7 +69,6 @@ export default class MatchService {
     let matches = await this.buildQueryService(params)
       .preload('bettings', (query) => {
         query.where('user_address', params.wallet_address || null)
-          .select()
       })
       .preload('predicts', (query) => {
         query.where('user_address', request.input('wallet_address') || null)
