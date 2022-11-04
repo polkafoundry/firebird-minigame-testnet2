@@ -55,6 +55,9 @@ export default class MatchService {
       .preload('bettings', (query) => {
         query.where('user_address', wallet_address || null)
       })
+      .preload('predicts', (query) => {
+        query.where('user_address', wallet_address || null)
+      })
       .first()
   }
 
@@ -74,7 +77,19 @@ export default class MatchService {
         query.where('user_address', request.input('wallet_address') || null)
       })
       .paginate(page, size)
-    return matches
+    matches = JSON.parse(JSON.stringify(matches))
+    return {
+      ...matches,
+      data: matches.data.map(match => {
+        let obj = {
+          ...match,
+          is_completed_bet: (match.bettings.length + match.predicts.length) == 5
+        }
+        delete obj.bettings
+        delete obj.predicts
+        return obj
+      })
+    }
   }
   public async getUpcomingMatch(request) {
     const page = request.input('page') || 1
@@ -93,6 +108,18 @@ export default class MatchService {
       .orderBy('start_time', 'ASC')
       .paginate(page, size)
 
-    return matches
+    matches = JSON.parse(JSON.stringify(matches))
+    return {
+      ...matches,
+      data: matches.data.map(match => {
+        let obj = {
+          ...match,
+          is_completed_bet: (match.bettings.length + match.predicts.length) == 5
+        }
+        delete obj.bettings
+        delete obj.predicts
+        return obj
+      })
+    }
   }
 }

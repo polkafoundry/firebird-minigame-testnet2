@@ -35,9 +35,14 @@ export default class MatchController {
   }
   public async getMatchDetail({ request, params }) {
     try {
-      const match = await MatchService.findByMatchId({ id: params.match_id, wallet_address: request.input('wallet_address') })
+      let match = await MatchService.findByMatchId({ id: params.match_id, wallet_address: request.input('wallet_address') })
       if (!match) return HelperUtils.responseBadRequest('Match id not found')
-      return HelperUtils.responseSuccess(match)
+      match = JSON.parse(JSON.stringify(match))
+
+      return HelperUtils.responseSuccess({
+        ...match,
+        is_completed_bet: (match.bettings.length + match.predicts.length) == 5
+      })
     } catch (error) {
       return HelperUtils.responseErrorInternal(error.message)
     }
