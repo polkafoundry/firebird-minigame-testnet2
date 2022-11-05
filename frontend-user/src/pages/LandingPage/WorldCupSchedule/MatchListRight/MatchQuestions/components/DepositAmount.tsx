@@ -1,4 +1,8 @@
-import { NUMBER_PATTERN } from "../../../../../../constants";
+import {
+  MAX_DEPOSIT_AMOUNT,
+  NUMBER_PATTERN,
+} from "../../../../../../constants";
+import { useMyWeb3 } from "../../../../../../hooks/useMyWeb3";
 
 type DepositAmountProps = {
   depositAmount: string;
@@ -16,13 +20,21 @@ const DepositAmount = (props: DepositAmountProps) => {
     isFullBetting = false,
     winRate,
   } = props;
-  const amount = "4,000";
+  const { birdBalance } = useMyWeb3();
 
   const onChange = (e: any) => {
     const valueInput = e.target.value;
     if (NUMBER_PATTERN.test(valueInput) || valueInput === "") {
-      handleChangeDepositAmount(valueInput);
+      const amount =
+        valueInput > MAX_DEPOSIT_AMOUNT ? MAX_DEPOSIT_AMOUNT : valueInput;
+      handleChangeDepositAmount(amount);
     }
+  };
+
+  const handleSelectMax = () => {
+    const maxValue =
+      +birdBalance > MAX_DEPOSIT_AMOUNT ? MAX_DEPOSIT_AMOUNT : birdBalance;
+    handleChangeDepositAmount(maxValue);
   };
 
   // console.log("depositAmount, ", depositAmount, winRate);
@@ -32,7 +44,7 @@ const DepositAmount = (props: DepositAmountProps) => {
       <div className="mt-10">
         <div className="flex justify-between">
           <span className="font-semibold text-xl">Deposit Amount:</span>
-          <span>Balance; {amount} $BIRD</span>
+          <span>Balance: {birdBalance || 0} $BIRD</span>
         </div>
         <p>
           Maximum is 1,000 BIRD/question. Don’t have BIRD token? Click{" "}
@@ -52,7 +64,12 @@ const DepositAmount = (props: DepositAmountProps) => {
             placeholder="Enter Number"
           />
           <span className="mr-5 font-semibold">$BIRD</span>
-          <button className="px-10 py-1 bg-yellow-400">Max</button>
+          <button
+            className="px-10 py-1 bg-yellow-400"
+            onClick={handleSelectMax}
+          >
+            Max
+          </button>
         </div>
       </div>
       {depositAmount && (

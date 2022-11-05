@@ -1,18 +1,21 @@
+import { BigNumber } from "ethers";
 import { useEffect, useState } from "react";
 import {
   BET_TYPE,
   MATCH_STATUS,
   QUESTION_STATUS,
 } from "../../../../../constants";
+import useBirdToken from "../../../../../hooks/useBirdToken";
 import { getImgSrc } from "../../utils";
 import { getOptionIndexByBetPlace } from "./components/utils";
-import PredictQuestion from "./PredictQuestion";
 import OddsQuestion from "./OddsQuestion";
 import OverUnderQuestion from "./OverUnderQuestion";
+import PredictQuestion from "./PredictQuestion";
 
 export type QuestionProps = {
   dataQuestion: any;
   title: string;
+  needApprove: boolean;
   betType?: typeof BET_TYPE[keyof typeof BET_TYPE];
 };
 
@@ -23,6 +26,19 @@ type MatchQuestionProps = {
 
 const MatchQuestions = (props: MatchQuestionProps) => {
   const { dataQuestion, account } = props;
+  const [needApprove, setNeedApprove] = useState<boolean>(false);
+
+  const { getBirdAllowance } = useBirdToken();
+
+  useEffect(() => {
+    if (!account) return;
+    const getBalanceAllow = async () => {
+      const bal = await getBirdAllowance(account);
+      const need = BigNumber.from(bal).lte(0);
+      setNeedApprove(need);
+    };
+    getBalanceAllow();
+  }, [account]);
 
   const [questions, setQuestions] = useState<any>([]);
 
@@ -44,14 +60,7 @@ const MatchQuestions = (props: MatchQuestionProps) => {
       const matchStatus = {
         match_status: dataQuestion?.match_status || MATCH_STATUS.UPCOMING,
       };
-      const matchResult = {
-        optionSelected: getOptionIndexByBetPlace(dataQuestion?.bet_place),
-        optionEnded: 1,
-        deposit: "100",
-        earned: "0",
-        claim: "0",
-        isClaimed: false,
-      };
+
       // unknow, waiting for result, result_num from BE
       const defaultQuestionStatus = QUESTION_STATUS.PREDICTED;
 
@@ -79,7 +88,6 @@ const MatchQuestions = (props: MatchQuestionProps) => {
       question2 = {
         ...question2,
         ...matchStatus,
-        // ...matchResult,
         options: [
           {
             label: homeTeamInfo.home_name,
@@ -93,6 +101,7 @@ const MatchQuestions = (props: MatchQuestionProps) => {
             winRate: dataQuestion?.odds_ht_away,
           },
         ],
+        optionSelected: getOptionIndexByBetPlace(question2?.bet_place),
         match_id: dataQuestion?.match_id,
         questionStatus: !question2
           ? QUESTION_STATUS.NOT_PREDICTED
@@ -120,8 +129,11 @@ const MatchQuestions = (props: MatchQuestionProps) => {
             winRate: dataQuestion?.odds_ft_away,
           },
         ],
+        optionSelected: getOptionIndexByBetPlace(question3?.bet_place),
         match_id: dataQuestion?.match_id,
-        ...matchResult,
+        questionStatus: !question3
+          ? QUESTION_STATUS.NOT_PREDICTED
+          : defaultQuestionStatus,
       };
 
       let question4 = bettingsData.find(
@@ -144,8 +156,11 @@ const MatchQuestions = (props: MatchQuestionProps) => {
             winRate: dataQuestion?.ou_ht_over,
           },
         ],
+        optionSelected: getOptionIndexByBetPlace(question4?.bet_place),
         match_id: dataQuestion?.match_id,
-        ...matchResult,
+        questionStatus: !question4
+          ? QUESTION_STATUS.NOT_PREDICTED
+          : defaultQuestionStatus,
       };
 
       let question5 = bettingsData.find(
@@ -168,8 +183,11 @@ const MatchQuestions = (props: MatchQuestionProps) => {
             winRate: dataQuestion?.ou_ft_over,
           },
         ],
+        optionSelected: getOptionIndexByBetPlace(question5?.bet_place),
         match_id: dataQuestion?.match_id,
-        ...matchResult,
+        questionStatus: !question5
+          ? QUESTION_STATUS.NOT_PREDICTED
+          : defaultQuestionStatus,
       };
 
       const newQuestions = [
@@ -204,25 +222,30 @@ const MatchQuestions = (props: MatchQuestionProps) => {
 
       <PredictQuestion
         dataQuestion={questions[0]}
+        needApprove={needApprove}
         title="1. What will the match score be?"
       />
       <OddsQuestion
         dataQuestion={questions[1]}
+        needApprove={needApprove}
         betType={BET_TYPE.ODD_EVEN_HALF_TIME}
         title="2. Who will win the 1st half?"
       />
       <OddsQuestion
         dataQuestion={questions[2]}
+        needApprove={needApprove}
         betType={BET_TYPE.ODD_EVEN_FULL_TIME}
         title="3. Who will win the full match?"
       />
       <OverUnderQuestion
         dataQuestion={questions[3]}
+        needApprove={needApprove}
         betType={BET_TYPE.OVER_UNDER_HALF_TIME}
         title="4. Will the 1st half total goals be higher or lower than the total goals below?"
       />
       <OverUnderQuestion
         dataQuestion={questions[4]}
+        needApprove={needApprove}
         betType={BET_TYPE.OVER_UNDER_FULL_TIME}
         title="5. Will the full match total goals be higher or lower than the total goals below?"
       />

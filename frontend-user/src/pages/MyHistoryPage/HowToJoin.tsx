@@ -9,8 +9,6 @@ import { requestSupportNetwork } from "../../utils/setupNetwork";
 const iconCheck = "/images/icon-correct-answer.svg";
 const iconUnCheck = "/images/icon-wrong-answer.svg";
 
-const fakeBirdToken = "4000";
-
 type ConditionTypes = {
   network: boolean;
   birdToken: boolean;
@@ -18,8 +16,13 @@ type ConditionTypes = {
 };
 
 const HowToJoin = () => {
-  const { isWrongChain, realTimeBalance, nativeCurrency, account } =
-    useMyWeb3();
+  const {
+    isWrongChain,
+    realTimeBalance,
+    nativeCurrency,
+    account,
+    birdBalance,
+  } = useMyWeb3();
   const { setShowModal } = useContext(WalletContext);
   const [predictConditions, setPredictConditions] = useState<ConditionTypes>({
     birdToken: false,
@@ -29,7 +32,7 @@ const HowToJoin = () => {
 
   useEffect(() => {
     const eligible: ConditionTypes = {
-      birdToken: !!(account && +fakeBirdToken > 0),
+      birdToken: !!(account && +birdBalance > 0),
       gasFee: !!(account && +realTimeBalance > 0),
       network: !!(account && !isWrongChain),
     };
@@ -98,7 +101,9 @@ const HowToJoin = () => {
                 <span>$BIRD to deposit</span>
               </div>
               {predictConditions.birdToken ? (
-                <p className="m-0 font-semibold">{`${fakeBirdToken} $BIRD`}</p>
+                <p className="m-0 font-semibold">{`${
+                  birdBalance || 0
+                } $BIRD`}</p>
               ) : (
                 <a
                   href="https://faucet.firefly.firebirdchain.com/"

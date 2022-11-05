@@ -1,27 +1,34 @@
 import { QUESTION_STATUS } from "../../../../../../constants";
+import { convertHexToStringNumber } from "../../../../../../utils";
 
 type ResultMatchProps = {
   questions: any;
-  matchStatus?: any;
+  questionStatus?: any;
 };
 const ResultMatch = (props: ResultMatchProps) => {
-  const { questions, matchStatus } = props;
+  const { questions, questionStatus } = props;
+
+  // TODO: has_claim, result, result_num
+
   return (
     <div className="mt-10">
       <div className="bg-orange-100 p-5 grid grid-cols-2 gap-y-5">
         <div className="flex flex-col">
           <span>Deposit Amount:</span>
           <span className="font-semibold">
-            {questions?.results?.deposit} $BIRD
+            {questions?.bet_amount
+              ? convertHexToStringNumber(questions?.bet_amount)
+              : "0"}{" "}
+            $BIRD
           </span>
         </div>
         <div className="flex flex-col">
           <span>Match Result</span>
-          {matchStatus !== QUESTION_STATUS.CORRECT_ANSWER &&
-            matchStatus !== QUESTION_STATUS.WRONG_ANSWER && (
+          {questionStatus !== QUESTION_STATUS.CORRECT_ANSWER &&
+            questionStatus !== QUESTION_STATUS.WRONG_ANSWER && (
               <span className="font-semibold">Updating...</span>
             )}
-          {matchStatus === QUESTION_STATUS.CORRECT_ANSWER && (
+          {questionStatus === QUESTION_STATUS.CORRECT_ANSWER && (
             <div className="flex">
               <img
                 src="images/icon-correct-answer.svg"
@@ -33,7 +40,7 @@ const ResultMatch = (props: ResultMatchProps) => {
               </span>
             </div>
           )}
-          {matchStatus === QUESTION_STATUS.WRONG_ANSWER && (
+          {questionStatus === QUESTION_STATUS.WRONG_ANSWER && (
             <div className="flex">
               <img src="images/icon-wrong-answer.svg" alt="" className="mr-2" />
               <span className="font-semibold text-red-600">Wrong answer</span>
@@ -59,8 +66,8 @@ const ResultMatch = (props: ResultMatchProps) => {
           </span>
         </div>
       </div>
-      {matchStatus === QUESTION_STATUS.CORRECT_ANSWER ||
-        (matchStatus === QUESTION_STATUS.WRONG_ANSWER && (
+      {questionStatus === QUESTION_STATUS.CORRECT_ANSWER ||
+        (questionStatus === QUESTION_STATUS.WRONG_ANSWER && (
           <div className="mt-5 flex">
             {Number(questions?.results?.claim) > 0 &&
               !questions?.results?.isClaimed && (

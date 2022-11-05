@@ -1,4 +1,4 @@
-import { ethers } from "ethers";
+import { BigNumber, ethers } from "ethers";
 import moment from "moment";
 
 export const displayWalletAddress = (address: string, digits = 6) => {
@@ -39,4 +39,8 @@ export const getMatchTime = (time: any) => {
   if (!time) return "N/A";
 
   return moment(time).format("HH:mm");
+};
+
+export const convertHexToStringNumber = (hex: any, decimals = 18) => {
+  return BigNumber.from(hex).div(BigNumber.from(10).pow(decimals)).toString();
 };

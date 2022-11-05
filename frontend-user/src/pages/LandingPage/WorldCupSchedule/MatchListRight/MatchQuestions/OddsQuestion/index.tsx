@@ -1,8 +1,10 @@
 import clsx from "clsx";
 import { BigNumber } from "ethers";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { QuestionProps } from "..";
 import { QUESTION_STATUS } from "../../../../../../constants";
+import useBetting from "../../../../../../hooks/useBetting";
+import useBirdToken from "../../../../../../hooks/useBirdToken";
 import BorderBox from "../components/BorderBox";
 import DepositAmount from "../components/DepositAmount";
 import Question from "../components/Question";
@@ -12,7 +14,7 @@ import { getOptionColorFromIndex } from "../components/utils";
 const betPlaceString = ["home", "draw", "away"];
 
 const OddsQuestion = (props: QuestionProps) => {
-  const { dataQuestion = {}, title, betType } = props;
+  const { dataQuestion = {}, title, betType, needApprove } = props;
   const isSubmitted =
     dataQuestion?.questionStatus === QUESTION_STATUS.PREDICTED;
   const questionStatus = dataQuestion?.questionStatus;
@@ -20,7 +22,15 @@ const OddsQuestion = (props: QuestionProps) => {
   const [optionWhoWin, setOptionWhoWin] = useState<number>(0);
   const [depositAmount, setDepositAmount] = useState<string>("");
 
-  const handleSubmit = () => {
+  const { approveBirdToken, loadingApprove } = useBirdToken();
+  const { betting, loadingBetting } = useBetting();
+
+  useEffect(() => {
+    if (!dataQuestion) return;
+    setOptionWhoWin(dataQuestion?.optionSelected);
+  }, [dataQuestion]);
+
+  const handleSubmit = async () => {
     const dataSubmit = {
       _matchID: dataQuestion?.match_id,
       _amount: BigNumber.from(depositAmount)
@@ -29,8 +39,14 @@ const OddsQuestion = (props: QuestionProps) => {
       _betType: betType,
       _betPlace: betPlaceString[optionWhoWin],
     };
-
+    const { _amount, _betPlace, _betType, _matchID } = dataSubmit;
     console.log("submit q2, q3", dataSubmit);
+
+    if (needApprove) {
+      await approveBirdToken();
+    }
+
+    await betting(_matchID, _amount, _betType, _betPlace);
   };
   const handleChangeOptionWhoWin = (option: number) => {
     setOptionWhoWin(option);
@@ -44,6 +60,7 @@ const OddsQuestion = (props: QuestionProps) => {
       title={title}
       handleSubmit={handleSubmit}
       isSubmitted={isSubmitted}
+      loading={loadingApprove || loadingBetting}
     >
       <div>
         <div className="flex items-start justify-between">
@@ -56,8 +73,8 @@ const OddsQuestion = (props: QuestionProps) => {
               )}
             >
               <BorderBox
-                label={option.label}
-                icon={option.icon}
+                label={option?.label}
+                icon={option?.icon}
                 className={clsx(
                   isSubmitted ? "pointer-events-none" : "cursor-pointer",
                   getOptionColorFromIndex(
@@ -80,7 +97,7 @@ const OddsQuestion = (props: QuestionProps) => {
                   ),
                 )}
               >
-                {option.winRate}
+                {option?.winRate}
               </span>
             </div>
           ))}
@@ -93,13 +110,16 @@ const OddsQuestion = (props: QuestionProps) => {
             errors={errors}
             winRate={
               dataQuestion?.options
-                ? dataQuestion?.options[optionWhoWin].winRate
+                ? dataQuestion?.options[optionWhoWin]?.winRate
                 : 0
             }
           />
         )}
         {isSubmitted && (
-          <ResultMatch questions={dataQuestion} matchStatus={questionStatus} />
+          <ResultMatch
+            questions={dataQuestion}
+            questionStatus={questionStatus}
+          />
         )}
       </div>
     </Question>

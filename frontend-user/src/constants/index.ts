@@ -1,5 +1,11 @@
 export const API_BASE_LOGO_TEAM = process.env.REACT_APP_API_LOGO_TEAM;
 export const API_BASE_URL = process.env.REACT_APP_API_BASE_URL + "api/v1";
+
+export const BETTING_CONTRACT = process.env.REACT_APP_BETTING_CONTRACT;
+export const BIRD_TOKEN_CONTRACT = process.env.REACT_APP_BIRD_TOKEN_CONTRACT;
+
+export const MAX_DEPOSIT_AMOUNT = 1000;
+
 export const URLS = {
   HOME: "/",
   LEADERBOARD: "/leaderboard",

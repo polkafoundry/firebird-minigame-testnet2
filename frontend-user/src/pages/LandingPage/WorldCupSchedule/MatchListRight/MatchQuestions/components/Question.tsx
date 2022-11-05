@@ -5,9 +5,10 @@ type QuestionProps = {
   children: JSX.Element;
   handleSubmit: () => void;
   isSubmitted: boolean;
+  loading?: boolean;
 };
 const Question = (props: QuestionProps) => {
-  const { title, children, handleSubmit, isSubmitted } = props;
+  const { title, children, handleSubmit, isSubmitted, loading } = props;
 
   return (
     <Disclosure defaultOpen>
@@ -29,8 +30,9 @@ const Question = (props: QuestionProps) => {
               <button
                 className="mt-5 px-10 py-3 rounded-xl bg-black text-white"
                 onClick={handleSubmit}
+                disabled={loading}
               >
-                Submit answer
+                {loading ? "Loading" : "Submit answer"}
               </button>
             )}
           </Disclosure.Panel>

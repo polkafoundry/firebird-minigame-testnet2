@@ -1,13 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { QuestionProps } from "..";
 import { QUESTION_STATUS } from "../../../../../../constants";
+import useBirdToken from "../../../../../../hooks/useBirdToken";
+import usePredicting from "../../../../../../hooks/usePredicting";
 import BorderBox from "../components/BorderBox";
 import InputNumber from "../components/InputNumber";
 import NotificationBox from "../components/NotificationBox";
 import Question from "../components/Question";
 
 const PredictQuestion = (props: QuestionProps) => {
-  const { dataQuestion = {}, title } = props;
+  const { dataQuestion = {}, title, needApprove } = props;
   const isSubmitted =
     dataQuestion?.questionStatus === QUESTION_STATUS.PREDICTED;
   const questionStatus = dataQuestion?.questionStatus;
@@ -16,6 +18,14 @@ const PredictQuestion = (props: QuestionProps) => {
   const [inputTeam1, setInputTeam1] = useState<string>("");
   const [inputTeam2, setInputTeam2] = useState<string>("");
 
+  const { approveBirdToken, loadingApprove } = useBirdToken();
+  const { loadingPredicting, predicting } = usePredicting();
+
+  useEffect(() => {
+    setInputTeam1(dataQuestion?.home_score || "");
+    setInputTeam2(dataQuestion?.away_score || "");
+  }, [dataQuestion]);
+
   const handleChangeInputTeam1 = (value: string) => {
     setInputTeam1(value);
   };
@@ -23,7 +33,7 @@ const PredictQuestion = (props: QuestionProps) => {
     setInputTeam2(value);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const dataSubmit = {
       _matchID: dataQuestion?.match_id,
       _homeScore: inputTeam1,
@@ -31,6 +41,13 @@ const PredictQuestion = (props: QuestionProps) => {
     };
 
     console.log("submit q1", dataSubmit);
+    const { _matchID, _homeScore, _awayScore } = dataSubmit;
+
+    if (needApprove) {
+      await approveBirdToken();
+    }
+
+    await predicting(_matchID, _homeScore, _awayScore);
   };
 
   return (
@@ -38,6 +55,7 @@ const PredictQuestion = (props: QuestionProps) => {
       title={title}
       handleSubmit={handleSubmit}
       isSubmitted={isSubmitted}
+      loading={loadingApprove || loadingPredicting}
     >
       <div>
         <div className="flex items-center justify-between">

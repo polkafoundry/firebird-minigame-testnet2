@@ -10,7 +10,6 @@ import { requestSupportNetwork } from "../../../../../utils/setupNetwork";
 
 const iconCheck = "/images/icon-correct-answer.svg";
 const iconUnCheck = "/images/icon-wrong-answer.svg";
-const fakeBirdToken = "4000";
 const buttonStyles = "w-[150px] bg-black text-white text-center py-2";
 
 type MatchGuideProps = {
@@ -20,7 +19,7 @@ type MatchGuideProps = {
 const MatchGuide = (props: MatchGuideProps) => {
   const { isDetailGuide = false } = props;
   const { setShowModal } = useContext(WalletContext);
-  const { realTimeBalance, nativeCurrency, account } = useMyWeb3();
+  const { realTimeBalance, nativeCurrency, account, birdBalance } = useMyWeb3();
 
   const predictConditions = usePredictConditions();
 
@@ -92,7 +91,7 @@ const MatchGuide = (props: MatchGuideProps) => {
               <span>$BIRD to deposit</span>
             </div>
             {predictConditions.birdToken ? (
-              <p className="m-0 font-semibold">{`${fakeBirdToken} $BIRD`}</p>
+              <p className="m-0 font-semibold">{`${birdBalance || 0} $BIRD`}</p>
             ) : (
               <div className="flex flex-col">
                 <a

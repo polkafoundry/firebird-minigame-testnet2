@@ -6,11 +6,15 @@ type ConditionTypes = {
   birdToken: boolean;
   gasFee: boolean;
 };
-const fakeBirdToken = "4000";
 
 const usePredictConditions = () => {
-  const { isWrongChain, realTimeBalance, nativeCurrency, account } =
-    useMyWeb3();
+  const {
+    isWrongChain,
+    realTimeBalance,
+    nativeCurrency,
+    account,
+    birdBalance,
+  } = useMyWeb3();
 
   const [predictConditions, setPredictConditions] = useState<ConditionTypes>({
     birdToken: false,
@@ -20,7 +24,7 @@ const usePredictConditions = () => {
 
   useEffect(() => {
     const eligible: ConditionTypes = {
-      birdToken: !!(account && +fakeBirdToken > 0),
+      birdToken: !!(account && +birdBalance > 0),
       gasFee: !!(account && +realTimeBalance > 0),
       network: !!(account && !isWrongChain),
     };

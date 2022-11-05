@@ -1,28 +1,43 @@
 import clsx from "clsx";
 import { BigNumber } from "ethers";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { QuestionProps } from "..";
+import { QUESTION_STATUS } from "../../../../../../constants";
+import useBetting from "../../../../../../hooks/useBetting";
+import useBirdToken from "../../../../../../hooks/useBirdToken";
 import BorderBox from "../components/BorderBox";
 import DepositAmount from "../components/DepositAmount";
 import Question from "../components/Question";
 import ResultMatch from "../components/ResultMatch";
 import { getOptionColorFromIndex } from "../components/utils";
 
-const betPlaceString = ["over", "", "under"];
+const betPlaceString = ["under", "", "over"];
 
 const OverUnderQuestion = (props: QuestionProps) => {
-  const { dataQuestion = {}, title, betType } = props;
+  const { dataQuestion = {}, title, betType, needApprove } = props;
+  const isSubmitted =
+    dataQuestion?.questionStatus === QUESTION_STATUS.PREDICTED;
+  const questionStatus = dataQuestion?.questionStatus;
   const [optionWhoWin, setOptionWhoWin] = useState<number>(0);
   const [depositAmount, setDepositAmount] = useState<string>("");
 
+  const { approveBirdToken, loadingApprove } = useBirdToken();
+  const { betting, loadingBetting } = useBetting();
+
+  useEffect(() => {
+    if (!dataQuestion) return;
+    setOptionWhoWin(dataQuestion?.optionSelected);
+  }, [dataQuestion]);
+
   const handleChangeOptionWhoWin = (option: number) => {
+    console.log("handleChangeOptionWhoWin", option);
     setOptionWhoWin(option);
   };
   const handleChangeDepositAmount = (value: string) => {
     setDepositAmount(value);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const dataSubmit = {
       _matchID: dataQuestion?.match_id,
       _amount: BigNumber.from(depositAmount)
@@ -33,29 +48,36 @@ const OverUnderQuestion = (props: QuestionProps) => {
     };
 
     console.log("submit q4 q5", dataSubmit);
+
+    const { _amount, _betPlace, _betType, _matchID } = dataSubmit;
+
+    if (needApprove) {
+      await approveBirdToken();
+    }
+
+    await betting(_matchID, _amount, _betType, _betPlace);
   };
 
   return (
     <Question
       title={title}
       handleSubmit={handleSubmit}
-      isSubmitted={dataQuestion?.isSubmitted}
+      isSubmitted={isSubmitted}
+      loading={loadingApprove || loadingBetting}
     >
       <div>
         <div className="flex items-start justify-between">
           {dataQuestion?.options?.map((option: any, index: number) => (
             <div
-              key={option.label}
+              key={option?.label}
               className="flex flex-col items-center w-full max-w-[120px]"
             >
               <BorderBox
-                label={option.label}
-                icon={option.icon}
+                label={option?.label}
+                icon={option?.icon}
                 className={clsx(
-                  dataQuestion?.isSubmitted
-                    ? "pointer-events-none"
-                    : "cursor-pointer",
-                  !option.isDisableClick &&
+                  isSubmitted ? "pointer-events-none" : "cursor-pointer",
+                  !option?.isDisableClick &&
                     getOptionColorFromIndex(
                       dataQuestion,
                       index,
@@ -64,11 +86,11 @@ const OverUnderQuestion = (props: QuestionProps) => {
                     ),
                 )}
                 onClick={() =>
-                  !option.isDisableClick && handleChangeOptionWhoWin(index)
+                  !option?.isDisableClick && handleChangeOptionWhoWin(index)
                 }
               />
               <span className="text-sm text-yellow-400 mt-1 h-5">
-                {optionWhoWin === index && option.description}
+                {optionWhoWin === index && option?.description}
               </span>
               <span
                 className={clsx(
@@ -81,13 +103,13 @@ const OverUnderQuestion = (props: QuestionProps) => {
                   ),
                 )}
               >
-                {option.winRate}
+                {option?.winRate}
               </span>
             </div>
           ))}
         </div>
 
-        {!dataQuestion?.isSubmitted && (
+        {!isSubmitted && (
           <DepositAmount
             depositAmount={depositAmount}
             handleChangeDepositAmount={handleChangeDepositAmount}
@@ -99,7 +121,12 @@ const OverUnderQuestion = (props: QuestionProps) => {
             }
           />
         )}
-        {dataQuestion?.isSubmitted && <ResultMatch questions={dataQuestion} />}
+        {isSubmitted && (
+          <ResultMatch
+            questions={dataQuestion}
+            questionStatus={questionStatus}
+          />
+        )}
       </div>
     </Question>
   );
