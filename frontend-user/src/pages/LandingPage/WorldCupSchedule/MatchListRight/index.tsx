@@ -31,7 +31,7 @@ const MatchListRight = (props: MatchListRightProps) => {
 
   const matchData = data?.data;
   const startTime = new Date(matchData?.start_time * 1000);
-  const matchTime = moment(startTime).format("Do MMM YY, HH:MM");
+  const matchTime = moment(startTime).format("Do MMM YY, HH:mm");
 
   const isEnded = moment(startTime).diff(new Date(), "hours") < 1;
 
@@ -86,7 +86,7 @@ const MatchListRight = (props: MatchListRightProps) => {
                 ? "Prediction for this match has been closed."
                 : `Predictions will be closed at ${moment(startTime)
                     .add(1, "hours")
-                    .format("Do MMM YY, HH:MM")}`}
+                    .format("Do MMM YY, HH:mm")}`}
             </div>
           </>
         ) : (

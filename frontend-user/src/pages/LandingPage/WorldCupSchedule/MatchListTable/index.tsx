@@ -1,9 +1,9 @@
 import clsx from "clsx";
-import moment from "moment";
 import { useState } from "react";
 import MatchName from "../../../../components/base/Table/MatchName";
 import MatchPredict from "../../../../components/base/Table/MatchPredict";
 import MatchStatus from "../../../../components/base/Table/MatchStatus";
+import { getMatchTime } from "../../../../utils";
 import styles from "./matchList.module.scss";
 
 const headingTable = [
@@ -34,12 +34,6 @@ const MatchListTable = (props: MatchListTableProps) => {
   const previousGroup = () => {
     if (groupStageIndex >= 1)
       setGroupStageIndex((prevState: any) => prevState - 1);
-  };
-
-  const getMatchTime = (time: any) => {
-    if (!time) return "N/A";
-
-    return moment(new Date(time * 1000)).format("HH:MM");
   };
 
   return (
@@ -97,7 +91,7 @@ const MatchListTable = (props: MatchListTableProps) => {
                   onClick={() => handleSelectMatch(match?.id)}
                 >
                   <div className="flex items-center">
-                    {getMatchTime(match?.start_time)}
+                    {getMatchTime(match?.start_time * 1000)}
                   </div>
                   <MatchName team1={match?.homeTeam} team2={match?.awayTeam} />
                   <div>{`${match?.ft_home_score}:${match?.ft_away_score}`}</div>
