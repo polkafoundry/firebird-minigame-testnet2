@@ -59,11 +59,7 @@ export default class PredictWinnerService {
         return new BusinessException('Match not found')
       }
       const PredictModel = require('@ioc:App/Models/Predict')
-      const predictList = await PredictModel.query()
-        .where('match_id', matchID)
-        .andWhere('home_score' === matchInfo.ft_home_score)
-        .andWhere('away_score' === matchInfo.ft_away_score)
-        .exec()
+      const predictList = await PredictModel.query().where('match_id', matchID).exec()
       if (!predictList || predictList.length === 0) {
         return new BusinessException('Not predict winner in match')
       }
