@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import { BigNumber } from "ethers";
 import { useState } from "react";
 import { QuestionProps } from "..";
 import BorderBox from "../components/BorderBox";
@@ -7,10 +8,12 @@ import Question from "../components/Question";
 import ResultMatch from "../components/ResultMatch";
 import { getOptionColorFromIndex } from "../components/utils";
 
-const ThirdQuestion = (props: QuestionProps) => {
-  const { dataQuestion = {}, title } = props;
+const betPlaceString = ["over", "", "under"];
+
+const OverUnderQuestion = (props: QuestionProps) => {
+  const { dataQuestion = {}, title, betType } = props;
   const [optionWhoWin, setOptionWhoWin] = useState<number>(0);
-  const [depositAmount, setDepositAmount] = useState<string>("0");
+  const [depositAmount, setDepositAmount] = useState<string>("");
 
   const handleChangeOptionWhoWin = (option: number) => {
     setOptionWhoWin(option);
@@ -20,7 +23,16 @@ const ThirdQuestion = (props: QuestionProps) => {
   };
 
   const handleSubmit = () => {
-    console.log("click submit");
+    const dataSubmit = {
+      _matchID: dataQuestion?.match_id,
+      _amount: BigNumber.from(depositAmount)
+        .mul(BigNumber.from(10).pow(18))
+        .toString(),
+      _betType: betType,
+      _betPlace: betPlaceString[optionWhoWin],
+    };
+
+    console.log("submit q4 q5", dataSubmit);
   };
 
   return (
@@ -93,4 +105,4 @@ const ThirdQuestion = (props: QuestionProps) => {
   );
 };
 
-export default ThirdQuestion;
+export default OverUnderQuestion;

@@ -11,6 +11,7 @@ const queryString = require("query-string");
 
 type MatchListRightProps = {
   matchId: number | undefined;
+  account: string | undefined;
 };
 
 const nav = [
@@ -19,12 +20,12 @@ const nav = [
 ];
 
 const MatchListRight = (props: MatchListRightProps) => {
-  const { matchId } = props;
+  const { matchId, account } = props;
   const [selectedNav, setSelectedNav] = useState<number>(1);
 
   const fetchMatchDetailUrl = matchId
     ? `/match/detail/${matchId}?${queryString.stringify({
-        wallet_address: "0xf6541439A90E7e340E913A2D70Dc1Ee283D1E90A",
+        wallet_address: account,
       })}`
     : "";
   const { data } = useFetch<any>(fetchMatchDetailUrl);
@@ -115,7 +116,7 @@ const MatchListRight = (props: MatchListRightProps) => {
       </div>
 
       {selectedNav === 1 ? (
-        <MatchQuestions dataQuestion={matchData} />
+        <MatchQuestions account={account} dataQuestion={matchData} />
       ) : (
         <MatchGuide isDetailGuide />
       )}

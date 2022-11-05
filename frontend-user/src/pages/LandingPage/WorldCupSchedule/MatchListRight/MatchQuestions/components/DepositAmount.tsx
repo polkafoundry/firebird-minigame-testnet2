@@ -49,6 +49,7 @@ const DepositAmount = (props: DepositAmountProps) => {
             className="flex-1 outline-none"
             value={depositAmount}
             onChange={onChange}
+            placeholder="Enter Number"
           />
           <span className="mr-5 font-semibold">$BIRD</span>
           <button className="px-10 py-1 bg-yellow-400">Max</button>

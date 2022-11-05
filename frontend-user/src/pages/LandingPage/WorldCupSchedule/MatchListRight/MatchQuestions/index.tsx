@@ -1,22 +1,28 @@
 import { useEffect, useState } from "react";
-import { BET_TYPE, MATCH_STATUS } from "../../../../../constants";
+import {
+  BET_TYPE,
+  MATCH_STATUS,
+  QUESTION_STATUS,
+} from "../../../../../constants";
 import { getImgSrc } from "../../utils";
 import { getOptionIndexByBetPlace } from "./components/utils";
-import FirstQuestion from "./FirstQuestion";
-import SecondQuestion from "./SecondQuestion";
-import ThirdQuestion from "./ThirdQuestion";
+import PredictQuestion from "./PredictQuestion";
+import OddsQuestion from "./OddsQuestion";
+import OverUnderQuestion from "./OverUnderQuestion";
 
 export type QuestionProps = {
   dataQuestion: any;
   title: string;
+  betType?: typeof BET_TYPE[keyof typeof BET_TYPE];
 };
 
 type MatchQuestionProps = {
   dataQuestion: any;
+  account: string | undefined;
 };
 
 const MatchQuestions = (props: MatchQuestionProps) => {
-  const { dataQuestion } = props;
+  const { dataQuestion, account } = props;
 
   const [questions, setQuestions] = useState<any>([]);
 
@@ -46,6 +52,8 @@ const MatchQuestions = (props: MatchQuestionProps) => {
         claim: "0",
         isClaimed: false,
       };
+      // unknow, waiting for result, result_num from BE
+      const defaultQuestionStatus = QUESTION_STATUS.PREDICTED;
 
       // QUESTION 1: Score Prediction
       const predictsData = dataQuestion?.predicts || [];
@@ -54,6 +62,11 @@ const MatchQuestions = (props: MatchQuestionProps) => {
         ...homeTeamInfo,
         ...awayTeamInfo,
         ...matchStatus,
+        match_id: dataQuestion?.match_id,
+        questionStatus:
+          predictsData.length === 0
+            ? QUESTION_STATUS.NOT_PREDICTED
+            : defaultQuestionStatus,
       };
 
       const bettingsData = dataQuestion?.bettings || [];
@@ -66,6 +79,7 @@ const MatchQuestions = (props: MatchQuestionProps) => {
       question2 = {
         ...question2,
         ...matchStatus,
+        // ...matchResult,
         options: [
           {
             label: homeTeamInfo.home_name,
@@ -79,7 +93,10 @@ const MatchQuestions = (props: MatchQuestionProps) => {
             winRate: dataQuestion?.odds_ht_away,
           },
         ],
-        ...matchResult,
+        match_id: dataQuestion?.match_id,
+        questionStatus: !question2
+          ? QUESTION_STATUS.NOT_PREDICTED
+          : defaultQuestionStatus,
       };
 
       // QUESTION 3
@@ -103,6 +120,7 @@ const MatchQuestions = (props: MatchQuestionProps) => {
             winRate: dataQuestion?.odds_ft_away,
           },
         ],
+        match_id: dataQuestion?.match_id,
         ...matchResult,
       };
 
@@ -126,6 +144,7 @@ const MatchQuestions = (props: MatchQuestionProps) => {
             winRate: dataQuestion?.ou_ht_over,
           },
         ],
+        match_id: dataQuestion?.match_id,
         ...matchResult,
       };
 
@@ -149,6 +168,7 @@ const MatchQuestions = (props: MatchQuestionProps) => {
             winRate: dataQuestion?.ou_ft_over,
           },
         ],
+        match_id: dataQuestion?.match_id,
         ...matchResult,
       };
 
@@ -165,17 +185,16 @@ const MatchQuestions = (props: MatchQuestionProps) => {
     bindData();
   }, [dataQuestion]);
 
-  // console.log("predicts", predictsData);
-
   const renderEmptyQuestion = () => {
     return (
       <div className="flex text-center text-xl font-semibold h-40 items-center justify-center">
-        Please Select Match First
+        {!account ? "Please Connect Wallet First" : "Please Select Match First"}
       </div>
     );
   };
 
-  if (!dataQuestion || dataQuestion.length === 0) return renderEmptyQuestion();
+  if (!account || !dataQuestion || dataQuestion.length === 0)
+    return renderEmptyQuestion();
 
   return (
     <div className="w-full p-5">
@@ -183,24 +202,28 @@ const MatchQuestions = (props: MatchQuestionProps) => {
         Select questions, predict the match & submit your answer.{" "}
       </span>
 
-      <FirstQuestion
+      <PredictQuestion
         dataQuestion={questions[0]}
         title="1. What will the match score be?"
       />
-      <SecondQuestion
+      <OddsQuestion
         dataQuestion={questions[1]}
+        betType={BET_TYPE.ODD_EVEN_HALF_TIME}
         title="2. Who will win the 1st half?"
       />
-      <SecondQuestion
+      <OddsQuestion
         dataQuestion={questions[2]}
+        betType={BET_TYPE.ODD_EVEN_FULL_TIME}
         title="3. Who will win the full match?"
       />
-      <ThirdQuestion
+      <OverUnderQuestion
         dataQuestion={questions[3]}
+        betType={BET_TYPE.OVER_UNDER_HALF_TIME}
         title="4. Will the 1st half total goals be higher or lower than the total goals below?"
       />
-      <ThirdQuestion
+      <OverUnderQuestion
         dataQuestion={questions[4]}
+        betType={BET_TYPE.OVER_UNDER_FULL_TIME}
         title="5. Will the full match total goals be higher or lower than the total goals below?"
       />
       {/* <FourthQuestion /> */}

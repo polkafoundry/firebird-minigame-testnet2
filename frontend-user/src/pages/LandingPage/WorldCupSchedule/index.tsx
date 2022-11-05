@@ -145,7 +145,7 @@ const WorldCupSchedule = () => {
           />
         </div>
         <div className="w-[45%]">
-          <MatchListRight matchId={selectedMatchId} />
+          <MatchListRight account={account} matchId={selectedMatchId} />
         </div>
       </div>
     </div>
