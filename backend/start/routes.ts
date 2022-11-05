@@ -35,6 +35,9 @@ Route.group(() => {
   Route.post('betting/predict-pick-winner', 'BettingsController.predictPickWinner')
 
   Route.post('/claim/get-sig', 'ClaimController.claimToken')
+
+  Route.post('/predict/get-list-winner', 'PredictWinnerController.getListPredictWinner')
+  Route.post('/predict/get-match-predict-info', 'PredictWinnerController.checkPredictByMatch')
 }).prefix('/api/v1')
 
 Route.group(() => {})

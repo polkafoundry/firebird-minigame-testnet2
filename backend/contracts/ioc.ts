@@ -15,3 +15,9 @@ declare module '@ioc:Firebird/ClaimService' {
   const ClaimService: ClaimServiceInterface
   export default ClaimService
 }
+
+declare module '@ioc:Firebird/PredictWinnerService' {
+  import PredictWinnerServiceInterface from 'Contracts/interfaces/PredictWinnerService.interface'
+  const PredictWinnerService: PredictWinnerServiceInterface
+  export default PredictWinnerService
+}
