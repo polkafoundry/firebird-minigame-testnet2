@@ -1,0 +1,1608 @@
+[
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint16",
+        "name": "matchID",
+        "type": "uint16"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint16",
+            "name": "ouHtOver",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "ouHtRatio",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "ouHtUnder",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "ouFtOver",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "ouFtRatio",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "ouFtUnder",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "oddsHtHome",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "oddsHtDraw",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "oddsHtAway",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "oddsFtHome",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "oddsFtDraw",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "oddsFtAway",
+            "type": "uint16"
+          }
+        ],
+        "indexed": false,
+        "internalType": "struct IBirdBetting.MatchStatistics",
+        "name": "mSta",
+        "type": "tuple"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint8",
+            "name": "ht_homeScore",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint8",
+            "name": "ht_awayScore",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint8",
+            "name": "ft_homeScore",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint8",
+            "name": "ft_awayScore",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint256",
+            "name": "startTime",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "homeName",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "homeIcon",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "awayName",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "awayIcon",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "location",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "round",
+            "type": "string"
+          },
+          {
+            "internalType": "bool",
+            "name": "isHalfTime",
+            "type": "bool"
+          },
+          {
+            "internalType": "bool",
+            "name": "isFinished",
+            "type": "bool"
+          }
+        ],
+        "indexed": false,
+        "internalType": "struct IBirdBetting.MatchInfo",
+        "name": "mInf",
+        "type": "tuple"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "sofaMatchID",
+        "type": "uint256"
+      }
+    ],
+    "name": "CreateMatch",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint8",
+        "name": "version",
+        "type": "uint8"
+      }
+    ],
+    "name": "Initialized",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "previousOwner",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "OwnershipTransferred",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "role",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "previousAdminRole",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "newAdminRole",
+        "type": "bytes32"
+      }
+    ],
+    "name": "RoleAdminChanged",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "role",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "sender",
+        "type": "address"
+      }
+    ],
+    "name": "RoleGranted",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "role",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "sender",
+        "type": "address"
+      }
+    ],
+    "name": "RoleRevoked",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint16",
+        "name": "matchID",
+        "type": "uint16"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint8",
+            "name": "ht_homeScore",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint8",
+            "name": "ht_awayScore",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint8",
+            "name": "ft_homeScore",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint8",
+            "name": "ft_awayScore",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint256",
+            "name": "startTime",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "homeName",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "homeIcon",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "awayName",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "awayIcon",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "location",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "round",
+            "type": "string"
+          },
+          {
+            "internalType": "bool",
+            "name": "isHalfTime",
+            "type": "bool"
+          },
+          {
+            "internalType": "bool",
+            "name": "isFinished",
+            "type": "bool"
+          }
+        ],
+        "indexed": false,
+        "internalType": "struct IBirdBetting.MatchInfo",
+        "name": "mInf",
+        "type": "tuple"
+      }
+    ],
+    "name": "UpdateMatchInfo",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint16",
+        "name": "matchID",
+        "type": "uint16"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint16",
+            "name": "ouHtOver",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "ouHtRatio",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "ouHtUnder",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "ouFtOver",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "ouFtRatio",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "ouFtUnder",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "oddsHtHome",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "oddsHtDraw",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "oddsHtAway",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "oddsFtHome",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "oddsFtDraw",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "oddsFtAway",
+            "type": "uint16"
+          }
+        ],
+        "indexed": false,
+        "internalType": "struct IBirdBetting.MatchStatistics",
+        "name": "mSta",
+        "type": "tuple"
+      }
+    ],
+    "name": "UpdateMatchStatistics",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint16",
+        "name": "matchID",
+        "type": "uint16"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "betType",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "betPlace",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "claimed",
+        "type": "bool"
+      }
+    ],
+    "name": "UserBetting",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint16",
+        "name": "matchID",
+        "type": "uint16"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "betType",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "deadline",
+        "type": "uint256"
+      }
+    ],
+    "name": "UserClaim",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint16",
+        "name": "matchID",
+        "type": "uint16"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint8",
+        "name": "homeScore",
+        "type": "uint8"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint8",
+        "name": "awayScore",
+        "type": "uint8"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "time",
+        "type": "uint256"
+      }
+    ],
+    "name": "UserPredicting",
+    "type": "event"
+  },
+  {
+    "inputs": [],
+    "name": "CLAIM_TOKEN_WITH_SIG_TYPEHASH",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "DEFAULT_ADMIN_ROLE",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "TokenClaimNonces",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "TokenClaimTimeStamp",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_token",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_fundWallet",
+        "type": "address"
+      }
+    ],
+    "name": "__SBirdBetting_init",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint16",
+        "name": "_matchID",
+        "type": "uint16"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_amount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "string",
+        "name": "_betType",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "_betPlace",
+        "type": "string"
+      }
+    ],
+    "name": "betting",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      },
+      {
+        "internalType": "uint16",
+        "name": "",
+        "type": "uint16"
+      }
+    ],
+    "name": "claimInMatch",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "fundWallet",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "role",
+        "type": "bytes32"
+      }
+    ],
+    "name": "getRoleAdmin",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "grantAdminRole",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "role",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "grantRole",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "role",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "hasRole",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint16",
+        "name": "",
+        "type": "uint16"
+      }
+    ],
+    "name": "matchByID",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint16",
+            "name": "ouHtOver",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "ouHtRatio",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "ouHtUnder",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "ouFtOver",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "ouFtRatio",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "ouFtUnder",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "oddsHtHome",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "oddsHtDraw",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "oddsHtAway",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "oddsFtHome",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "oddsFtDraw",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "oddsFtAway",
+            "type": "uint16"
+          }
+        ],
+        "internalType": "struct IBirdBetting.MatchStatistics",
+        "name": "mSta",
+        "type": "tuple"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint8",
+            "name": "ht_homeScore",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint8",
+            "name": "ht_awayScore",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint8",
+            "name": "ft_homeScore",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint8",
+            "name": "ft_awayScore",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint256",
+            "name": "startTime",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "homeName",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "homeIcon",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "awayName",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "awayIcon",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "location",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "round",
+            "type": "string"
+          },
+          {
+            "internalType": "bool",
+            "name": "isHalfTime",
+            "type": "bool"
+          },
+          {
+            "internalType": "bool",
+            "name": "isFinished",
+            "type": "bool"
+          }
+        ],
+        "internalType": "struct IBirdBetting.MatchInfo",
+        "name": "mInf",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "maxBetAmount",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "name": "onERC721Received",
+    "outputs": [
+      {
+        "internalType": "bytes4",
+        "name": "",
+        "type": "bytes4"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "owner",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint16",
+        "name": "_matchID",
+        "type": "uint16"
+      },
+      {
+        "internalType": "uint8",
+        "name": "_homeScore",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "_awayScore",
+        "type": "uint8"
+      }
+    ],
+    "name": "predict",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "renounceOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "role",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "renounceRole",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "revokeAdminRole",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "role",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "revokeRole",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_fund",
+        "type": "address"
+      }
+    ],
+    "name": "setFundAddress",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint16",
+        "name": "_matchID",
+        "type": "uint16"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint16",
+            "name": "ouHtOver",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "ouHtRatio",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "ouHtUnder",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "ouFtOver",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "ouFtRatio",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "ouFtUnder",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "oddsHtHome",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "oddsHtDraw",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "oddsHtAway",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "oddsFtHome",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "oddsFtDraw",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "oddsFtAway",
+            "type": "uint16"
+          }
+        ],
+        "internalType": "struct IBirdBetting.MatchStatistics",
+        "name": "_mSta",
+        "type": "tuple"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint8",
+            "name": "ht_homeScore",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint8",
+            "name": "ht_awayScore",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint8",
+            "name": "ft_homeScore",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint8",
+            "name": "ft_awayScore",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint256",
+            "name": "startTime",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "homeName",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "homeIcon",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "awayName",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "awayIcon",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "location",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "round",
+            "type": "string"
+          },
+          {
+            "internalType": "bool",
+            "name": "isHalfTime",
+            "type": "bool"
+          },
+          {
+            "internalType": "bool",
+            "name": "isFinished",
+            "type": "bool"
+          }
+        ],
+        "internalType": "struct IBirdBetting.MatchInfo",
+        "name": "_mInf",
+        "type": "tuple"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_sofaMatchID",
+        "type": "uint256"
+      }
+    ],
+    "name": "setMatchInfo",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "setMaxBetAmount",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_signer",
+        "type": "address"
+      }
+    ],
+    "name": "setSigner",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "spacer",
+        "type": "uint256"
+      }
+    ],
+    "name": "setSpacer",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_tokenAddress",
+        "type": "address"
+      }
+    ],
+    "name": "setTokenAddress",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes4",
+        "name": "interfaceId",
+        "type": "bytes4"
+      }
+    ],
+    "name": "supportsInterface",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint16",
+        "name": "_matchID",
+        "type": "uint16"
+      },
+      {
+        "internalType": "string",
+        "name": "_betType",
+        "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_amount",
+        "type": "uint256"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "deadline",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint8",
+            "name": "v",
+            "type": "uint8"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "r",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "s",
+            "type": "bytes32"
+          }
+        ],
+        "internalType": "struct IBirdBetting.EIP712Signature",
+        "name": "_signature",
+        "type": "tuple"
+      }
+    ],
+    "name": "tokenClaim",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "transferOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint16",
+        "name": "_matchID",
+        "type": "uint16"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint8",
+            "name": "ht_homeScore",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint8",
+            "name": "ht_awayScore",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint8",
+            "name": "ft_homeScore",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint8",
+            "name": "ft_awayScore",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint256",
+            "name": "startTime",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "homeName",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "homeIcon",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "awayName",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "awayIcon",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "location",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "round",
+            "type": "string"
+          },
+          {
+            "internalType": "bool",
+            "name": "isHalfTime",
+            "type": "bool"
+          },
+          {
+            "internalType": "bool",
+            "name": "isFinished",
+            "type": "bool"
+          }
+        ],
+        "internalType": "struct IBirdBetting.MatchInfo",
+        "name": "_mInf",
+        "type": "tuple"
+      }
+    ],
+    "name": "updateMatchInfo",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint16",
+        "name": "_matchID",
+        "type": "uint16"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint16",
+            "name": "ouHtOver",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "ouHtRatio",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "ouHtUnder",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "ouFtOver",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "ouFtRatio",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "ouFtUnder",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "oddsHtHome",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "oddsHtDraw",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "oddsHtAway",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "oddsFtHome",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "oddsFtDraw",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "oddsFtAway",
+            "type": "uint16"
+          }
+        ],
+        "internalType": "struct IBirdBetting.MatchStatistics",
+        "name": "mSta",
+        "type": "tuple"
+      }
+    ],
+    "name": "updateMatchStatistics",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      },
+      {
+        "internalType": "uint16",
+        "name": "",
+        "type": "uint16"
+      },
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "name": "userBettingInMatch",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "string",
+        "name": "place",
+        "type": "string"
+      },
+      {
+        "internalType": "bool",
+        "name": "isClaimed",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      },
+      {
+        "internalType": "uint16",
+        "name": "",
+        "type": "uint16"
+      }
+    ],
+    "name": "userPredictByMatch",
+    "outputs": [
+      {
+        "internalType": "uint8",
+        "name": "homeScore",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "awayScore",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint256",
+        "name": "time",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  }
+]
