@@ -2,7 +2,7 @@ import InvalidParamException from 'App/Exceptions/InvalidParamException'
 import BusinessException from 'App/Exceptions/BusinessException'
 
 export default class PredictWinnerService {
-  public async checkPredictByMatch(request, response): Promise<any> {
+  public async checkPredictByMatch(request): Promise<any> {
     const matchID = request.input('match_id')
     const address = request.input('address')
 
@@ -31,8 +31,8 @@ export default class PredictWinnerService {
           away_score_predict: predictInfo.away_score,
           predict_time: predictInfo.predict_time,
           predict_winner:
-            predictInfo.home_score === matchInfo.ft_home_score &&
-            predictInfo.away_score === matchInfo.ft_away_score,
+            predictInfo.home_score == matchInfo.ft_home_score &&
+            predictInfo.away_score == matchInfo.ft_away_score,
           is_final_winner: predictWinnerInfo ? predictWinnerInfo?.final_winner : null,
         }
       } else {
@@ -47,7 +47,7 @@ export default class PredictWinnerService {
     }
   }
 
-  public async getListPredictWinner(request, response): Promise<any> {
+  public async getListPredictWinner(request): Promise<any> {
     const matchID = request.input('match_id')
 
     if (!matchID) throw new InvalidParamException('Match ID required')
@@ -59,7 +59,11 @@ export default class PredictWinnerService {
         return new BusinessException('Match not found')
       }
       const PredictModel = require('@ioc:App/Models/Predict')
-      const predictList = await PredictModel.query().where('match_id', matchID).exec()
+      const predictList = await PredictModel.query()
+        .where('match_id', matchID)
+        .andWhere('home_score', matchInfo.ft_home_score)
+        .andWhere('away_score', matchInfo.ft_away_score)
+        .exec()
       if (!predictList || predictList.length === 0) {
         return new BusinessException('Not predict winner in match')
       }

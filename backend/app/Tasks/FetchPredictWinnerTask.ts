@@ -14,7 +14,6 @@ const initTask = async () => {
   }
   try {
     let currentBlock = PREDICT_WINNER_START_BLOCK
-
     for (const eventType of ARRAY_EVENTS) {
       let data = {
         event_type: eventType,
@@ -23,6 +22,7 @@ const initTask = async () => {
       }
 
       const jobKey = new Job().key
+
       await Bull.getByKey(jobKey).bull.add(jobKey + eventType, data, {
         repeat: {
           every: 1000 * 60, // 1 minutes

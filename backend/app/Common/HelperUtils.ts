@@ -4,6 +4,9 @@ const Const = require('@ioc:App/Common/Const')
 const BETTING_SMART_CONTRACT = process.env.BETTING_SMART_CONTRACT
 const BETTING_ABI = require('../../blockchain_configs/contracts/SBirdBetting.json')
 
+const PREDICT_WINNER_SMART_CONTRACT = process.env.PREDICT_WINNER_SMART_CONTRACT
+const PREDICT_WINNER_ABI = require('../../blockchain_configs/contracts/PredictWinner.json')
+
 const getWeb3ProviderLink = () => {
   if (isDevelopment) {
     const WEB3_API_URLS = ['https://rpc.testnet-firebird.polkafoundry.com/']
@@ -55,13 +58,27 @@ const getBettingContractInstance = async () => {
   return instance
 }
 
+const getPredictWinnerContractInstance = async () => {
+  const pool = PREDICT_WINNER_SMART_CONTRACT
+  if (!pool) {
+    return null
+  }
+  const web3 = await getWeb3Provider()
+  const instance = new web3.eth.Contract(PREDICT_WINNER_ABI.abi, pool)
+  if (!instance) {
+    return null
+  }
+
+  return instance
+}
+
 const responseErrorInternal = (message) => {
   return {
     status: 500,
     message: message || 'Sorry there seems to be a server error!',
     data: null,
   }
-};
+}
 
 const responseNotFound = (message) => {
   return {
@@ -69,7 +86,7 @@ const responseNotFound = (message) => {
     message: message || 'Not Found !',
     data: null,
   }
-};
+}
 
 const responseBadRequest = (message) => {
   return {
@@ -77,7 +94,7 @@ const responseBadRequest = (message) => {
     message: message || 'Looks like this is unkown request, please try again or contact us.',
     data: null,
   }
-};
+}
 
 const responseSuccess = (data = null, message) => {
   return {
@@ -85,13 +102,14 @@ const responseSuccess = (data = null, message) => {
     message: message || 'Success !',
     data,
   }
-};
+}
 
 module.exports = {
   getWeb3Provider,
   getBettingContractInstance,
+  getPredictWinnerContractInstance,
   responseErrorInternal,
   responseNotFound,
   responseBadRequest,
-  responseSuccess
+  responseSuccess,
 }

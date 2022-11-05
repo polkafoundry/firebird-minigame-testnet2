@@ -15,9 +15,9 @@ export default class PredictWinners extends BaseSchema {
 
       table.string('req_id').notNullable()
       table.integer('match_id').notNullable()
-      table.string('predict_winner').notNullable()
-      table.string('final_winner').notNullable()
-      table.decimal('randomness', 40, 0)
+      table.string('predict_winner')
+      table.string('final_winner')
+      table.string('randomness')
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */

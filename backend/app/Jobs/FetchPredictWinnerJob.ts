@@ -3,9 +3,6 @@ import Logger from '@ioc:Adonis/Core/Logger'
 const RedisPredictWinnerUtils = require('@ioc:App/Common/RedisPredictWinnerUtils')
 const HelperUtils = require('@ioc:App/Common/HelperUtils')
 const PredictWinner = require('@ioc:App/Models/PredictWinner')
-const BettingModel = require('@ioc:App/Models/Betting')
-const PredictModel = require('@ioc:App/Models/Predict')
-const BetCountModel = require('@ioc:App/Models/BetCount')
 
 const REQUEST_RANDOM_NUMBER = 'RequestRandomNumber'
 const RECEIVE_RANDOM_NUMBER = 'ReceiveRandomNumber'
@@ -29,7 +26,6 @@ export default class FetchPredictWinnerJob implements JobContract {
 
   public async handle(job) {
     const { data } = job
-
     const eventType = data.event_type
     let from = data.from
     let to = data.to
@@ -88,8 +84,7 @@ export default class FetchPredictWinnerJob implements JobContract {
   }
 
   private async fetchEvents(provider, event_type, from, to) {
-    const instance = await HelperUtils.getBettingContractInstance()
-
+    const instance = await HelperUtils.getPredictWinnerContractInstance()
     const events = await instance.getPastEvents(event_type, {
       fromBlock: from,
       toBlock: to,

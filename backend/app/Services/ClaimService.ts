@@ -6,7 +6,7 @@ import { fromRpcSig } from 'ethereumjs-util'
 const BETTING_SMART_CONTRACT = process.env.BETTING_SMART_CONTRACT
 
 export default class BettingService {
-  public async claimToken(request, response): Promise<any> {
+  public async claimToken(request): Promise<any> {
     const matchID = request.input('match_id')
     const betType = request.input('bet_type')
     const walletAddress = request.input('wallet')
