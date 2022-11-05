@@ -20,10 +20,10 @@ contract PickWinner is
     mapping(uint16 => address[]) public listWinnerByMatch;
     mapping(uint16 => address) public winnerByMatch;
 
-    event RequestRandomNumber(bytes32 requestId, uint16 eventId);
+    event RequestRandomNumber(bytes32 requestId, uint16 matchID);
     event ReceiveRandomNumber(
         bytes32 requestId,
-        uint256 eventId,
+        uint256 matchID,
         uint256 result,
         address winner
     );
