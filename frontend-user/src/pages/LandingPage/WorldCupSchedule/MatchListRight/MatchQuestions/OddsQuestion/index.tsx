@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import { BigNumber } from "ethers";
 import { useState } from "react";
 import { QuestionProps } from "..";
 import { QUESTION_STATUS } from "../../../../../../constants";
@@ -8,18 +9,28 @@ import Question from "../components/Question";
 import ResultMatch from "../components/ResultMatch";
 import { getOptionColorFromIndex } from "../components/utils";
 
-const SecondQuestion = (props: QuestionProps) => {
-  const { dataQuestion = {}, title } = props;
-  const isSubmitted = dataQuestion && true;
-  const matchStatus = !dataQuestion
-    ? QUESTION_STATUS.NOT_PREDICTED
-    : QUESTION_STATUS.PREDICTED;
+const betPlaceString = ["home", "draw", "away"];
+
+const OddsQuestion = (props: QuestionProps) => {
+  const { dataQuestion = {}, title, betType } = props;
+  const isSubmitted =
+    dataQuestion?.questionStatus === QUESTION_STATUS.PREDICTED;
+  const questionStatus = dataQuestion?.questionStatus;
   const errors: string[] = [];
   const [optionWhoWin, setOptionWhoWin] = useState<number>(0);
-  const [depositAmount, setDepositAmount] = useState<string>("0");
+  const [depositAmount, setDepositAmount] = useState<string>("");
 
   const handleSubmit = () => {
-    console.log("click submit");
+    const dataSubmit = {
+      _matchID: dataQuestion?.match_id,
+      _amount: BigNumber.from(depositAmount)
+        .mul(BigNumber.from(10).pow(18))
+        .toString(),
+      _betType: betType,
+      _betPlace: betPlaceString[optionWhoWin],
+    };
+
+    console.log("submit q2, q3", dataSubmit);
   };
   const handleChangeOptionWhoWin = (option: number) => {
     setOptionWhoWin(option);
@@ -35,11 +46,14 @@ const SecondQuestion = (props: QuestionProps) => {
       isSubmitted={isSubmitted}
     >
       <div>
-        <div className="flex items-start">
-          {dataQuestion?.options.map((option: any, index: number) => (
+        <div className="flex items-start justify-between">
+          {dataQuestion?.options?.map((option: any, index: number) => (
             <div
-              key={option.label}
-              className="flex flex-col items-center mr-10 last:mr-0"
+              key={index}
+              className={clsx(
+                "flex flex-col items-center w-full",
+                option?.label === "Draw" ? "max-w-[100px]" : "max-w-[180px]",
+              )}
             >
               <BorderBox
                 label={option.label}
@@ -77,15 +91,19 @@ const SecondQuestion = (props: QuestionProps) => {
             depositAmount={depositAmount}
             handleChangeDepositAmount={handleChangeDepositAmount}
             errors={errors}
-            winRate={dataQuestion?.options[optionWhoWin].winRate}
+            winRate={
+              dataQuestion?.options
+                ? dataQuestion?.options[optionWhoWin].winRate
+                : 0
+            }
           />
         )}
         {isSubmitted && (
-          <ResultMatch questions={dataQuestion} matchStatus={matchStatus} />
+          <ResultMatch questions={dataQuestion} matchStatus={questionStatus} />
         )}
       </div>
     </Question>
   );
 };
 
-export default SecondQuestion;
+export default OddsQuestion;

@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import { BigNumber } from "ethers";
 import { useState } from "react";
 import { QuestionProps } from "..";
 import BorderBox from "../components/BorderBox";
@@ -7,10 +8,12 @@ import Question from "../components/Question";
 import ResultMatch from "../components/ResultMatch";
 import { getOptionColorFromIndex } from "../components/utils";
 
-const ThirdQuestion = (props: QuestionProps) => {
-  const { dataQuestion = {}, title } = props;
+const betPlaceString = ["over", "", "under"];
+
+const OverUnderQuestion = (props: QuestionProps) => {
+  const { dataQuestion = {}, title, betType } = props;
   const [optionWhoWin, setOptionWhoWin] = useState<number>(0);
-  const [depositAmount, setDepositAmount] = useState<string>("0");
+  const [depositAmount, setDepositAmount] = useState<string>("");
 
   const handleChangeOptionWhoWin = (option: number) => {
     setOptionWhoWin(option);
@@ -20,7 +23,16 @@ const ThirdQuestion = (props: QuestionProps) => {
   };
 
   const handleSubmit = () => {
-    console.log("click submit");
+    const dataSubmit = {
+      _matchID: dataQuestion?.match_id,
+      _amount: BigNumber.from(depositAmount)
+        .mul(BigNumber.from(10).pow(18))
+        .toString(),
+      _betType: betType,
+      _betPlace: betPlaceString[optionWhoWin],
+    };
+
+    console.log("submit q4 q5", dataSubmit);
   };
 
   return (
@@ -30,17 +42,16 @@ const ThirdQuestion = (props: QuestionProps) => {
       isSubmitted={dataQuestion?.isSubmitted}
     >
       <div>
-        <div className="flex items-start">
-          {dataQuestion?.options.map((option: any, index: number) => (
+        <div className="flex items-start justify-between">
+          {dataQuestion?.options?.map((option: any, index: number) => (
             <div
               key={option.label}
-              className="flex flex-col items-center mr-10 last:mr-0"
+              className="flex flex-col items-center w-full max-w-[120px]"
             >
               <BorderBox
                 label={option.label}
                 icon={option.icon}
                 className={clsx(
-                  "w-[160px]",
                   dataQuestion?.isSubmitted
                     ? "pointer-events-none"
                     : "cursor-pointer",
@@ -81,7 +92,11 @@ const ThirdQuestion = (props: QuestionProps) => {
             depositAmount={depositAmount}
             handleChangeDepositAmount={handleChangeDepositAmount}
             errors={dataQuestion?.errors}
-            winRate={dataQuestion?.options[optionWhoWin].winRate}
+            winRate={
+              dataQuestion?.options
+                ? dataQuestion?.options[optionWhoWin]?.winRate
+                : 0
+            }
           />
         )}
         {dataQuestion?.isSubmitted && <ResultMatch questions={dataQuestion} />}
@@ -90,4 +105,4 @@ const ThirdQuestion = (props: QuestionProps) => {
   );
 };
 
-export default ThirdQuestion;
+export default OverUnderQuestion;

@@ -1,4 +1,5 @@
 import { ethers } from "ethers";
+import moment from "moment";
 
 export const displayWalletAddress = (address: string, digits = 6) => {
   return `${address.substring(0, digits)}...${address.substring(
@@ -33,3 +34,9 @@ export function groupArrayById(arr = [], key: string) {
       )
     : {};
 }
+
+export const getMatchTime = (time: any) => {
+  if (!time) return "N/A";
+
+  return moment(time).format("HH:mm");
+};

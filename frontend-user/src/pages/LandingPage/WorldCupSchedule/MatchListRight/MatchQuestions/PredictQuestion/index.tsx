@@ -6,12 +6,11 @@ import InputNumber from "../components/InputNumber";
 import NotificationBox from "../components/NotificationBox";
 import Question from "../components/Question";
 
-const FirstQuestion = (props: QuestionProps) => {
+const PredictQuestion = (props: QuestionProps) => {
   const { dataQuestion = {}, title } = props;
-  const isSubmitted = dataQuestion && true;
-  const matchStatus = !dataQuestion
-    ? QUESTION_STATUS.NOT_PREDICTED
-    : QUESTION_STATUS.PREDICTED;
+  const isSubmitted =
+    dataQuestion?.questionStatus === QUESTION_STATUS.PREDICTED;
+  const questionStatus = dataQuestion?.questionStatus;
   const error = "";
 
   const [inputTeam1, setInputTeam1] = useState<string>("");
@@ -25,7 +24,13 @@ const FirstQuestion = (props: QuestionProps) => {
   };
 
   const handleSubmit = () => {
-    console.log("click submit");
+    const dataSubmit = {
+      _matchID: dataQuestion?.match_id,
+      _homeScore: inputTeam1,
+      _awayScore: inputTeam2,
+    };
+
+    console.log("submit q1", dataSubmit);
   };
 
   return (
@@ -35,28 +40,34 @@ const FirstQuestion = (props: QuestionProps) => {
       isSubmitted={isSubmitted}
     >
       <div>
-        <div className="flex items-center">
-          <BorderBox label="Qatar" icon="/images/icon-qatar.svg" />
-          <div className="flex space-x-5 items-baseline mx-10">
+        <div className="flex items-center justify-between">
+          <BorderBox
+            label={dataQuestion?.home_name}
+            icon={dataQuestion?.home_icon}
+          />
+          <div className="flex space-x-5 items-baseline">
             <InputNumber
-              input={dataQuestion.home_score || inputTeam1}
+              input={dataQuestion?.home_score || inputTeam1}
               handleChange={handleChangeInputTeam1}
-              type={matchStatus}
+              type={questionStatus}
             />
             <span className="text-4xl font-semibold block">:</span>
             <InputNumber
-              input={dataQuestion.away_score || inputTeam2}
+              input={dataQuestion?.away_score || inputTeam2}
               handleChange={handleChangeInputTeam2}
-              type={matchStatus}
+              type={questionStatus}
             />
           </div>
-          <BorderBox label="Ecuador" icon="/images/icon-ecuador.svg" />
+          <BorderBox
+            label={dataQuestion.away_name}
+            icon={dataQuestion.away_icon}
+          />
         </div>
         {error && <p className="text-red-600 font-semibold mt-2">{error}</p>}
-        <div>{isSubmitted && <NotificationBox type={matchStatus} />}</div>
+        <div>{isSubmitted && <NotificationBox type={questionStatus} />}</div>
       </div>
     </Question>
   );
 };
 
-export default FirstQuestion;
+export default PredictQuestion;

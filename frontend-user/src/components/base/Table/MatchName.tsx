@@ -13,12 +13,12 @@ const MatchName = (props: MatchNameProps) => {
     //   <span className="font-semibold">{team2.name}</span>
     // </div>
 
-    <div className="flex justify-between space-x-2">
+    <div className="flex justify-between">
       <div className="flex items-center flex-1">
         <img src={team1?.icon} alt="" className="w-5 h-5" />
         <span className="font-semibold ml-2">{team1?.name}</span>
       </div>
-      <span className="font-semibold mx-2">vs</span>
+      <span className="font-semibold mr-4">vs</span>
       <div className="flex items-center flex-1">
         <img src={team2?.icon} alt="" className="w-5 h-5" />
         <span className="font-semibold ml-2">{team2?.name}</span>

@@ -4,7 +4,7 @@ const NotificationBox = (props: any) => {
   const { type } = props;
   const renderLinkUpdateScore = () => (
     <span>
-      <a href="#" className="font-medium">
+      <a href="#" className="font-medium underline">
         here
       </a>
       .

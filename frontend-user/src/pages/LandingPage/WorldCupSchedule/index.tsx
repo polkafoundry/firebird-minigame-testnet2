@@ -138,13 +138,14 @@ const WorldCupSchedule = () => {
       <div className="flex mt-5 relative">
         <div className="w-[55%] sticky top-10 h-fit">
           <MatchListTable
+            selectedMatchId={selectedMatchId}
             handleSelectMatch={handleSelectMatch}
             dataTable={dataTable}
             loading={loading}
           />
         </div>
         <div className="w-[45%]">
-          <MatchListRight matchId={selectedMatchId} />
+          <MatchListRight account={account} matchId={selectedMatchId} />
         </div>
       </div>
     </div>
