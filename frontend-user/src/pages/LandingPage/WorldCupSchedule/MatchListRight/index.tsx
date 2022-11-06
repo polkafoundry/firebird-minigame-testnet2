@@ -34,7 +34,9 @@ const MatchListRight = (props: MatchListRightProps) => {
   const startTime = new Date(matchData?.start_time * 1000);
   const matchTime = moment(startTime).format("Do MMM YY, HH:mm");
 
-  const isEnded = moment(startTime).diff(new Date(), "hours") < 1;
+  const isEnded = moment(new Date()).diff(startTime, "minutes") >= 90;
+
+  console.log("isEnded", isEnded);
 
   return (
     <div className="flex flex-col rounded-lg ml-6 border-2 border-gray-600">
