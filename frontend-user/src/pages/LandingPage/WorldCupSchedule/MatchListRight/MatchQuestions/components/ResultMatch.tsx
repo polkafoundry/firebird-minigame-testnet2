@@ -1,3 +1,5 @@
+import { BigNumber } from "ethers";
+import { toast } from "react-toastify";
 import { QUESTION_STATUS } from "../../../../../../constants";
 import { convertHexToStringNumber } from "../../../../../../utils";
 
@@ -8,7 +10,29 @@ type ResultMatchProps = {
 const ResultMatch = (props: ResultMatchProps) => {
   const { questions, questionStatus } = props;
 
-  // TODO: has_claim, result, result_num
+  const displayEarnedAmount = () => {
+    const amount = questions?.result_num;
+    if (!amount) return "Updating...";
+
+    if (amount < 0) return "0 $BIRD";
+
+    return convertHexToStringNumber(amount) + " $BIRD";
+  };
+
+  const getAmountToClaim = () => {
+    if (!questions?.result_num) return "Updating...";
+    if (questionStatus === QUESTION_STATUS.WRONG_ANSWER) return "0 $BIRD";
+
+    const amount = BigNumber.from(questions.bet_amount).add(
+      BigNumber.from(questions.result_num),
+    );
+
+    return convertHexToStringNumber(amount) + " $BIRD";
+  };
+
+  const handleClaimToken = () => {
+    toast.info("Coming soon! Please stay tuned");
+  };
 
   return (
     <div className="mt-10">
@@ -49,38 +73,31 @@ const ResultMatch = (props: ResultMatchProps) => {
         </div>
         <div className="flex flex-col">
           <span>Earned amount</span>
-          <span className="font-semibold">
-            {questions?.results?.earned
-              ? questions?.results?.earned + " $BIRD"
-              : "Updating..."}
-          </span>
+          <span className="font-semibold">{displayEarnedAmount()}</span>
         </div>
         <div className="flex flex-col">
           <span>Amount to claim</span>
-          <span className="font-semibold">
-            {questions?.results?.claim
-              ? questions?.results?.claim +
-                " $BIRD" +
-                (questions?.results?.isClaimed ? " (Claimed)" : "")
-              : "Updating..."}
-          </span>
+          <span className="font-semibold">{getAmountToClaim()}</span>
         </div>
       </div>
-      {questionStatus === QUESTION_STATUS.CORRECT_ANSWER ||
-        (questionStatus === QUESTION_STATUS.WRONG_ANSWER && (
-          <div className="mt-5 flex">
-            {Number(questions?.results?.claim) > 0 &&
-              !questions?.results?.isClaimed && (
-                <button className="px-10 py-2 bg-black text-white rounded-xl mr-10">
-                  Claim token
-                </button>
-              )}
-            <button className="px-10 py-2 border-2 border-black rounded-xl flex items-center">
-              My history
-              <img src="/images/icon-next.svg" alt="" className="ml-2" />
-            </button>
-          </div>
-        ))}
+
+      {questionStatus === QUESTION_STATUS.CORRECT_ANSWER && (
+        <div className="mt-5 flex">
+          {/* {Number(questions?.results?.claim) > 0 &&
+              !questions?.results?.isClaimed && ( */}
+          <button
+            className="px-10 py-2 bg-black text-white rounded-xl mr-10"
+            onClick={handleClaimToken}
+          >
+            Claim token
+          </button>
+          {/* )} */}
+          <button className="px-10 py-2 border-2 border-black rounded-xl flex items-center">
+            My history
+            <img src="/images/icon-next.svg" alt="" className="ml-2" />
+          </button>
+        </div>
+      )}
     </div>
   );
 };
