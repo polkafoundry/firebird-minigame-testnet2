@@ -207,7 +207,7 @@ const MatchQuestions = (props: MatchQuestionProps) => {
         return QUESTION_STATUS.CORRECT_ANSWER;
 
       default:
-        return QUESTION_STATUS.NOT_PREDICTED;
+        return QUESTION_STATUS.PREDICTED;
     }
   };
 
