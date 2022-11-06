@@ -2,6 +2,7 @@ import { BigNumber } from "ethers";
 import { useEffect, useState } from "react";
 import {
   BET_TYPE,
+  MATCH_RESULT,
   MATCH_STATUS,
   QUESTION_STATUS,
 } from "../../../../../constants";
@@ -61,9 +62,6 @@ const MatchQuestions = (props: MatchQuestionProps) => {
         match_status: dataQuestion?.match_status || MATCH_STATUS.UPCOMING,
       };
 
-      // unknow, waiting for result, result_num from BE
-      const defaultQuestionStatus = QUESTION_STATUS.PREDICTED;
-
       // QUESTION 1: Score Prediction
       const predictsData = dataQuestion?.predicts || [];
       const question1 = {
@@ -73,9 +71,10 @@ const MatchQuestions = (props: MatchQuestionProps) => {
         ...matchStatus,
         match_id: dataQuestion?.match_id,
         questionStatus:
-          predictsData.length === 0
+          predictsData.length === 0 ||
+          dataQuestion?.start_time * 1000 > new Date().getTime()
             ? QUESTION_STATUS.NOT_PREDICTED
-            : defaultQuestionStatus,
+            : getQuestionStatus(predictsData[0]),
       };
 
       const bettingsData = dataQuestion?.bettings || [];
@@ -103,9 +102,7 @@ const MatchQuestions = (props: MatchQuestionProps) => {
         ],
         optionSelected: getOptionIndexByBetPlace(question2?.bet_place),
         match_id: dataQuestion?.match_id,
-        questionStatus: !question2
-          ? QUESTION_STATUS.NOT_PREDICTED
-          : defaultQuestionStatus,
+        questionStatus: getQuestionStatus(question2),
       };
 
       // QUESTION 3
@@ -131,9 +128,7 @@ const MatchQuestions = (props: MatchQuestionProps) => {
         ],
         optionSelected: getOptionIndexByBetPlace(question3?.bet_place),
         match_id: dataQuestion?.match_id,
-        questionStatus: !question3
-          ? QUESTION_STATUS.NOT_PREDICTED
-          : defaultQuestionStatus,
+        questionStatus: getQuestionStatus(question3),
       };
 
       let question4 = bettingsData.find(
@@ -158,9 +153,7 @@ const MatchQuestions = (props: MatchQuestionProps) => {
         ],
         optionSelected: getOptionIndexByBetPlace(question4?.bet_place),
         match_id: dataQuestion?.match_id,
-        questionStatus: !question4
-          ? QUESTION_STATUS.NOT_PREDICTED
-          : defaultQuestionStatus,
+        questionStatus: getQuestionStatus(question4),
       };
 
       let question5 = bettingsData.find(
@@ -185,9 +178,7 @@ const MatchQuestions = (props: MatchQuestionProps) => {
         ],
         optionSelected: getOptionIndexByBetPlace(question5?.bet_place),
         match_id: dataQuestion?.match_id,
-        questionStatus: !question5
-          ? QUESTION_STATUS.NOT_PREDICTED
-          : defaultQuestionStatus,
+        questionStatus: getQuestionStatus(question5),
       };
 
       const newQuestions = [
@@ -202,6 +193,21 @@ const MatchQuestions = (props: MatchQuestionProps) => {
     };
     bindData();
   }, [dataQuestion]);
+
+  const getQuestionStatus = (question: any) => {
+    if (!question) return QUESTION_STATUS.NOT_PREDICTED;
+
+    switch (question.result) {
+      case MATCH_RESULT.LOSE:
+      case MATCH_RESULT.DRAW:
+        return QUESTION_STATUS.WRONG_ANSWER;
+      case MATCH_RESULT.WIN:
+        return QUESTION_STATUS.CORRECT_ANSWER;
+
+      default:
+        return QUESTION_STATUS.PREDICTED;
+    }
+  };
 
   const renderEmptyQuestion = () => {
     return (

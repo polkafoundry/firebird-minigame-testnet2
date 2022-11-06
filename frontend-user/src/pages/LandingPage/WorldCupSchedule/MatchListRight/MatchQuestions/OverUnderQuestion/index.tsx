@@ -2,7 +2,7 @@ import clsx from "clsx";
 import { BigNumber } from "ethers";
 import { useEffect, useState } from "react";
 import { QuestionProps } from "..";
-import { QUESTION_STATUS } from "../../../../../../constants";
+import { MATCH_STATUS, QUESTION_STATUS } from "../../../../../../constants";
 import useBetting from "../../../../../../hooks/useBetting";
 import useBirdToken from "../../../../../../hooks/useBirdToken";
 import BorderBox from "../components/BorderBox";
@@ -15,8 +15,6 @@ const betPlaceString = ["under", "", "over"];
 
 const OverUnderQuestion = (props: QuestionProps) => {
   const { dataQuestion = {}, title, betType, needApprove } = props;
-  const isSubmitted =
-    dataQuestion?.questionStatus === QUESTION_STATUS.PREDICTED;
   const questionStatus = dataQuestion?.questionStatus;
   const [optionWhoWin, setOptionWhoWin] = useState<number>(0);
   const [depositAmount, setDepositAmount] = useState<string>("");
@@ -24,13 +22,16 @@ const OverUnderQuestion = (props: QuestionProps) => {
   const { approveBirdToken, loadingApprove } = useBirdToken();
   const { betting, loadingBetting } = useBetting();
 
+  const isSubmitted =
+    dataQuestion?.questionStatus !== QUESTION_STATUS.NOT_PREDICTED;
+  const matchEnded = dataQuestion?.match_status === MATCH_STATUS.FINISHED;
+
   useEffect(() => {
     if (!dataQuestion) return;
     setOptionWhoWin(dataQuestion?.optionSelected);
   }, [dataQuestion]);
 
   const handleChangeOptionWhoWin = (option: number) => {
-    console.log("handleChangeOptionWhoWin", option);
     setOptionWhoWin(option);
   };
   const handleChangeDepositAmount = (value: string) => {
@@ -63,6 +64,7 @@ const OverUnderQuestion = (props: QuestionProps) => {
       title={title}
       handleSubmit={handleSubmit}
       isSubmitted={isSubmitted}
+      matchEnded={matchEnded}
       loading={loadingApprove || loadingBetting}
     >
       <div>
@@ -109,7 +111,7 @@ const OverUnderQuestion = (props: QuestionProps) => {
           ))}
         </div>
 
-        {!isSubmitted && (
+        {!isSubmitted && !matchEnded && (
           <DepositAmount
             depositAmount={depositAmount}
             handleChangeDepositAmount={handleChangeDepositAmount}

@@ -44,7 +44,6 @@ const useBetting = () => {
           setLoadingBetting(false);
 
           toast.success("Submit answer successful");
-          window.location.reload();
         }
       } catch (error: any) {
         console.log("ERR betting: ", error?.message);

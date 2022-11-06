@@ -33,6 +33,12 @@ export enum QUESTION_STATUS {
   WINNER,
 }
 
+export const MATCH_RESULT = {
+  WIN: "win",
+  DRAW: "draw",
+  LOSE: "lose",
+};
+
 export const MATCH_STATUS = {
   UPCOMING: "upcoming",
   LIVE: "live",

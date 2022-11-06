@@ -85,7 +85,7 @@ const useBirdToken = () => {
         account,
       );
       if (contract) {
-        const balance = await contract.allowance(address, BIRD_TOKEN_CONTRACT);
+        const balance = await contract.allowance(address, BETTING_CONTRACT);
         balanceString = convertHexToStringNumber(balance);
       }
     } catch (error) {
