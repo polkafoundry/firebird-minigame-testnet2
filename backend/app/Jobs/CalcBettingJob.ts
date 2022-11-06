@@ -91,7 +91,7 @@ export default class CalcBettingJob implements JobContract {
             ou_statistics: match.ou_ht_ratio,
             result: ouHTBets[i]?.bet_place === 'under' ? 'win' : 'lose',
             result_num:
-              ouHTBets[i]?.bet_place === 'under' ? match.ou_ht_over * amount - amount : -amount,
+              ouHTBets[i]?.bet_place === 'under' ? match.ou_ht_under * amount - amount : -amount,
             is_calculated: true,
           })
       } else if (match.ou_ht_ratio < match.ht_home_score + match.ht_away_score) {
@@ -130,7 +130,7 @@ export default class CalcBettingJob implements JobContract {
             ou_statistics: match.ou_ft_ratio,
             result: ouFTBets[i]?.bet_place === 'under' ? 'win' : 'lose',
             result_num:
-              ouFTBets[i]?.bet_place === 'under' ? match.ou_ft_over * amount - amount : -amount,
+              ouFTBets[i]?.bet_place === 'under' ? match.ou_ft_under * amount - amount : -amount,
             is_calculated: true,
           })
       } else if (match.ou_ht_ratio < match.ht_home_score + match.ht_away_score) {
@@ -169,8 +169,8 @@ export default class CalcBettingJob implements JobContract {
               oddsHTBets[i]?.bet_place === 'home'
                 ? match.odds_ht_home
                 : oddsHTBets[i]?.bet_place === 'away'
-                  ? match.odds_ht_away
-                  : match.odds_ht_draw,
+                ? match.odds_ht_away
+                : match.odds_ht_draw,
             result: oddsHTBets[i]?.bet_place === 'home' ? 'win' : 'lose',
             result_num:
               oddsHTBets[i]?.bet_place === 'home' ? match.odds_ht_home * amount - amount : -amount,
@@ -185,8 +185,8 @@ export default class CalcBettingJob implements JobContract {
               oddsHTBets[i]?.bet_place === 'home'
                 ? match.odds_ht_home
                 : oddsHTBets[i]?.bet_place === 'away'
-                  ? match.odds_ht_away
-                  : match.odds_ht_draw,
+                ? match.odds_ht_away
+                : match.odds_ht_draw,
             result: oddsHTBets[i]?.bet_place === 'away' ? 'win' : 'lose',
             result_num:
               oddsHTBets[i]?.bet_place === 'away' ? match.odds_ht_away * amount - amount : -amount,
@@ -201,8 +201,8 @@ export default class CalcBettingJob implements JobContract {
               oddsHTBets[i]?.bet_place === 'home'
                 ? match.odds_ht_home
                 : oddsHTBets[i]?.bet_place === 'away'
-                  ? match.odds_ht_away
-                  : match.odds_ht_draw,
+                ? match.odds_ht_away
+                : match.odds_ht_draw,
             result: oddsHTBets[i]?.bet_place === 'draw' ? 'win' : 'lose',
             result_num:
               oddsHTBets[i]?.bet_place === 'draw' ? match.odds_ht_draw * amount - amount : -amount,
@@ -223,8 +223,8 @@ export default class CalcBettingJob implements JobContract {
               oddsFTBets[i]?.bet_place === 'home'
                 ? match.odds_ft_home
                 : oddsFTBets[i]?.bet_place === 'away'
-                  ? match.odds_ft_away
-                  : match.odds_ft_draw,
+                ? match.odds_ft_away
+                : match.odds_ft_draw,
             result: oddsFTBets[i]?.bet_place === 'home' ? 'win' : 'lose',
             result_num:
               oddsFTBets[i]?.bet_place === 'home' ? match.odds_ft_home * amount - amount : -amount,
@@ -239,8 +239,8 @@ export default class CalcBettingJob implements JobContract {
               oddsFTBets[i]?.bet_place === 'home'
                 ? match.odds_ft_home
                 : oddsFTBets[i]?.bet_place === 'away'
-                  ? match.odds_ft_away
-                  : match.odds_ft_draw,
+                ? match.odds_ft_away
+                : match.odds_ft_draw,
             result: oddsFTBets[i]?.bet_place === 'away' ? 'win' : 'lose',
             result_num:
               oddsFTBets[i]?.bet_place === 'away' ? match.odds_ft_away * amount - amount : -amount,
@@ -255,8 +255,8 @@ export default class CalcBettingJob implements JobContract {
               oddsFTBets[i]?.bet_place === 'home'
                 ? match.odds_ft_home
                 : oddsFTBets[i]?.bet_place === 'away'
-                  ? match.odds_ft_away
-                  : match.odds_ft_draw,
+                ? match.odds_ft_away
+                : match.odds_ft_draw,
             result: oddsFTBets[i]?.bet_place === 'draw' ? 'win' : 'lose',
             result_num:
               oddsFTBets[i]?.bet_place === 'draw' ? match.odds_ft_draw * amount - amount : -amount,

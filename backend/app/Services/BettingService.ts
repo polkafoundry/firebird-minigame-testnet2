@@ -33,7 +33,7 @@ export default class BettingService {
             ou_statistics: match.ou_ht_ratio,
             result: ouHTBets[i]?.bet_place === 'under' ? 'win' : 'lose',
             result_num:
-              ouHTBets[i]?.bet_place === 'under' ? match.ou_ht_over * amount - amount : -amount,
+              ouHTBets[i]?.bet_place === 'under' ? match.ou_ht_under * amount - amount : -amount,
           })
       } else if (match.ou_ht_ratio < match.ht_home_score + match.ht_away_score) {
         // ratio < total score
@@ -91,7 +91,7 @@ export default class BettingService {
             ou_statistics: match.ou_ft_ratio,
             result: ouFTBets[i]?.bet_place === 'under' ? 'win' : 'lose',
             result_num:
-              ouFTBets[i]?.bet_place === 'under' ? match.ou_ft_over * amount - amount : -amount,
+              ouFTBets[i]?.bet_place === 'under' ? match.ou_ft_under * amount - amount : -amount,
           })
       } else if (match.ou_ht_ratio < match.ht_home_score + match.ht_away_score) {
         // ratio < total score
