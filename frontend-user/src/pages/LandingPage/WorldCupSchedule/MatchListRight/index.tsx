@@ -78,20 +78,20 @@ const MatchListRight = (props: MatchListRightProps) => {
               </div>
             </div>
 
-            {!isLiving && (
-              <div
-                className={clsx(
-                  "text-black text-sm px-2 rounded-md mt-5 font-semibold",
-                  isEnded ? "bg-main" : "bg-gray-500",
-                )}
-              >
-                {isEnded
-                  ? "Prediction for this match has been closed."
-                  : `Predictions will be closed at ${moment(startTime).format(
-                      "Do MMM YY, HH:mm",
-                    )}`}
-              </div>
-            )}
+            <div
+              className={clsx(
+                "text-black text-sm px-2 rounded-md mt-5 font-semibold",
+                isLiving ? "bg-green-500" : isEnded ? "bg-main" : "bg-gray-500",
+              )}
+            >
+              {isLiving
+                ? "Live-streaming"
+                : isEnded
+                ? "Prediction for this match has been closed."
+                : `Predictions will be closed at ${moment(startTime).format(
+                    "Do MMM YY, HH:mm",
+                  )}`}
+            </div>
           </>
         ) : (
           <>

@@ -42,7 +42,6 @@ const usePredicting = () => {
           setLoadingPredicting(false);
 
           toast.success("Submit answer successful");
-          window.location.reload();
         }
       } catch (error: any) {
         console.log("ERR bettingOdds: ", error?.message);
