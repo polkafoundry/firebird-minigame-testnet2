@@ -34,7 +34,8 @@ const MatchListRight = (props: MatchListRightProps) => {
   const startTime = new Date(matchData?.start_time * 1000);
   const matchTime = moment(startTime).format("Do MMM YY, HH:mm");
 
-  const isEnded = moment(new Date()).diff(startTime, "minutes") >= 60;
+  const isLiving = startTime.getTime() <= new Date().getTime();
+  const isEnded = moment(new Date()).diff(startTime, "minutes") >= 90;
 
   return (
     <div className="flex flex-col rounded-lg ml-6 border-2 border-gray-600">
@@ -77,18 +78,20 @@ const MatchListRight = (props: MatchListRightProps) => {
               </div>
             </div>
 
-            <div
-              className={clsx(
-                "text-black text-sm px-2 rounded-md mt-5 font-semibold",
-                isEnded ? "bg-main" : "bg-gray-500",
-              )}
-            >
-              {isEnded
-                ? "Prediction for this match has been closed."
-                : `Predictions will be closed at ${moment(startTime)
-                    .add(1, "hours")
-                    .format("Do MMM YY, HH:mm")}`}
-            </div>
+            {!isLiving && (
+              <div
+                className={clsx(
+                  "text-black text-sm px-2 rounded-md mt-5 font-semibold",
+                  isEnded ? "bg-main" : "bg-gray-500",
+                )}
+              >
+                {isEnded
+                  ? "Prediction for this match has been closed."
+                  : `Predictions will be closed at ${moment(startTime).format(
+                      "Do MMM YY, HH:mm",
+                    )}`}
+              </div>
+            )}
           </>
         ) : (
           <>

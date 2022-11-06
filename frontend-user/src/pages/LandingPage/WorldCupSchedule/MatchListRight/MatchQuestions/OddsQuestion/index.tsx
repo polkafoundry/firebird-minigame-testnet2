@@ -2,7 +2,7 @@ import clsx from "clsx";
 import { BigNumber } from "ethers";
 import { useEffect, useState } from "react";
 import { QuestionProps } from "..";
-import { QUESTION_STATUS } from "../../../../../../constants";
+import { MATCH_STATUS, QUESTION_STATUS } from "../../../../../../constants";
 import useBetting from "../../../../../../hooks/useBetting";
 import useBirdToken from "../../../../../../hooks/useBirdToken";
 import BorderBox from "../components/BorderBox";
@@ -24,7 +24,7 @@ const OddsQuestion = (props: QuestionProps) => {
 
   const isSubmitted =
     dataQuestion?.questionStatus !== QUESTION_STATUS.NOT_PREDICTED;
-  // const matchEnded = dataQuestion?.match_status === MATCH_STATUS.FINISHED;
+  const matchEnded = dataQuestion?.match_status === MATCH_STATUS.FINISHED;
   const questionStatus = dataQuestion?.questionStatus;
 
   useEffect(() => {
@@ -62,6 +62,7 @@ const OddsQuestion = (props: QuestionProps) => {
       title={title}
       handleSubmit={handleSubmit}
       isSubmitted={isSubmitted}
+      matchEnded={matchEnded}
       loading={loadingApprove || loadingBetting}
     >
       <div>
@@ -105,7 +106,7 @@ const OddsQuestion = (props: QuestionProps) => {
           ))}
         </div>
 
-        {!isSubmitted && (
+        {!isSubmitted && !matchEnded && (
           <DepositAmount
             depositAmount={depositAmount}
             handleChangeDepositAmount={handleChangeDepositAmount}

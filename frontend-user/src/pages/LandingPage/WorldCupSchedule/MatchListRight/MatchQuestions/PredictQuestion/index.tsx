@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { QuestionProps } from "..";
-import { QUESTION_STATUS } from "../../../../../../constants";
+import { MATCH_STATUS, QUESTION_STATUS } from "../../../../../../constants";
 import useBirdToken from "../../../../../../hooks/useBirdToken";
 import usePredicting from "../../../../../../hooks/usePredicting";
 import BorderBox from "../components/BorderBox";
@@ -10,16 +10,18 @@ import Question from "../components/Question";
 
 const PredictQuestion = (props: QuestionProps) => {
   const { dataQuestion = {}, title, needApprove } = props;
-  const isSubmitted =
-    dataQuestion?.questionStatus !== QUESTION_STATUS.NOT_PREDICTED;
-  const questionStatus = dataQuestion?.questionStatus;
-  const error = "";
+
+  const { approveBirdToken, loadingApprove } = useBirdToken();
+  const { loadingPredicting, predicting } = usePredicting();
 
   const [inputTeam1, setInputTeam1] = useState<string>("");
   const [inputTeam2, setInputTeam2] = useState<string>("");
 
-  const { approveBirdToken, loadingApprove } = useBirdToken();
-  const { loadingPredicting, predicting } = usePredicting();
+  const isSubmitted =
+    dataQuestion?.questionStatus !== QUESTION_STATUS.NOT_PREDICTED;
+  const matchEnded = dataQuestion?.match_status === MATCH_STATUS.FINISHED;
+  const questionStatus = dataQuestion?.questionStatus;
+  const error = "";
 
   useEffect(() => {
     setInputTeam1(dataQuestion?.home_score || "");
@@ -55,6 +57,7 @@ const PredictQuestion = (props: QuestionProps) => {
       title={title}
       handleSubmit={handleSubmit}
       isSubmitted={isSubmitted}
+      matchEnded={matchEnded}
       loading={loadingApprove || loadingPredicting}
     >
       <div>
@@ -68,12 +71,14 @@ const PredictQuestion = (props: QuestionProps) => {
               input={inputTeam1}
               handleChange={handleChangeInputTeam1}
               type={questionStatus}
+              disabled={matchEnded}
             />
             <span className="text-4xl font-semibold block">:</span>
             <InputNumber
               input={inputTeam2}
               handleChange={handleChangeInputTeam2}
               type={questionStatus}
+              disabled={matchEnded}
             />
           </div>
           <BorderBox

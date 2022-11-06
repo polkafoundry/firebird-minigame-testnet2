@@ -6,9 +6,10 @@ type InputNumberProps = {
   handleChange: (data: any) => void;
   className?: string;
   type: QUESTION_STATUS;
+  disabled?: boolean;
 };
 const InputNumber = (props: InputNumberProps) => {
-  const { input, handleChange, className = "", type } = props;
+  const { input, handleChange, className = "", type, disabled } = props;
 
   const onChange = (e: any) => {
     const valueInput = e.target.value;
@@ -28,7 +29,7 @@ const InputNumber = (props: InputNumberProps) => {
 
         className,
       )}
-      disabled={type !== QUESTION_STATUS.NOT_PREDICTED}
+      disabled={type !== QUESTION_STATUS.NOT_PREDICTED || disabled}
       value={input}
       placeholder="0"
       onChange={onChange}
