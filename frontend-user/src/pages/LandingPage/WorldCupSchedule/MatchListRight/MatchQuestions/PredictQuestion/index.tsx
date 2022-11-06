@@ -11,7 +11,7 @@ import Question from "../components/Question";
 const PredictQuestion = (props: QuestionProps) => {
   const { dataQuestion = {}, title, needApprove } = props;
   const isSubmitted =
-    dataQuestion?.questionStatus === QUESTION_STATUS.PREDICTED;
+    dataQuestion?.questionStatus !== QUESTION_STATUS.NOT_PREDICTED;
   const questionStatus = dataQuestion?.questionStatus;
   const error = "";
 
@@ -65,20 +65,20 @@ const PredictQuestion = (props: QuestionProps) => {
           />
           <div className="flex space-x-5 items-baseline">
             <InputNumber
-              input={dataQuestion?.home_score || inputTeam1}
+              input={inputTeam1}
               handleChange={handleChangeInputTeam1}
               type={questionStatus}
             />
             <span className="text-4xl font-semibold block">:</span>
             <InputNumber
-              input={dataQuestion?.away_score || inputTeam2}
+              input={inputTeam2}
               handleChange={handleChangeInputTeam2}
               type={questionStatus}
             />
           </div>
           <BorderBox
-            label={dataQuestion.away_name}
-            icon={dataQuestion.away_icon}
+            label={dataQuestion?.away_name}
+            icon={dataQuestion?.away_icon}
           />
         </div>
         {error && <p className="text-red-600 font-semibold mt-2">{error}</p>}

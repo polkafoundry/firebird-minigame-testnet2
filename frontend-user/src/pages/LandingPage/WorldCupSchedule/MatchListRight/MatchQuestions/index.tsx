@@ -62,9 +62,6 @@ const MatchQuestions = (props: MatchQuestionProps) => {
         match_status: dataQuestion?.match_status || MATCH_STATUS.UPCOMING,
       };
 
-      // unknow, waiting for result, result_num from BE
-      const defaultQuestionStatus = QUESTION_STATUS.PREDICTED;
-
       // QUESTION 1: Score Prediction
       const predictsData = dataQuestion?.predicts || [];
       const question1 = {
@@ -74,9 +71,10 @@ const MatchQuestions = (props: MatchQuestionProps) => {
         ...matchStatus,
         match_id: dataQuestion?.match_id,
         questionStatus:
-          predictsData.length === 0
+          predictsData.length === 0 ||
+          dataQuestion?.start_time * 1000 > new Date().getTime()
             ? QUESTION_STATUS.NOT_PREDICTED
-            : defaultQuestionStatus,
+            : getQuestionStatus(predictsData[0]),
       };
 
       const bettingsData = dataQuestion?.bettings || [];
