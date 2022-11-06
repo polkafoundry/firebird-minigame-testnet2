@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import DropDown from "../../../components/base/DropDown";
@@ -135,8 +136,10 @@ const WorldCupSchedule = () => {
         </div>
       </div>
 
-      <div className="flex mt-5 relative">
-        <div className="w-[55%] sticky top-10 h-fit">
+      <div className={clsx("flex flex-col mt-5 relative", "md:flex-row")}>
+        <div
+          className={clsx("w-full  h-fit", "md:w-[55%] md:sticky md:top-10")}
+        >
           <MatchListTable
             selectedMatchId={selectedMatchId}
             handleSelectMatch={handleSelectMatch}
@@ -144,7 +147,7 @@ const WorldCupSchedule = () => {
             loading={loading}
           />
         </div>
-        <div className="w-[45%]">
+        <div className="w-full md:w-[45%]">
           <MatchListRight account={account} matchId={selectedMatchId} />
         </div>
       </div>

@@ -38,7 +38,7 @@ const MatchListRight = (props: MatchListRightProps) => {
   const isEnded = moment(new Date()).diff(startTime, "minutes") >= 90;
 
   return (
-    <div className="flex flex-col rounded-lg ml-6 border-2 border-gray-600">
+    <div className="flex flex-col rounded-lg md:ml-6 border-2 border-gray-600">
       <div className="flex flex-col items-center justify-center text-center h-auto min-h-[280px] bg-gray-700 text-white">
         {matchData ? (
           <>
