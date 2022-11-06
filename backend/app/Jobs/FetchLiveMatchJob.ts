@@ -67,7 +67,7 @@ export default class FetchLiveMatchJob implements JobContract {
       ft_away_score: matchData.event?.awayScore?.normaltime,
     }
 
-    if (matchData.event?.status?.code == 6) {
+    if (matchData.event?.status?.code != 0) {
       data.match_status = Const.MATCH_STATUS.LIVE
     }
     if ([7, 31].includes(matchData.event?.status?.code)) {
