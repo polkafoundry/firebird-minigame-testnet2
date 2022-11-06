@@ -3,6 +3,7 @@ import { useState } from "react";
 import MatchName from "../../../../components/base/Table/MatchName";
 import MatchPredict from "../../../../components/base/Table/MatchPredict";
 import MatchStatus from "../../../../components/base/Table/MatchStatus";
+import { MATCH_STATUS } from "../../../../constants";
 import { getMatchTime } from "../../../../utils";
 import styles from "./matchList.module.scss";
 
@@ -94,7 +95,11 @@ const MatchListTable = (props: MatchListTableProps) => {
                     {getMatchTime(match?.start_time * 1000)}
                   </div>
                   <MatchName team1={match?.homeTeam} team2={match?.awayTeam} />
-                  <div>{`${match?.ft_home_score}:${match?.ft_away_score}`}</div>
+                  <div>
+                    {match?.match_status === MATCH_STATUS.UPCOMING
+                      ? "-:-"
+                      : `${match?.ft_home_score}:${match?.ft_away_score}`}
+                  </div>
                   <MatchStatus status={match?.match_status} />
                   <MatchPredict
                     isCorrect={match?.is_completed_bet}
