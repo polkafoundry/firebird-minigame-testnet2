@@ -110,7 +110,7 @@ export default class BettingService {
             result_num:
               ouFTBets[i]?.bet_place === 'under'
                 ? new BigNumber(amount)
-                    .multipliedBy(new BigNumber(match.ou_ht_under))
+                    .multipliedBy(new BigNumber(match.ou_ft_under))
                     .minus(new BigNumber(amount))
                     .toFixed()
                 : -amount,
