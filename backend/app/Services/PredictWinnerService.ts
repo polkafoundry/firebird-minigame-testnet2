@@ -73,4 +73,24 @@ export default class PredictWinnerService {
       return HelperUtils.responseErrorInternal(error)
     }
   }
+
+  public async getUserPredictHistory(request): Promise<any> {
+    const address = request.input('address')
+
+    if (!address) return HelperUtils.responseErrorInternal('User address required')
+
+    try {
+      const PredictModel = require('@ioc:App/Models/Predict')
+      const predictList = await PredictModel.query()
+        .where('user_address', address)
+        .orderBy('match_id', 'asc')
+        .exec()
+      if (!predictList || predictList.length === 0) {
+        return HelperUtils.responseErrorInternal('User predict not found')
+      }
+      return HelperUtils.responseSuccess(predictList)
+    } catch (error) {
+      return HelperUtils.responseErrorInternal(error)
+    }
+  }
 }
