@@ -15,6 +15,7 @@ import Bull from '@ioc:Rocketseat/Bull'
 import BettingModel from 'App/Models/Betting'
 import MatchModel from 'App/Models/Match'
 const Const = require('@ioc:App/Common/Const')
+const BigNumber = require('bignumber.js')
 
 /* Ranges from 1 (highest priority) to MAX_INT (lowest priority). */
 const priority = 2
@@ -91,7 +92,12 @@ export default class CalcBettingJob implements JobContract {
             ou_statistics: match.ou_ht_ratio,
             result: ouHTBets[i]?.bet_place === 'under' ? 'win' : 'lose',
             result_num:
-              ouHTBets[i]?.bet_place === 'under' ? match.ou_ht_under * amount - amount : -amount,
+              ouHTBets[i]?.bet_place === 'under'
+                ? new BigNumber(amount)
+                    .multipliedBy(new BigNumber(match.ou_ht_under))
+                    .minus(new BigNumber(amount))
+                    .toFixed()
+                : -amount,
             is_calculated: true,
           })
       } else if (match.ou_ht_ratio < match.ht_home_score + match.ht_away_score) {
@@ -103,21 +109,30 @@ export default class CalcBettingJob implements JobContract {
             ou_statistics: match.ou_ht_ratio,
             result: ouHTBets[i]?.bet_place === 'over' ? 'win' : 'lose',
             result_num:
-              ouHTBets[i]?.bet_place === 'over' ? match.ou_ht_over * amount - amount : -amount,
+              ouHTBets[i]?.bet_place === 'over'
+                ? new BigNumber(amount)
+                    .multipliedBy(new BigNumber(match.ou_ht_over))
+                    .minus(new BigNumber(amount))
+                    .toFixed()
+                : -amount,
             is_calculated: true,
           })
       } else {
         //ratio = total score
-        await BettingModel.query().where('id', ouHTBets[i]?.id).update({
-          bet_statistics: match.ou_ht_over,
-          ou_statistics: match.ou_ht_ratio,
-          result: 'draw',
-          result_num: 0,
-          is_calculated: true,
-        })
+        await BettingModel.query()
+          .where('id', ouHTBets[i]?.id)
+          .update({
+            bet_statistics:
+              ouHTBets[i]?.bet_place === 'over' ? match.ou_ht_over : match.ou_ht_under,
+            ou_statistics: match.ou_ht_ratio,
+            result: 'draw',
+            result_num: 0,
+            is_calculated: true,
+          })
       }
     }
   }
+
   private async _calcOuFtBet(match, ouFTBets) {
     for (let i = 0; i < ouFTBets.length; i++) {
       let amount = ouFTBets[i]?.bet_amount
@@ -130,7 +145,12 @@ export default class CalcBettingJob implements JobContract {
             ou_statistics: match.ou_ft_ratio,
             result: ouFTBets[i]?.bet_place === 'under' ? 'win' : 'lose',
             result_num:
-              ouFTBets[i]?.bet_place === 'under' ? match.ou_ft_under * amount - amount : -amount,
+              ouFTBets[i]?.bet_place === 'under'
+                ? new BigNumber(amount)
+                    .multipliedBy(new BigNumber(match.ou_ht_under))
+                    .minus(new BigNumber(amount))
+                    .toFixed()
+                : -amount,
             is_calculated: true,
           })
       } else if (match.ou_ht_ratio < match.ht_home_score + match.ht_away_score) {
@@ -142,18 +162,26 @@ export default class CalcBettingJob implements JobContract {
             ou_statistics: match.ou_ft_ratio,
             result: ouFTBets[i]?.bet_place === 'over' ? 'win' : 'lose',
             result_num:
-              ouFTBets[i]?.bet_place === 'over' ? match.ou_ft_over * amount - amount : -amount,
+              ouFTBets[i]?.bet_place === 'over'
+                ? new BigNumber(amount)
+                    .multipliedBy(new BigNumber(match.ou_ft_over))
+                    .minus(new BigNumber(amount))
+                    .toFixed()
+                : -amount,
             is_calculated: true,
           })
       } else {
         //ratio = total score
-        await BettingModel.query().where('id', ouFTBets[i]?.id).update({
-          bet_statistics: match.ou_ft_over,
-          ou_statistics: match.ou_ft_ratio,
-          result: 'draw',
-          result_num: 0,
-          is_calculated: true,
-        })
+        await BettingModel.query()
+          .where('id', ouFTBets[i]?.id)
+          .update({
+            bet_statistics:
+              ouFTBets[i]?.bet_place === 'over' ? match.ou_ft_over : match.ou_ft_under,
+            ou_statistics: match.ou_ft_ratio,
+            result: 'draw',
+            result_num: 0,
+            is_calculated: true,
+          })
       }
     }
   }
@@ -173,7 +201,12 @@ export default class CalcBettingJob implements JobContract {
                 : match.odds_ht_draw,
             result: oddsHTBets[i]?.bet_place === 'home' ? 'win' : 'lose',
             result_num:
-              oddsHTBets[i]?.bet_place === 'home' ? match.odds_ht_home * amount - amount : -amount,
+              oddsHTBets[i]?.bet_place === 'home'
+                ? new BigNumber(amount)
+                    .multipliedBy(new BigNumber(match.odds_ht_home))
+                    .minus(new BigNumber(amount))
+                    .toFixed()
+                : -amount,
             is_calculated: true,
           })
       } else if (match.ht_home_score < match.ht_away_score) {
@@ -189,7 +222,12 @@ export default class CalcBettingJob implements JobContract {
                 : match.odds_ht_draw,
             result: oddsHTBets[i]?.bet_place === 'away' ? 'win' : 'lose',
             result_num:
-              oddsHTBets[i]?.bet_place === 'away' ? match.odds_ht_away * amount - amount : -amount,
+              oddsHTBets[i]?.bet_place === 'away'
+                ? new BigNumber(amount)
+                    .multipliedBy(new BigNumber(match.odds_ht_away))
+                    .minus(new BigNumber(amount))
+                    .toFixed()
+                : -amount,
             is_calculated: true,
           })
       } else {
@@ -205,7 +243,12 @@ export default class CalcBettingJob implements JobContract {
                 : match.odds_ht_draw,
             result: oddsHTBets[i]?.bet_place === 'draw' ? 'win' : 'lose',
             result_num:
-              oddsHTBets[i]?.bet_place === 'draw' ? match.odds_ht_draw * amount - amount : -amount,
+              oddsHTBets[i]?.bet_place === 'draw'
+                ? new BigNumber(amount)
+                    .multipliedBy(new BigNumber(match.odds_ht_draw))
+                    .minus(new BigNumber(amount))
+                    .toFixed()
+                : -amount,
             is_calculated: true,
           })
       }
@@ -227,7 +270,12 @@ export default class CalcBettingJob implements JobContract {
                 : match.odds_ft_draw,
             result: oddsFTBets[i]?.bet_place === 'home' ? 'win' : 'lose',
             result_num:
-              oddsFTBets[i]?.bet_place === 'home' ? match.odds_ft_home * amount - amount : -amount,
+              oddsFTBets[i]?.bet_place === 'home'
+                ? new BigNumber(amount)
+                    .multipliedBy(new BigNumber(match.odds_ft_home))
+                    .minus(new BigNumber(amount))
+                    .toFixed()
+                : -amount,
             is_calculated: true,
           })
       } else if (match.ft_home_score < match.ft_away_score) {
@@ -243,7 +291,12 @@ export default class CalcBettingJob implements JobContract {
                 : match.odds_ft_draw,
             result: oddsFTBets[i]?.bet_place === 'away' ? 'win' : 'lose',
             result_num:
-              oddsFTBets[i]?.bet_place === 'away' ? match.odds_ft_away * amount - amount : -amount,
+              oddsFTBets[i]?.bet_place === 'away'
+                ? new BigNumber(amount)
+                    .multipliedBy(new BigNumber(match.odds_ft_away))
+                    .minus(new BigNumber(amount))
+                    .toFixed()
+                : -amount,
             is_calculated: true,
           })
       } else {
@@ -259,7 +312,12 @@ export default class CalcBettingJob implements JobContract {
                 : match.odds_ft_draw,
             result: oddsFTBets[i]?.bet_place === 'draw' ? 'win' : 'lose',
             result_num:
-              oddsFTBets[i]?.bet_place === 'draw' ? match.odds_ft_draw * amount - amount : -amount,
+              oddsFTBets[i]?.bet_place === 'draw'
+                ? new BigNumber(amount)
+                    .multipliedBy(new BigNumber(match.odds_ft_draw))
+                    .minus(new BigNumber(amount))
+                    .toFixed()
+                : -amount,
             is_calculated: true,
           })
       }
