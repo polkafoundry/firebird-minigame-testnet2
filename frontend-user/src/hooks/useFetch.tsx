@@ -6,14 +6,17 @@ type useFetchReturnType<T> = {
   error: string;
   data: T | undefined;
 };
-const fetcher = (url: string) => {
-  if (url === API_BASE_URL)
-    return { data: undefined, error: "Url is an empty or undefined string" };
-  return fetch(url).then((res) => res.json());
-};
+export const fetcher = (url: string, ...args: any) =>
+  fetch(url, ...args).then((res) => res.json());
 
-const useFetch = <T,>(uriProps?: string | undefined): useFetchReturnType<T> => {
-  const { data, error } = useSWR(API_BASE_URL + uriProps, fetcher);
+const useFetch = <T,>(
+  uriProps?: string | undefined,
+  shouldFetch = true,
+): useFetchReturnType<T> => {
+  const { data, error } = useSWR(
+    shouldFetch ? `${API_BASE_URL}${uriProps}` : null,
+    fetcher,
+  );
 
   return {
     loading: !error && !data,

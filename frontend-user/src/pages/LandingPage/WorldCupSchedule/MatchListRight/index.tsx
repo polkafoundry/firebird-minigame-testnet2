@@ -6,8 +6,6 @@ import useFetch from "../../../../hooks/useFetch";
 import { getImgSrc } from "../utils";
 import MatchQuestions from "./MatchQuestions";
 import MatchGuide from "./MathGuide";
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const queryString = require("query-string");
 
 type MatchListRightProps = {
   matchId: number | undefined;
@@ -23,12 +21,8 @@ const MatchListRight = (props: MatchListRightProps) => {
   const { matchId, account } = props;
   const [selectedNav, setSelectedNav] = useState<number>(1);
 
-  const fetchMatchDetailUrl = matchId
-    ? `/match/detail/${matchId}?${queryString.stringify({
-        wallet_address: account,
-      })}`
-    : "";
-  const { data } = useFetch<any>(fetchMatchDetailUrl);
+  const fetchMatchDetailUrl = `/match/detail/${matchId}?wallet_address=${account}`;
+  const { data } = useFetch<any>(fetchMatchDetailUrl, !!matchId);
 
   const matchData = data?.data;
   const startTime = new Date(matchData?.start_time * 1000);
