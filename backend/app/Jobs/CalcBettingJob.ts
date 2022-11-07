@@ -87,7 +87,7 @@ export default class CalcBettingJob implements JobContract {
         await BettingModel.query()
           .where('id', ouHTBets[i]?.id)
           .update({
-            bet_statistics: match.ou_ht_over,
+            bet_statistics: match.ou_ht_under,
             ou_statistics: match.ou_ht_ratio,
             result: ouHTBets[i]?.bet_place === 'under' ? 'win' : 'lose',
             result_num:
@@ -126,7 +126,7 @@ export default class CalcBettingJob implements JobContract {
         await BettingModel.query()
           .where('id', ouFTBets[i]?.id)
           .update({
-            bet_statistics: match.ou_ft_over,
+            bet_statistics: match.ou_ft_under,
             ou_statistics: match.ou_ft_ratio,
             result: ouFTBets[i]?.bet_place === 'under' ? 'win' : 'lose',
             result_num:
