@@ -6,6 +6,7 @@ import { API_BASE_LOGO_TEAM } from "../../../constants";
 import useFetch from "../../../hooks/useFetch";
 import { useMyWeb3 } from "../../../hooks/useMyWeb3";
 import { groupArrayById } from "../../../utils";
+import HeadingPrimary from "../components/HeadingPrimary";
 import MatchListRight from "./MatchListRight";
 import MatchListTable from "./MatchListTable";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -112,6 +113,7 @@ const WorldCupSchedule = () => {
       <p className="m-0 text-4xl font-semibold text-center">
         2022 Qatar World Cup Schedule
       </p>
+      <HeadingPrimary title="Match List" />
       <div className="w-[55%] mt-10">
         <div className="flex justify-between items-center">
           <span className="text-2xl font-semibold">Match List (GMT +7)</span>
