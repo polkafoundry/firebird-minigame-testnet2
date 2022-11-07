@@ -1,4 +1,3 @@
-import InvalidParamException from 'App/Exceptions/InvalidParamException'
 import BusinessException from 'App/Exceptions/BusinessException'
 
 export default class PredictWinnerService {
@@ -6,8 +5,8 @@ export default class PredictWinnerService {
     const matchID = request.input('match_id')
     const address = request.input('address')
 
-    if (!address) throw new InvalidParamException('Wallet address required')
-    if (!matchID) throw new InvalidParamException('Match ID required')
+    if (!address) throw new BusinessException('Wallet address required')
+    if (!matchID) throw new BusinessException('Match ID required')
 
     try {
       const PredictModel = require('@ioc:App/Models/Predict')
@@ -50,7 +49,7 @@ export default class PredictWinnerService {
   public async getListPredictWinner(request): Promise<any> {
     const matchID = request.input('match_id')
 
-    if (!matchID) throw new InvalidParamException('Match ID required')
+    if (!matchID) throw new BusinessException('Match ID required')
 
     try {
       const MatchModel = require('@ioc:App/Models/Match')
