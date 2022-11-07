@@ -54,7 +54,7 @@ const PredictionRule = () => {
                 );
               } else
                 return (
-                  <div className="flex-1">
+                  <div key={indexRule} className="flex-1">
                     <img src={rule.image} />
                   </div>
                 );
