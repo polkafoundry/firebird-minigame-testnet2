@@ -1,7 +1,17 @@
+import { useEffect, useState } from "react";
 import { QUESTION_STATUS } from "../../../../../../constants";
 
-const NotificationBox = (props: any) => {
-  const { type } = props;
+type NotificationBoxTypes = {
+  type: typeof QUESTION_STATUS[keyof typeof QUESTION_STATUS];
+  homeScore: string | undefined;
+  awayScore: string | undefined;
+};
+
+const NotificationBox = (props: NotificationBoxTypes) => {
+  const { type, awayScore = 0, homeScore = 0 } = props;
+
+  //#region RENER REGION
+
   const renderLinkUpdateScore = () => (
     <span>
       <a href="#" className="font-medium underline">
@@ -45,7 +55,7 @@ const NotificationBox = (props: any) => {
       </div>
       <p className="text-center mt-5">
         Your prediction is incorrect. The correct score is{" "}
-        <span className="font-medium">2:1</span>.
+        <span className="font-medium">{`${homeScore} : ${awayScore}`}</span>.
       </p>
     </>
   );
@@ -62,6 +72,8 @@ const NotificationBox = (props: any) => {
       </p>
     </>
   );
+
+  //#endregion END REDNER REGION
 
   return (
     <div className="flex flex-col items-center mt-5 p-5 bg-orange-100 ">

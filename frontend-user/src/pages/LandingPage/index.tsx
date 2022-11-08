@@ -1,4 +1,6 @@
 import LandingLayout from "../../components/layout/LandingLayout";
+import CalculatedReward from "./CalculatedReward";
+import PredictionRule from "./PredictionRule";
 import WorldCupSchedule from "./WorldCupSchedule";
 
 const LangdingPage = () => {
@@ -8,6 +10,8 @@ const LangdingPage = () => {
 
       <div className="flex flex-col w-full max-w-screen-main mx-auto">
         <WorldCupSchedule />
+        <PredictionRule />
+        <CalculatedReward />
       </div>
     </LandingLayout>
   );

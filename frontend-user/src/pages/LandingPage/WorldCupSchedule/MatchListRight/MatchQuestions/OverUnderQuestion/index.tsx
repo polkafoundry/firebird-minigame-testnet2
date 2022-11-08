@@ -15,15 +15,14 @@ const betPlaceString = ["under", "", "over"];
 
 const OverUnderQuestion = (props: QuestionProps) => {
   const { dataQuestion = {}, title, betType, needApprove } = props;
-  const questionStatus = dataQuestion?.questionStatus;
   const [optionWhoWin, setOptionWhoWin] = useState<number>(0);
   const [depositAmount, setDepositAmount] = useState<string>("");
 
   const { approveBirdToken, loadingApprove } = useBirdToken();
   const { betting, loadingBetting } = useBetting();
 
-  const isSubmitted =
-    dataQuestion?.questionStatus !== QUESTION_STATUS.NOT_PREDICTED;
+  const questionStatus = dataQuestion?.questionStatus;
+  const isSubmitted = questionStatus !== QUESTION_STATUS.NOT_PREDICTED;
   const matchEnded = dataQuestion?.match_status === MATCH_STATUS.FINISHED;
 
   useEffect(() => {
