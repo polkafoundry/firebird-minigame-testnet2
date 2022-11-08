@@ -38,6 +38,7 @@ Route.group(() => {
 
   Route.post('/predict/get-list-winner', 'PredictWinnerController.getListPredictWinner')
   Route.post('/predict/get-match-predict-info', 'PredictWinnerController.checkPredictByMatch')
+  Route.post('/predict/get-predict-history', 'PredictWinnerController.getUserPredictHistory')
 }).prefix('/api/v1')
 
 Route.group(() => {})
