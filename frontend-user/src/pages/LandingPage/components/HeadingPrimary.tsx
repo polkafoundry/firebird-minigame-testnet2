@@ -28,14 +28,10 @@ const HeadingPrimary = (props: HeadingPrimaryProps) => {
       >
         {backroundTitle}
       </p>
-      <div className="flex items-center justify-center absolute bottom-0 w-full">
-        <div className={clsx(styles.smallSquare, "mr-[12px]")}></div>
-        <div className={clsx(styles.largeSquare, "mr-[15px]")}></div>
+      <div className="flex items-center justify-center absolute bottom-3 w-full">
         <h5 className={clsx(styles.headingPrimary, titleColor, "mr-[15px]")}>
           {title}
         </h5>
-        <div className={clsx(styles.largeSquare, "mr-[12px]")}></div>
-        <div className={styles.smallSquare}></div>
       </div>
     </div>
   );

@@ -33,6 +33,7 @@ module.exports = {
       "22/32": ["22px", { lineHeight: "32px" }],
       "26/32": ["26px", { lineHeight: "32px" }],
       "28/36": ["28px", { lineHeight: "36px" }],
+      "32/40": ["32px", { lineHeight: "40px" }],
       "40/52": ["40px", { lineHeight: "52px" }],
       "56/60": ["56px", { lineHeight: "60px" }],
     },

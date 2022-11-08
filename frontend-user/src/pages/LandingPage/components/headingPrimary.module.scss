@@ -31,21 +31,8 @@
 .headingPrimary {
   font-family: "TTHoves";
   font-weight: 600;
-  font-size: 40px;
-  line-height: 52px;
+  font-size: 36px;
+  line-height: 48px;
   text-align: center;
-}
-
-.smallSquare {
-  width: 10.43px;
-  height: 10.43px;
-  background-color: rgba(145, 13, 79, 1);
-  transform: rotate(45deg);
-}
-
-.largeSquare {
-  width: 16.18px;
-  height: 16.18px;
-  background-color: rgba(254, 195, 16, 1);
-  transform: rotate(45deg);
+  text-transform: uppercase;
 }
