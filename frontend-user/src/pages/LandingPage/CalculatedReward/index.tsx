@@ -12,63 +12,69 @@ const totalRewardTable = {
     { id: 4, round: "Semi-finals", matches: "02", prize: 70 },
     { id: 5, round: "Third-place match", matches: "01", prize: 80 },
     { id: 6, round: "Final", matches: "01", prize: 100 },
+    { id: 7, round: "Total", matches: "", prize: 1720 },
   ],
 };
 
 const finalRewardTable = {
   headings: ["Leaderboard", "Reward / Winner"],
   data: [
-    { id: 1, address: "Top 1", prize: 700 },
-    { id: 2, address: "Top 2", prize: 400 },
-    { id: 3, address: "Top 3", prize: 250 },
-    { id: 4, address: "Top 4 - 10", prize: 150 },
-    { id: 5, address: "Top 11 - 20", prize: 70 },
-    { id: 6, address: "Top 21 - 30", prize: 50 },
+    { id: 1, top: "Top 1", prize: 700 },
+    { id: 2, top: "Top 2", prize: 400 },
+    { id: 3, top: "Top 3", prize: 250 },
+    { id: 4, top: "Top 4 - 10", prize: 150 },
+    { id: 5, top: "Top 11 - 20", prize: 70 },
+    { id: 6, top: "Top 21 - 30", prize: 50 },
+    { id: 7, top: "Total", prize: 3600 },
   ],
 };
 
 const CalculatedReward = () => {
   const renderTableTotalRewards = () => {
+    const lastIndex = totalRewardTable.data.length - 1;
+
     return (
       <div className="mt-5">
-        <div
-          className={clsx(
-            "flex bg-[#1e2024] p-5 font-semibold border-b-2 border-black",
-            styles.tableRow,
-          )}
-        >
+        <div className={clsx("flex font-semibold", styles.totalRewardRow)}>
           {totalRewardTable.headings.map((heading) => (
-            <div key={heading}>{heading}</div>
+            <div key={heading} className="text-14/24">
+              {heading}
+            </div>
           ))}
         </div>
 
-        {totalRewardTable.data.map((reward) => (
+        {totalRewardTable.data.map((reward, index) => (
           <div
             key={reward.id}
-            className={clsx(
-              "flex px-5 py-2 bg-[#1e2024] border-b-2 border-black",
-              styles.tableRow,
-            )}
+            className={clsx("flex items-center", styles.totalRewardRow)}
           >
             <div>{reward.round}</div>
             <div>{reward.matches}</div>
-            <div>${reward.prize}</div>
+            <div className="flex justify-end items-center font-bold">
+              ${reward.prize}
+              {index === lastIndex && (
+                <img
+                  src="/images/landing-page/icon-cup.png"
+                  alt=""
+                  className="ml-3"
+                />
+              )}
+            </div>
           </div>
         ))}
-        <div className="flex justify-between px-5 py-2 bg-[#1e2024]">
-          <div>Total</div>
-          <div>$1,720</div>
-        </div>
       </div>
     );
   };
 
   const renderTableFinalRewards = () => {
+    const lastIndex = finalRewardTable.data.length - 1;
+
     return (
       <div className="mt-5">
         <div
           className={clsx(
-            "flex justify-between bg-[#1e2024] p-5 font-semibold border-b-2 border-black",
+            "flex justify-between font-semibold",
+            styles.finalRewardRow,
           )}
         >
           {finalRewardTable.headings.map((heading) => (
@@ -76,21 +82,33 @@ const CalculatedReward = () => {
           ))}
         </div>
 
-        {finalRewardTable.data.map((reward) => (
+        {finalRewardTable.data.map((reward, index) => (
           <div
             key={reward.id}
             className={clsx(
-              "flex justify-between px-5 py-2 bg-[#1e2024] border-b-2 border-black",
+              "flex justify-between items-center",
+              styles.finalRewardRow,
             )}
           >
-            <div>{reward.address}</div>
-            <div>${reward.prize}</div>
+            <div
+              className={clsx(
+                [0, 1, 2].includes(index) && "font-semibold uppercase",
+              )}
+            >
+              {reward.top}
+            </div>
+            <div className="flex justify-end items-center font-bold overflow-hidden">
+              ${reward.prize}
+              {index === lastIndex && (
+                <img
+                  src="/images/landing-page/icon-reward.png"
+                  alt=""
+                  className="ml-3"
+                />
+              )}
+            </div>
           </div>
         ))}
-        <div className="flex justify-between px-5 py-2 bg-[#1e2024]">
-          <div>Total</div>
-          <div>$3,600</div>
-        </div>
       </div>
     );
   };
@@ -120,7 +138,7 @@ const CalculatedReward = () => {
           </div>
         </div>
         <div className="z-10 mt-10 px-[52px] pt-[57px] pb-[67px] rounded-[20px] bg-black">
-          <div className="flex space-x-5">
+          <div className="flex flex-col lg:flex-row lg:space-x-5 space-y-5 lg:space-y-0">
             <div className="flex-[3]">
               <p className="text-center text-26/32 font-semibold">
                 Rewards for match score winners
