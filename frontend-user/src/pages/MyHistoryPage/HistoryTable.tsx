@@ -1,25 +1,18 @@
 import clsx from "clsx";
-import { useEffect } from "react";
 import MatchName from "../../components/base/Table/MatchName";
 import MatchPredict from "../../components/base/Table/MatchPredict";
+import { getDateTime } from "../../utils";
 import styles from "./historyTable.module.scss";
 
 type HistoryTableTypes = {
-  tableInfo: {
-    headings: Array<any>;
-    data: Array<any>;
-  };
+  headings: Array<any>;
+  dataTable: Array<any>;
   tableLoading: boolean;
   isWhoWinTable: boolean;
 };
 
 const HistoryTable = (props: HistoryTableTypes) => {
-  const { tableInfo, tableLoading, isWhoWinTable } = props;
-  const { data = [], headings } = tableInfo;
-
-  useEffect(() => {
-    console.log("dataTable", data);
-  }, [data]);
+  const { tableLoading, isWhoWinTable, headings, dataTable } = props;
 
   const renderLoading = () => {
     return <div className="">Loading ... </div>;
@@ -47,7 +40,7 @@ const HistoryTable = (props: HistoryTableTypes) => {
         ))}
       </div>
 
-      {data.map((rowData) => (
+      {dataTable.map((rowData) => (
         <div
           key={rowData.id}
           className={clsx(
@@ -58,8 +51,10 @@ const HistoryTable = (props: HistoryTableTypes) => {
           {!isWhoWinTable && (
             <>
               <MatchName team1={rowData.team1} team2={rowData.team2} />
-              <div>{rowData.answer}</div>
-              <div>{rowData.datetime}</div>
+              <div>
+                {rowData.home_score}:{rowData.away_score}
+              </div>
+              <div>{getDateTime(rowData.predict_time * 1000)}</div>
               <MatchPredict isCorrect={rowData.result} />
               <div>{rowData.winWhitelist ? "Yes" : "No"}</div>
               <div>${rowData.earnedReward}</div>

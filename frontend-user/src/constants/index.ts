@@ -59,3 +59,8 @@ export const BET_TYPE = {
   ODD_EVEN_HALF_TIME: "odds_ht",
   ODD_EVEN_FULL_TIME: "odds_ft",
 };
+
+export const HISTORY_NAV_VALUES = {
+  GOALS: 1,
+  MATCH_SCORE: 2,
+};
