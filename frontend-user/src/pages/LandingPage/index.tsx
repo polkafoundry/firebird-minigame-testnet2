@@ -8,7 +8,7 @@ const LangdingPage = () => {
     <LandingLayout>
       {/* <HomeBanner /> */}
 
-      <div className="flex flex-col w-full max-w-screen-main mx-auto bg-[#030102]">
+      <div className="flex flex-col w-full max-w-screen-main mx-auto">
         <WorldCupSchedule />
         <PredictionRule />
         <CalculatedReward />
