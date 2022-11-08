@@ -10,18 +10,86 @@
   z-index: 2;
 }
 
-.tableRow > div:first-child {
-  min-width: 180px;
+.totalRewardRow,
+.finalRewardRow {
+  margin-top: 2px;
+  min-width: fit-content;
+  background-color: #1e2024;
+  min-height: 42px;
+}
 
+// Heading Table Content
+.totalRewardRow:first-child,
+.finalRewardRow:first-child {
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  text-transform: uppercase;
+  align-items: center;
+}
+.totalRewardRow:last-child,
+.finalRewardRow:last-child {
+  margin-top: 8px;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+  padding: 0 16px 0 20px;
+  text-transform: uppercase;
+  font-weight: 600;
+  min-height: 48px;
+}
+.totalRewardRow > div,
+.finalRewardRow > div {
+  font-size: 14px;
+  line-height: 20px;
+  font-family: "Inter";
+}
+
+// TotalReward Table
+.totalRewardRow:not(:first-child) {
+  padding: 6px 30px;
+}
+.totalRewardRow:last-child {
+  border: 1px solid rgba(255, 3, 129, 1);
+  background-color: #910d4f;
+  box-shadow: 0px 4px 20px #fc1f8e;
+}
+.totalRewardRow:first-child > div {
+  padding: 8px 30px;
+}
+.totalRewardRow > div:first-child {
+  min-width: 190px;
   flex: 3;
 }
-.tableRow > div:nth-child(2) {
+.totalRewardRow > div:nth-child(2) {
   min-width: 100px;
   flex: 2;
   text-align: center;
 }
-.tableRow > div:last-child {
-  min-width: 220px;
+.totalRewardRow > div:last-child {
+  min-width: 260px;
   flex: 4;
   text-align: right;
+}
+
+// Final Reward Table
+.finalRewardRow:not(:first-child) {
+  padding: 6px 20px;
+  border-radius: 4px;
+}
+.finalRewardRow:last-child {
+  border: 1px solid rgba(210, 17, 253, 1);
+  background-color: #480557;
+  box-shadow: 0px 4px 20px #d211fd;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+  padding: 0 16px 0 20px;
+}
+.finalRewardRow:first-child > div {
+  padding: 8px 20px;
+}
+.finalRewardRow:nth-child(2),
+.finalRewardRow:nth-child(3),
+.finalRewardRow:nth-child(4) {
+  background-image: url("../../../assets/images/bg-top-leaderboard.svg");
+  background-repeat: no-repeat;
+  background-position: left;
 }
