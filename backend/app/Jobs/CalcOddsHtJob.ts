@@ -47,8 +47,7 @@ export const calcOddsHtJob = async () => {
 export default class CalcOddsHtJob implements JobContract {
   public key = 'CalcOddsHtJob'
 
-  public async handle(job) {
-    const { data } = job
+  public async handle() {
     // Do somethign with you job data
     const match = await MatchModel.query()
       .where('is_calculated_odds_ht', false)

@@ -33,6 +33,7 @@ Route.group(() => {
   Route.post('betting/odds-ht-calculate', 'BettingsController.oddsHTCalculate')
   Route.post('betting/odds-ft-calculate', 'BettingsController.oddsFTCalculate')
   Route.post('betting/predict-pick-winner', 'BettingsController.predictPickWinner')
+  Route.post('betting/predict-update-status', 'BettingsController.updatePredictStatus')
 
   Route.post('/claim/get-sig', 'ClaimController.claimToken')
 

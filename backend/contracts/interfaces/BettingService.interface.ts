@@ -4,4 +4,5 @@ export default interface BettingServiceInterface {
   oddsHTCalculate(request): Promise<any>
   oddsFTCalculate(request): Promise<any>
   predictPickWinner(request): Promise<any>
+  updatePredictStatus(request): Promise<any>
 }
