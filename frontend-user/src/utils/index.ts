@@ -48,5 +48,6 @@ export const getDateTime = (time: any) => {
 };
 
 export const convertHexToStringNumber = (hex: any, decimals = 18) => {
+  if (hex === null || hex === undefined) return "0";
   return BigNumber.from(hex).div(BigNumber.from(10).pow(decimals)).toString();
 };
