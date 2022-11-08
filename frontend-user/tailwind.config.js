@@ -24,9 +24,12 @@ module.exports = {
     },
     fontFamily: {},
     fontSize: {
+      "16/24": ["16px", { lineHeight: "24px" }],
       "18/24": ["18px", { lineHeight: "24px" }],
       "18/32": ["18px", { lineHeight: "32px" }],
+      "20/28": ["20px", { lineHeight: "28px" }],
       "26/32": ["26px", { lineHeight: "32px" }],
+      "28/36": ["28px", { lineHeight: "36px" }],
       "40/52": ["40px", { lineHeight: "52px" }],
     },
     extend: {},

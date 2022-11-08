@@ -14,24 +14,65 @@ const schedule = [
 
 const Schedule = () => {
   return (
-    <div className="mb-20">
+    <div className={clsx("pt-[140px] mb-20", styles.scheduleBg)}>
       <HeadingPrimary
         backroundTitle="SCHEDULE"
         title="2022 Qatar World Cup Schedule"
+        backgroundColor="text-[#3e0016]"
       />
       <div
         className={clsx(
-          "flex mt-20 px-20 relative overflow-hidden",
+          "flex mt-[-50px] px-20 relative overflow-hidden",
           styles.schedule,
         )}
       >
         {schedule.map((item, index) => (
-          <div key={item.title} className="relative flex">
-            <div className="h-24 flex flex-col justify-center">
-              <div>{item.title}</div>
-              <div>{item.time}</div>
+          <div
+            key={item.title}
+            className={clsx(
+              "relative flex",
+              index % 2 === 0 ? "flex-col" : "flex-col-reverse",
+            )}
+          >
+            <div
+              className={clsx(
+                "h-[240px] flex flex-col py-8",
+                index % 2 === 0 ? "justify-end" : "justify-start",
+              )}
+            >
+              <div
+                className={clsx(
+                  index === 0 ? "text-28/36 text-[#EB522F]" : "text-20/28",
+                  "font-semibold",
+                )}
+              >
+                {item.title}
+              </div>
+              <div className="text-16/24 font-normal opacity-80">
+                {item.time}
+              </div>
             </div>
-            <div className="h-24"></div>
+            <div
+              className={clsx(
+                "h-[240px] flex py-8",
+                index % 2 === 0 ? "items-start" : "items-end",
+              )}
+            >
+              {index === 0 && (
+                <img
+                  src="./images/landing-page/football.png"
+                  alt=""
+                  className="translate-x-[-45px]"
+                />
+              )}
+              {index === 5 && (
+                <img
+                  src="./images/landing-page/cup.png"
+                  alt=""
+                  className="text-end translate-x-[35px]"
+                />
+              )}
+            </div>
             <div
               className={clsx(
                 "absolute h-full flex items-center",
