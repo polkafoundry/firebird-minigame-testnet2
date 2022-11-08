@@ -1,25 +1,24 @@
 import InvalidParamException from 'App/Exceptions/InvalidParamException'
 import BusinessException from 'App/Exceptions/BusinessException'
+const HelperUtils = require('@ioc:App/Common/HelperUtils')
 
 import { ethers, Wallet } from 'ethers'
 import { fromRpcSig } from 'ethereumjs-util'
 const BETTING_SMART_CONTRACT = process.env.BETTING_SMART_CONTRACT
 
 export default class BettingService {
+  public BettingModel = require('@ioc:App/Models/Betting')
   public async claimToken(request): Promise<any> {
     const matchID = request.input('match_id')
     const betType = request.input('bet_type')
     const walletAddress = request.input('wallet')
     const amount = request.input('amount')
 
-    if (!walletAddress) throw new InvalidParamException('Wallet address required')
-
-    const HelperUtils = require('@ioc:App/Common/HelperUtils')
+    if (!walletAddress) return HelperUtils.responseErrorInternal('Wallet address required')
 
     // verify withdraw to game backend
     try {
-      const BettingModel = require('@ioc:App/Models/Betting')
-      const betInfo = await BettingModel.query()
+      const betInfo = await this.BettingModel.query()
         .where('match_id', matchID)
         .andWhere('user_address', walletAddress)
         .andWhere('bet_type', betType)
@@ -35,13 +34,12 @@ export default class BettingService {
         const bettingContract = await HelperUtils.getBettingContractInstance()
         const nonce = parseInt(await bettingContract.methods.TokenClaimNonces(walletAddress).call())
         const signature = await this.signWithdrawToken(nonce, amount, matchID, betType)
-
-        return { signature }
+        return HelperUtils.responseSuccess(signature)
       } else {
-        return new BusinessException('Bet is not calculate or amount not avaiable')
+        return HelperUtils.responseErrorInternal('Bet is not calculate or amount not avaiable')
       }
     } catch (error) {
-      throw new BusinessException(error)
+      return HelperUtils.responseErrorInternal(error)
     }
   }
   private async signWithdrawToken(
@@ -56,7 +54,6 @@ export default class BettingService {
     deadline: string
   }> {
     const wallet: Wallet = new ethers.Wallet(process.env.SIGNER_PRIVATE_KEY || '')
-    const HelperUtils = require('@ioc:App/Common/HelperUtils')
     const provider = await HelperUtils.getWeb3Provider()
     const latestBlockNumber = (await provider.eth.getBlockNumber()) - 1
     const blockTime = await provider.eth.getBlock(latestBlockNumber)

@@ -1,23 +1,25 @@
 import BaseException from 'App/Exceptions/BaseException'
+const BigNumber = require('bignumber.js')
 
 export default class BettingService {
+  public MatchModel = require('@ioc:App/Models/Match')
+  public BettingModel = require('@ioc:App/Models/Betting')
+  public PredictModel = require('@ioc:App/Models/Predict')
+
   public async ouHTCalculate(request): Promise<any> {
     const matchID = request.input('match_id')
     if (!matchID) {
       throw new BaseException('Match ID is required')
     }
-    const MatchModel = require('@ioc:App/Models/Match')
-    const BettingModel = require('@ioc:App/Models/Betting')
-    const BigNumber = require('bignumber.js')
 
-    const match = await MatchModel.query().where('match_id', matchID).first()
+    const match = await this.MatchModel.query().where('match_id', matchID).first()
     if (!match) {
       throw new BaseException('match not found')
     }
     if (!match?.is_half_time) {
       throw new BaseException('match not half time')
     }
-    const ouHTBets = await BettingModel.query()
+    const ouHTBets = await this.BettingModel.query()
       .where('match_id', matchID)
       .andWhere('bet_type', 'ou_ht')
     if (!ouHTBets) {
@@ -27,7 +29,7 @@ export default class BettingService {
       let amount = ouHTBets[i]?.bet_amount
       if (match.ou_ht_ratio > match.ht_home_score + match.ht_away_score) {
         // ratio > total score
-        await BettingModel.query()
+        await this.BettingModel.query()
           .where('id', ouHTBets[i]?.id)
           .update({
             bet_statistics: match.ou_ht_under,
@@ -44,7 +46,7 @@ export default class BettingService {
           })
       } else if (match.ou_ht_ratio < match.ht_home_score + match.ht_away_score) {
         // ratio < total score
-        await BettingModel.query()
+        await this.BettingModel.query()
           .where('id', ouHTBets[i]?.id)
           .update({
             bet_statistics: match.ou_ht_over,
@@ -61,7 +63,7 @@ export default class BettingService {
           })
       } else {
         //ratio = total score
-        await BettingModel.query()
+        await this.BettingModel.query()
           .where('id', ouHTBets[i]?.id)
           .update({
             bet_statistics:
@@ -72,18 +74,15 @@ export default class BettingService {
           })
       }
     }
-    return ouHTBets
+    return true
   }
   public async ouFTCalculate(request): Promise<any> {
     const matchID = request.input('match_id')
     if (!matchID) {
       throw new BaseException('Match ID is required')
     }
-    const MatchModel = require('@ioc:App/Models/Match')
-    const BettingModel = require('@ioc:App/Models/Betting')
-    const BigNumber = require('bignumber.js')
 
-    const match = await MatchModel.query().where('match_id', matchID).first()
+    const match = await this.MatchModel.query().where('match_id', matchID).first()
     if (!match) {
       throw new BaseException('match not found')
     }
@@ -91,7 +90,7 @@ export default class BettingService {
       throw new BaseException('match not fulltime')
     }
 
-    const ouFTBets = await BettingModel.query()
+    const ouFTBets = await this.BettingModel.query()
       .where('match_id', matchID)
       .andWhere('bet_type', 'ou_ft')
     if (!ouFTBets) {
@@ -101,7 +100,7 @@ export default class BettingService {
       let amount = ouFTBets[i]?.bet_amount
       if (match.ou_ft_ratio > match.ft_home_score + match.ft_away_score) {
         // ratio > total score
-        await BettingModel.query()
+        await this.BettingModel.query()
           .where('id', ouFTBets[i]?.id)
           .update({
             bet_statistics: match.ou_ft_under,
@@ -118,7 +117,7 @@ export default class BettingService {
           })
       } else if (match.ou_ht_ratio < match.ht_home_score + match.ht_away_score) {
         // ratio < total score
-        await BettingModel.query()
+        await this.BettingModel.query()
           .where('id', ouFTBets[i]?.id)
           .update({
             bet_statistics: match.ou_ft_over,
@@ -135,7 +134,7 @@ export default class BettingService {
           })
       } else {
         //ratio = total score
-        await BettingModel.query()
+        await this.BettingModel.query()
           .where('id', ouFTBets[i]?.id)
           .update({
             bet_statistics:
@@ -146,18 +145,15 @@ export default class BettingService {
           })
       }
     }
-    return ouFTBets
+    return true
   }
   public async oddsHTCalculate(request): Promise<any> {
     const matchID = request.input('match_id')
     if (!matchID) {
       throw new BaseException('Match ID is required')
     }
-    const MatchModel = require('@ioc:App/Models/Match')
-    const BettingModel = require('@ioc:App/Models/Betting')
-    const BigNumber = require('bignumber.js')
 
-    const match = await MatchModel.query().where('match_id', matchID).first()
+    const match = await this.MatchModel.query().where('match_id', matchID).first()
     if (!match) {
       throw new BaseException('match not found')
     }
@@ -165,7 +161,7 @@ export default class BettingService {
       throw new BaseException('match not half time')
     }
 
-    const oddsHTBets = await BettingModel.query()
+    const oddsHTBets = await this.BettingModel.query()
       .where('match_id', matchID)
       .andWhere('bet_type', 'odds_ht')
     if (!oddsHTBets) {
@@ -175,7 +171,7 @@ export default class BettingService {
       let amount = oddsHTBets[i]?.bet_amount
       if (match.ht_home_score > match.ht_away_score) {
         // home win
-        await BettingModel.query()
+        await this.BettingModel.query()
           .where('id', oddsHTBets[i]?.id)
           .update({
             bet_statistics:
@@ -196,7 +192,7 @@ export default class BettingService {
           })
       } else if (match.ht_home_score < match.ht_away_score) {
         // away win
-        await BettingModel.query()
+        await this.BettingModel.query()
           .where('id', oddsHTBets[i]?.id)
           .update({
             bet_statistics:
@@ -217,7 +213,7 @@ export default class BettingService {
           })
       } else {
         //draw
-        await BettingModel.query()
+        await this.BettingModel.query()
           .where('id', oddsHTBets[i]?.id)
           .update({
             bet_statistics:
@@ -238,18 +234,15 @@ export default class BettingService {
           })
       }
     }
-    return oddsHTBets
+    return true
   }
   public async oddsFTCalculate(request): Promise<any> {
     const matchID = request.input('match_id')
     if (!matchID) {
       throw new BaseException('Match ID is required')
     }
-    const MatchModel = require('@ioc:App/Models/Match')
-    const BettingModel = require('@ioc:App/Models/Betting')
-    const BigNumber = require('bignumber.js')
 
-    const match = await MatchModel.query().where('match_id', matchID).first()
+    const match = await this.MatchModel.query().where('match_id', matchID).first()
     if (!match) {
       throw new BaseException('match not found')
     }
@@ -257,7 +250,7 @@ export default class BettingService {
       throw new BaseException('match not fulltime')
     }
 
-    const oddsFTBets = await BettingModel.query()
+    const oddsFTBets = await this.BettingModel.query()
       .where('match_id', matchID)
       .andWhere('bet_type', 'odds_ft')
     if (!oddsFTBets) {
@@ -267,7 +260,7 @@ export default class BettingService {
       let amount = oddsFTBets[i]?.bet_amount
       if (match.ft_home_score > match.ft_away_score) {
         // home win
-        await BettingModel.query()
+        await this.BettingModel.query()
           .where('id', oddsFTBets[i]?.id)
           .update({
             bet_statistics:
@@ -288,7 +281,7 @@ export default class BettingService {
           })
       } else if (match.ft_home_score < match.ft_away_score) {
         // away win
-        await BettingModel.query()
+        await this.BettingModel.query()
           .where('id', oddsFTBets[i]?.id)
           .update({
             bet_statistics:
@@ -309,7 +302,7 @@ export default class BettingService {
           })
       } else {
         //draw
-        await BettingModel.query()
+        await this.BettingModel.query()
           .where('id', oddsFTBets[i]?.id)
           .update({
             bet_statistics:
@@ -330,17 +323,15 @@ export default class BettingService {
           })
       }
     }
-    return oddsFTBets
+    return true
   }
   public async predictPickWinner(request): Promise<any> {
     const matchID = request.input('match_id')
     if (!matchID) {
       throw new BaseException('Match ID is required')
     }
-    const MatchModel = require('@ioc:App/Models/Match')
-    const PredictModel = require('@ioc:App/Models/Predict')
 
-    const match = await MatchModel.query().where('match_id', matchID).first()
+    const match = await this.MatchModel.query().where('match_id', matchID).first()
     if (!match) {
       throw new BaseException('match not found')
     }
@@ -348,7 +339,7 @@ export default class BettingService {
       throw new BaseException('match not fulltime')
     }
 
-    const userPredict = await PredictModel.query()
+    const userPredict = await this.PredictModel.query()
       .where('match_id', matchID)
       .andWhere('home_score', match?.ft_home_score)
       .andWhere('away_score', match?.ft_away_score)

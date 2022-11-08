@@ -3,6 +3,10 @@ import BusinessException from 'App/Exceptions/BusinessException'
 const HelperUtils = require('@ioc:App/Common/HelperUtils')
 
 export default class PredictWinnerService {
+  public MatchModel = require('@ioc:App/Models/Match')
+  public PredictModel = require('@ioc:App/Models/Predict')
+  public PredictWinner = require('@ioc:App/Models/PredictWinner')
+
   public async checkPredictByMatch(request, response): Promise<any> {
     const matchID = request.input('match_id')
     const address = request.input('address')
@@ -11,21 +15,18 @@ export default class PredictWinnerService {
     if (!matchID) return HelperUtils.responseErrorInternal('Match ID required')
 
     try {
-      const PredictModel = require('@ioc:App/Models/Predict')
-      const predictInfo = await PredictModel.query()
+      const predictInfo = await this.PredictModel.query()
         .where('match_id', matchID)
         .andWhere('user_address', address)
         .first()
       if (!predictInfo) {
         return HelperUtils.responseErrorInternal('User not predict in this match')
       }
-      const MatchModel = require('@ioc:App/Models/Match')
-      const matchInfo = await MatchModel.query().where('match_id', matchID).first()
+      const matchInfo = await this.MatchModel.query().where('match_id', matchID).first()
       if (!matchInfo) {
         return HelperUtils.responseErrorInternal('Match not found')
       }
-      const PredictWinner = require('@ioc:App/Models/PredictWinner')
-      const predictWinnerInfo = await PredictWinner.query().where('match_id', matchID).first()
+      const predictWinnerInfo = await this.PredictWinner.query().where('match_id', matchID).first()
       if (matchInfo?.is_full_time) {
         return HelperUtils.responseSuccess({
           home_score_predict: predictInfo.home_score,
@@ -54,13 +55,12 @@ export default class PredictWinnerService {
     if (!matchID) return HelperUtils.responseErrorInternal('Match ID required')
 
     try {
-      const MatchModel = require('@ioc:App/Models/Match')
-      const matchInfo = await MatchModel.query().where('match_id', matchID).first()
+      const matchInfo = await this.MatchModel.query().where('match_id', matchID).first()
       if (!matchInfo) {
         return HelperUtils.responseErrorInternal('Match not found')
       }
-      const PredictModel = require('@ioc:App/Models/Predict')
-      const predictList = await PredictModel.query()
+
+      const predictList = await this.PredictModel.query()
         .where('match_id', matchID)
         .andWhere('home_score', matchInfo.ft_home_score)
         .andWhere('away_score', matchInfo.ft_away_score)
@@ -80,8 +80,7 @@ export default class PredictWinnerService {
     if (!address) return HelperUtils.responseErrorInternal('User address required')
 
     try {
-      const PredictModel = require('@ioc:App/Models/Predict')
-      const predictList = await PredictModel.query()
+      const predictList = await this.PredictModel.query()
         .where('user_address', address)
         .orderBy('match_id', 'asc')
         .exec()

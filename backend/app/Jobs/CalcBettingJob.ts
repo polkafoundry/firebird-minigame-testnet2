@@ -14,6 +14,8 @@ import { JobContract } from '@ioc:Rocketseat/Bull'
 import Bull from '@ioc:Rocketseat/Bull'
 import BettingModel from 'App/Models/Betting'
 import MatchModel from 'App/Models/Match'
+import PredictModel from 'App/Models/Predict'
+
 const Const = require('@ioc:App/Common/Const')
 const BigNumber = require('bignumber.js')
 
@@ -46,12 +48,16 @@ export default class CalcBettingJob implements JobContract {
     console.log('CalcBettingJob: ', data)
     // Do somethign with you job data
     const MAX_BETTING_CALC = 5000
-    let [match, bettings] = await Promise.all([
+    let [match, bettings, predict] = await Promise.all([
       MatchModel.query().where('match_id', data.matchId).first(),
       BettingModel.query()
         .where('match_id', data.matchId)
         .where('bet_type', data.betType)
         .where('is_calculated', false)
+        .limit(MAX_BETTING_CALC),
+      PredictModel.query()
+        .where('match_id', data.matchId)
+        .where('match_predicted', false)
         .limit(MAX_BETTING_CALC),
     ])
     bettings = JSON.parse(JSON.stringify(bettings))
@@ -66,6 +72,8 @@ export default class CalcBettingJob implements JobContract {
       [Const.BET_TYPE.ODDS_FT]: this._calcOddsFtBet,
     }
     await calcFunction[data.betType](match, bettings)
+
+    await this._updatePredictStatus(match, predict)
 
     if (bettings.length < MAX_BETTING_CALC) {
       const checkingField = {
@@ -319,6 +327,31 @@ export default class CalcBettingJob implements JobContract {
                     .toFixed()
                 : -amount,
             is_calculated: true,
+          })
+      }
+    }
+  }
+
+  private async _updatePredictStatus(match, predicts) {
+    for (let i = 0; i < predicts.length; i++) {
+      if (
+        match.ft_home_score == predicts[i].home_score &&
+        match.ft_away_score == predicts[i].away_score
+      ) {
+        await PredictModel.query()
+          .where('match_id', predicts[i].match_id)
+          .where('user_address', predicts[i].user_address)
+          .update({
+            result: true,
+            match_predicted: true,
+          })
+      } else {
+        await PredictModel.query()
+          .where('match_id', predicts[i].match_id)
+          .where('user_address', predicts[i].user_address)
+          .update({
+            result: false,
+            match_predicted: true,
           })
       }
     }
