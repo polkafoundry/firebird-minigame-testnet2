@@ -41,7 +41,7 @@ const PredictionRule = () => {
               if (rule.title) {
                 return (
                   <div key={indexRule} className="flex-1 relative">
-                    <img src={rule.image} />
+                    <img src={rule.image} className="w-full" />
                     <div className="absolute top-0 w-full h-full flex flex-col justify-center pb-10 px-10 xs:px-20 lg:px-[120px]">
                       <span className="text-40/52 font-semibold">
                         {rule.title}
@@ -55,7 +55,7 @@ const PredictionRule = () => {
               } else
                 return (
                   <div key={indexRule} className="flex-1">
-                    <img src={rule.image} />
+                    <img src={rule.image} className="w-full" />
                   </div>
                 );
             })}
