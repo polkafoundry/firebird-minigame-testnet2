@@ -9,13 +9,20 @@
   user-select: none;
 
   opacity: 0.4;
+}
 
+.colorPrimary {
+  background: linear-gradient(180deg, #000000 15.8%, rgba(0, 0, 0, 0) 86.43%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-stroke: 4px transparent;
+}
+.colorSecondary {
   background: linear-gradient(
     180deg,
     #ffffff 15.8%,
     rgba(255, 255, 255, 0) 86.43%
   );
-
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-stroke: 4px transparent;

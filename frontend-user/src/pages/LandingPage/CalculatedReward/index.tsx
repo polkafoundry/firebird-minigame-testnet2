@@ -119,11 +119,13 @@ const CalculatedReward = () => {
         backroundTitle="Calculated"
         title="How the rewards are calculated?"
       />
-      <p className="mt-2 text-center">
+      <p className="mt-2 text-center text-">
         All rewards will be airdropped to the winners after Firebird Cup events
         ends.
       </p>
-      <div className={clsx("mt-9 mx-[100px] flex flex-col relative")}>
+      <div
+        className={clsx("mt-9 mx-[100px] flex flex-col relative text-white")}
+      >
         <div className={styles.blurBg}></div>
         <div className="flex justify-center w-full z-10">
           <div>
@@ -133,7 +135,7 @@ const CalculatedReward = () => {
             />
             <ButtonStyled
               title="My history"
-              className="w-[200px] bg-white text-black"
+              className="w-[200px] bg-black text-white"
             />
           </div>
         </div>
