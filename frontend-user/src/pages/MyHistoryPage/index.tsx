@@ -57,73 +57,73 @@ const headings = {
   ],
 };
 
-const whoWin = {
-  headings: [
-    "Match",
-    "Question",
-    "Answer",
-    "Date-time",
-    "Result",
-    "Deposited",
-    "Earned",
-    "Amount to claim",
-    "Claim",
-  ],
-  data: [
-    {
-      id: 1,
-      team1: { name: "Quatar", icon: "/images/icon-qatar.svg" },
-      team2: { name: "Ecuador", icon: "/images/icon-ecuador.svg" },
-      question: "Who win 1st half",
-      answer: "Quatar",
-      datetime: "2022/11/20 15:23",
-      result: true,
-      deposited: "100",
-      earned: "872",
-      amount: "972",
-      isClaimed: false,
-    },
-    {
-      id: 2,
-      team1: { name: "Quatar", icon: "/images/icon-qatar.svg" },
-      team2: { name: "Ecuador", icon: "/images/icon-ecuador.svg" },
-      question: "Who win 1st half",
-      answer: "Quatar",
-      datetime: "2022/11/20 15:23",
-      result: false,
-      deposited: "200",
-      earned: "0",
-      amount: "0",
-      isClaimed: false,
-    },
-    {
-      id: 3,
-      team1: { name: "Quatar", icon: "/images/icon-qatar.svg" },
-      team2: { name: "Ecuador", icon: "/images/icon-ecuador.svg" },
-      question: "Who win 1st half",
-      answer: "Quatar",
-      datetime: "2022/11/20 15:23",
-      result: true,
-      deposited: "100",
-      earned: "872",
-      amount: "972",
-      isClaimed: true,
-    },
-    {
-      id: 4,
-      team1: { name: "Quatar", icon: "/images/icon-qatar.svg" },
-      team2: { name: "Ecuador", icon: "/images/icon-ecuador.svg" },
-      question: "Who win 1st half",
-      answer: "Quatar",
-      datetime: "2022/11/20 15:23",
-      result: false,
-      deposited: "500",
-      earned: "0",
-      amount: "0",
-      isClaimed: false,
-    },
-  ],
-};
+// const whoWin = {
+//   headings: [
+//     "Match",
+//     "Question",
+//     "Answer",
+//     "Date-time",
+//     "Result",
+//     "Deposited",
+//     "Earned",
+//     "Amount to claim",
+//     "Claim",
+//   ],
+//   data: [
+//     {
+//       id: 1,
+//       team1: { name: "Quatar", icon: "/images/icon-qatar.svg" },
+//       team2: { name: "Ecuador", icon: "/images/icon-ecuador.svg" },
+//       question: "Who win 1st half",
+//       answer: "Quatar",
+//       datetime: "2022/11/20 15:23",
+//       result: true,
+//       deposited: "100",
+//       earned: "872",
+//       amount: "972",
+//       isClaimed: false,
+//     },
+//     {
+//       id: 2,
+//       team1: { name: "Quatar", icon: "/images/icon-qatar.svg" },
+//       team2: { name: "Ecuador", icon: "/images/icon-ecuador.svg" },
+//       question: "Who win 1st half",
+//       answer: "Quatar",
+//       datetime: "2022/11/20 15:23",
+//       result: false,
+//       deposited: "200",
+//       earned: "0",
+//       amount: "0",
+//       isClaimed: false,
+//     },
+//     {
+//       id: 3,
+//       team1: { name: "Quatar", icon: "/images/icon-qatar.svg" },
+//       team2: { name: "Ecuador", icon: "/images/icon-ecuador.svg" },
+//       question: "Who win 1st half",
+//       answer: "Quatar",
+//       datetime: "2022/11/20 15:23",
+//       result: true,
+//       deposited: "100",
+//       earned: "872",
+//       amount: "972",
+//       isClaimed: true,
+//     },
+//     {
+//       id: 4,
+//       team1: { name: "Quatar", icon: "/images/icon-qatar.svg" },
+//       team2: { name: "Ecuador", icon: "/images/icon-ecuador.svg" },
+//       question: "Who win 1st half",
+//       answer: "Quatar",
+//       datetime: "2022/11/20 15:23",
+//       result: false,
+//       deposited: "500",
+//       earned: "0",
+//       amount: "0",
+//       isClaimed: false,
+//     },
+//   ],
+// };
 
 type FilterTypes = {
   result: string;
@@ -281,16 +281,22 @@ const MyHistoryPage = () => {
               </div>
 
               <div className="flex">
-                <HistoryTable
-                  headings={
-                    navActived === HISTORY_NAV_VALUES.GOALS
-                      ? headings.matchScore
-                      : headings.whoWin
-                  }
-                  dataTable={dataTable}
-                  tableLoading={false}
-                  isWhoWinTable={navActived !== HISTORY_NAV_VALUES.GOALS}
-                />
+                {loading && <div>loading</div>}
+                {!loading && account && (
+                  <HistoryTable
+                    headings={
+                      navActived === HISTORY_NAV_VALUES.GOALS
+                        ? headings.matchScore
+                        : headings.whoWin
+                    }
+                    dataTable={dataTable}
+                    tableLoading={false}
+                    isWhoWinTable={navActived !== HISTORY_NAV_VALUES.GOALS}
+                  />
+                )}
+                {!loading && !account && (
+                  <div>Please connect wallet to see prediction list</div>
+                )}
               </div>
 
               <Pagination
