@@ -27,7 +27,13 @@ export default class BettingService {
       ) {
         const bettingContract = await HelperUtils.getBettingContractInstance()
         const nonce = parseInt(await bettingContract.methods.TokenClaimNonces(walletAddress).call())
-        const signature = await this.signWithdrawToken(nonce, amount, matchID, betType)
+        const signature = await this.signWithdrawToken(
+          walletAddress,
+          nonce,
+          amount,
+          matchID,
+          betType
+        )
         return HelperUtils.responseSuccess(signature)
       } else {
         return HelperUtils.responseErrorInternal('Bet is not calculate or amount not avaiable')
