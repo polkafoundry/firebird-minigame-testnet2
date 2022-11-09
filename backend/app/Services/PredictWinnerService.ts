@@ -113,6 +113,7 @@ export default class PredictWinnerService {
       const status = request.input('status') //true, false
 
       if (!address) return HelperUtils.responseErrorInternal('User address required')
+      let filterResultQuery = status === undefined ? '' : `AND result = ${status}`
 
       let [total, wins, finalWinner, predicts] = await Promise.all([
         this.Database.from('predicts').count('* as total').where('user_address', address),
@@ -121,16 +122,25 @@ export default class PredictWinnerService {
           .where('user_address', address)
           .andWhere('result', true),
         this.Database.from('predict_winners').count('* as total').where('final_winner', address),
-        status !== undefined
-          ? this.PredictModel.query()
-              .where('user_address', address)
-              .where('result', status)
-              .orderBy('match_id', 'asc')
-              .paginate(page, limit)
-          : this.PredictModel.query()
-              .where('user_address', address)
-              .orderBy('match_id', 'asc')
-              .paginate(page, limit),
+        this.Database.from('predicts AS p')
+          .joinRaw(`INNER JOIN matchs AS m ON p.match_id = m.match_id`)
+          .joinRaw(`LEFT JOIN predict_winners AS pw ON p.match_id = pw.match_id`)
+          .joinRaw(`WHERE user_address = '${address}'`)
+          .joinRaw(filterResultQuery)
+          .select('m.home_name')
+          .select('m.home_icon')
+          .select('m.away_name')
+          .select('m.away_icon')
+          .select('p.match_id')
+          .select('p.home_score')
+          .select('p.away_score')
+          .select('p.created_at')
+          .select('p.result')
+          .select('p.match_predicted')
+          .select('pw.final_winner')
+          .select('pw.rewards')
+          .orderBy('p.match_id', 'ASC')
+          .paginate(page, limit),
       ])
       return HelperUtils.responseSuccess({
         total: total[0]?.total,
