@@ -32,14 +32,14 @@ Route.group(() => {
   Route.post('betting/ou-ft-calculate', 'BettingsController.ouFTCalculate')
   Route.post('betting/odds-ht-calculate', 'BettingsController.oddsHTCalculate')
   Route.post('betting/odds-ft-calculate', 'BettingsController.oddsFTCalculate')
-  Route.post('betting/predict-pick-winner', 'BettingsController.predictPickWinner')
-  Route.post('betting/predict-update-status', 'BettingsController.updatePredictStatus')
+  Route.post('betting/history', 'BettingsController.getUserBettingHistory')
 
   Route.post('/claim/get-sig', 'ClaimController.claimToken')
 
   Route.post('/predict/get-list-winner', 'PredictWinnerController.getListPredictWinner')
   Route.post('/predict/get-match-predict-info', 'PredictWinnerController.checkPredictByMatch')
-  Route.post('/predict/get-predict-history', 'PredictWinnerController.getUserPredictHistory')
+  Route.post('/predict/history', 'PredictWinnerController.getUserPredictHistory')
+  Route.post('/predict/update-status', 'PredictWinnerController.updatePredictStatus')
 }).prefix('/api/v1')
 
 Route.group(() => {})

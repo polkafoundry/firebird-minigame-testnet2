@@ -18,8 +18,6 @@ export default class Predicts extends BaseSchema {
       table.string('home_score').notNullable()
       table.string('away_score').notNullable()
       table.integer('predict_time').notNullable()
-      table.boolean('result').notNullable().defaultTo(false)
-      table.boolean('match_predicted').notNullable().defaultTo(false)
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */
