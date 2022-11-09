@@ -1,10 +1,10 @@
-import { BigNumber } from "ethers";
+// import { BigNumber } from "ethers";
 import { toast } from "react-toastify";
 import { API_BASE_URL, QUESTION_STATUS } from "../../../../../../constants";
 import useClaimToken from "../../../../../../hooks/useClaimToken";
 import { fetcher } from "../../../../../../hooks/useFetch";
-import usePost from "../../../../../../hooks/usePost";
-import useWalletSignature from "../../../../../../hooks/useWalletSignature";
+// import usePost from "../../../../../../hooks/usePost";
+// import useWalletSignature from "../../../../../../hooks/useWalletSignature";
 import { convertHexToStringNumber } from "../../../../../../utils";
 
 type ResultMatchProps = {
@@ -25,16 +25,16 @@ const ResultMatch = (props: ResultMatchProps) => {
     return convertHexToStringNumber(amount) + " $BIRD";
   };
 
-  const getAmountToClaim = () => {
-    if (!questions?.result_num) return "Updating...";
-    if (questionStatus === QUESTION_STATUS.WRONG_ANSWER) return "0 $BIRD";
+  // const getAmountToClaim = () => {
+  //   if (!questions?.result_num) return "Updating...";
+  //   if (questionStatus === QUESTION_STATUS.WRONG_ANSWER) return "0 $BIRD";
 
-    const amount = BigNumber.from(questions.bet_amount).add(
-      BigNumber.from(questions.result_num),
-    );
+  //   const amount = BigNumber.from(questions.bet_amount).add(
+  //     BigNumber.from(questions.result_num),
+  //   );
 
-    return convertHexToStringNumber(amount) + " $BIRD";
-  };
+  //   return convertHexToStringNumber(amount) + " $BIRD";
+  // };
 
   const handleClaimToken = async () => {
     if (!questions) {
