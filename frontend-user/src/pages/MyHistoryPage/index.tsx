@@ -3,20 +3,20 @@ import { useEffect, useState } from "react";
 import DropDown from "../../components/base/DropDown";
 import Pagination from "../../components/base/Pagination";
 import DefaultLayout from "../../components/layout/DefaultLayout";
+import { HISTORY_NAV_VALUES } from "../../constants";
+import { useMyWeb3 } from "../../hooks/useMyWeb3";
+import usePost from "../../hooks/usePost";
 import HistoryTable from "./HistoryTable";
 import HowToJoin from "./HowToJoin";
+import Statistics from "./Statistic";
 
-const valueNav = {
-  GOALS: 1,
-  MATCH_SCORE: 2,
-};
 type NavItemTypes = {
   label: string;
-  value: typeof valueNav[keyof typeof valueNav];
+  value: typeof HISTORY_NAV_VALUES[keyof typeof HISTORY_NAV_VALUES];
 };
 const nav = [
-  { label: "Who win & Total goals", value: valueNav.GOALS },
-  { label: "Match score", value: valueNav.MATCH_SCORE },
+  { label: "Who win & Total goals", value: HISTORY_NAV_VALUES.GOALS },
+  { label: "Match score", value: HISTORY_NAV_VALUES.MATCH_SCORE },
 ];
 
 const fakeStatsWhoWin = {
@@ -35,8 +35,8 @@ const fakeStatsMatchScore = {
   earned: "$40",
 };
 
-const matchScore = {
-  headings: [
+const headings = {
+  matchScore: [
     "Match",
     "Answer",
     "Date-time",
@@ -44,51 +44,7 @@ const matchScore = {
     "Win whitelist",
     "Earned rewards",
   ],
-  data: [
-    {
-      id: 1,
-      team1: { name: "Quatar", icon: "/images/icon-qatar.svg" },
-      team2: { name: "Ecuador", icon: "/images/icon-ecuador.svg" },
-      answer: "2:0",
-      datetime: "2022/11/20 15:23",
-      result: true,
-      winWhitelist: false,
-      earnedReward: "0",
-    },
-    {
-      id: 2,
-      team1: { name: "Quatar", icon: "/images/icon-qatar.svg" },
-      team2: { name: "Ecuador", icon: "/images/icon-ecuador.svg" },
-      answer: "2:0",
-      datetime: "2022/11/20 15:23",
-      result: false,
-      winWhitelist: false,
-      earnedReward: "0",
-    },
-    {
-      id: 3,
-      team1: { name: "Quatar", icon: "/images/icon-qatar.svg" },
-      team2: { name: "Ecuador", icon: "/images/icon-ecuador.svg" },
-      answer: "2:0",
-      datetime: "2022/11/20 15:23",
-      result: true,
-      winWhitelist: true,
-      earnedReward: "0",
-    },
-    {
-      id: 4,
-      team1: { name: "Quatar", icon: "/images/icon-qatar.svg" },
-      team2: { name: "Ecuador", icon: "/images/icon-ecuador.svg" },
-      answer: "2:0",
-      datetime: "2022/11/20 15:23",
-      result: true,
-      winWhitelist: false,
-      earnedReward: "0",
-    },
-  ],
-};
-const whoWin = {
-  headings: [
+  whoWin: [
     "Match",
     "Question",
     "Answer",
@@ -99,110 +55,80 @@ const whoWin = {
     "Amount to claim",
     "Claim",
   ],
-  data: [
-    {
-      id: 1,
-      team1: { name: "Quatar", icon: "/images/icon-qatar.svg" },
-      team2: { name: "Ecuador", icon: "/images/icon-ecuador.svg" },
-      question: "Who win 1st half",
-      answer: "Quatar",
-      datetime: "2022/11/20 15:23",
-      result: true,
-      deposited: "100",
-      earned: "872",
-      amount: "972",
-      isClaimed: false,
-    },
-    {
-      id: 2,
-      team1: { name: "Quatar", icon: "/images/icon-qatar.svg" },
-      team2: { name: "Ecuador", icon: "/images/icon-ecuador.svg" },
-      question: "Who win 1st half",
-      answer: "Quatar",
-      datetime: "2022/11/20 15:23",
-      result: false,
-      deposited: "200",
-      earned: "0",
-      amount: "0",
-      isClaimed: false,
-    },
-    {
-      id: 3,
-      team1: { name: "Quatar", icon: "/images/icon-qatar.svg" },
-      team2: { name: "Ecuador", icon: "/images/icon-ecuador.svg" },
-      question: "Who win 1st half",
-      answer: "Quatar",
-      datetime: "2022/11/20 15:23",
-      result: true,
-      deposited: "100",
-      earned: "872",
-      amount: "972",
-      isClaimed: true,
-    },
-    {
-      id: 4,
-      team1: { name: "Quatar", icon: "/images/icon-qatar.svg" },
-      team2: { name: "Ecuador", icon: "/images/icon-ecuador.svg" },
-      question: "Who win 1st half",
-      answer: "Quatar",
-      datetime: "2022/11/20 15:23",
-      result: false,
-      deposited: "500",
-      earned: "0",
-      amount: "0",
-      isClaimed: false,
-    },
-  ],
 };
+
+// const whoWin = {
+//   headings: [
+//     "Match",
+//     "Question",
+//     "Answer",
+//     "Date-time",
+//     "Result",
+//     "Deposited",
+//     "Earned",
+//     "Amount to claim",
+//     "Claim",
+//   ],
+//   data: [
+//     {
+//       id: 1,
+//       team1: { name: "Quatar", icon: "/images/icon-qatar.svg" },
+//       team2: { name: "Ecuador", icon: "/images/icon-ecuador.svg" },
+//       question: "Who win 1st half",
+//       answer: "Quatar",
+//       datetime: "2022/11/20 15:23",
+//       result: true,
+//       deposited: "100",
+//       earned: "872",
+//       amount: "972",
+//       isClaimed: false,
+//     },
+//     {
+//       id: 2,
+//       team1: { name: "Quatar", icon: "/images/icon-qatar.svg" },
+//       team2: { name: "Ecuador", icon: "/images/icon-ecuador.svg" },
+//       question: "Who win 1st half",
+//       answer: "Quatar",
+//       datetime: "2022/11/20 15:23",
+//       result: false,
+//       deposited: "200",
+//       earned: "0",
+//       amount: "0",
+//       isClaimed: false,
+//     },
+//     {
+//       id: 3,
+//       team1: { name: "Quatar", icon: "/images/icon-qatar.svg" },
+//       team2: { name: "Ecuador", icon: "/images/icon-ecuador.svg" },
+//       question: "Who win 1st half",
+//       answer: "Quatar",
+//       datetime: "2022/11/20 15:23",
+//       result: true,
+//       deposited: "100",
+//       earned: "872",
+//       amount: "972",
+//       isClaimed: true,
+//     },
+//     {
+//       id: 4,
+//       team1: { name: "Quatar", icon: "/images/icon-qatar.svg" },
+//       team2: { name: "Ecuador", icon: "/images/icon-ecuador.svg" },
+//       question: "Who win 1st half",
+//       answer: "Quatar",
+//       datetime: "2022/11/20 15:23",
+//       result: false,
+//       deposited: "500",
+//       earned: "0",
+//       amount: "0",
+//       isClaimed: false,
+//     },
+//   ],
+// };
 
 type FilterTypes = {
   result: string;
   claimed: string;
   search: string;
-};
-
-const Statistics = (props: any) => {
-  const { data, navActived } = props;
-
-  return (
-    <div className="grid grid-cols-5 gap-7 mt-10">
-      <div className="flex flex-col bg-gray-100 rounded-md min-h-[80px] justify-center items-center">
-        <span className="">Prediction times</span>
-        <span className="text-xl font-semibold">{data.prediction_times}</span>
-      </div>
-      <div className="flex flex-col bg-gray-100 rounded-md min-h-[80px] justify-center items-center">
-        <span className="">Correct answer</span>
-        <span className="text-xl font-semibold">{data.correct_answers}</span>
-      </div>
-      <div className="flex flex-col bg-gray-100 rounded-md min-h-[80px] justify-center items-center">
-        <span className="">Win rate</span>
-        <span className="text-xl font-semibold">{data.win_rate}</span>
-      </div>
-      {navActived === valueNav.GOALS ? (
-        <>
-          <div className="flex flex-col bg-gray-100 rounded-md min-h-[80px] justify-center items-center">
-            <span className="">Total $BIRD earned</span>
-            <span className="text-xl font-semibold">{data.earned}</span>
-          </div>
-          <div className="flex flex-col bg-gray-100 rounded-md min-h-[80px] justify-center items-center">
-            <span className="">Current rank</span>
-            <span className="text-xl font-semibold">{data.current_rank}</span>
-          </div>
-        </>
-      ) : (
-        <>
-          <div className="flex flex-col bg-gray-100 rounded-md min-h-[80px] justify-center items-center">
-            <span className="">Win whitelist times</span>
-            <span className="text-xl font-semibold">{data.win_whitelist}</span>
-          </div>
-          <div className="flex flex-col bg-gray-100 rounded-md min-h-[80px] justify-center items-center">
-            <span className="">Total $ earned</span>
-            <span className="text-xl font-semibold">{data.earned}</span>
-          </div>
-        </>
-      )}
-    </div>
-  );
 };
 
 const resultOptions = [
@@ -217,9 +143,39 @@ const claimedOptions = [
 ];
 
 const MyHistoryPage = () => {
+  const { account } = useMyWeb3();
+  const [dataTable, setDataTable] = useState<any>([]);
   const [navActived, setNavActived] = useState<
-    typeof valueNav[keyof typeof valueNav]
-  >(valueNav.GOALS);
+    typeof HISTORY_NAV_VALUES[keyof typeof HISTORY_NAV_VALUES]
+  >(HISTORY_NAV_VALUES.GOALS);
+
+  const { response, loading } = usePost<any>(
+    "/predict/get-predict-history",
+    {
+      address: account,
+    },
+    !!account,
+  );
+
+  useEffect(() => {
+    if (!response) return;
+
+    if (response?.status !== 200) {
+      console.log("ERR get predict history: ", response?.message);
+    } else {
+      const newDataTable = response.data.map((item: any) => ({
+        ...item,
+        team1: { name: "Quatar", icon: "/images/icon-qatar.svg" },
+        team2: { name: "Ecuador", icon: "/images/icon-ecuador.svg" },
+        result: true,
+        winWhitelist: false,
+        earnedReward: "0",
+      }));
+
+      setDataTable(newDataTable);
+    }
+  }, [response]);
+
   const [filter, setFilter] = useState<FilterTypes>({
     claimed: "",
     result: "",
@@ -279,7 +235,7 @@ const MyHistoryPage = () => {
 
               <Statistics
                 data={
-                  navActived === valueNav.GOALS
+                  navActived === HISTORY_NAV_VALUES.GOALS
                     ? fakeStatsWhoWin
                     : fakeStatsMatchScore
                 }
@@ -325,13 +281,22 @@ const MyHistoryPage = () => {
               </div>
 
               <div className="flex">
-                <HistoryTable
-                  tableInfo={
-                    navActived === valueNav.GOALS ? matchScore : whoWin
-                  }
-                  tableLoading={false}
-                  isWhoWinTable={navActived !== valueNav.GOALS}
-                />
+                {loading && <div>loading</div>}
+                {!loading && account && (
+                  <HistoryTable
+                    headings={
+                      navActived === HISTORY_NAV_VALUES.GOALS
+                        ? headings.matchScore
+                        : headings.whoWin
+                    }
+                    dataTable={dataTable}
+                    tableLoading={false}
+                    isWhoWinTable={navActived !== HISTORY_NAV_VALUES.GOALS}
+                  />
+                )}
+                {!loading && !account && (
+                  <div>Please connect wallet to see prediction list</div>
+                )}
               </div>
 
               <Pagination

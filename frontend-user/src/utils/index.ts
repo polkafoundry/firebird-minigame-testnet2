@@ -41,6 +41,13 @@ export const getMatchTime = (time: any) => {
   return moment(time).format("HH:mm");
 };
 
+export const getDateTime = (time: any) => {
+  if (!time) return "N/A";
+
+  return moment(time).format("YYYY/MM/DD HH:mm");
+};
+
 export const convertHexToStringNumber = (hex: any, decimals = 18) => {
+  if (hex === null || hex === undefined) return "0";
   return BigNumber.from(hex).div(BigNumber.from(10).pow(decimals)).toString();
 };

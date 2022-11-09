@@ -37,6 +37,7 @@ const usePost = <T,>(
         console.log("ERR fetch predict info: ", err);
         setError(err?.message || "Something went wrong");
       });
+    setLoading(false);
   }, [uriProps, shouldFetch]);
 
   return {

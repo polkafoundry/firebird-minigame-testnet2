@@ -1,13 +1,8 @@
-.blurBg {
-  // height: 379px;
-  // width: 1000px;
-  // background: url("../../../assets/images/blur-bg.svg");
-  // background-position: center;
-  // filter: blur(150px);
-  // position: absolute;
-  // top: 0;
-  // left: 0;
-  // z-index: 2;
+.backgroundImage {
+  background-image: url("../../../assets/images/calculated-reward-bg.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
 }
 
 .totalRewardRow,

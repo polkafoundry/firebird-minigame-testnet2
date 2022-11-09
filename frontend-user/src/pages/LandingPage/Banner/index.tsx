@@ -1,4 +1,6 @@
+import clsx from "clsx";
 import React from "react";
+import styles from "./banner.module.scss";
 
 const socialsData = [
   {
@@ -19,11 +21,17 @@ const socialsData = [
 ];
 const Banner = () => {
   return (
-    <div className="mt-20 mb-10 relative text-white max-w-screen-main mx-auto">
-      <div className="px-[100px]">
-        <img src="/images/landing-page/banner-cup.png" alt="" />
-      </div>
-      <div className="absolute top-0 px-[100px] w-full h-full flex flex-col justify-center items-center">
+    <div
+      className={clsx(
+        "mt-20 mb-10 px-[100px] text-white max-w-screen-main w-full mx-auto",
+      )}
+    >
+      <div
+        className={clsx(
+          "pt-[45px] pb-[64px] flex flex-col justify-center items-center rounded-[32px]",
+          styles.bannerBackground,
+        )}
+      >
         <div className="w-[136px]">
           <img src="/images/landing-page/banner-text.png" />
         </div>
@@ -35,7 +43,7 @@ const Banner = () => {
           {socialsData.map((item) => (
             <div
               key={item.title}
-              className=" flex items-center space-x-3 bg-black rounded-xl py-3 px-7 w-[294px]"
+              className=" flex items-center mb-3 space-x-3 bg-black rounded-xl py-3 px-7 w-[294px]"
             >
               <img src={item.icon} alt="" className="W-10 h-10" />
               <div className="flex flex-col">

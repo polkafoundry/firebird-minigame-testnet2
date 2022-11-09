@@ -1,6 +1,10 @@
-import { BigNumber } from "ethers";
+// import { BigNumber } from "ethers";
 import { toast } from "react-toastify";
-import { QUESTION_STATUS } from "../../../../../../constants";
+import { API_BASE_URL, QUESTION_STATUS } from "../../../../../../constants";
+import useClaimToken from "../../../../../../hooks/useClaimToken";
+import { fetcher } from "../../../../../../hooks/useFetch";
+// import usePost from "../../../../../../hooks/usePost";
+// import useWalletSignature from "../../../../../../hooks/useWalletSignature";
 import { convertHexToStringNumber } from "../../../../../../utils";
 
 type ResultMatchProps = {
@@ -9,6 +13,8 @@ type ResultMatchProps = {
 };
 const ResultMatch = (props: ResultMatchProps) => {
   const { questions, questionStatus } = props;
+
+  const { claimToken } = useClaimToken();
 
   const displayEarnedAmount = () => {
     const amount = questions?.result_num;
@@ -19,19 +25,57 @@ const ResultMatch = (props: ResultMatchProps) => {
     return convertHexToStringNumber(amount) + " $BIRD";
   };
 
-  const getAmountToClaim = () => {
-    if (!questions?.result_num) return "Updating...";
-    if (questionStatus === QUESTION_STATUS.WRONG_ANSWER) return "0 $BIRD";
+  // const getAmountToClaim = () => {
+  //   if (!questions?.result_num) return "Updating...";
+  //   if (questionStatus === QUESTION_STATUS.WRONG_ANSWER) return "0 $BIRD";
 
-    const amount = BigNumber.from(questions.bet_amount).add(
-      BigNumber.from(questions.result_num),
-    );
+  //   const amount = BigNumber.from(questions.bet_amount).add(
+  //     BigNumber.from(questions.result_num),
+  //   );
 
-    return convertHexToStringNumber(amount) + " $BIRD";
-  };
+  //   return convertHexToStringNumber(amount) + " $BIRD";
+  // };
 
-  const handleClaimToken = () => {
-    toast.info("Coming soon! Please stay tuned");
+  const handleClaimToken = async () => {
+    if (!questions) {
+      toast.error("Question not found!");
+      return;
+    }
+
+    const payload = {
+      match_id: questions?.match_id,
+      bet_type: questions?.bet_type,
+      wallet: questions?.user_address,
+      amount: questions?.total_claim,
+    };
+    console.log("claim", payload);
+
+    fetcher(`${API_BASE_URL}/claim/get-sig`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    })
+      .then(async (res) => {
+        // console.log("sig", res?.data);
+
+        const { amount, bet_type, match_id } = payload;
+
+        const rawSignature = res?.data;
+        const signMessage = {
+          deadline: rawSignature?.deadline,
+          v: rawSignature?.v,
+          r: rawSignature?.r?.data,
+          s: rawSignature?.s?.data,
+        };
+        console.log("signMessage", signMessage);
+
+        await claimToken(match_id, bet_type, amount, signMessage);
+      })
+      .catch((err: any) => {
+        console.log("ERR get signature: ", err);
+      });
   };
 
   return (
@@ -77,7 +121,9 @@ const ResultMatch = (props: ResultMatchProps) => {
         </div>
         <div className="flex flex-col">
           <span>Amount to claim</span>
-          <span className="font-semibold">{getAmountToClaim()}</span>
+          <span className="font-semibold">
+            {convertHexToStringNumber(questions?.total_claim) + " $BIRD"}
+          </span>
         </div>
       </div>
 

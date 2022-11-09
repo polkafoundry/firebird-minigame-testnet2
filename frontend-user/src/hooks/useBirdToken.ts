@@ -1,8 +1,9 @@
 import { useWeb3React } from "@web3-react/core";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { toast } from "react-toastify";
 import BIRD_ABI from "../abi/SBirdToken.json";
 import { BETTING_CONTRACT, BIRD_TOKEN_CONTRACT } from "../constants";
+import { BIRD_CHAIN_ID } from "../constants/networks";
 import { convertHexToStringNumber } from "../utils";
 import { getContract } from "../utils/contract";
 
@@ -10,10 +11,11 @@ export const MAX_INT =
   "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff";
 
 const useBirdToken = () => {
-  const { library, account } = useWeb3React();
+  const { library, account, chainId } = useWeb3React();
 
   const [loadingApprove, setLoadingApprove] = useState<boolean>(false);
   const [transactionHash, setTransactionHash] = useState<string>("");
+  const isWrongChain = useMemo(() => !(chainId === +BIRD_CHAIN_ID), [chainId]);
 
   const approveBirdToken = useCallback(async () => {
     if (!BIRD_TOKEN_CONTRACT || !account) {
@@ -46,6 +48,10 @@ const useBirdToken = () => {
   }, [library, account]);
 
   const getBirdBalance = async (address: string | undefined) => {
+    if (isWrongChain) {
+      console.log("Wrong Chain");
+      return;
+    }
     if (!BIRD_TOKEN_CONTRACT || !address || !account) {
       toast.error("Fail to load contract or account is not connected");
       return;
@@ -71,6 +77,10 @@ const useBirdToken = () => {
   };
 
   const getBirdAllowance = async (address: string | undefined) => {
+    if (isWrongChain) {
+      console.log("Wrong Chain");
+      return;
+    }
     if (!BIRD_TOKEN_CONTRACT || !address || !account) {
       toast.error("Fail to load contract or account is not connected");
       return;
