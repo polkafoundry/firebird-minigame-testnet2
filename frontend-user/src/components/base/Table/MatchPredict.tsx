@@ -1,12 +1,14 @@
 import clsx from "clsx";
+import { BETTING_RESULT } from "../../../constants";
 
 type MatchPredictProps = {
-  isCorrect: boolean;
+  isCorrect?: boolean;
   isDisplayText?: boolean;
+  result?: string;
 };
 
 const MatchPredict = (props: MatchPredictProps) => {
-  const { isCorrect = true, isDisplayText = true } = props;
+  const { isCorrect = true, isDisplayText = true, result } = props;
   const textColor = isCorrect ? "text-green-500" : "text-red-500";
   const iconSrc = isCorrect
     ? "/images/icon-correct-answer.svg"
@@ -15,12 +17,20 @@ const MatchPredict = (props: MatchPredictProps) => {
 
   return (
     <div className="flex items-center">
-      <img src={iconSrc} alt="" className={iconSize} />
-      {isDisplayText && (
-        <span className={clsx(textColor, "font-semibold ml-1")}>
-          {isCorrect ? "Correct" : "Incorrect"}
-        </span>
+      {!result && (
+        <>
+          <img src={iconSrc} alt="" className={iconSize} />
+          {isDisplayText && (
+            <span className={clsx(textColor, "font-semibold ml-1")}>
+              {isCorrect ? "Correct" : "Incorrect"}
+            </span>
+          )}
+        </>
       )}
+
+      {result === BETTING_RESULT.WIN && <div>Win</div>}
+      {result === BETTING_RESULT.DRAW && <div>Draw</div>}
+      {result === BETTING_RESULT.LOSE && <div>Lose</div>}
     </div>
   );
 };

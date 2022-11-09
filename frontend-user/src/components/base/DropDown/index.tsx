@@ -81,7 +81,7 @@ const DropDown = (props: DropDownProps) => {
                 {items
                   .filter((item) => item.value !== selectedItem?.value)
                   .map((item) => (
-                    <Menu.Item key={item.value}>
+                    <Menu.Item key={item.label}>
                       {({ active }) => (
                         <li
                           className={clsx(
