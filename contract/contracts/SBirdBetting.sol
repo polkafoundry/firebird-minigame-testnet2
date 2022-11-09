@@ -15,6 +15,7 @@ import "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/IERC721Upgradeable.sol";
 import "./interface/IBirdBetting.sol";
+import "@openzeppelin/contracts/utils/Strings.sol";
 
 contract SBirdBetting is
     Initializable,
@@ -31,7 +32,7 @@ contract SBirdBetting is
     bytes32 private constant OWNER_ROLE = keccak256("OWNER_ROLE");
     bytes32 public constant CLAIM_TOKEN_WITH_SIG_TYPEHASH =
         keccak256(
-            "TokenClaim(uint16 matchID,string betType, uint256 amount,uint256 nonce,uint256 deadline)"
+            "TokenClaim(string caller,uint16 matchID,string betType,uint256 amount,uint256 nonce,uint256 deadline)"
         );
     uint256 private spacerTime;
     uint256 public maxBetAmount;
@@ -194,6 +195,13 @@ contract SBirdBetting is
                 keccak256(
                     abi.encode(
                         CLAIM_TOKEN_WITH_SIG_TYPEHASH,
+                        keccak256(
+                            abi.encodePacked(
+                                Strings.toHexString(uint160(msg.sender), 20)
+                            )
+                        ),
+                        _matchID,
+                        keccak256(abi.encodePacked(_betType)),
                         _amount,
                         TokenClaimNonces[msg.sender]++,
                         _signature.deadline
@@ -231,6 +239,10 @@ contract SBirdBetting is
     // signing key does not require high security and can be put on an API server and rotated periodically, as signatures are issued dynamically
     function setSigner(address _signer) external onlyRole(OWNER_ROLE) {
         signer = _signer;
+    }
+
+    function getSigner() public view onlyRole(OWNER_ROLE) returns (address) {
+        return signer;
     }
 
     function setSpacer(uint256 spacer) external onlyRole(OWNER_ROLE) {

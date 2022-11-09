@@ -11,7 +11,7 @@ async function main() {
   // We get the contract to deploy
   const [deployer] = await hre.ethers.getSigners();
   const sBirdContract = await ethers.getContractFactory("SBirdBetting");
-  const upgradeContract = await upgrades.upgradeProxy("0xF74E67CE9936a6ABb06C0770C1b3b1644e5aA101", sBirdContract);
+  const upgradeContract = await upgrades.upgradeProxy("0x420F54f674E0CB66b3F746aCe15bfE2d2782EA51", sBirdContract);
   console.log("sbird contract upgraded:", upgradeContract.address);
 }
 
