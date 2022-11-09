@@ -1,5 +1,3 @@
-import InvalidParamException from 'App/Exceptions/InvalidParamException'
-import BusinessException from 'App/Exceptions/BusinessException'
 const HelperUtils = require('@ioc:App/Common/HelperUtils')
 
 export default class PredictWinnerService {
@@ -7,7 +5,7 @@ export default class PredictWinnerService {
   public PredictModel = require('@ioc:App/Models/Predict')
   public PredictWinner = require('@ioc:App/Models/PredictWinner')
 
-  public async checkPredictByMatch(request, response): Promise<any> {
+  public async checkPredictByMatch(request): Promise<any> {
     const matchID = request.input('match_id')
     const address = request.input('address')
 

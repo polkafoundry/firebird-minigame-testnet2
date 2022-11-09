@@ -42,6 +42,10 @@ export default class BettingService {
                     .minus(new BigNumber(amount))
                     .toFixed()
                 : -amount,
+            total_claim:
+              ouHTBets[i]?.bet_place === 'under'
+                ? new BigNumber(amount).multipliedBy(new BigNumber(match.ou_ht_under)).toFixed()
+                : 0,
             is_calculated: true,
           })
       } else if (match.ou_ht_ratio < match.ht_home_score + match.ht_away_score) {
@@ -59,6 +63,10 @@ export default class BettingService {
                     .minus(new BigNumber(amount))
                     .toFixed()
                 : -amount,
+            total_claim:
+              ouHTBets[i]?.bet_place === 'over'
+                ? new BigNumber(amount).multipliedBy(new BigNumber(match.ou_ht_over)).toFixed()
+                : 0,
             is_calculated: true,
           })
       } else {
@@ -71,6 +79,8 @@ export default class BettingService {
             ou_statistics: match.ou_ht_ratio,
             result: 'draw',
             result_num: 0,
+            total_claim: 0,
+            is_calculated: true,
           })
       }
     }
@@ -113,6 +123,10 @@ export default class BettingService {
                     .minus(new BigNumber(amount))
                     .toFixed()
                 : -amount,
+            total_claim:
+              ouFTBets[i]?.bet_place === 'under'
+                ? new BigNumber(amount).multipliedBy(new BigNumber(match.ou_ft_under)).toFixed()
+                : 0,
             is_calculated: true,
           })
       } else if (match.ou_ht_ratio < match.ht_home_score + match.ht_away_score) {
@@ -130,6 +144,10 @@ export default class BettingService {
                     .minus(new BigNumber(amount))
                     .toFixed()
                 : -amount,
+            total_claim:
+              ouFTBets[i]?.bet_place === 'over'
+                ? new BigNumber(amount).multipliedBy(new BigNumber(match.ou_ft_over)).toFixed()
+                : 0,
             is_calculated: true,
           })
       } else {
@@ -142,6 +160,8 @@ export default class BettingService {
             ou_statistics: match.ou_ft_ratio,
             result: 'draw',
             result_num: 0,
+            total_claim: 0,
+            is_calculated: true,
           })
       }
     }
@@ -188,6 +208,10 @@ export default class BettingService {
                     .minus(new BigNumber(amount))
                     .toFixed()
                 : -amount,
+            total_claim:
+              oddsHTBets[i]?.bet_place === 'home'
+                ? new BigNumber(amount).multipliedBy(new BigNumber(match.odds_ht_home)).toFixed()
+                : 0,
             is_calculated: true,
           })
       } else if (match.ht_home_score < match.ht_away_score) {
@@ -209,6 +233,10 @@ export default class BettingService {
                     .minus(new BigNumber(amount))
                     .toFixed()
                 : -amount,
+            total_claim:
+              oddsHTBets[i]?.bet_place === 'away'
+                ? new BigNumber(amount).multipliedBy(new BigNumber(match.odds_ht_away)).toFixed()
+                : 0,
             is_calculated: true,
           })
       } else {
@@ -230,6 +258,10 @@ export default class BettingService {
                     .minus(new BigNumber(amount))
                     .toFixed()
                 : -amount,
+            total_claim:
+              oddsHTBets[i]?.bet_place === 'draw'
+                ? new BigNumber(amount).multipliedBy(new BigNumber(match.odds_ht_draw)).toFixed()
+                : 0,
             is_calculated: true,
           })
       }
@@ -277,6 +309,10 @@ export default class BettingService {
                     .minus(new BigNumber(amount))
                     .toFixed()
                 : -amount,
+            total_claim:
+              oddsFTBets[i]?.bet_place === 'home'
+                ? new BigNumber(amount).multipliedBy(new BigNumber(match.odds_ft_home)).toFixed()
+                : 0,
             is_calculated: true,
           })
       } else if (match.ft_home_score < match.ft_away_score) {
@@ -298,6 +334,10 @@ export default class BettingService {
                     .minus(new BigNumber(amount))
                     .toFixed()
                 : -amount,
+            total_claim:
+              oddsFTBets[i]?.bet_place === 'away'
+                ? new BigNumber(amount).multipliedBy(new BigNumber(match.odds_ft_away)).toFixed()
+                : 0,
             is_calculated: true,
           })
       } else {
@@ -319,6 +359,10 @@ export default class BettingService {
                     .minus(new BigNumber(amount))
                     .toFixed()
                 : -amount,
+            total_claim:
+              oddsFTBets[i]?.bet_place === 'draw'
+                ? new BigNumber(amount).multipliedBy(new BigNumber(match.odds_ft_draw)).toFixed()
+                : 0,
             is_calculated: true,
           })
       }
@@ -348,5 +392,35 @@ export default class BettingService {
     }
 
     return userPredict
+  }
+
+  public async updatePredictStatus(matchID) {
+    const match = await this.MatchModel.query().where('match_id', matchID).first()
+    const predicts = await this.PredictModel.query()
+      .where('match_id', matchID)
+      .where('match_predicted', false)
+      .exec()
+    for (let i = 0; i < predicts.length; i++) {
+      if (
+        match.ft_home_score == predicts[i].home_score &&
+        match.ft_away_score == predicts[i].away_score
+      ) {
+        await this.PredictModel.query()
+          .where('match_id', predicts[i].match_id)
+          .where('user_address', predicts[i].user_address)
+          .update({
+            result: true,
+            match_predicted: true,
+          })
+      } else {
+        await this.PredictModel.query()
+          .where('match_id', predicts[i].match_id)
+          .where('user_address', predicts[i].user_address)
+          .update({
+            result: false,
+            match_predicted: true,
+          })
+      }
+    }
   }
 }

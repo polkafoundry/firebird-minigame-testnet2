@@ -55,10 +55,7 @@ export default class CalcBettingJob implements JobContract {
         .where('bet_type', data.betType)
         .where('is_calculated', false)
         .limit(MAX_BETTING_CALC),
-      PredictModel.query()
-        .where('match_id', data.matchId)
-        .where('match_predicted', false)
-        .limit(MAX_BETTING_CALC),
+      PredictModel.query().where('match_id', data.matchId).where('match_predicted', false).exec(),
     ])
     bettings = JSON.parse(JSON.stringify(bettings))
     console.log('CalcBettingJob: ', match)
@@ -106,6 +103,10 @@ export default class CalcBettingJob implements JobContract {
                     .minus(new BigNumber(amount))
                     .toFixed()
                 : -amount,
+            total_claim:
+              ouHTBets[i]?.bet_place === 'under'
+                ? new BigNumber(amount).multipliedBy(new BigNumber(match.ou_ht_under)).toFixed()
+                : 0,
             is_calculated: true,
           })
       } else if (match.ou_ht_ratio < match.ht_home_score + match.ht_away_score) {
@@ -123,6 +124,10 @@ export default class CalcBettingJob implements JobContract {
                     .minus(new BigNumber(amount))
                     .toFixed()
                 : -amount,
+            total_claim:
+              ouHTBets[i]?.bet_place === 'over'
+                ? new BigNumber(amount).multipliedBy(new BigNumber(match.ou_ht_over)).toFixed()
+                : 0,
             is_calculated: true,
           })
       } else {
@@ -135,6 +140,7 @@ export default class CalcBettingJob implements JobContract {
             ou_statistics: match.ou_ht_ratio,
             result: 'draw',
             result_num: 0,
+            total_claim: 0,
             is_calculated: true,
           })
       }
@@ -159,6 +165,10 @@ export default class CalcBettingJob implements JobContract {
                     .minus(new BigNumber(amount))
                     .toFixed()
                 : -amount,
+            total_claim:
+              ouFTBets[i]?.bet_place === 'under'
+                ? new BigNumber(amount).multipliedBy(new BigNumber(match.ou_ht_under)).toFixed()
+                : 0,
             is_calculated: true,
           })
       } else if (match.ou_ht_ratio < match.ht_home_score + match.ht_away_score) {
@@ -176,6 +186,10 @@ export default class CalcBettingJob implements JobContract {
                     .minus(new BigNumber(amount))
                     .toFixed()
                 : -amount,
+            total_claim:
+              ouFTBets[i]?.bet_place === 'over'
+                ? new BigNumber(amount).multipliedBy(new BigNumber(match.ou_ft_over)).toFixed()
+                : -amount,
             is_calculated: true,
           })
       } else {
@@ -188,6 +202,7 @@ export default class CalcBettingJob implements JobContract {
             ou_statistics: match.ou_ft_ratio,
             result: 'draw',
             result_num: 0,
+            total_claim: 0,
             is_calculated: true,
           })
       }
@@ -215,6 +230,10 @@ export default class CalcBettingJob implements JobContract {
                     .minus(new BigNumber(amount))
                     .toFixed()
                 : -amount,
+            total_claim:
+              oddsHTBets[i]?.bet_place === 'home'
+                ? new BigNumber(amount).multipliedBy(new BigNumber(match.odds_ht_home)).toFixed()
+                : 0,
             is_calculated: true,
           })
       } else if (match.ht_home_score < match.ht_away_score) {
@@ -236,6 +255,10 @@ export default class CalcBettingJob implements JobContract {
                     .minus(new BigNumber(amount))
                     .toFixed()
                 : -amount,
+            total_claim:
+              oddsHTBets[i]?.bet_place === 'away'
+                ? new BigNumber(amount).multipliedBy(new BigNumber(match.odds_ht_away)).toFixed()
+                : 0,
             is_calculated: true,
           })
       } else {
@@ -257,6 +280,10 @@ export default class CalcBettingJob implements JobContract {
                     .minus(new BigNumber(amount))
                     .toFixed()
                 : -amount,
+            total_claim:
+              oddsHTBets[i]?.bet_place === 'draw'
+                ? new BigNumber(amount).multipliedBy(new BigNumber(match.odds_ht_draw)).toFixed()
+                : 0,
             is_calculated: true,
           })
       }
@@ -284,6 +311,10 @@ export default class CalcBettingJob implements JobContract {
                     .minus(new BigNumber(amount))
                     .toFixed()
                 : -amount,
+            total_claim:
+              oddsFTBets[i]?.bet_place === 'home'
+                ? new BigNumber(amount).multipliedBy(new BigNumber(match.odds_ft_home)).toFixed()
+                : 0,
             is_calculated: true,
           })
       } else if (match.ft_home_score < match.ft_away_score) {
@@ -305,6 +336,10 @@ export default class CalcBettingJob implements JobContract {
                     .minus(new BigNumber(amount))
                     .toFixed()
                 : -amount,
+            total_claim:
+              oddsFTBets[i]?.bet_place === 'away'
+                ? new BigNumber(amount).multipliedBy(new BigNumber(match.odds_ft_away)).toFixed()
+                : 0,
             is_calculated: true,
           })
       } else {
@@ -326,6 +361,10 @@ export default class CalcBettingJob implements JobContract {
                     .minus(new BigNumber(amount))
                     .toFixed()
                 : -amount,
+            total_claim:
+              oddsFTBets[i]?.bet_place === 'draw'
+                ? new BigNumber(amount).multipliedBy(new BigNumber(match.odds_ft_draw)).toFixed()
+                : 0,
             is_calculated: true,
           })
       }

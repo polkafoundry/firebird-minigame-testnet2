@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { QUESTION_STATUS } from "../../../../../../constants";
 
 type NotificationBoxTypes = {

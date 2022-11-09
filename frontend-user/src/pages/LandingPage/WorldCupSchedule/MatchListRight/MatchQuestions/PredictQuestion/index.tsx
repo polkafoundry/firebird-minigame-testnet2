@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from "react";
-import { toast } from "react-toastify";
 import { QuestionProps } from "..";
 import { MATCH_STATUS, QUESTION_STATUS } from "../../../../../../constants";
 import useBirdToken from "../../../../../../hooks/useBirdToken";
@@ -47,7 +46,7 @@ const PredictQuestion = (props: QuestionProps) => {
   useEffect(() => {
     if (!response) return;
 
-    console.log(response);
+    // console.log(response);
     if (response?.status !== 200) {
       console.log("ERR get predict info: ", response?.message);
       // toast.error(response?.message || "Fail to get predict info");
@@ -55,12 +54,6 @@ const PredictQuestion = (props: QuestionProps) => {
       setPredictInfo(response.data);
     }
   }, [response]);
-
-  // useEffect(() => {
-  //   const shouldLoad = !!account && matchEnded && dataQuestion?.match_id;
-
-  //   setShouldLoadPredictInfo(shouldLoad);
-  // }, [account, matchEnded, dataQuestion]);
 
   // default score
   useEffect(() => {

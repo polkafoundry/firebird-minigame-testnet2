@@ -49,6 +49,9 @@ export default class Betting extends BaseModel {
   @column({ columnName: 'result_num' })
   public result_num: number
 
+  @column({ columnName: 'total_claim' })
+  public total_claim: number
+
   @column({ columnName: 'has_claim' })
   public has_claim: boolean
 

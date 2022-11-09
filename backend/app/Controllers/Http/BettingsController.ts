@@ -17,4 +17,7 @@ export default class BettingsController {
   public async predictPickWinner({ request }) {
     return await BettingService.predictPickWinner(request)
   }
+  public async updatePredictStatus({ request }) {
+    return await BettingService.updatePredictStatus(request)
+  }
 }

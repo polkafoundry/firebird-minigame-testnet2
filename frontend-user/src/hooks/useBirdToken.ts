@@ -1,5 +1,5 @@
 import { useWeb3React } from "@web3-react/core";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { toast } from "react-toastify";
 import BIRD_ABI from "../abi/SBirdToken.json";
 import { BETTING_CONTRACT, BIRD_TOKEN_CONTRACT } from "../constants";
@@ -15,7 +15,7 @@ const useBirdToken = () => {
 
   const [loadingApprove, setLoadingApprove] = useState<boolean>(false);
   const [transactionHash, setTransactionHash] = useState<string>("");
-  const isWrongChain = !(chainId === +BIRD_CHAIN_ID);
+  const isWrongChain = useMemo(() => !(chainId === +BIRD_CHAIN_ID), [chainId]);
 
   const approveBirdToken = useCallback(async () => {
     if (!BIRD_TOKEN_CONTRACT || !account) {

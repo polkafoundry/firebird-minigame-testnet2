@@ -1,5 +1,3 @@
-import InvalidParamException from 'App/Exceptions/InvalidParamException'
-import BusinessException from 'App/Exceptions/BusinessException'
 const HelperUtils = require('@ioc:App/Common/HelperUtils')
 
 import { ethers, Wallet } from 'ethers'
@@ -23,13 +21,9 @@ export default class BettingService {
         .andWhere('user_address', walletAddress)
         .andWhere('bet_type', betType)
         .first()
-      let am = Number(betInfo.result_num)
-      console.log(am)
-      // return { betInfo }
-
       if (
         amount.toLocaleString('fullwide', { useGrouping: false }) ===
-        betInfo.result_num.toLocaleString('fullwide', { useGrouping: false })
+        betInfo.total_claim.toLocaleString('fullwide', { useGrouping: false })
       ) {
         const bettingContract = await HelperUtils.getBettingContractInstance()
         const nonce = parseInt(await bettingContract.methods.TokenClaimNonces(walletAddress).call())
