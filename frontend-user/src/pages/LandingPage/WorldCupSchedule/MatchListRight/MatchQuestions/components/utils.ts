@@ -1,3 +1,5 @@
+import { BET_PLACE } from "../../../../../../constants";
+
 export const getOptionColorFromIndex = (
   question: any,
   index: number,
@@ -21,15 +23,15 @@ export const getOptionColorFromIndex = (
 
 export const getOptionIndexByBetPlace = (bet_place: string) => {
   switch (bet_place) {
-    case "home":
+    case BET_PLACE.HOME:
       return 0;
-    case "draw":
+    case BET_PLACE.DRAW:
       return 1;
-    case "away":
+    case BET_PLACE.AWAY:
       return 2;
-    case "under":
+    case BET_PLACE.UNDER:
       return 0;
-    case "over":
+    case BET_PLACE.OVER:
       return 2;
   }
 };

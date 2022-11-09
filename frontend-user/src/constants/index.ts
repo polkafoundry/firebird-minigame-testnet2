@@ -60,6 +60,20 @@ export const BET_TYPE = {
   ODD_EVEN_FULL_TIME: "odds_ft",
 };
 
+export const BET_PLACE = {
+  HOME: "home",
+  DRAW: "draw",
+  AWAY: "away",
+  UNDER: "under",
+  OVER: "over",
+};
+
+export const BETTING_RESULT = {
+  WIN: "win",
+  DRAW: "draw",
+  LOSE: "lose",
+};
+
 export const HISTORY_NAV_VALUES = {
   GOALS: 1,
   MATCH_SCORE: 2,

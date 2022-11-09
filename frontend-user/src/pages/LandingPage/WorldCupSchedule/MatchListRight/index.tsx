@@ -3,7 +3,7 @@ import moment from "moment";
 import { useState } from "react";
 import { MATCH_STATUS } from "../../../../constants";
 import useFetch from "../../../../hooks/useFetch";
-import { getImgSrc } from "../utils";
+import { getImgSrc } from "../../../../utils";
 import MatchQuestions from "./MatchQuestions";
 import MatchGuide from "./MathGuide";
 

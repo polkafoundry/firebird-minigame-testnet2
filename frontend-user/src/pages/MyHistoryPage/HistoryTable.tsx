@@ -1,7 +1,8 @@
 import clsx from "clsx";
 import MatchName from "../../components/base/Table/MatchName";
 import MatchPredict from "../../components/base/Table/MatchPredict";
-import { getDateTime } from "../../utils";
+import { BET_PLACE, BET_TYPE } from "../../constants";
+import { convertHexToStringNumber, getDateTime, getImgSrc } from "../../utils";
 import styles from "./historyTable.module.scss";
 
 type HistoryTableTypes = {
@@ -24,6 +25,53 @@ const HistoryTable = (props: HistoryTableTypes) => {
     </button>
   );
 
+  const getQuestionByBetType = (betType: string) => {
+    switch (betType) {
+      case BET_TYPE.ODD_EVEN_HALF_TIME: {
+        return "Who win 1st half";
+      }
+      case BET_TYPE.ODD_EVEN_FULL_TIME: {
+        return "Who win full match";
+      }
+      case BET_TYPE.OVER_UNDER_HALF_TIME: {
+        return "1st half total goals";
+      }
+      case BET_TYPE.OVER_UNDER_FULL_TIME: {
+        return "Full match total goals";
+      }
+      default: {
+        return "N/A";
+      }
+    }
+  };
+
+  const getEarnedAmount = (result_num: any) =>
+    result_num > 0 ? convertHexToStringNumber(result_num) : "0";
+
+  const getAnswerText = (rowData: any) => {
+    const isCorrectAnswer = rowData.result === "win";
+    switch (rowData.bet_place) {
+      case BET_PLACE.HOME: {
+        return isCorrectAnswer ? rowData.home_name : rowData.away_name;
+      }
+      case BET_PLACE.DRAW: {
+        return "Draw";
+      }
+      case BET_PLACE.AWAY: {
+        return isCorrectAnswer ? rowData.away_name : rowData.home_name;
+      }
+      case BET_PLACE.UNDER: {
+        return isCorrectAnswer ? "Higher" : "Lower";
+      }
+      case BET_PLACE.OVER: {
+        return isCorrectAnswer ? "Lower" : "Higher";
+      }
+      default: {
+        return "N/A";
+      }
+    }
+  };
+
   if (tableLoading) renderLoading();
 
   return (
@@ -42,9 +90,9 @@ const HistoryTable = (props: HistoryTableTypes) => {
 
       {dataTable.map((rowData) => (
         <div
-          key={rowData.id}
+          key={rowData.match_id + rowData.bet_type}
           className={clsx(
-            "flex  items-center px-5 py-2 border hover:bg-yellow-200 min-w-fit",
+            "flex items-center px-5 py-2 border hover:bg-yellow-200 min-w-fit",
             isWhoWinTable ? styles.whoWinRow : styles.matchScoreRow,
           )}
         >
@@ -62,17 +110,26 @@ const HistoryTable = (props: HistoryTableTypes) => {
           )}
           {isWhoWinTable && (
             <>
-              <MatchName team1={rowData.team1} team2={rowData.team2} />
-              <div>{rowData.question}</div>
-              <div>{rowData.answer}</div>
-              <div>{rowData.datetime}</div>
-              <MatchPredict isCorrect={rowData.result} />
-              <div>{rowData.deposited} $BIRD</div>
-              <div>{rowData.earned} $BIRD</div>
-              <div>{rowData.amount} $BIRD</div>
+              <MatchName
+                team1={{
+                  name: rowData.home_name,
+                  icon: getImgSrc(rowData.home_icon),
+                }}
+                team2={{
+                  name: rowData.away_name,
+                  icon: getImgSrc(rowData.away_icon),
+                }}
+              />
+              <div>{getQuestionByBetType(rowData.bet_type)}</div>
+              <div>{getAnswerText(rowData)}</div>
+              <div>{getDateTime(rowData.created_at)}</div>
+              <MatchPredict result={rowData.result} />
+              <div>{convertHexToStringNumber(rowData.bet_amount)} $BIRD</div>
+              <div>{getEarnedAmount(rowData.result_num)} $BIRD</div>
+              <div>{convertHexToStringNumber(rowData.total_claim)} $BIRD</div>
               <div>
-                {Number(rowData.amount) !== 0 &&
-                  (rowData.isClaimed ? "Claimed" : renderClaimButton())}
+                {rowData.total_claim > 0 &&
+                  (rowData.has_claim ? "Claimed" : renderClaimButton())}
               </div>
             </>
           )}
