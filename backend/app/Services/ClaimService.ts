@@ -37,6 +37,7 @@ export default class BettingService {
     }
   }
   private async signWithdrawToken(
+    address: string,
     nonce: number,
     amount: number,
     matchID: number,
@@ -55,6 +56,7 @@ export default class BettingService {
     const deadline = Math.floor(blockTimeStamp) + 60 * 15 // 15 minutes
     const types = {
       TokenClaim: [
+        { name: 'caller', type: 'string' },
         { name: 'matchID', type: 'uint16' },
         { name: 'betType', type: 'string' },
         { name: 'amount', type: 'uint256' },
@@ -62,7 +64,9 @@ export default class BettingService {
         { name: 'deadline', type: 'uint256' },
       ],
     }
+    let caller = address.toString().toLowerCase()
     const message = {
+      caller,
       matchID,
       betType,
       amount,
