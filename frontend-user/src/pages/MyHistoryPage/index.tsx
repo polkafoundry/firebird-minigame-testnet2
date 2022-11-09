@@ -20,22 +20,6 @@ const nav = [
   { label: "Match score", value: HISTORY_NAV_VALUES.MATCH_SCORE },
 ];
 
-// const fakeStatsWhoWin = {
-//   prediction_times: "06",
-//   correct_answers: "04",
-//   win_rate: "66,67%",
-//   win_whitelist: "02",
-//   earned: "$40",
-// };
-
-// const fakeStatsMatchScore = {
-//   prediction_times: "04",
-//   correct_answers: "02",
-//   win_rate: "50.00%",
-//   earned: "2,075",
-//   current_rank: "#10",
-// };
-
 const headings = {
   matchScore: [
     "Match",
@@ -57,74 +41,6 @@ const headings = {
     "Claim",
   ],
 };
-
-// const whoWin = {
-//   headings: [
-//     "Match",
-//     "Question",
-//     "Answer",
-//     "Date-time",
-//     "Result",
-//     "Deposited",
-//     "Earned",
-//     "Amount to claim",
-//     "Claim",
-//   ],
-//   data: [
-//     {
-//       id: 1,
-//       team1: { name: "Quatar", icon: "/images/icon-qatar.svg" },
-//       team2: { name: "Ecuador", icon: "/images/icon-ecuador.svg" },
-//       question: "Who win 1st half",
-//       answer: "Quatar",
-//       datetime: "2022/11/20 15:23",
-//       result: true,
-//       deposited: "100",
-//       earned: "872",
-//       amount: "972",
-//       isClaimed: false,
-//     },
-//     {
-//       id: 2,
-//       team1: { name: "Quatar", icon: "/images/icon-qatar.svg" },
-//       team2: { name: "Ecuador", icon: "/images/icon-ecuador.svg" },
-//       question: "Who win 1st half",
-//       answer: "Quatar",
-//       datetime: "2022/11/20 15:23",
-//       result: false,
-//       deposited: "200",
-//       earned: "0",
-//       amount: "0",
-//       isClaimed: false,
-//     },
-//     {
-//       id: 3,
-//       team1: { name: "Quatar", icon: "/images/icon-qatar.svg" },
-//       team2: { name: "Ecuador", icon: "/images/icon-ecuador.svg" },
-//       question: "Who win 1st half",
-//       answer: "Quatar",
-//       datetime: "2022/11/20 15:23",
-//       result: true,
-//       deposited: "100",
-//       earned: "872",
-//       amount: "972",
-//       isClaimed: true,
-//     },
-//     {
-//       id: 4,
-//       team1: { name: "Quatar", icon: "/images/icon-qatar.svg" },
-//       team2: { name: "Ecuador", icon: "/images/icon-ecuador.svg" },
-//       question: "Who win 1st half",
-//       answer: "Quatar",
-//       datetime: "2022/11/20 15:23",
-//       result: false,
-//       deposited: "500",
-//       earned: "0",
-//       amount: "0",
-//       isClaimed: false,
-//     },
-//   ],
-// };
 
 type FilterTypes = {
   result: string;
@@ -190,23 +106,19 @@ const MyHistoryPage = () => {
       console.log("ERR get predict history: ", response?.message);
     } else {
       const resData = response.data;
-      // const bettingsData = resData.bettings.data;
-      // const newDataTable = bettingsData.map((item: any) => ({
-      //   ...item,
-      //   // team1: { name: item.home_name, icon: getImgSrc(item.home_icon) },
-      //   // team2: { name: item.away_name, icon: getImgSrc(item.away_icon) },
-      //   // winWhitelist: false,
-      //   // earnedReward: "0",
-      // }));
+
       const newStatistics = {
         prediction_times: resData.total,
         correct_answers: resData.wins,
         win_rate: (resData.wins / resData.total) * 100,
-        earned: convertHexToStringNumber(resData.earnedToken),
+        earned: resData.earnedToken
+          ? convertHexToStringNumber(resData.earnedToken)
+          : "Updating...",
         current_rank: "Updating...",
+        win_whitelist: resData.finalWinner,
       };
 
-      setDataTable(resData.bettings.data);
+      setDataTable(resData?.bettings?.data || resData?.predicts?.data);
       setStatistics(newStatistics);
     }
   }, [response]);
@@ -311,6 +223,7 @@ const MyHistoryPage = () => {
                     dataTable={dataTable}
                     tableLoading={false}
                     isWhoWinTable={navActived === HISTORY_NAV_VALUES.GOALS}
+                    account={account}
                   />
                 )}
                 {!loading && !account && (

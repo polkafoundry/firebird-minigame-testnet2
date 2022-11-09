@@ -10,10 +10,11 @@ type HistoryTableTypes = {
   dataTable: Array<any>;
   tableLoading: boolean;
   isWhoWinTable: boolean;
+  account: string;
 };
 
 const HistoryTable = (props: HistoryTableTypes) => {
-  const { tableLoading, isWhoWinTable, headings, dataTable } = props;
+  const { tableLoading, isWhoWinTable, headings, dataTable, account } = props;
 
   const renderLoading = () => {
     return <div className="">Loading ... </div>;
@@ -88,9 +89,9 @@ const HistoryTable = (props: HistoryTableTypes) => {
         ))}
       </div>
 
-      {dataTable.map((rowData) => (
+      {dataTable.map((rowData, index) => (
         <div
-          key={rowData.match_id + rowData.bet_type}
+          key={rowData.match_id + index}
           className={clsx(
             "flex items-center px-5 py-2 border hover:bg-yellow-200 min-w-fit",
             isWhoWinTable ? styles.whoWinRow : styles.matchScoreRow,
@@ -98,14 +99,29 @@ const HistoryTable = (props: HistoryTableTypes) => {
         >
           {!isWhoWinTable && (
             <>
-              <MatchName team1={rowData.team1} team2={rowData.team2} />
+              <MatchName
+                team1={{
+                  name: rowData.home_name,
+                  icon: getImgSrc(rowData.home_icon),
+                }}
+                team2={{
+                  name: rowData.away_name,
+                  icon: getImgSrc(rowData.away_icon),
+                }}
+              />
               <div>
                 {rowData.home_score}:{rowData.away_score}
               </div>
-              <div>{getDateTime(rowData.predict_time * 1000)}</div>
-              <MatchPredict isCorrect={rowData.result} />
-              <div>{rowData.winWhitelist ? "Yes" : "No"}</div>
-              <div>${rowData.earnedReward}</div>
+              <div>{getDateTime(rowData.created_at)}</div>
+              {rowData.match_predicted ? (
+                <div>Waiting...</div>
+              ) : (
+                <MatchPredict isCorrect={rowData.result} />
+              )}
+              <div>{rowData.final_winner === account ? "Yes" : "No"}</div>
+              <div>
+                ${rowData.final_winner === account ? rowData.rewards : 0}
+              </div>
             </>
           )}
           {isWhoWinTable && (
