@@ -15,7 +15,7 @@ const Statistics = (props: any) => {
       </div>
       <div className="flex flex-col bg-gray-100 rounded-md min-h-[80px] justify-center items-center">
         <span className="">Win rate</span>
-        <span className="text-xl font-semibold">{data.win_rate}</span>
+        <span className="text-xl font-semibold">{data.win_rate}%</span>
       </div>
       {navActived === HISTORY_NAV_VALUES.GOALS ? (
         <>

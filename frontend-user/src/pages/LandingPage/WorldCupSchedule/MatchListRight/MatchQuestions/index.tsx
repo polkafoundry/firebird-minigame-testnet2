@@ -7,7 +7,7 @@ import {
   QUESTION_STATUS,
 } from "../../../../../constants";
 import useBirdToken from "../../../../../hooks/useBirdToken";
-import { getImgSrc } from "../../utils";
+import { getImgSrc } from "../../../../../utils";
 import { getOptionIndexByBetPlace } from "./components/utils";
 import OddsQuestion from "./OddsQuestion";
 import OverUnderQuestion from "./OverUnderQuestion";

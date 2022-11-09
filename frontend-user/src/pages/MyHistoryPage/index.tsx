@@ -1,11 +1,12 @@
 import clsx from "clsx";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import DropDown from "../../components/base/DropDown";
 import Pagination from "../../components/base/Pagination";
 import DefaultLayout from "../../components/layout/DefaultLayout";
-import { HISTORY_NAV_VALUES } from "../../constants";
+import { BETTING_RESULT, HISTORY_NAV_VALUES } from "../../constants";
 import { useMyWeb3 } from "../../hooks/useMyWeb3";
 import usePost from "../../hooks/usePost";
+import { convertHexToStringNumber } from "../../utils";
 import HistoryTable from "./HistoryTable";
 import HowToJoin from "./HowToJoin";
 import Statistics from "./Statistic";
@@ -18,22 +19,6 @@ const nav = [
   { label: "Who win & Total goals", value: HISTORY_NAV_VALUES.GOALS },
   { label: "Match score", value: HISTORY_NAV_VALUES.MATCH_SCORE },
 ];
-
-const fakeStatsWhoWin = {
-  prediction_times: "04",
-  correct_answers: "02",
-  win_rate: "50.00%",
-  earned: "2,075",
-  current_rank: "#10",
-};
-
-const fakeStatsMatchScore = {
-  prediction_times: "06",
-  correct_answers: "04",
-  win_rate: "66,67%",
-  win_whitelist: "02",
-  earned: "$40",
-};
 
 const headings = {
   matchScore: [
@@ -57,74 +42,6 @@ const headings = {
   ],
 };
 
-// const whoWin = {
-//   headings: [
-//     "Match",
-//     "Question",
-//     "Answer",
-//     "Date-time",
-//     "Result",
-//     "Deposited",
-//     "Earned",
-//     "Amount to claim",
-//     "Claim",
-//   ],
-//   data: [
-//     {
-//       id: 1,
-//       team1: { name: "Quatar", icon: "/images/icon-qatar.svg" },
-//       team2: { name: "Ecuador", icon: "/images/icon-ecuador.svg" },
-//       question: "Who win 1st half",
-//       answer: "Quatar",
-//       datetime: "2022/11/20 15:23",
-//       result: true,
-//       deposited: "100",
-//       earned: "872",
-//       amount: "972",
-//       isClaimed: false,
-//     },
-//     {
-//       id: 2,
-//       team1: { name: "Quatar", icon: "/images/icon-qatar.svg" },
-//       team2: { name: "Ecuador", icon: "/images/icon-ecuador.svg" },
-//       question: "Who win 1st half",
-//       answer: "Quatar",
-//       datetime: "2022/11/20 15:23",
-//       result: false,
-//       deposited: "200",
-//       earned: "0",
-//       amount: "0",
-//       isClaimed: false,
-//     },
-//     {
-//       id: 3,
-//       team1: { name: "Quatar", icon: "/images/icon-qatar.svg" },
-//       team2: { name: "Ecuador", icon: "/images/icon-ecuador.svg" },
-//       question: "Who win 1st half",
-//       answer: "Quatar",
-//       datetime: "2022/11/20 15:23",
-//       result: true,
-//       deposited: "100",
-//       earned: "872",
-//       amount: "972",
-//       isClaimed: true,
-//     },
-//     {
-//       id: 4,
-//       team1: { name: "Quatar", icon: "/images/icon-qatar.svg" },
-//       team2: { name: "Ecuador", icon: "/images/icon-ecuador.svg" },
-//       question: "Who win 1st half",
-//       answer: "Quatar",
-//       datetime: "2022/11/20 15:23",
-//       result: false,
-//       deposited: "500",
-//       earned: "0",
-//       amount: "0",
-//       isClaimed: false,
-//     },
-//   ],
-// };
-
 type FilterTypes = {
   result: string;
   claimed: string;
@@ -132,29 +49,54 @@ type FilterTypes = {
 };
 
 const resultOptions = [
-  { label: "Result: All", value: 0 },
-  { label: "Result: 1", value: 1 },
-  { label: "Result: 2", value: 2 },
+  { label: "Result: All", value: undefined },
+  { label: "Result: Win", value: BETTING_RESULT.WIN },
+  { label: "Result: Draw", value: BETTING_RESULT.DRAW },
+  { label: "Result: Lose", value: BETTING_RESULT.LOSE },
 ];
 const claimedOptions = [
-  { label: "Claimed: All", value: 0 },
-  { label: "Claimed: 1", value: 1 },
-  { label: "Claimed: 2", value: 2 },
+  { label: "Claimed: All", value: undefined },
+  { label: "Claimed: Yes", value: true },
+  { label: "Claimed: No", value: false },
 ];
 
 const MyHistoryPage = () => {
   const { account } = useMyWeb3();
   const [dataTable, setDataTable] = useState<any>([]);
+  const [statistics, setStatistics] = useState<any>({});
+  const [filter, setFilter] = useState<FilterTypes>({
+    claimed: "",
+    result: "",
+    search: "",
+  });
+  const [resultSelected, setResultSelected] = useState<any>(
+    resultOptions[0].value,
+  );
+  const [claimSelected, setClaimSelected] = useState<any>(
+    claimedOptions[0].value,
+  );
+  const [currentPage, setCurrentPage] = useState<number>(1);
+
   const [navActived, setNavActived] = useState<
     typeof HISTORY_NAV_VALUES[keyof typeof HISTORY_NAV_VALUES]
   >(HISTORY_NAV_VALUES.GOALS);
 
+  const shouldLoadPredictInfo = useMemo(() => {
+    return !!account && resultSelected && claimSelected;
+  }, [account, resultSelected, claimSelected]);
+
   const { response, loading } = usePost<any>(
-    "/predict/get-predict-history",
+    navActived === HISTORY_NAV_VALUES.GOALS
+      ? "/betting/history"
+      : "/predict/history",
     {
+      page: currentPage,
+      limit: 10,
       address: account,
+      result: resultSelected,
+      is_claim: claimSelected,
     },
-    !!account,
+    shouldLoadPredictInfo,
   );
 
   useEffect(() => {
@@ -163,27 +105,23 @@ const MyHistoryPage = () => {
     if (response?.status !== 200) {
       console.log("ERR get predict history: ", response?.message);
     } else {
-      const newDataTable = response.data.map((item: any) => ({
-        ...item,
-        team1: { name: "Quatar", icon: "/images/icon-qatar.svg" },
-        team2: { name: "Ecuador", icon: "/images/icon-ecuador.svg" },
-        result: true,
-        winWhitelist: false,
-        earnedReward: "0",
-      }));
+      const resData = response.data;
 
-      setDataTable(newDataTable);
+      const newStatistics = {
+        prediction_times: resData.total,
+        correct_answers: resData.wins,
+        win_rate: (resData.wins / resData.total) * 100,
+        earned: resData.earnedToken
+          ? convertHexToStringNumber(resData.earnedToken)
+          : "Updating...",
+        current_rank: "Updating...",
+        win_whitelist: resData.finalWinner,
+      };
+
+      setDataTable(resData?.bettings?.data || resData?.predicts?.data);
+      setStatistics(newStatistics);
     }
   }, [response]);
-
-  const [filter, setFilter] = useState<FilterTypes>({
-    claimed: "",
-    result: "",
-    search: "",
-  });
-  const [resultSelected, setResultSelected] = useState<number>();
-  const [claimSelected, setClaimSelected] = useState<number>();
-  const [currentPage, setCurrentPage] = useState<number>(1);
 
   const handleChangeResult = (value: any) => {
     setResultSelected(value);
@@ -233,14 +171,7 @@ const MyHistoryPage = () => {
                 ))}
               </div>
 
-              <Statistics
-                data={
-                  navActived === HISTORY_NAV_VALUES.GOALS
-                    ? fakeStatsWhoWin
-                    : fakeStatsMatchScore
-                }
-                navActived={navActived}
-              />
+              <Statistics data={statistics} navActived={navActived} />
 
               <div className="flex items-center mt-10">
                 <div className="flex  w-full justify-between items-baseline">
@@ -286,12 +217,13 @@ const MyHistoryPage = () => {
                   <HistoryTable
                     headings={
                       navActived === HISTORY_NAV_VALUES.GOALS
-                        ? headings.matchScore
-                        : headings.whoWin
+                        ? headings.whoWin
+                        : headings.matchScore
                     }
                     dataTable={dataTable}
                     tableLoading={false}
-                    isWhoWinTable={navActived !== HISTORY_NAV_VALUES.GOALS}
+                    isWhoWinTable={navActived === HISTORY_NAV_VALUES.GOALS}
+                    account={account}
                   />
                 )}
                 {!loading && !account && (
