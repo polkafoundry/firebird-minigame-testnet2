@@ -6,6 +6,7 @@ import useFetch from "../../../../hooks/useFetch";
 import { getImgSrc } from "../../../../utils";
 import MatchQuestions from "./MatchQuestions";
 import MatchGuide from "./MathGuide";
+import styles from "./matchListRight.module.scss";
 
 type MatchListRightProps = {
   matchId: number | undefined;
@@ -32,7 +33,7 @@ const MatchListRight = (props: MatchListRightProps) => {
   const isLiving = startTime.getTime() <= new Date().getTime() && !isEnded;
 
   return (
-    <div className="flex flex-col rounded-lg md:ml-6 border-2 border-gray-600">
+    <div className="flex flex-col rounded-lg md:ml-6 border-2 border-gray-600 bg-[#F2F2F2]">
       <div className="flex flex-col items-center justify-center text-center h-auto min-h-[280px] bg-gray-700 text-white">
         {matchData ? (
           <>
