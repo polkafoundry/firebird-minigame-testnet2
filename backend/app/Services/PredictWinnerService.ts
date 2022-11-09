@@ -74,7 +74,8 @@ export default class PredictWinnerService {
     }
   }
 
-  public async updatePredictStatus(matchID) {
+  public async updatePredictStatus(request): Promise<any> {
+    const matchID = request.input('match_id')
     const match = await this.MatchModel.query().where('match_id', matchID).first()
     const predicts = await this.PredictModel.query()
       .where('match_id', matchID)
