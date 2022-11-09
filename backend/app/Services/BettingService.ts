@@ -376,8 +376,8 @@ export default class BettingService {
   public async getUserBettingHistory(request): Promise<any> {
     try {
       const address = request.input('address')
-      const page = request.input('page')
-      const limit = request.input('limit')
+      const page = request.input('page') || 1
+      const limit = request.input('limit') || 10
       const result = request.input('result') //lose, win, draw
       const isClaim = request.input('is_claim')
 
@@ -393,13 +393,27 @@ export default class BettingService {
         this.Database.rawQuery(
           `SELECT SUM(CASE WHEN result_num > 0 then result_num ELSE 0 END) AS total_win FROM bettings WHERE user_address = '${address}'`
         ),
-        this.Database.from('bettings')
+        this.Database.from('bettings as b')
+          .joinRaw(`inner join matchs AS m ON b.match_id = m.match_id`)
           .joinRaw(`WHERE user_address = '${address}'`)
           .joinRaw(filterResultQuery)
           .joinRaw(claimResultQuery)
-          .select('*')
+          .select('b.match_id')
+          .select('b.bet_place')
+          .select('b.bet_type')
+          .select('b.bet_amount')
+          .select('b.result_num')
+          .select('b.total_claim')
+          .select('b.result')
+          .select('b.created_at')
+          .select('b.has_claim')
+          .select('b.is_calculated')
+          .select('m.home_name')
+          .select('m.home_icon')
+          .select('m.away_name')
+          .select('m.away_icon')
           .orderBy('match_id', 'ASC')
-          .paginate(page ? page : 1, limit ? limit : 10),
+          .paginate(page, limit),
       ])
 
       return HelperUtils.responseSuccess({

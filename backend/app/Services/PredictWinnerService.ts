@@ -107,8 +107,8 @@ export default class PredictWinnerService {
   public async getUserPredictHistory(request): Promise<any> {
     try {
       const address = request.input('address')
-      const page = request.input('page')
-      const limit = request.input('limit')
+      const page = request.input('page') || 1
+      const limit = request.input('limit') || 10
       const status = request.input('status') //true, false
 
       if (!address) return HelperUtils.responseErrorInternal('User address required')
@@ -125,11 +125,11 @@ export default class PredictWinnerService {
               .where('user_address', address)
               .where('result', status)
               .orderBy('match_id', 'asc')
-              .paginate(page ? page : 1, limit ? limit : 10)
+              .paginate(page, limit)
           : this.PredictModel.query()
               .where('user_address', address)
               .orderBy('match_id', 'asc')
-              .paginate(page ? page : 1, limit ? limit : 10),
+              .paginate(page, limit),
       ])
       return HelperUtils.responseSuccess({
         total: total[0]?.total,
