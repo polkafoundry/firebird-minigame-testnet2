@@ -47,7 +47,7 @@ export const calcOuFtJob = async () => {
 export default class CalcOuFtJob implements JobContract {
   public key = 'CalcOuFtJob'
 
-  public async handle(job) {
+  public async handle() {
     // const { data } = job
     // Do somethign with you job data
     const match = await MatchModel.query()

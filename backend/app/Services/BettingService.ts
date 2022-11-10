@@ -1,23 +1,28 @@
 import BaseException from 'App/Exceptions/BaseException'
+const HelperUtils = require('@ioc:App/Common/HelperUtils')
+
+const BigNumber = require('bignumber.js')
 
 export default class BettingService {
+  public MatchModel = require('@ioc:App/Models/Match')
+  public BettingModel = require('@ioc:App/Models/Betting')
+  public PredictModel = require('@ioc:App/Models/Predict')
+  public Database = require('@ioc:Adonis/Lucid/Database')
+
   public async ouHTCalculate(request): Promise<any> {
     const matchID = request.input('match_id')
     if (!matchID) {
       throw new BaseException('Match ID is required')
     }
-    const MatchModel = require('@ioc:App/Models/Match')
-    const BettingModel = require('@ioc:App/Models/Betting')
-    const BigNumber = require('bignumber.js')
 
-    const match = await MatchModel.query().where('match_id', matchID).first()
+    const match = await this.MatchModel.query().where('match_id', matchID).first()
     if (!match) {
       throw new BaseException('match not found')
     }
     if (!match?.is_half_time) {
       throw new BaseException('match not half time')
     }
-    const ouHTBets = await BettingModel.query()
+    const ouHTBets = await this.BettingModel.query()
       .where('match_id', matchID)
       .andWhere('bet_type', 'ou_ht')
     if (!ouHTBets) {
@@ -27,7 +32,7 @@ export default class BettingService {
       let amount = ouHTBets[i]?.bet_amount
       if (match.ou_ht_ratio > match.ht_home_score + match.ht_away_score) {
         // ratio > total score
-        await BettingModel.query()
+        await this.BettingModel.query()
           .where('id', ouHTBets[i]?.id)
           .update({
             bet_statistics: match.ou_ht_under,
@@ -40,11 +45,15 @@ export default class BettingService {
                     .minus(new BigNumber(amount))
                     .toFixed()
                 : -amount,
+            total_claim:
+              ouHTBets[i]?.bet_place === 'under'
+                ? new BigNumber(amount).multipliedBy(new BigNumber(match.ou_ht_under)).toFixed()
+                : 0,
             is_calculated: true,
           })
       } else if (match.ou_ht_ratio < match.ht_home_score + match.ht_away_score) {
         // ratio < total score
-        await BettingModel.query()
+        await this.BettingModel.query()
           .where('id', ouHTBets[i]?.id)
           .update({
             bet_statistics: match.ou_ht_over,
@@ -57,11 +66,15 @@ export default class BettingService {
                     .minus(new BigNumber(amount))
                     .toFixed()
                 : -amount,
+            total_claim:
+              ouHTBets[i]?.bet_place === 'over'
+                ? new BigNumber(amount).multipliedBy(new BigNumber(match.ou_ht_over)).toFixed()
+                : 0,
             is_calculated: true,
           })
       } else {
         //ratio = total score
-        await BettingModel.query()
+        await this.BettingModel.query()
           .where('id', ouHTBets[i]?.id)
           .update({
             bet_statistics:
@@ -69,21 +82,20 @@ export default class BettingService {
             ou_statistics: match.ou_ht_ratio,
             result: 'draw',
             result_num: 0,
+            total_claim: 0,
+            is_calculated: true,
           })
       }
     }
-    return ouHTBets
+    return true
   }
   public async ouFTCalculate(request): Promise<any> {
     const matchID = request.input('match_id')
     if (!matchID) {
       throw new BaseException('Match ID is required')
     }
-    const MatchModel = require('@ioc:App/Models/Match')
-    const BettingModel = require('@ioc:App/Models/Betting')
-    const BigNumber = require('bignumber.js')
 
-    const match = await MatchModel.query().where('match_id', matchID).first()
+    const match = await this.MatchModel.query().where('match_id', matchID).first()
     if (!match) {
       throw new BaseException('match not found')
     }
@@ -91,7 +103,7 @@ export default class BettingService {
       throw new BaseException('match not fulltime')
     }
 
-    const ouFTBets = await BettingModel.query()
+    const ouFTBets = await this.BettingModel.query()
       .where('match_id', matchID)
       .andWhere('bet_type', 'ou_ft')
     if (!ouFTBets) {
@@ -101,7 +113,7 @@ export default class BettingService {
       let amount = ouFTBets[i]?.bet_amount
       if (match.ou_ft_ratio > match.ft_home_score + match.ft_away_score) {
         // ratio > total score
-        await BettingModel.query()
+        await this.BettingModel.query()
           .where('id', ouFTBets[i]?.id)
           .update({
             bet_statistics: match.ou_ft_under,
@@ -114,11 +126,15 @@ export default class BettingService {
                     .minus(new BigNumber(amount))
                     .toFixed()
                 : -amount,
+            total_claim:
+              ouFTBets[i]?.bet_place === 'under'
+                ? new BigNumber(amount).multipliedBy(new BigNumber(match.ou_ft_under)).toFixed()
+                : 0,
             is_calculated: true,
           })
       } else if (match.ou_ht_ratio < match.ht_home_score + match.ht_away_score) {
         // ratio < total score
-        await BettingModel.query()
+        await this.BettingModel.query()
           .where('id', ouFTBets[i]?.id)
           .update({
             bet_statistics: match.ou_ft_over,
@@ -131,11 +147,15 @@ export default class BettingService {
                     .minus(new BigNumber(amount))
                     .toFixed()
                 : -amount,
+            total_claim:
+              ouFTBets[i]?.bet_place === 'over'
+                ? new BigNumber(amount).multipliedBy(new BigNumber(match.ou_ft_over)).toFixed()
+                : 0,
             is_calculated: true,
           })
       } else {
         //ratio = total score
-        await BettingModel.query()
+        await this.BettingModel.query()
           .where('id', ouFTBets[i]?.id)
           .update({
             bet_statistics:
@@ -143,21 +163,20 @@ export default class BettingService {
             ou_statistics: match.ou_ft_ratio,
             result: 'draw',
             result_num: 0,
+            total_claim: 0,
+            is_calculated: true,
           })
       }
     }
-    return ouFTBets
+    return true
   }
   public async oddsHTCalculate(request): Promise<any> {
     const matchID = request.input('match_id')
     if (!matchID) {
       throw new BaseException('Match ID is required')
     }
-    const MatchModel = require('@ioc:App/Models/Match')
-    const BettingModel = require('@ioc:App/Models/Betting')
-    const BigNumber = require('bignumber.js')
 
-    const match = await MatchModel.query().where('match_id', matchID).first()
+    const match = await this.MatchModel.query().where('match_id', matchID).first()
     if (!match) {
       throw new BaseException('match not found')
     }
@@ -165,7 +184,7 @@ export default class BettingService {
       throw new BaseException('match not half time')
     }
 
-    const oddsHTBets = await BettingModel.query()
+    const oddsHTBets = await this.BettingModel.query()
       .where('match_id', matchID)
       .andWhere('bet_type', 'odds_ht')
     if (!oddsHTBets) {
@@ -175,7 +194,7 @@ export default class BettingService {
       let amount = oddsHTBets[i]?.bet_amount
       if (match.ht_home_score > match.ht_away_score) {
         // home win
-        await BettingModel.query()
+        await this.BettingModel.query()
           .where('id', oddsHTBets[i]?.id)
           .update({
             bet_statistics:
@@ -192,11 +211,15 @@ export default class BettingService {
                     .minus(new BigNumber(amount))
                     .toFixed()
                 : -amount,
+            total_claim:
+              oddsHTBets[i]?.bet_place === 'home'
+                ? new BigNumber(amount).multipliedBy(new BigNumber(match.odds_ht_home)).toFixed()
+                : 0,
             is_calculated: true,
           })
       } else if (match.ht_home_score < match.ht_away_score) {
         // away win
-        await BettingModel.query()
+        await this.BettingModel.query()
           .where('id', oddsHTBets[i]?.id)
           .update({
             bet_statistics:
@@ -213,11 +236,15 @@ export default class BettingService {
                     .minus(new BigNumber(amount))
                     .toFixed()
                 : -amount,
+            total_claim:
+              oddsHTBets[i]?.bet_place === 'away'
+                ? new BigNumber(amount).multipliedBy(new BigNumber(match.odds_ht_away)).toFixed()
+                : 0,
             is_calculated: true,
           })
       } else {
         //draw
-        await BettingModel.query()
+        await this.BettingModel.query()
           .where('id', oddsHTBets[i]?.id)
           .update({
             bet_statistics:
@@ -234,22 +261,23 @@ export default class BettingService {
                     .minus(new BigNumber(amount))
                     .toFixed()
                 : -amount,
+            total_claim:
+              oddsHTBets[i]?.bet_place === 'draw'
+                ? new BigNumber(amount).multipliedBy(new BigNumber(match.odds_ht_draw)).toFixed()
+                : 0,
             is_calculated: true,
           })
       }
     }
-    return oddsHTBets
+    return true
   }
   public async oddsFTCalculate(request): Promise<any> {
     const matchID = request.input('match_id')
     if (!matchID) {
       throw new BaseException('Match ID is required')
     }
-    const MatchModel = require('@ioc:App/Models/Match')
-    const BettingModel = require('@ioc:App/Models/Betting')
-    const BigNumber = require('bignumber.js')
 
-    const match = await MatchModel.query().where('match_id', matchID).first()
+    const match = await this.MatchModel.query().where('match_id', matchID).first()
     if (!match) {
       throw new BaseException('match not found')
     }
@@ -257,7 +285,7 @@ export default class BettingService {
       throw new BaseException('match not fulltime')
     }
 
-    const oddsFTBets = await BettingModel.query()
+    const oddsFTBets = await this.BettingModel.query()
       .where('match_id', matchID)
       .andWhere('bet_type', 'odds_ft')
     if (!oddsFTBets) {
@@ -267,7 +295,7 @@ export default class BettingService {
       let amount = oddsFTBets[i]?.bet_amount
       if (match.ft_home_score > match.ft_away_score) {
         // home win
-        await BettingModel.query()
+        await this.BettingModel.query()
           .where('id', oddsFTBets[i]?.id)
           .update({
             bet_statistics:
@@ -284,11 +312,15 @@ export default class BettingService {
                     .minus(new BigNumber(amount))
                     .toFixed()
                 : -amount,
+            total_claim:
+              oddsFTBets[i]?.bet_place === 'home'
+                ? new BigNumber(amount).multipliedBy(new BigNumber(match.odds_ft_home)).toFixed()
+                : 0,
             is_calculated: true,
           })
       } else if (match.ft_home_score < match.ft_away_score) {
         // away win
-        await BettingModel.query()
+        await this.BettingModel.query()
           .where('id', oddsFTBets[i]?.id)
           .update({
             bet_statistics:
@@ -305,11 +337,15 @@ export default class BettingService {
                     .minus(new BigNumber(amount))
                     .toFixed()
                 : -amount,
+            total_claim:
+              oddsFTBets[i]?.bet_place === 'away'
+                ? new BigNumber(amount).multipliedBy(new BigNumber(match.odds_ft_away)).toFixed()
+                : 0,
             is_calculated: true,
           })
       } else {
         //draw
-        await BettingModel.query()
+        await this.BettingModel.query()
           .where('id', oddsFTBets[i]?.id)
           .update({
             bet_statistics:
@@ -326,36 +362,68 @@ export default class BettingService {
                     .minus(new BigNumber(amount))
                     .toFixed()
                 : -amount,
+            total_claim:
+              oddsFTBets[i]?.bet_place === 'draw'
+                ? new BigNumber(amount).multipliedBy(new BigNumber(match.odds_ft_draw)).toFixed()
+                : 0,
             is_calculated: true,
           })
       }
     }
-    return oddsFTBets
+    return true
   }
-  public async predictPickWinner(request): Promise<any> {
-    const matchID = request.input('match_id')
-    if (!matchID) {
-      throw new BaseException('Match ID is required')
-    }
-    const MatchModel = require('@ioc:App/Models/Match')
-    const PredictModel = require('@ioc:App/Models/Predict')
 
-    const match = await MatchModel.query().where('match_id', matchID).first()
-    if (!match) {
-      throw new BaseException('match not found')
-    }
-    if (!match?.is_full_time) {
-      throw new BaseException('match not fulltime')
-    }
+  public async getUserBettingHistory(request): Promise<any> {
+    try {
+      const address = request.input('address')
+      const page = request.input('page') || 1
+      const limit = request.input('limit') || 10
+      const result = request.input('result') //lose, win, draw
+      const isClaim = request.input('is_claim')
 
-    const userPredict = await PredictModel.query()
-      .where('match_id', matchID)
-      .andWhere('home_score', match?.ft_home_score)
-      .andWhere('away_score', match?.ft_away_score)
-    if (!userPredict) {
-      throw new BaseException('not found predict in match')
-    }
+      let filterResultQuery = result === undefined ? '' : `AND result = '${result}'`
+      let claimResultQuery = isClaim === undefined ? '' : `AND has_claim = ${isClaim}`
 
-    return userPredict
+      let [total, wins, earnedToken, bettings] = await Promise.all([
+        this.Database.from('bettings').count('* as total').where('user_address', address),
+        this.Database.from('bettings')
+          .count('* as total')
+          .where('user_address', address)
+          .andWhere('result', 'win'),
+        this.Database.rawQuery(
+          `SELECT SUM(CASE WHEN result_num > 0 then result_num ELSE 0 END) AS total_win FROM bettings WHERE user_address = '${address}'`
+        ),
+        this.Database.from('bettings as b')
+          .joinRaw(`inner join matchs AS m ON b.match_id = m.match_id`)
+          .joinRaw(`WHERE user_address = '${address}'`)
+          .joinRaw(filterResultQuery)
+          .joinRaw(claimResultQuery)
+          .select('b.match_id')
+          .select('b.bet_place')
+          .select('b.bet_type')
+          .select('b.bet_amount')
+          .select('b.result_num')
+          .select('b.total_claim')
+          .select('b.result')
+          .select('b.created_at')
+          .select('b.has_claim')
+          .select('b.is_calculated')
+          .select('m.home_name')
+          .select('m.home_icon')
+          .select('m.away_name')
+          .select('m.away_icon')
+          .orderBy('match_id', 'ASC')
+          .paginate(page, limit),
+      ])
+
+      return HelperUtils.responseSuccess({
+        total: total[0]?.total,
+        wins: wins[0]?.total,
+        earnedToken: earnedToken[0][0].total_win,
+        bettings,
+      })
+    } catch (error) {
+      return HelperUtils.responseErrorInternal(error)
+    }
   }
 }

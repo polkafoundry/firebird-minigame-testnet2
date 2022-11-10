@@ -1,42 +1,27 @@
 import clsx from "clsx";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import DropDown from "../../components/base/DropDown";
 import Pagination from "../../components/base/Pagination";
 import DefaultLayout from "../../components/layout/DefaultLayout";
+import { BETTING_RESULT, HISTORY_NAV_VALUES } from "../../constants";
+import { useMyWeb3 } from "../../hooks/useMyWeb3";
+import usePost from "../../hooks/usePost";
+import { convertHexToStringNumber } from "../../utils";
 import HistoryTable from "./HistoryTable";
 import HowToJoin from "./HowToJoin";
+import Statistics from "./Statistic";
 
-const valueNav = {
-  GOALS: 1,
-  MATCH_SCORE: 2,
-};
 type NavItemTypes = {
   label: string;
-  value: typeof valueNav[keyof typeof valueNav];
+  value: typeof HISTORY_NAV_VALUES[keyof typeof HISTORY_NAV_VALUES];
 };
 const nav = [
-  { label: "Who win & Total goals", value: valueNav.GOALS },
-  { label: "Match score", value: valueNav.MATCH_SCORE },
+  { label: "Who win & Total goals", value: HISTORY_NAV_VALUES.GOALS },
+  { label: "Match score", value: HISTORY_NAV_VALUES.MATCH_SCORE },
 ];
 
-const fakeStatsWhoWin = {
-  prediction_times: "04",
-  correct_answers: "02",
-  win_rate: "50.00%",
-  earned: "2,075",
-  current_rank: "#10",
-};
-
-const fakeStatsMatchScore = {
-  prediction_times: "06",
-  correct_answers: "04",
-  win_rate: "66,67%",
-  win_whitelist: "02",
-  earned: "$40",
-};
-
-const matchScore = {
-  headings: [
+const headings = {
+  matchScore: [
     "Match",
     "Answer",
     "Date-time",
@@ -44,51 +29,7 @@ const matchScore = {
     "Win whitelist",
     "Earned rewards",
   ],
-  data: [
-    {
-      id: 1,
-      team1: { name: "Quatar", icon: "/images/icon-qatar.svg" },
-      team2: { name: "Ecuador", icon: "/images/icon-ecuador.svg" },
-      answer: "2:0",
-      datetime: "2022/11/20 15:23",
-      result: true,
-      winWhitelist: false,
-      earnedReward: "0",
-    },
-    {
-      id: 2,
-      team1: { name: "Quatar", icon: "/images/icon-qatar.svg" },
-      team2: { name: "Ecuador", icon: "/images/icon-ecuador.svg" },
-      answer: "2:0",
-      datetime: "2022/11/20 15:23",
-      result: false,
-      winWhitelist: false,
-      earnedReward: "0",
-    },
-    {
-      id: 3,
-      team1: { name: "Quatar", icon: "/images/icon-qatar.svg" },
-      team2: { name: "Ecuador", icon: "/images/icon-ecuador.svg" },
-      answer: "2:0",
-      datetime: "2022/11/20 15:23",
-      result: true,
-      winWhitelist: true,
-      earnedReward: "0",
-    },
-    {
-      id: 4,
-      team1: { name: "Quatar", icon: "/images/icon-qatar.svg" },
-      team2: { name: "Ecuador", icon: "/images/icon-ecuador.svg" },
-      answer: "2:0",
-      datetime: "2022/11/20 15:23",
-      result: true,
-      winWhitelist: false,
-      earnedReward: "0",
-    },
-  ],
-};
-const whoWin = {
-  headings: [
+  whoWin: [
     "Match",
     "Question",
     "Answer",
@@ -99,60 +40,6 @@ const whoWin = {
     "Amount to claim",
     "Claim",
   ],
-  data: [
-    {
-      id: 1,
-      team1: { name: "Quatar", icon: "/images/icon-qatar.svg" },
-      team2: { name: "Ecuador", icon: "/images/icon-ecuador.svg" },
-      question: "Who win 1st half",
-      answer: "Quatar",
-      datetime: "2022/11/20 15:23",
-      result: true,
-      deposited: "100",
-      earned: "872",
-      amount: "972",
-      isClaimed: false,
-    },
-    {
-      id: 2,
-      team1: { name: "Quatar", icon: "/images/icon-qatar.svg" },
-      team2: { name: "Ecuador", icon: "/images/icon-ecuador.svg" },
-      question: "Who win 1st half",
-      answer: "Quatar",
-      datetime: "2022/11/20 15:23",
-      result: false,
-      deposited: "200",
-      earned: "0",
-      amount: "0",
-      isClaimed: false,
-    },
-    {
-      id: 3,
-      team1: { name: "Quatar", icon: "/images/icon-qatar.svg" },
-      team2: { name: "Ecuador", icon: "/images/icon-ecuador.svg" },
-      question: "Who win 1st half",
-      answer: "Quatar",
-      datetime: "2022/11/20 15:23",
-      result: true,
-      deposited: "100",
-      earned: "872",
-      amount: "972",
-      isClaimed: true,
-    },
-    {
-      id: 4,
-      team1: { name: "Quatar", icon: "/images/icon-qatar.svg" },
-      team2: { name: "Ecuador", icon: "/images/icon-ecuador.svg" },
-      question: "Who win 1st half",
-      answer: "Quatar",
-      datetime: "2022/11/20 15:23",
-      result: false,
-      deposited: "500",
-      earned: "0",
-      amount: "0",
-      isClaimed: false,
-    },
-  ],
 };
 
 type FilterTypes = {
@@ -161,73 +48,80 @@ type FilterTypes = {
   search: string;
 };
 
-const Statistics = (props: any) => {
-  const { data, navActived } = props;
-
-  return (
-    <div className="grid grid-cols-5 gap-7 mt-10">
-      <div className="flex flex-col bg-gray-100 rounded-md min-h-[80px] justify-center items-center">
-        <span className="">Prediction times</span>
-        <span className="text-xl font-semibold">{data.prediction_times}</span>
-      </div>
-      <div className="flex flex-col bg-gray-100 rounded-md min-h-[80px] justify-center items-center">
-        <span className="">Correct answer</span>
-        <span className="text-xl font-semibold">{data.correct_answers}</span>
-      </div>
-      <div className="flex flex-col bg-gray-100 rounded-md min-h-[80px] justify-center items-center">
-        <span className="">Win rate</span>
-        <span className="text-xl font-semibold">{data.win_rate}</span>
-      </div>
-      {navActived === valueNav.GOALS ? (
-        <>
-          <div className="flex flex-col bg-gray-100 rounded-md min-h-[80px] justify-center items-center">
-            <span className="">Total $BIRD earned</span>
-            <span className="text-xl font-semibold">{data.earned}</span>
-          </div>
-          <div className="flex flex-col bg-gray-100 rounded-md min-h-[80px] justify-center items-center">
-            <span className="">Current rank</span>
-            <span className="text-xl font-semibold">{data.current_rank}</span>
-          </div>
-        </>
-      ) : (
-        <>
-          <div className="flex flex-col bg-gray-100 rounded-md min-h-[80px] justify-center items-center">
-            <span className="">Win whitelist times</span>
-            <span className="text-xl font-semibold">{data.win_whitelist}</span>
-          </div>
-          <div className="flex flex-col bg-gray-100 rounded-md min-h-[80px] justify-center items-center">
-            <span className="">Total $ earned</span>
-            <span className="text-xl font-semibold">{data.earned}</span>
-          </div>
-        </>
-      )}
-    </div>
-  );
-};
-
 const resultOptions = [
-  { label: "Result: All", value: 0 },
-  { label: "Result: 1", value: 1 },
-  { label: "Result: 2", value: 2 },
+  { label: "Result: All", value: undefined },
+  { label: "Result: Win", value: BETTING_RESULT.WIN },
+  { label: "Result: Draw", value: BETTING_RESULT.DRAW },
+  { label: "Result: Lose", value: BETTING_RESULT.LOSE },
 ];
 const claimedOptions = [
-  { label: "Claimed: All", value: 0 },
-  { label: "Claimed: 1", value: 1 },
-  { label: "Claimed: 2", value: 2 },
+  { label: "Claimed: All", value: undefined },
+  { label: "Claimed: Yes", value: true },
+  { label: "Claimed: No", value: false },
 ];
 
 const MyHistoryPage = () => {
-  const [navActived, setNavActived] = useState<
-    typeof valueNav[keyof typeof valueNav]
-  >(valueNav.GOALS);
+  const { account } = useMyWeb3();
+  const [dataTable, setDataTable] = useState<any>([]);
+  const [statistics, setStatistics] = useState<any>({});
   const [filter, setFilter] = useState<FilterTypes>({
     claimed: "",
     result: "",
     search: "",
   });
-  const [resultSelected, setResultSelected] = useState<number>();
-  const [claimSelected, setClaimSelected] = useState<number>();
+  const [resultSelected, setResultSelected] = useState<any>(
+    resultOptions[0].value,
+  );
+  const [claimSelected, setClaimSelected] = useState<any>(
+    claimedOptions[0].value,
+  );
   const [currentPage, setCurrentPage] = useState<number>(1);
+
+  const [navActived, setNavActived] = useState<
+    typeof HISTORY_NAV_VALUES[keyof typeof HISTORY_NAV_VALUES]
+  >(HISTORY_NAV_VALUES.GOALS);
+
+  const shouldLoadPredictInfo = useMemo(() => {
+    return !!account && resultSelected && claimSelected;
+  }, [account, resultSelected, claimSelected]);
+
+  const { response, loading } = usePost<any>(
+    navActived === HISTORY_NAV_VALUES.GOALS
+      ? "/betting/history"
+      : "/predict/history",
+    {
+      page: currentPage,
+      limit: 10,
+      address: account,
+      result: resultSelected,
+      is_claim: claimSelected,
+    },
+    shouldLoadPredictInfo,
+  );
+
+  useEffect(() => {
+    if (!response) return;
+
+    if (response?.status !== 200) {
+      console.log("ERR get predict history: ", response?.message);
+    } else {
+      const resData = response.data;
+
+      const newStatistics = {
+        prediction_times: resData.total,
+        correct_answers: resData.wins,
+        win_rate: (resData.wins / resData.total) * 100,
+        earned: resData.earnedToken
+          ? convertHexToStringNumber(resData.earnedToken)
+          : "Updating...",
+        current_rank: "Updating...",
+        win_whitelist: resData.finalWinner,
+      };
+
+      setDataTable(resData?.bettings?.data || resData?.predicts?.data);
+      setStatistics(newStatistics);
+    }
+  }, [response]);
 
   const handleChangeResult = (value: any) => {
     setResultSelected(value);
@@ -277,14 +171,7 @@ const MyHistoryPage = () => {
                 ))}
               </div>
 
-              <Statistics
-                data={
-                  navActived === valueNav.GOALS
-                    ? fakeStatsWhoWin
-                    : fakeStatsMatchScore
-                }
-                navActived={navActived}
-              />
+              <Statistics data={statistics} navActived={navActived} />
 
               <div className="flex items-center mt-10">
                 <div className="flex  w-full justify-between items-baseline">
@@ -325,13 +212,23 @@ const MyHistoryPage = () => {
               </div>
 
               <div className="flex">
-                <HistoryTable
-                  tableInfo={
-                    navActived === valueNav.GOALS ? matchScore : whoWin
-                  }
-                  tableLoading={false}
-                  isWhoWinTable={navActived !== valueNav.GOALS}
-                />
+                {loading && <div>loading</div>}
+                {!loading && account && (
+                  <HistoryTable
+                    headings={
+                      navActived === HISTORY_NAV_VALUES.GOALS
+                        ? headings.whoWin
+                        : headings.matchScore
+                    }
+                    dataTable={dataTable}
+                    tableLoading={false}
+                    isWhoWinTable={navActived === HISTORY_NAV_VALUES.GOALS}
+                    account={account}
+                  />
+                )}
+                {!loading && !account && (
+                  <div>Please connect wallet to see prediction list</div>
+                )}
               </div>
 
               <Pagination

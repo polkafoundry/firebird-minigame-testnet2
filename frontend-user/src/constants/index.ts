@@ -8,6 +8,7 @@ export const MAX_DEPOSIT_AMOUNT = 1000;
 
 export const URLS = {
   HOME: "/",
+  EVENT: "/event",
   LEADERBOARD: "/leaderboard",
   HISTORY: "/history",
   FAUCET_TESTNET: "https://faucet.firefly.firebirdchain.com/",
@@ -58,4 +59,23 @@ export const BET_TYPE = {
   OVER_UNDER_FULL_TIME: "ou_ft",
   ODD_EVEN_HALF_TIME: "odds_ht",
   ODD_EVEN_FULL_TIME: "odds_ft",
+};
+
+export const BET_PLACE = {
+  HOME: "home",
+  DRAW: "draw",
+  AWAY: "away",
+  UNDER: "under",
+  OVER: "over",
+};
+
+export const BETTING_RESULT = {
+  WIN: "win",
+  DRAW: "draw",
+  LOSE: "lose",
+};
+
+export const HISTORY_NAV_VALUES = {
+  GOALS: 1,
+  MATCH_SCORE: 2,
 };

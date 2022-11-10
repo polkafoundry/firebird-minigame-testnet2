@@ -1,9 +1,13 @@
-import InvalidParamException from 'App/Exceptions/InvalidParamException'
-import BusinessException from 'App/Exceptions/BusinessException'
 const HelperUtils = require('@ioc:App/Common/HelperUtils')
 
 export default class PredictWinnerService {
-  public async checkPredictByMatch(request, response): Promise<any> {
+  public MatchModel = require('@ioc:App/Models/Match')
+  public PredictModel = require('@ioc:App/Models/Predict')
+  public PredictWinner = require('@ioc:App/Models/PredictWinner')
+  public BettingModel = require('@ioc:App/Models/Betting')
+  public Database = require('@ioc:Adonis/Lucid/Database')
+
+  public async checkPredictByMatch(request): Promise<any> {
     const matchID = request.input('match_id')
     const address = request.input('address')
 
@@ -11,21 +15,18 @@ export default class PredictWinnerService {
     if (!matchID) return HelperUtils.responseErrorInternal('Match ID required')
 
     try {
-      const PredictModel = require('@ioc:App/Models/Predict')
-      const predictInfo = await PredictModel.query()
+      const predictInfo = await this.PredictModel.query()
         .where('match_id', matchID)
         .andWhere('user_address', address)
         .first()
       if (!predictInfo) {
         return HelperUtils.responseErrorInternal('User not predict in this match')
       }
-      const MatchModel = require('@ioc:App/Models/Match')
-      const matchInfo = await MatchModel.query().where('match_id', matchID).first()
+      const matchInfo = await this.MatchModel.query().where('match_id', matchID).first()
       if (!matchInfo) {
         return HelperUtils.responseErrorInternal('Match not found')
       }
-      const PredictWinner = require('@ioc:App/Models/PredictWinner')
-      const predictWinnerInfo = await PredictWinner.query().where('match_id', matchID).first()
+      const predictWinnerInfo = await this.PredictWinner.query().where('match_id', matchID).first()
       if (matchInfo?.is_full_time) {
         return HelperUtils.responseSuccess({
           home_score_predict: predictInfo.home_score,
@@ -54,13 +55,12 @@ export default class PredictWinnerService {
     if (!matchID) return HelperUtils.responseErrorInternal('Match ID required')
 
     try {
-      const MatchModel = require('@ioc:App/Models/Match')
-      const matchInfo = await MatchModel.query().where('match_id', matchID).first()
+      const matchInfo = await this.MatchModel.query().where('match_id', matchID).first()
       if (!matchInfo) {
         return HelperUtils.responseErrorInternal('Match not found')
       }
-      const PredictModel = require('@ioc:App/Models/Predict')
-      const predictList = await PredictModel.query()
+
+      const predictList = await this.PredictModel.query()
         .where('match_id', matchID)
         .andWhere('home_score', matchInfo.ft_home_score)
         .andWhere('away_score', matchInfo.ft_away_score)
@@ -74,21 +74,80 @@ export default class PredictWinnerService {
     }
   }
 
-  public async getUserPredictHistory(request): Promise<any> {
-    const address = request.input('address')
-
-    if (!address) return HelperUtils.responseErrorInternal('User address required')
-
-    try {
-      const PredictModel = require('@ioc:App/Models/Predict')
-      const predictList = await PredictModel.query()
-        .where('user_address', address)
-        .orderBy('match_id', 'asc')
-        .exec()
-      if (!predictList || predictList.length === 0) {
-        return HelperUtils.responseErrorInternal('User predict not found')
+  public async updatePredictStatus(request): Promise<any> {
+    const matchID = request.input('match_id')
+    const match = await this.MatchModel.query().where('match_id', matchID).first()
+    const predicts = await this.PredictModel.query()
+      .where('match_id', matchID)
+      .where('match_predicted', false)
+      .exec()
+    for (let i = 0; i < predicts.length; i++) {
+      if (
+        match.ft_home_score == predicts[i].home_score &&
+        match.ft_away_score == predicts[i].away_score
+      ) {
+        await this.PredictModel.query()
+          .where('match_id', predicts[i].match_id)
+          .where('user_address', predicts[i].user_address)
+          .update({
+            result: true,
+            match_predicted: true,
+          })
+      } else {
+        await this.PredictModel.query()
+          .where('match_id', predicts[i].match_id)
+          .where('user_address', predicts[i].user_address)
+          .update({
+            result: false,
+            match_predicted: true,
+          })
       }
-      return HelperUtils.responseSuccess(predictList)
+    }
+  }
+
+  public async getUserPredictHistory(request): Promise<any> {
+    try {
+      const address = request.input('address')
+      const page = request.input('page') || 1
+      const limit = request.input('limit') || 10
+      const status = request.input('status') //true, false
+
+      if (!address) return HelperUtils.responseErrorInternal('User address required')
+      let filterResultQuery = status === undefined ? '' : `AND result = ${status}`
+
+      let [total, wins, finalWinner, predicts] = await Promise.all([
+        this.Database.from('predicts').count('* as total').where('user_address', address),
+        this.Database.from('predicts')
+          .count('* as total')
+          .where('user_address', address)
+          .andWhere('result', true),
+        this.Database.from('predict_winners').count('* as total').where('final_winner', address),
+        this.Database.from('predicts AS p')
+          .joinRaw(`INNER JOIN matchs AS m ON p.match_id = m.match_id`)
+          .joinRaw(`LEFT JOIN predict_winners AS pw ON p.match_id = pw.match_id`)
+          .joinRaw(`WHERE user_address = '${address}'`)
+          .joinRaw(filterResultQuery)
+          .select('m.home_name')
+          .select('m.home_icon')
+          .select('m.away_name')
+          .select('m.away_icon')
+          .select('p.match_id')
+          .select('p.home_score')
+          .select('p.away_score')
+          .select('p.created_at')
+          .select('p.result')
+          .select('p.match_predicted')
+          .select('pw.final_winner')
+          .select('pw.rewards')
+          .orderBy('p.match_id', 'ASC')
+          .paginate(page, limit),
+      ])
+      return HelperUtils.responseSuccess({
+        total: total[0]?.total,
+        wins: wins[0]?.total,
+        finalWinner: finalWinner[0]?.total,
+        predicts,
+      })
     } catch (error) {
       return HelperUtils.responseErrorInternal(error)
     }

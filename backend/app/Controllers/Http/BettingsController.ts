@@ -14,7 +14,7 @@ export default class BettingsController {
   public async oddsFTCalculate({ request }) {
     return await BettingService.oddsFTCalculate(request)
   }
-  public async predictPickWinner({ request }) {
-    return await BettingService.predictPickWinner(request)
+  public async getUserBettingHistory({ request }) {
+    return await BettingService.getUserBettingHistory(request)
   }
 }

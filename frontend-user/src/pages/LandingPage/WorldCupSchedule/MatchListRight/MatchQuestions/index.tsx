@@ -7,13 +7,14 @@ import {
   QUESTION_STATUS,
 } from "../../../../../constants";
 import useBirdToken from "../../../../../hooks/useBirdToken";
-import { getImgSrc } from "../../utils";
+import { getImgSrc } from "../../../../../utils";
 import { getOptionIndexByBetPlace } from "./components/utils";
 import OddsQuestion from "./OddsQuestion";
 import OverUnderQuestion from "./OverUnderQuestion";
 import PredictQuestion from "./PredictQuestion";
 
 export type QuestionProps = {
+  account?: string | undefined;
   dataQuestion: any;
   title: string;
   needApprove: boolean;
@@ -70,6 +71,8 @@ const MatchQuestions = (props: MatchQuestionProps) => {
         ...awayTeamInfo,
         ...matchStatus,
         match_id: dataQuestion?.match_id,
+        ft_home_score: dataQuestion?.ft_home_score,
+        ft_away_score: dataQuestion?.ft_away_score,
         questionStatus:
           predictsData.length === 0 ||
           dataQuestion?.start_time * 1000 > new Date().getTime()
@@ -227,6 +230,7 @@ const MatchQuestions = (props: MatchQuestionProps) => {
       </span>
 
       <PredictQuestion
+        account={account}
         dataQuestion={questions[0]}
         needApprove={needApprove}
         title="1. What will the match score be?"

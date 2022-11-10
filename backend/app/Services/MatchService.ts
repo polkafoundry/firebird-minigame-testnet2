@@ -33,15 +33,15 @@ export default class MatchService {
     if ('match_status' in params) {
       builder = builder.where('match_status', params.match_status)
     }
+
     return builder
   }
   public async getLiveMatch() {
     const currentTime = Math.floor(Date.now() / 1000)
     const liveMatches = await this.MatchModel.query()
       .where('match_status', Const.MATCH_STATUS.LIVE)
-      .orWhere(builder => {
-        builder.where('is_full_time', false)
-          .where('start_time', '<=', currentTime)
+      .orWhere((builder) => {
+        builder.where('is_full_time', false).where('start_time', '<=', currentTime)
       })
     return Promise.resolve(JSON.parse(JSON.stringify(liveMatches)))
   }
@@ -72,7 +72,7 @@ export default class MatchService {
     match = JSON.parse(JSON.stringify(match))
     const obj = {
       ...match,
-      is_completed_bet: match.bet_count ? match.bet_count.bet_count == 5 : false
+      is_completed_bet: match.bet_count ? match.bet_count.bet_count == 5 : false,
     }
     delete match.bet_count
     return obj
@@ -100,15 +100,15 @@ export default class MatchService {
     matches = JSON.parse(JSON.stringify(matches))
     return {
       ...matches,
-      data: matches.data.map(match => {
+      data: matches.data.map((match) => {
         let obj = {
           ...match,
-          is_completed_bet: match.bet_count ? match.bet_count.bet_count == 5 : false
+          is_completed_bet: match.bet_count ? match.bet_count.bet_count == 5 : false,
         }
         delete obj.bettings
         delete obj.predicts
         return obj
-      })
+      }),
     }
   }
   public async getUpcomingMatch(request) {
@@ -134,15 +134,15 @@ export default class MatchService {
     matches = JSON.parse(JSON.stringify(matches))
     return {
       ...matches,
-      data: matches.data.map(match => {
+      data: matches.data.map((match) => {
         let obj = {
           ...match,
-          is_completed_bet: match.bet_count ? match.bet_count.bet_count == 5 : false
+          is_completed_bet: match.bet_count ? match.bet_count.bet_count == 5 : false,
         }
         delete obj.bettings
         delete obj.predicts
         return obj
-      })
+      }),
     }
   }
 }

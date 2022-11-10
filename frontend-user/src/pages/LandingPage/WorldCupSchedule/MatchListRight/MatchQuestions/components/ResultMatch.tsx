@@ -1,6 +1,10 @@
-import { BigNumber } from "ethers";
+// import { BigNumber } from "ethers";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { QUESTION_STATUS } from "../../../../../../constants";
+import { API_BASE_URL, QUESTION_STATUS } from "../../../../../../constants";
+import useBettingContract from "../../../../../../hooks/useBettingContract";
+import useClaimToken from "../../../../../../hooks/useClaimToken";
+import { fetcher } from "../../../../../../hooks/useFetch";
 import { convertHexToStringNumber } from "../../../../../../utils";
 
 type ResultMatchProps = {
@@ -9,6 +13,26 @@ type ResultMatchProps = {
 };
 const ResultMatch = (props: ResultMatchProps) => {
   const { questions, questionStatus } = props;
+
+  const [loadingClaim, setLoadingClaim] = useState<boolean>(false);
+  const [isClaimed, setIsClaimed] = useState<boolean>(false);
+  const [recheckClaim, setRecheckClaim] = useState<boolean>(false); // using after user claim successful
+
+  const { claimToken } = useClaimToken();
+  const { checkClaimed } = useBettingContract();
+
+  useEffect(() => {
+    if (!questions || questionStatus !== QUESTION_STATUS.CORRECT_ANSWER) return;
+
+    const checkUserClaimed = async () => {
+      const claimed = await checkClaimed(
+        questions.match_id,
+        questions.bet_type,
+      );
+      setIsClaimed(claimed);
+    };
+    checkUserClaimed();
+  }, [questions, recheckClaim]);
 
   const displayEarnedAmount = () => {
     const amount = questions?.result_num;
@@ -19,19 +43,48 @@ const ResultMatch = (props: ResultMatchProps) => {
     return convertHexToStringNumber(amount) + " $BIRD";
   };
 
-  const getAmountToClaim = () => {
-    if (!questions?.result_num) return "Updating...";
-    if (questionStatus === QUESTION_STATUS.WRONG_ANSWER) return "0 $BIRD";
+  const handleClaimToken = async () => {
+    if (!questions) {
+      toast.error("Question not found!");
+      return;
+    }
 
-    const amount = BigNumber.from(questions.bet_amount).add(
-      BigNumber.from(questions.result_num),
-    );
+    const payload = {
+      match_id: questions?.match_id,
+      bet_type: questions?.bet_type,
+      wallet: questions?.user_address,
+      amount: questions?.total_claim,
+    };
+    // console.log("claim", payload);
+    setLoadingClaim(true);
 
-    return convertHexToStringNumber(amount) + " $BIRD";
-  };
+    fetcher(`${API_BASE_URL}/claim/get-sig`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    })
+      .then(async (res) => {
+        const { amount, bet_type, match_id } = payload;
 
-  const handleClaimToken = () => {
-    toast.info("Coming soon! Please stay tuned");
+        const rawSignature = res?.data;
+        const signMessage = {
+          deadline: rawSignature?.deadline,
+          v: rawSignature?.v,
+          r: rawSignature?.r?.data,
+          s: rawSignature?.s?.data,
+        };
+
+        await claimToken(match_id, bet_type, amount, signMessage);
+        setRecheckClaim((prevState) => !prevState);
+
+        setLoadingClaim(false);
+      })
+      .catch((err: any) => {
+        setLoadingClaim(false);
+        console.log("ERR get signature: ", err);
+      });
   };
 
   return (
@@ -77,25 +130,32 @@ const ResultMatch = (props: ResultMatchProps) => {
         </div>
         <div className="flex flex-col">
           <span>Amount to claim</span>
-          <span className="font-semibold">{getAmountToClaim()}</span>
+          <span className="font-semibold">
+            {convertHexToStringNumber(questions?.total_claim) + " $BIRD"}
+          </span>
         </div>
       </div>
 
       {questionStatus === QUESTION_STATUS.CORRECT_ANSWER && (
         <div className="mt-5 flex">
-          {/* {Number(questions?.results?.claim) > 0 &&
-              !questions?.results?.isClaimed && ( */}
-          <button
-            className="px-10 py-2 bg-black text-white rounded-xl mr-10"
-            onClick={handleClaimToken}
+          {!isClaimed && (
+            <button
+              className="px-10 py-2 bg-black text-white rounded-xl mr-10"
+              onClick={handleClaimToken}
+              disabled={loadingClaim}
+            >
+              {loadingClaim ? "Loading" : "Claim token"}
+            </button>
+          )}
+          <a
+            href="/history"
+            target={"_blank"}
+            rel="norefferer"
+            className="px-10 py-2 border-2 border-black rounded-xl flex items-center"
           >
-            Claim token
-          </button>
-          {/* )} */}
-          <button className="px-10 py-2 border-2 border-black rounded-xl flex items-center">
             My history
             <img src="/images/icon-next.svg" alt="" className="ml-2" />
-          </button>
+          </a>
         </div>
       )}
     </div>

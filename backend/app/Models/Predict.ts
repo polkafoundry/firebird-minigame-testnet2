@@ -35,6 +35,12 @@ export default class Predict extends BaseModel {
   @column({ columnName: 'predict_time' })
   public predict_time: number
 
+  @column({ columnName: 'result' })
+  public result: boolean
+
+  @column({ columnName: 'match_predicted' })
+  public match_predicted: boolean
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 

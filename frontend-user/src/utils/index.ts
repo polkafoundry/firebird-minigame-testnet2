@@ -1,5 +1,6 @@
 import { BigNumber, ethers } from "ethers";
 import moment from "moment";
+import { API_BASE_LOGO_TEAM } from "../constants";
 
 export const displayWalletAddress = (address: string, digits = 6) => {
   return `${address.substring(0, digits)}...${address.substring(
@@ -41,6 +42,16 @@ export const getMatchTime = (time: any) => {
   return moment(time).format("HH:mm");
 };
 
+export const getDateTime = (time: any) => {
+  if (!time) return "N/A";
+
+  return moment(time).format("YYYY/MM/DD HH:mm");
+};
+
+export const getImgSrc = (iconNumber: string) =>
+  API_BASE_LOGO_TEAM + iconNumber + ".png";
+
 export const convertHexToStringNumber = (hex: any, decimals = 18) => {
+  if (hex === null || hex === undefined) return "0";
   return BigNumber.from(hex).div(BigNumber.from(10).pow(decimals)).toString();
 };

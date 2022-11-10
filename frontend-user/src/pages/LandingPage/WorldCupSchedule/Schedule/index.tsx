@@ -14,11 +14,13 @@ const schedule = [
 
 const Schedule = () => {
   return (
-    <div className={clsx("pt-[140px] mb-20", styles.scheduleBg)}>
+    <div className={clsx("pt-[140px] mb-20 text-white", styles.scheduleBg)}>
       <HeadingPrimary
         backroundTitle="SCHEDULE"
         title="2022 Qatar World Cup Schedule"
         backgroundColor="text-[#3e0016]"
+        titleColor="text-white"
+        isColorSecondary={true}
       />
       <div
         className={clsx(
@@ -42,7 +44,9 @@ const Schedule = () => {
             >
               <div
                 className={clsx(
-                  index === 0 ? "text-28/36 text-[#EB522F]" : "text-20/28",
+                  index === 0 || index === 5
+                    ? "text-28/36 text-[#EB522F]"
+                    : "text-20/28",
                   "font-semibold",
                 )}
               >

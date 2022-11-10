@@ -9,13 +9,20 @@
   user-select: none;
 
   opacity: 0.4;
+}
 
+.colorPrimary {
+  background: linear-gradient(180deg, #000000 15.8%, rgba(0, 0, 0, 0) 86.43%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-stroke: 4px transparent;
+}
+.colorSecondary {
   background: linear-gradient(
     180deg,
     #ffffff 15.8%,
     rgba(255, 255, 255, 0) 86.43%
   );
-
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-stroke: 4px transparent;
@@ -24,21 +31,8 @@
 .headingPrimary {
   font-family: "TTHoves";
   font-weight: 600;
-  font-size: 40px;
-  line-height: 52px;
+  font-size: 36px;
+  line-height: 48px;
   text-align: center;
-}
-
-.smallSquare {
-  width: 10.43px;
-  height: 10.43px;
-  background-color: rgba(145, 13, 79, 1);
-  transform: rotate(45deg);
-}
-
-.largeSquare {
-  width: 16.18px;
-  height: 16.18px;
-  background-color: rgba(254, 195, 16, 1);
-  transform: rotate(45deg);
+  text-transform: uppercase;
 }

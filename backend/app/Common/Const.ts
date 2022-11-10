@@ -84,7 +84,7 @@ module.exports = Object.freeze({
     OU_HT: 'ou_ht',
     ODDS_HT: 'odds_ht',
     OU_FT: 'ou_ft',
-    ODDS_FT: 'odds_ft'
+    ODDS_FT: 'odds_ft',
   },
   MATCH_STATUS: {
     UPCOMING: 'upcoming',
@@ -98,4 +98,14 @@ module.exports = Object.freeze({
     EVENT_NAME: process.env.MF_EVENT_NAME
   },
   MF_ENDPOINT: process.env.MF_ENDPOINT,
+  PREDICT_REWARD_BY_ROUND: {
+    1: 20,
+    2: 20,
+    3: 20,
+    116: 30,
+    18: 50,
+    14: 70,
+    34: 80,
+    12: 100,
+  },
 })

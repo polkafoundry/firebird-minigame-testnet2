@@ -11,29 +11,30 @@ const MatchStatus = (props: MatchStatusProps) => {
   const getBackgroundColor = () => {
     switch (status) {
       case MATCH_STATUS.LIVE:
-        return "bg-green-200";
+        return "bg-[#d0f0db] text-[#3ac26a]";
 
       case MATCH_STATUS.UPCOMING:
-        return "bg-pink-200";
+        return "bg-[#ffd8dd] text-[#ff5c71]";
 
       case MATCH_STATUS.FINISHED:
-        return "bg-gray-200";
+        return "bg-[#f3f3f3] text-[#cdcdcd]";
       default:
-        return "bg-gray-200";
+        return "bg-[#f3f3f3] text-[#cdcdcd]";
     }
   };
 
   const backgroundColor = getBackgroundColor();
 
   return (
-    <div
-      className={clsx(
-        backgroundColor,
-        "rounded-xl font-semibold p-1",
-        className,
-      )}
-    >
-      {MATCH_STATUS_TEXT[status]}
+    <div className={clsx(className, "flex justify-center items-center")}>
+      <div
+        className={clsx(
+          backgroundColor,
+          "rounded-xl font-semibold text-12/18 tracking-[1px] max-w-[90px] w-full",
+        )}
+      >
+        {MATCH_STATUS_TEXT[status]}
+      </div>
     </div>
   );
 };

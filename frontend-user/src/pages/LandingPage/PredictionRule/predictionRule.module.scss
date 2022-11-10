@@ -1,0 +1,22 @@
+// .predictRuleBg {
+//   background-image: url("../../../assets/images/prediction-rule-bg.svg");
+//   background-color: #000000;
+//   background-repeat: no-repeat;
+//   background-position: center;
+//   background-size: cover;
+// }
+
+.predictRuleBg > div {
+  background-color: #000000;
+  background-repeat: no-repeat;
+  background-position: top;
+  background-size: cover;
+}
+.predictRuleBg > div:first-child {
+  background-image: url("../../../assets/images/left-bg.svg");
+}
+.predictRuleBg > div:last-child {
+  background-position: bottom;
+
+  background-image: url("../../../assets/images/right-bg.svg");
+}

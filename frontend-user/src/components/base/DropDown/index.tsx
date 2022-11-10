@@ -14,7 +14,7 @@ type DropDownProps = {
   onChange: (data: any) => void;
   className?: string;
   itemsClassName?: string;
-  bgColor?: "black" | "orange";
+  bgColor?: "black" | "white";
 };
 
 const DropDown = (props: DropDownProps) => {
@@ -25,13 +25,13 @@ const DropDown = (props: DropDownProps) => {
     onChange,
     className,
     itemsClassName,
-    bgColor = "orange",
+    bgColor = "white",
   } = props;
   const selectedItem = items.find((item) => item.value === selectedValue);
-  const backgroundColor = bgColor === "black" ? "bg-black" : "bg-orange-200";
-  const textColor = bgColor === "black" ? "text-white" : "text-gray-700";
+  const backgroundColor = bgColor === "black" ? "bg-black" : "bg-white";
+  const textColor = bgColor === "black" ? "text-white" : "text-gray-700 ";
   const activeStyle =
-    bgColor === "black" ? "bg-white text-black" : "bg-white text-gray-900";
+    bgColor === "black" ? "bg-white text-black" : "bg-white text-red";
 
   return (
     <Menu
@@ -46,10 +46,10 @@ const DropDown = (props: DropDownProps) => {
       {({ open }) => (
         <>
           <div>
-            <Menu.Button className="inline-flex w-full justify-between items-center rounded-xl px-3 py-2.5 text-base font-semibold">
+            <Menu.Button className="inline-flex w-full justify-between items-center rounded-xl px-3 py-1.5 text-base font-semibold">
               {selectedItem?.label || label}
               <img
-                className={clsx("cursor-pointer", open && "rotate-180")}
+                className={clsx("cursor-pointer w-3 h-3", open && "rotate-180")}
                 src={
                   bgColor === "black"
                     ? "/images/icon-arrow-down-white.svg"
@@ -81,12 +81,12 @@ const DropDown = (props: DropDownProps) => {
                 {items
                   .filter((item) => item.value !== selectedItem?.value)
                   .map((item) => (
-                    <Menu.Item key={item.value}>
+                    <Menu.Item key={item.label}>
                       {({ active }) => (
                         <li
                           className={clsx(
                             active ? activeStyle : textColor,
-                            "block px-4 py-2 text-sm cursor-pointer hover:text-birdRed",
+                            "block px-4 py-2 text-sm cursor-pointer hover:bg-[#3A0013] text-white",
                           )}
                           onClick={() => {
                             onChange(item.value);

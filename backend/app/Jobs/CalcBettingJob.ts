@@ -14,6 +14,8 @@ import { JobContract } from '@ioc:Rocketseat/Bull'
 import Bull from '@ioc:Rocketseat/Bull'
 import BettingModel from 'App/Models/Betting'
 import MatchModel from 'App/Models/Match'
+import PredictModel from 'App/Models/Predict'
+
 const Const = require('@ioc:App/Common/Const')
 const BigNumber = require('bignumber.js')
 
@@ -46,17 +48,20 @@ export default class CalcBettingJob implements JobContract {
     console.log('CalcBettingJob: ', data)
     // Do somethign with you job data
     const MAX_BETTING_CALC = 5000
-    let [match, bettings] = await Promise.all([
+    let [match, bettings, predict] = await Promise.all([
       MatchModel.query().where('match_id', data.matchId).first(),
       BettingModel.query()
         .where('match_id', data.matchId)
         .where('bet_type', data.betType)
         .where('is_calculated', false)
         .limit(MAX_BETTING_CALC),
+      PredictModel.query().where('match_id', data.matchId).where('match_predicted', false).exec(),
     ])
     bettings = JSON.parse(JSON.stringify(bettings))
     console.log('CalcBettingJob: ', match)
     console.log({ bettings })
+    await this._updatePredictStatus(match, predict)
+
     if (!match) return
 
     const calcFunction = {
@@ -98,6 +103,10 @@ export default class CalcBettingJob implements JobContract {
                     .minus(new BigNumber(amount))
                     .toFixed()
                 : -amount,
+            total_claim:
+              ouHTBets[i]?.bet_place === 'under'
+                ? new BigNumber(amount).multipliedBy(new BigNumber(match.ou_ht_under)).toFixed()
+                : 0,
             is_calculated: true,
           })
       } else if (match.ou_ht_ratio < match.ht_home_score + match.ht_away_score) {
@@ -115,6 +124,10 @@ export default class CalcBettingJob implements JobContract {
                     .minus(new BigNumber(amount))
                     .toFixed()
                 : -amount,
+            total_claim:
+              ouHTBets[i]?.bet_place === 'over'
+                ? new BigNumber(amount).multipliedBy(new BigNumber(match.ou_ht_over)).toFixed()
+                : 0,
             is_calculated: true,
           })
       } else {
@@ -127,6 +140,7 @@ export default class CalcBettingJob implements JobContract {
             ou_statistics: match.ou_ht_ratio,
             result: 'draw',
             result_num: 0,
+            total_claim: 0,
             is_calculated: true,
           })
       }
@@ -151,6 +165,10 @@ export default class CalcBettingJob implements JobContract {
                     .minus(new BigNumber(amount))
                     .toFixed()
                 : -amount,
+            total_claim:
+              ouFTBets[i]?.bet_place === 'under'
+                ? new BigNumber(amount).multipliedBy(new BigNumber(match.ou_ht_under)).toFixed()
+                : 0,
             is_calculated: true,
           })
       } else if (match.ou_ht_ratio < match.ht_home_score + match.ht_away_score) {
@@ -168,6 +186,10 @@ export default class CalcBettingJob implements JobContract {
                     .minus(new BigNumber(amount))
                     .toFixed()
                 : -amount,
+            total_claim:
+              ouFTBets[i]?.bet_place === 'over'
+                ? new BigNumber(amount).multipliedBy(new BigNumber(match.ou_ft_over)).toFixed()
+                : -amount,
             is_calculated: true,
           })
       } else {
@@ -180,6 +202,7 @@ export default class CalcBettingJob implements JobContract {
             ou_statistics: match.ou_ft_ratio,
             result: 'draw',
             result_num: 0,
+            total_claim: 0,
             is_calculated: true,
           })
       }
@@ -207,6 +230,10 @@ export default class CalcBettingJob implements JobContract {
                     .minus(new BigNumber(amount))
                     .toFixed()
                 : -amount,
+            total_claim:
+              oddsHTBets[i]?.bet_place === 'home'
+                ? new BigNumber(amount).multipliedBy(new BigNumber(match.odds_ht_home)).toFixed()
+                : 0,
             is_calculated: true,
           })
       } else if (match.ht_home_score < match.ht_away_score) {
@@ -228,6 +255,10 @@ export default class CalcBettingJob implements JobContract {
                     .minus(new BigNumber(amount))
                     .toFixed()
                 : -amount,
+            total_claim:
+              oddsHTBets[i]?.bet_place === 'away'
+                ? new BigNumber(amount).multipliedBy(new BigNumber(match.odds_ht_away)).toFixed()
+                : 0,
             is_calculated: true,
           })
       } else {
@@ -249,6 +280,10 @@ export default class CalcBettingJob implements JobContract {
                     .minus(new BigNumber(amount))
                     .toFixed()
                 : -amount,
+            total_claim:
+              oddsHTBets[i]?.bet_place === 'draw'
+                ? new BigNumber(amount).multipliedBy(new BigNumber(match.odds_ht_draw)).toFixed()
+                : 0,
             is_calculated: true,
           })
       }
@@ -276,6 +311,10 @@ export default class CalcBettingJob implements JobContract {
                     .minus(new BigNumber(amount))
                     .toFixed()
                 : -amount,
+            total_claim:
+              oddsFTBets[i]?.bet_place === 'home'
+                ? new BigNumber(amount).multipliedBy(new BigNumber(match.odds_ft_home)).toFixed()
+                : 0,
             is_calculated: true,
           })
       } else if (match.ft_home_score < match.ft_away_score) {
@@ -297,6 +336,10 @@ export default class CalcBettingJob implements JobContract {
                     .minus(new BigNumber(amount))
                     .toFixed()
                 : -amount,
+            total_claim:
+              oddsFTBets[i]?.bet_place === 'away'
+                ? new BigNumber(amount).multipliedBy(new BigNumber(match.odds_ft_away)).toFixed()
+                : 0,
             is_calculated: true,
           })
       } else {
@@ -318,7 +361,36 @@ export default class CalcBettingJob implements JobContract {
                     .minus(new BigNumber(amount))
                     .toFixed()
                 : -amount,
+            total_claim:
+              oddsFTBets[i]?.bet_place === 'draw'
+                ? new BigNumber(amount).multipliedBy(new BigNumber(match.odds_ft_draw)).toFixed()
+                : 0,
             is_calculated: true,
+          })
+      }
+    }
+  }
+
+  private async _updatePredictStatus(match, predicts) {
+    for (let i = 0; i < predicts.length; i++) {
+      if (
+        match.ft_home_score == predicts[i].home_score &&
+        match.ft_away_score == predicts[i].away_score
+      ) {
+        await PredictModel.query()
+          .where('match_id', predicts[i].match_id)
+          .where('user_address', predicts[i].user_address)
+          .update({
+            result: true,
+            match_predicted: true,
+          })
+      } else {
+        await PredictModel.query()
+          .where('match_id', predicts[i].match_id)
+          .where('user_address', predicts[i].user_address)
+          .update({
+            result: false,
+            match_predicted: true,
           })
       }
     }

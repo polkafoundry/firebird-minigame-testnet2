@@ -22,10 +22,9 @@ const OddsQuestion = (props: QuestionProps) => {
   const { approveBirdToken, loadingApprove } = useBirdToken();
   const { betting, loadingBetting } = useBetting();
 
-  const isSubmitted =
-    dataQuestion?.questionStatus !== QUESTION_STATUS.NOT_PREDICTED;
-  const matchEnded = dataQuestion?.match_status === MATCH_STATUS.FINISHED;
   const questionStatus = dataQuestion?.questionStatus;
+  const isSubmitted = questionStatus !== QUESTION_STATUS.NOT_PREDICTED;
+  const matchEnded = dataQuestion?.match_status === MATCH_STATUS.FINISHED;
 
   useEffect(() => {
     if (!dataQuestion) return;

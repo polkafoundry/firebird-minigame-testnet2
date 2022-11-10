@@ -1,24 +1,42 @@
+.backgroundGroupStage {
+  background-image: url("../../../../assets/images/bg-group-stage.svg");
+  background-repeat: no-repeat;
+}
+
+.tableRow:first-child {
+  padding: 11px 20px;
+}
+.tableRow:first-child > div {
+  text-transform: uppercase;
+  font-weight: 700;
+  opacity: 0.8;
+  font-size: 12px;
+  line-height: 18px;
+}
+.tableRow:not(:first-child) {
+  padding: 9px 20px;
+}
 .tableRow > div:first-child {
   width: 12%;
   max-width: 60px;
 }
 .tableRow > div:nth-child(2) {
-  width: 306px;
+  width: 160px;
   flex: 1;
 }
 .tableRow > div:nth-child(3) {
-  width: 8%;
+  width: 18%;
   max-width: 70px;
   text-align: center;
 }
 .tableRow > div:nth-child(4) {
-  width: 12%;
-  max-width: 80px;
+  width: 18%;
+  max-width: 100px;
   text-align: center;
 }
 .tableRow > div:last-child {
-  width: 12%;
-  max-width: 80px;
+  width: 18%;
+  max-width: 100px;
   display: flex;
   justify-content: center;
 }

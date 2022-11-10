@@ -8,6 +8,7 @@ const REQUEST_RANDOM_NUMBER = 'RequestRandomNumber'
 const RECEIVE_RANDOM_NUMBER = 'ReceiveRandomNumber'
 
 const STEP = parseInt(process.env.CRAWL_STEP || '5000', 10)
+const Const = require('@ioc:App/Common/Const')
 
 /*
 |--------------------------------------------------------------------------
@@ -84,6 +85,7 @@ export default class FetchPredictWinnerJob implements JobContract {
   }
 
   private async fetchEvents(provider, event_type, from, to) {
+    const MatchModel = require('@ioc:App/Models/Match')
     const instance = await HelperUtils.getPredictWinnerContractInstance()
     const events = await instance.getPastEvents(event_type, {
       fromBlock: from,
@@ -105,6 +107,9 @@ export default class FetchPredictWinnerJob implements JobContract {
           await data.save()
           break
         case RECEIVE_RANDOM_NUMBER:
+          const match = await MatchModel.query()
+            .where('match_id', event.returnValues.matchID)
+            .first()
           await PredictWinner.query()
             .where('match_id', event.returnValues.matchID)
             .andWhere('req_id', event.returnValues.requestId)
@@ -112,6 +117,7 @@ export default class FetchPredictWinnerJob implements JobContract {
               predict_winner: event.returnValues.matchID,
               final_winner: event.returnValues.winner,
               randomness: event.returnValues.result,
+              rewards: Const.PREDICT_REWARD_BY_ROUND[match.round],
             })
           break
         default:

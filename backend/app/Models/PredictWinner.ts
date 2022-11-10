@@ -35,6 +35,9 @@ class PredictWinner extends BaseModel {
   @column({ columnName: 'randomness' })
   public randomness: number
 
+  @column({ columnName: 'rewards' })
+  public rewards: number
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 

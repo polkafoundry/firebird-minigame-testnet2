@@ -1,6 +1,6 @@
 import React from "react";
 import DefaultLayout from "../../components/layout/DefaultLayout";
-import MatchScore from "./MatchScore/inde";
+import MatchScore from "./MatchScore";
 import WhoWin from "./WhoWin";
 
 const LeaderboardPage = () => {
