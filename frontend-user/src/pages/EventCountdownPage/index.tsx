@@ -54,11 +54,11 @@ const EventCountdownPage = () => {
           styles.banner,
         )}
       >
-        <span className="text-80/80 font-bold">Phoenix Cup</span>
+        <span className="text-80/80 font-semibold">Phoenix Cup</span>
         <span className="text-24/32 tracking-widest font-semibold mt-2">
           🔥 coming soon 🔥
         </span>
-        <div className="flex space-x-8">
+        <div className="flex space-x-8 mt-16">
           <TimeField label="days" value={day} />
           <span className="text-[120px] leading-[120px] pt-10">:</span>
 
