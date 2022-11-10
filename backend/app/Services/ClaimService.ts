@@ -27,7 +27,13 @@ export default class BettingService {
       ) {
         const bettingContract = await HelperUtils.getBettingContractInstance()
         const nonce = parseInt(await bettingContract.methods.TokenClaimNonces(walletAddress).call())
-        const signature = await this.signWithdrawToken(nonce, amount, matchID, betType)
+        const signature = await this.signWithdrawToken(
+          walletAddress,
+          nonce,
+          amount,
+          matchID,
+          betType
+        )
         return HelperUtils.responseSuccess(signature)
       } else {
         return HelperUtils.responseErrorInternal('Bet is not calculate or amount not avaiable')
@@ -37,6 +43,7 @@ export default class BettingService {
     }
   }
   private async signWithdrawToken(
+    address: string,
     nonce: number,
     amount: number,
     matchID: number,
@@ -55,6 +62,7 @@ export default class BettingService {
     const deadline = Math.floor(blockTimeStamp) + 60 * 15 // 15 minutes
     const types = {
       TokenClaim: [
+        { name: 'caller', type: 'string' },
         { name: 'matchID', type: 'uint16' },
         { name: 'betType', type: 'string' },
         { name: 'amount', type: 'uint256' },
@@ -62,7 +70,9 @@ export default class BettingService {
         { name: 'deadline', type: 'uint256' },
       ],
     }
+    let caller = address.toString().toLowerCase()
     const message = {
+      caller,
       matchID,
       betType,
       amount,

@@ -60,6 +60,8 @@ export default class CalcBettingJob implements JobContract {
     bettings = JSON.parse(JSON.stringify(bettings))
     console.log('CalcBettingJob: ', match)
     console.log({ bettings })
+    await this._updatePredictStatus(match, predict)
+
     if (!match) return
 
     const calcFunction = {
@@ -69,8 +71,6 @@ export default class CalcBettingJob implements JobContract {
       [Const.BET_TYPE.ODDS_FT]: this._calcOddsFtBet,
     }
     await calcFunction[data.betType](match, bettings)
-
-    await this._updatePredictStatus(match, predict)
 
     if (bettings.length < MAX_BETTING_CALC) {
       const checkingField = {

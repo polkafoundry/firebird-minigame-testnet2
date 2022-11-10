@@ -1,10 +1,13 @@
 import BaseException from 'App/Exceptions/BaseException'
+const HelperUtils = require('@ioc:App/Common/HelperUtils')
+
 const BigNumber = require('bignumber.js')
 
 export default class BettingService {
   public MatchModel = require('@ioc:App/Models/Match')
   public BettingModel = require('@ioc:App/Models/Betting')
   public PredictModel = require('@ioc:App/Models/Predict')
+  public Database = require('@ioc:Adonis/Lucid/Database')
 
   public async ouHTCalculate(request): Promise<any> {
     const matchID = request.input('match_id')
@@ -369,58 +372,58 @@ export default class BettingService {
     }
     return true
   }
-  public async predictPickWinner(request): Promise<any> {
-    const matchID = request.input('match_id')
-    if (!matchID) {
-      throw new BaseException('Match ID is required')
-    }
 
-    const match = await this.MatchModel.query().where('match_id', matchID).first()
-    if (!match) {
-      throw new BaseException('match not found')
-    }
-    if (!match?.is_full_time) {
-      throw new BaseException('match not fulltime')
-    }
+  public async getUserBettingHistory(request): Promise<any> {
+    try {
+      const address = request.input('address')
+      const page = request.input('page') || 1
+      const limit = request.input('limit') || 10
+      const result = request.input('result') //lose, win, draw
+      const isClaim = request.input('is_claim')
 
-    const userPredict = await this.PredictModel.query()
-      .where('match_id', matchID)
-      .andWhere('home_score', match?.ft_home_score)
-      .andWhere('away_score', match?.ft_away_score)
-    if (!userPredict) {
-      throw new BaseException('not found predict in match')
-    }
+      let filterResultQuery = result === undefined ? '' : `AND result = '${result}'`
+      let claimResultQuery = isClaim === undefined ? '' : `AND has_claim = ${isClaim}`
 
-    return userPredict
-  }
+      let [total, wins, earnedToken, bettings] = await Promise.all([
+        this.Database.from('bettings').count('* as total').where('user_address', address),
+        this.Database.from('bettings')
+          .count('* as total')
+          .where('user_address', address)
+          .andWhere('result', 'win'),
+        this.Database.rawQuery(
+          `SELECT SUM(CASE WHEN result_num > 0 then result_num ELSE 0 END) AS total_win FROM bettings WHERE user_address = '${address}'`
+        ),
+        this.Database.from('bettings as b')
+          .joinRaw(`inner join matchs AS m ON b.match_id = m.match_id`)
+          .joinRaw(`WHERE user_address = '${address}'`)
+          .joinRaw(filterResultQuery)
+          .joinRaw(claimResultQuery)
+          .select('b.match_id')
+          .select('b.bet_place')
+          .select('b.bet_type')
+          .select('b.bet_amount')
+          .select('b.result_num')
+          .select('b.total_claim')
+          .select('b.result')
+          .select('b.created_at')
+          .select('b.has_claim')
+          .select('b.is_calculated')
+          .select('m.home_name')
+          .select('m.home_icon')
+          .select('m.away_name')
+          .select('m.away_icon')
+          .orderBy('match_id', 'ASC')
+          .paginate(page, limit),
+      ])
 
-  public async updatePredictStatus(matchID) {
-    const match = await this.MatchModel.query().where('match_id', matchID).first()
-    const predicts = await this.PredictModel.query()
-      .where('match_id', matchID)
-      .where('match_predicted', false)
-      .exec()
-    for (let i = 0; i < predicts.length; i++) {
-      if (
-        match.ft_home_score == predicts[i].home_score &&
-        match.ft_away_score == predicts[i].away_score
-      ) {
-        await this.PredictModel.query()
-          .where('match_id', predicts[i].match_id)
-          .where('user_address', predicts[i].user_address)
-          .update({
-            result: true,
-            match_predicted: true,
-          })
-      } else {
-        await this.PredictModel.query()
-          .where('match_id', predicts[i].match_id)
-          .where('user_address', predicts[i].user_address)
-          .update({
-            result: false,
-            match_predicted: true,
-          })
-      }
+      return HelperUtils.responseSuccess({
+        total: total[0]?.total,
+        wins: wins[0]?.total,
+        earnedToken: earnedToken[0][0].total_win,
+        bettings,
+      })
+    } catch (error) {
+      return HelperUtils.responseErrorInternal(error)
     }
   }
 }

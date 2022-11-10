@@ -8,8 +8,8 @@
 const hre = require("hardhat");
 
 async function main() {
-  const tokenAddress = "0x2FBE4c9399c279002c0a2e37593d99B555F25824";
-  const fundAddress = "0x58562da9cAD0BC44DC6D19E209da93Be834c28B8";
+  const tokenAddress = "0x75B609AA12713b2fb7Ac141B2dD06d81cf4115E3";
+  const fundAddress = "0x1522E0De73B85D0b8DE2c67b4263F8Fa4A88abBB";
   const maxAmount = "1000000000000000000000";
 
   const ContractFactory = await hre.ethers.getContractFactory("SBirdBetting");

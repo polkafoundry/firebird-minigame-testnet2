@@ -30,32 +30,6 @@ const predictionRules = [
   ],
 ];
 
-const predictionRules1 = [
-  [
-    {
-      title: "Match Score",
-      description:
-        "Predict final score of a match. You will be added to the match's whitelist if your prediction is correct. 1 winner for each game will be selected randomly by Chainlink.",
-    },
-    { image: "./images/landing-page/prediction-rule/image-2.png" },
-
-    {
-      title: "Total goals",
-      description:
-        "You will be able to predict the total goals in both 1st half & full match. Your prediction can be  lower or higher than a given total number. You will need to deposit $BIRD to join.",
-    },
-  ],
-  [
-    { image: "./images/landing-page/prediction-rule/image-1.png" },
-    {
-      title: "Who wins?",
-      description:
-        "Predict which team will be the winner.  You will need to deposit $BIRD to join. If your team wins, you will receive bonus $BIRD based on the rate given.",
-    },
-    { image: "./images/landing-page/prediction-rule/image-3.png" },
-  ],
-];
-
 const PredictionRule = () => {
   return (
     <div>
