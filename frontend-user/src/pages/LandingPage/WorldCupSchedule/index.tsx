@@ -105,7 +105,7 @@ const WorldCupSchedule = () => {
       <div className="max-w-screen-main mx-auto w-full">
         <div className={clsx("flex flex-col mt-5 relative", "md:flex-row")}>
           <div
-            className={clsx("w-full h-fit", "md:w-[55%] md:sticky md:top-10")}
+            className={clsx("w-full h-fit", "md:w-[44%] md:sticky md:top-10")}
           >
             <MatchListTable
               selectedMatchId={selectedMatchId}
@@ -117,7 +117,7 @@ const WorldCupSchedule = () => {
               handleChangeStatus={handleChangeStatus}
             />
           </div>
-          <div className="w-full md:w-[45%]">
+          <div className="w-full md:w-[56%]">
             <MatchListRight account={account} matchId={selectedMatchId} />
           </div>
         </div>

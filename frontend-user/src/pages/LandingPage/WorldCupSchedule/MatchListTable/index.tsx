@@ -153,7 +153,7 @@ const MatchListTable = (props: MatchListTableProps) => {
                   <div
                     key={match?.id}
                     className={clsx(
-                      "flex cursor-pointer bg-white hover:bg-orange-300 transition-all duration-300 mb-0.5 last:mb-0",
+                      "flex items-center cursor-pointer bg-white hover:bg-orange-300 transition-all duration-300 mb-0.5 last:mb-0",
                       styles.tableRow,
                       selectedMatchId === match?.id ? "bg-amber-200" : "",
                     )}

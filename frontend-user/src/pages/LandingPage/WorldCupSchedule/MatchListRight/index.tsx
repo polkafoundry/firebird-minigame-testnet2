@@ -4,9 +4,9 @@ import { useState } from "react";
 import { MATCH_STATUS } from "../../../../constants";
 import useFetch from "../../../../hooks/useFetch";
 import { getImgSrc } from "../../../../utils";
+import styles from "./matchListRight.module.scss";
 import MatchQuestions from "./MatchQuestions";
 import MatchGuide from "./MathGuide";
-import styles from "./matchListRight.module.scss";
 
 type MatchListRightProps = {
   matchId: number | undefined;
@@ -20,7 +20,7 @@ const nav = [
 
 const MatchListRight = (props: MatchListRightProps) => {
   const { matchId, account } = props;
-  const [selectedNav, setSelectedNav] = useState<number>(1);
+  const [selectedNav, setSelectedNav] = useState<number>(2);
 
   const fetchMatchDetailUrl = `/match/detail/${matchId}?wallet_address=${account}`;
   const { data } = useFetch<any>(fetchMatchDetailUrl, !!matchId);
@@ -33,31 +33,36 @@ const MatchListRight = (props: MatchListRightProps) => {
   const isLiving = startTime.getTime() <= new Date().getTime() && !isEnded;
 
   return (
-    <div className="flex flex-col rounded-lg md:ml-6 border-2 border-gray-600 bg-[#F2F2F2]">
-      <div className="flex flex-col items-center justify-center text-center h-auto min-h-[280px] bg-gray-700 text-white">
+    <div className="flex flex-col rounded-lg md:ml-6 bg-[#F2F2F2]">
+      <div
+        className={clsx(
+          "flex flex-col items-center justify-center text-center h-auto min-h-[280px] text-white",
+          styles.backgroundStadium,
+        )}
+      >
         {matchData ? (
           <>
-            <span className="">{matchTime}</span>
-            <span className="">{matchData?.stadium}</span>
-            <div className="flex justify-between w-full max-w-[440px]">
+            <span className="text-20/32 uppercase font-bold">{matchTime}</span>
+            <span className="text-16/24 mt-1">{matchData?.stadium}</span>
+            <div className="flex justify-between items-center w-full max-w-[660px] mt-5">
               <div className="flex flex-col items-center gap-2 flex-1">
                 <img
                   src={getImgSrc(matchData.home_icon)}
-                  className="w-[65px] h-[65px] m-auto rounded-full"
+                  className="w-[60px] h-[60px] m-auto rounded-full"
                   alt=""
                 />
-                <span className="text-base">{matchData.home_name}</span>
+                <span className="text-20/32 font-semibold capitalize">
+                  {matchData.home_name.toLowerCase()}
+                </span>
               </div>
-              <div>
-                <span className="leading-[65px] text-[52px] font-semibold">
+              <div className="rounded-full bg-white text-black flex justify-center items-center w-[140px] h-[60px] mx-5">
+                <span className="text-24/32 font-semibold">
                   {matchData?.match_status === MATCH_STATUS.UPCOMING
                     ? "-"
                     : matchData?.ft_home_score || 0}
                 </span>
-                <span className="leading-[65px] text-[52px] font-semibold mx-5">
-                  :
-                </span>
-                <span className="leading-[65px] text-[52px] font-semibold">
+                <span className="text-24/32 font-semibold mx-2">:</span>
+                <span className="text-24/32 font-semibold">
                   {matchData?.match_status === MATCH_STATUS.UPCOMING
                     ? "-"
                     : matchData?.ft_away_score || 0}
@@ -69,14 +74,20 @@ const MatchListRight = (props: MatchListRightProps) => {
                   className="w-[65px] h-[65px] m-auto rounded-full"
                   alt=""
                 />
-                <span className="text-base">{matchData.away_name}</span>
+                <span className="text-20/32 font-semibold capitalize">
+                  {matchData.away_name.toLowerCase()}
+                </span>
               </div>
             </div>
 
             <div
               className={clsx(
-                "text-black text-sm px-2 rounded-md mt-5 font-semibold",
-                isLiving ? "bg-green-500" : isEnded ? "bg-main" : "bg-gray-500",
+                "text-white text-14/20 px-5 py-1.5 rounded-md mt-5 font-semibold bg-[#3A0013]",
+                // isLiving
+                //   ? "bg-green-500"
+                //   : isEnded
+                //   ? "bg-[#3A0013]"
+                //   : "bg-gray-500",
               )}
             >
               {isLiving
@@ -91,7 +102,7 @@ const MatchListRight = (props: MatchListRightProps) => {
         ) : (
           <>
             <img src="/images/select-match.png" alt="" />
-            <p className="m-0 bold text-lg">Please select a match.</p>
+            <p className="mt-4 bold text-14/20">Please select a match.</p>
           </>
         )}
       </div>
@@ -100,10 +111,10 @@ const MatchListRight = (props: MatchListRightProps) => {
         {nav.map((item: any) => (
           <div
             className={clsx(
-              "flex justify-center items-center text-center",
+              "flex justify-center items-center text-center text-14/20 font-bold text-black",
               selectedNav === item.value
-                ? "bg-gray-500 text-black"
-                : "bg-gray-200 text-gray-400",
+                ? "bg-white"
+                : "bg-[#F2F2F2] opacity-50",
             )}
             key={item.value}
             onClick={() => setSelectedNav(item.value)}
