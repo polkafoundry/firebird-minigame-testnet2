@@ -21,8 +21,6 @@ import { calcOddsFtJob } from 'App/Jobs/CalcOddsFtJob'
 const FetchMatchInfoInitTask = require('@ioc:App/Tasks/FetchMatchInfoTask')
 const FetchPredictWinnerInitTask = require('@ioc:App/Tasks/FetchPredictWinnerTask')
 
-import sendDataToMetaForceSchedule from 'App/Tasks/SendDataToMetaForceTask'
-
 /*
 |--------------------------------------------------------------------------
 | Global middleware
@@ -67,6 +65,5 @@ new Promise(() => {
   calcOddsHtJob()
   calcOddsFtJob()
 
-  sendDataToMetaForceSchedule()
   return
 }).then(() => { })

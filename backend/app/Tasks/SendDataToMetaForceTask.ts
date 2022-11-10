@@ -85,3 +85,5 @@ const sendDataToMetaForceSchedule = () => {
 }
 
 export default sendDataToMetaForceSchedule
+
+module.exports = sendDataToMetaForceSchedule
