@@ -4,10 +4,10 @@ import DefaultLayout from "../../components/layout/DefaultLayout";
 
 const EventCountdownPage = () => {
   const { unityProvider, isLoaded, loadingProgression } = useUnityContext({
-    loaderUrl: "buildUnity/Builds.loader.js",
-    dataUrl: "buildUnity/Builds.data",
-    frameworkUrl: "buildUnity/Builds.framework.js",
-    codeUrl: "buildUnity/Builds.wasm",
+    loaderUrl: "buildUnity/BuildsNoLogin.loader.js",
+    dataUrl: "buildUnity/BuildsNoLogin.data",
+    frameworkUrl: "buildUnity/BuildsNoLogin.framework.js",
+    codeUrl: "buildUnity/BuildsNoLogin.wasm",
     webglContextAttributes: {
       preserveDrawingBuffer: true,
     },
