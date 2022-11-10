@@ -8,6 +8,7 @@ export const MAX_DEPOSIT_AMOUNT = 1000;
 
 export const URLS = {
   HOME: "/",
+  EVENT: "/event",
   LEADERBOARD: "/leaderboard",
   HISTORY: "/history",
   FAUCET_TESTNET: "https://faucet.firefly.firebirdchain.com/",
