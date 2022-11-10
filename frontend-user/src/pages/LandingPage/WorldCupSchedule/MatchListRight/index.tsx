@@ -6,7 +6,6 @@ import useFetch from "../../../../hooks/useFetch";
 import { getImgSrc } from "../../../../utils";
 import MatchQuestions from "./MatchQuestions";
 import MatchGuide from "./MathGuide";
-import styles from "./matchListRight.module.scss";
 
 type MatchListRightProps = {
   matchId: number | undefined;
