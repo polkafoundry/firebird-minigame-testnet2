@@ -14,7 +14,7 @@ const queryString = require("query-string");
 
 export type FilterTypes = {
   predicted: number;
-  match_status: string;
+  status: string;
   page: number;
   size: number;
   round_name: typeof rounds[keyof typeof rounds];
@@ -28,7 +28,7 @@ const WorldCupSchedule = () => {
   const [dataTable, setDataTable] = useState<any[]>([]);
   const [filter, setFilter] = useState<FilterTypes>({
     predicted: 0,
-    match_status: "",
+    status: "",
     page: 1,
     size: 20,
     wallet_address: "",
@@ -87,7 +87,7 @@ const WorldCupSchedule = () => {
   const handleChangeStatus = (value: any) => {
     setFilter((prevFilter: FilterTypes) => ({
       ...prevFilter,
-      match_status: value,
+      status: value,
     }));
   };
 
