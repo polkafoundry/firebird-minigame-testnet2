@@ -1,10 +1,11 @@
 import clsx from "clsx";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { FilterTypes } from "..";
 import DropDown from "../../../../components/base/DropDown";
 import MatchName from "../../../../components/base/Table/MatchName";
 import MatchPredict from "../../../../components/base/Table/MatchPredict";
 import MatchStatus from "../../../../components/base/Table/MatchStatus";
-import { MATCH_STATUS } from "../../../../constants";
+import { MATCH_STATUS, rounds } from "../../../../constants";
 import { getMatchTime } from "../../../../utils";
 import styles from "./matchList.module.scss";
 
@@ -23,11 +24,13 @@ const predictedOptions = [
 ];
 
 const statusOptions = [
-  { label: "All", value: 0 },
-  { label: "Ended", value: 1 },
-  { label: "On going", value: 2 },
-  { label: "Not yet", value: 3 },
+  { label: "All", value: "" },
+  { label: "Ended", value: MATCH_STATUS.FINISHED },
+  { label: "On going", value: MATCH_STATUS.LIVE },
+  { label: "Not yet", value: MATCH_STATUS.UPCOMING },
 ];
+
+const REGEX_DATE = /(\w.*) -/g;
 
 type MatchListTableProps = {
   handleSelectMatch: (id: number) => void;
@@ -35,6 +38,7 @@ type MatchListTableProps = {
   dataTable: Array<any>;
   selectedMatchId: number | undefined;
   filter: any;
+  setFilter: any;
   handleChangePredicted: (value: any) => void;
   handleChangeStatus: (value: any) => void;
 };
@@ -46,31 +50,55 @@ const MatchListTable = (props: MatchListTableProps) => {
     dataTable = [],
     selectedMatchId,
     filter,
+    setFilter,
     handleChangePredicted,
     handleChangeStatus,
   } = props;
 
   const [groupStageIndex, setGroupStageIndex] = useState<number>(0);
 
+  useEffect(() => {
+    setFilter((prevState: FilterTypes) => ({
+      ...prevState,
+      round_name: rounds[groupStageIndex].value,
+    }));
+  }, [groupStageIndex]);
+
   const nextGroup = () => {
-    if (groupStageIndex < dataTable.length - 1)
-      setGroupStageIndex((prevState: any) => prevState + 1);
+    if (groupStageIndex >= rounds.length - 1) return;
+    setGroupStageIndex((prevState: any) => prevState + 1);
   };
 
   const previousGroup = () => {
-    if (groupStageIndex >= 1)
-      setGroupStageIndex((prevState: any) => prevState - 1);
+    if (groupStageIndex < 1) return;
+    setGroupStageIndex((prevState: any) => prevState - 1);
   };
+
+  const getDate = (date: string) => {
+    if (!date) return "";
+    const str = date.match(REGEX_DATE);
+    return str ? str[0].slice(0, str.length - 2) : "";
+  };
+
+  const priodDate = useMemo(() => {
+    if (!dataTable) return "N/A";
+
+    const lastIndex = dataTable.length - 1;
+    const startDate = getDate(dataTable[0]?.date);
+    const endDate = getDate(dataTable[lastIndex]?.date);
+
+    return `${startDate} - ${endDate}`;
+  }, [dataTable]);
 
   return (
     <div className="bg-[#F2F2F2]">
       <div
         className={clsx(
-          "uppercase text-20/28 font-bold text-white pl-[30px] py-1.5",
+          "uppercase text-20/28 font-bold text-white px-[30px] py-1.5 w-fit",
           styles.backgroundGroupStage,
         )}
       >
-        Group stage
+        {rounds[groupStageIndex].label}
       </div>
       <div className="px-5 pt-3 pb-5">
         <div className="flex items-center justify-between ">
@@ -110,13 +138,7 @@ const MatchListTable = (props: MatchListTableProps) => {
           >
             <img src="/images/icon-previous.svg" alt="" />
           </div>
-          <div className="text-20/28 font-bold uppercase">
-            {dataTable
-              ? dataTable[groupStageIndex]?.groupRound +
-                " " +
-                dataTable[groupStageIndex]?.date
-              : "N/A"}
-          </div>
+          <div className="text-20/28 font-bold uppercase">{priodDate}</div>
           <div
             className="h-12 w-12 cursor-pointer flex justify-center items-center"
             onClick={nextGroup}
@@ -128,6 +150,7 @@ const MatchListTable = (props: MatchListTableProps) => {
             />
           </div>
         </div>
+
         <div className="overflow-x-auto">
           <div
             className={clsx(

@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import moment from "moment";
 import { useEffect, useState } from "react";
-import { API_BASE_LOGO_TEAM } from "../../../constants";
+import { API_BASE_LOGO_TEAM, rounds } from "../../../constants";
 import useFetch from "../../../hooks/useFetch";
 import { useMyWeb3 } from "../../../hooks/useMyWeb3";
 import { groupArrayById } from "../../../utils";
@@ -12,12 +12,12 @@ import Schedule from "./Schedule";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const queryString = require("query-string");
 
-type FilterTypes = {
+export type FilterTypes = {
   predicted: number;
-  status: number;
+  match_status: string;
   page: number;
   size: number;
-  round_name: number;
+  round_name: typeof rounds[keyof typeof rounds];
   wallet_address: string;
 };
 
@@ -28,11 +28,11 @@ const WorldCupSchedule = () => {
   const [dataTable, setDataTable] = useState<any[]>([]);
   const [filter, setFilter] = useState<FilterTypes>({
     predicted: 0,
-    status: 0,
+    match_status: "",
     page: 1,
     size: 20,
     wallet_address: "",
-    round_name: 15,
+    round_name: rounds[0].value,
   });
 
   const { data, loading } = useFetch<any>(
@@ -63,8 +63,6 @@ const WorldCupSchedule = () => {
       newTableData.push({
         date: key,
         matches: value,
-        // TODO: pairing with api
-        groupRound: "Round 1:",
       });
     }
     setDataTable(newTableData);
@@ -89,7 +87,7 @@ const WorldCupSchedule = () => {
   const handleChangeStatus = (value: any) => {
     setFilter((prevFilter: FilterTypes) => ({
       ...prevFilter,
-      status: value,
+      match_status: value,
     }));
   };
 
@@ -112,6 +110,7 @@ const WorldCupSchedule = () => {
               dataTable={dataTable}
               loading={loading}
               filter={filter}
+              setFilter={setFilter}
               handleChangePredicted={handleChangePredicted}
               handleChangeStatus={handleChangeStatus}
             />

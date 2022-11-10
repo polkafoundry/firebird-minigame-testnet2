@@ -29,25 +29,25 @@ const PredictQuestion = (props: QuestionProps) => {
   const [inputTeam1, setInputTeam1] = useState<string>("");
   const [inputTeam2, setInputTeam2] = useState<string>("");
 
-  // const isSubmitted =
-  //   dataQuestion?.questionStatus !== QUESTION_STATUS.NOT_PREDICTED;
-  // const matchEnded = dataQuestion?.match_status === MATCH_STATUS.FINISHED;
-  const isSubmitted = true;
-  const matchEnded = false;
+  const isSubmitted =
+    dataQuestion?.questionStatus !== QUESTION_STATUS.NOT_PREDICTED;
+  const matchEnded = dataQuestion?.match_status === MATCH_STATUS.FINISHED;
+  // const isSubmitted = true;
+  // const matchEnded = false;
 
   const shouldLoadPredictInfo = useMemo(() => {
     return !!account && matchEnded && dataQuestion?.match_id;
   }, [account, matchEnded, dataQuestion]);
 
   // TODO: missing state QUESTION_STATUS.PREDICTED
-  // const questionStatus = useMemo(() => {
-  //   if (!matchEnded) return dataQuestion?.questionStatus;
-  //   if (predictInfo?.is_final_winner) return QUESTION_STATUS.WINNER;
-  //   if (predictInfo?.predict_winner) return QUESTION_STATUS.CORRECT_ANSWER;
-  //   else return QUESTION_STATUS.WRONG_ANSWER;
-  // }, [dataQuestion?.questionStatus, predictInfo]);
+  const questionStatus = useMemo(() => {
+    if (!matchEnded) return dataQuestion?.questionStatus;
+    if (predictInfo?.is_final_winner) return QUESTION_STATUS.WINNER;
+    if (predictInfo?.predict_winner) return QUESTION_STATUS.CORRECT_ANSWER;
+    else return QUESTION_STATUS.WRONG_ANSWER;
+  }, [dataQuestion?.questionStatus, predictInfo]);
 
-  const questionStatus = QUESTION_STATUS.WINNER;
+  // const questionStatus = QUESTION_STATUS.WINNER;
 
   const { response } = usePost<any>(
     "/predict/get-match-predict-info",
