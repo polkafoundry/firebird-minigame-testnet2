@@ -64,5 +64,6 @@ new Promise(() => {
   calcOuHtJob()
   calcOddsHtJob()
   calcOddsFtJob()
+
   return
-}).then(() => {})
+}).then(() => { })

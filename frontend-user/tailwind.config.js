@@ -19,7 +19,7 @@ module.exports = {
       main: "1440px",
     },
     colors: {
-      main: "#D01F36",
+      main: "#EB522F",
       ...colors,
     },
     fontFamily: {
@@ -45,6 +45,7 @@ module.exports = {
       "32/40": ["32px", { lineHeight: "40px" }],
       "40/52": ["40px", { lineHeight: "52px" }],
       "56/60": ["56px", { lineHeight: "60px" }],
+      "80/80": ["80px", { lineHeight: "80px" }],
     },
     extend: {},
   },

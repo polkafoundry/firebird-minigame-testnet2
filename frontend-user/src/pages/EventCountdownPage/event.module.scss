@@ -1,0 +1,22 @@
+.banner {
+  background: url(/assets/images/countdown/bg-countdown-banner.png) no-repeat;
+  background-size: cover;
+}
+
+.scrollDown {
+  animation: pulse 2.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(10px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
+}

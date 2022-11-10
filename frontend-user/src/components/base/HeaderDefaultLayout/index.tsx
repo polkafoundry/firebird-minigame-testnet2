@@ -92,7 +92,7 @@ const HeaderDefaultLayout = () => {
   };
 
   return (
-    <div className="w-full bg-black absolute h-20 flex justify-center">
+    <div className="w-full bg-black absolute h-20 flex justify-center z-20">
       <nav
         className={clsx(
           "w-full h-full flex items-center justify-between max-w-screen-main text-white",
