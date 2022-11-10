@@ -9,6 +9,7 @@ const jobs = [
   'App/Jobs/CalcOuHtJob',
   'App/Jobs/CalcOddsHtJob',
   'App/Jobs/CalcOddsFtJob',
+  // 'App/Jobs/SendDataToMetaForceJob',
 ]
 
 export default jobs
