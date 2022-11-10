@@ -149,6 +149,8 @@ const ResultMatch = (props: ResultMatchProps) => {
           )}
           <a
             href="/history"
+            target={"_blank"}
+            rel="norefferer"
             className="px-10 py-2 border-2 border-black rounded-xl flex items-center"
           >
             My history
