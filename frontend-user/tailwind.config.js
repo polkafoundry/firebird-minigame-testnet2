@@ -28,9 +28,11 @@ module.exports = {
     },
     fontSize: {
       "10/14": ["10px", { lineHeight: "14px" }],
+      "12/16": ["12px", { lineHeight: "16px" }],
       "12/18": ["12px", { lineHeight: "18px" }],
       "14/20": ["14px", { lineHeight: "20px" }],
       "14/24": ["14px", { lineHeight: "24px" }],
+      "16/20": ["16px", { lineHeight: "20px" }],
       "16/24": ["16px", { lineHeight: "24px" }],
       "18/24": ["18px", { lineHeight: "24px" }],
       "18/32": ["18px", { lineHeight: "32px" }],

@@ -7,6 +7,7 @@ import {
   QUESTION_STATUS,
 } from "../../../../../constants";
 import useBirdToken from "../../../../../hooks/useBirdToken";
+import usePredictConditions from "../../../../../hooks/usePredictConditions";
 import { getImgSrc } from "../../../../../utils";
 import { getOptionIndexByBetPlace } from "./components/utils";
 import OddsQuestion from "./OddsQuestion";
@@ -19,6 +20,10 @@ export type QuestionProps = {
   title: string;
   needApprove: boolean;
   betType?: typeof BET_TYPE[keyof typeof BET_TYPE];
+  error?: {
+    birdToken?: boolean;
+  };
+  predictPrize?: string;
 };
 
 type MatchQuestionProps = {
@@ -27,11 +32,15 @@ type MatchQuestionProps = {
   isWrongChain: boolean;
 };
 
+// TODO: pairing with api
+const predictPrize = "$20";
+
 const MatchQuestions = (props: MatchQuestionProps) => {
   const { dataQuestion, account, isWrongChain } = props;
   const [needApprove, setNeedApprove] = useState<boolean>(false);
 
   const { getBirdAllowance } = useBirdToken();
+  const predictConditions = usePredictConditions();
 
   useEffect(() => {
     if (!account) return;
@@ -228,8 +237,8 @@ const MatchQuestions = (props: MatchQuestionProps) => {
 
   return (
     <div className="w-full p-5">
-      <span className="">
-        Select questions, predict the match & submit your answer.{" "}
+      <span className="text-16/24 font-inter">
+        Select questions, predict the match & submit your answer.
       </span>
 
       <PredictQuestion
@@ -237,6 +246,8 @@ const MatchQuestions = (props: MatchQuestionProps) => {
         dataQuestion={questions[0]}
         needApprove={needApprove}
         title="1. What will the match score be?"
+        error={{ birdToken: predictConditions.birdToken }}
+        predictPrize={predictPrize}
       />
       <OddsQuestion
         dataQuestion={questions[1]}
@@ -262,7 +273,6 @@ const MatchQuestions = (props: MatchQuestionProps) => {
         betType={BET_TYPE.OVER_UNDER_FULL_TIME}
         title="5. Will the full match total goals be higher or lower than the total goals below?"
       />
-      {/* <FourthQuestion /> */}
     </div>
   );
 };

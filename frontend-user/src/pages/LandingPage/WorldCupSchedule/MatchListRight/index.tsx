@@ -21,7 +21,7 @@ const nav = [
 
 const MatchListRight = (props: MatchListRightProps) => {
   const { matchId, account, isWrongChain } = props;
-  const [selectedNav, setSelectedNav] = useState<number>(2);
+  const [selectedNav, setSelectedNav] = useState<number>(1);
 
   const fetchMatchDetailUrl = `/match/detail/${matchId}?wallet_address=${account}`;
   const { data } = useFetch<any>(fetchMatchDetailUrl, !!matchId);
@@ -84,11 +84,7 @@ const MatchListRight = (props: MatchListRightProps) => {
             <div
               className={clsx(
                 "text-white text-14/20 px-5 py-1.5 rounded-md mt-5 font-semibold bg-[#3A0013]",
-                // isLiving
-                //   ? "bg-green-500"
-                //   : isEnded
-                //   ? "bg-[#3A0013]"
-                //   : "bg-gray-500",
+                isEnded ? "bg-[#3A0013]" : "bg-[#257632]",
               )}
             >
               {isLiving
