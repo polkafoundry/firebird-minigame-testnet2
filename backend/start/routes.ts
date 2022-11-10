@@ -20,7 +20,7 @@
 
 import Route from '@ioc:Adonis/Core/Route'
 
-Route.get('/', () => "It's workingaaaaa")
+Route.get('/', () => "It's working")
 
 Route.group(() => {
   Route.get('/match/get-list-match', 'MatchController.getListMatch')
@@ -39,8 +39,10 @@ Route.group(() => {
   Route.post('/predict/get-list-winner', 'PredictWinnerController.getListPredictWinner')
   Route.post('/predict/get-match-predict-info', 'PredictWinnerController.checkPredictByMatch')
   Route.post('/predict/get-predict-history', 'PredictWinnerController.getUserPredictHistory')
+
+  Route.get('/leaderboard', 'MetaForceController.getData')
 }).prefix('/api/v1')
 
-Route.group(() => {})
+Route.group(() => { })
   .prefix('/api/v1')
   .middleware('checkSignature')

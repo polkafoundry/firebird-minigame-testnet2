@@ -1,3 +1,5 @@
+import crypto from 'crypto'
+
 const isDevelopment = process.env.NODE_ENV === 'development'
 const Const = require('@ioc:App/Common/Const')
 
@@ -104,6 +106,11 @@ const responseSuccess = (data = null, message) => {
   }
 }
 
+const getMFToken = (input: crypto.BinaryLike, algorithm = "sha256"): string => {
+  if (!input) return ''
+  return crypto.createHash(algorithm).update(input).digest("hex")
+}
+
 module.exports = {
   getWeb3Provider,
   getBettingContractInstance,
@@ -112,4 +119,5 @@ module.exports = {
   responseNotFound,
   responseBadRequest,
   responseSuccess,
+  getMFToken,
 }
