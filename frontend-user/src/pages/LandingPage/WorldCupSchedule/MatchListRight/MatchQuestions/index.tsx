@@ -24,16 +24,19 @@ export type QuestionProps = {
 type MatchQuestionProps = {
   dataQuestion: any;
   account: string | undefined;
+  isWrongChain: boolean;
 };
 
 const MatchQuestions = (props: MatchQuestionProps) => {
-  const { dataQuestion, account } = props;
+  const { dataQuestion, account, isWrongChain } = props;
   const [needApprove, setNeedApprove] = useState<boolean>(false);
 
   const { getBirdAllowance } = useBirdToken();
 
   useEffect(() => {
     if (!account) return;
+    if (isWrongChain) return;
+
     const getBalanceAllow = async () => {
       const bal = await getBirdAllowance(account);
       const need = BigNumber.from(bal).lte(0);

@@ -11,6 +11,7 @@ import MatchGuide from "./MathGuide";
 type MatchListRightProps = {
   matchId: number | undefined;
   account: string | undefined;
+  isWrongChain: boolean;
 };
 
 const nav = [
@@ -19,8 +20,8 @@ const nav = [
 ];
 
 const MatchListRight = (props: MatchListRightProps) => {
-  const { matchId, account } = props;
-  const [selectedNav, setSelectedNav] = useState<number>(2);
+  const { matchId, account, isWrongChain } = props;
+  const [selectedNav, setSelectedNav] = useState<number>(1);
 
   const fetchMatchDetailUrl = `/match/detail/${matchId}?wallet_address=${account}`;
   const { data } = useFetch<any>(fetchMatchDetailUrl, !!matchId);
@@ -125,7 +126,11 @@ const MatchListRight = (props: MatchListRightProps) => {
       </div>
 
       {selectedNav === 1 ? (
-        <MatchQuestions account={account} dataQuestion={matchData} />
+        <MatchQuestions
+          account={account}
+          dataQuestion={matchData}
+          isWrongChain={isWrongChain}
+        />
       ) : (
         <MatchGuide isDetailGuide />
       )}

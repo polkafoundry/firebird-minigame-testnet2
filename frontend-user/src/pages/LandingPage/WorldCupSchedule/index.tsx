@@ -22,7 +22,7 @@ type FilterTypes = {
 };
 
 const WorldCupSchedule = () => {
-  const { account } = useMyWeb3();
+  const { account, isWrongChain } = useMyWeb3();
 
   const [selectedMatchId, setSelectedMatchId] = useState<number | undefined>();
   const [dataTable, setDataTable] = useState<any[]>([]);
@@ -117,7 +117,11 @@ const WorldCupSchedule = () => {
             />
           </div>
           <div className="w-full md:w-[56%]">
-            <MatchListRight account={account} matchId={selectedMatchId} />
+            <MatchListRight
+              account={account}
+              isWrongChain={isWrongChain}
+              matchId={selectedMatchId}
+            />
           </div>
         </div>
       </div>

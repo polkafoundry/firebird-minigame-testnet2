@@ -1,7 +1,9 @@
 // import { BigNumber } from "ethers";
-import { useEffect, useState } from "react";
+import { useWeb3React } from "@web3-react/core";
+import { useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
 import { API_BASE_URL, QUESTION_STATUS } from "../../../../../../constants";
+import { BIRD_CHAIN_ID } from "../../../../../../constants/networks";
 import useBettingContract from "../../../../../../hooks/useBettingContract";
 import useClaimToken from "../../../../../../hooks/useClaimToken";
 import { fetcher } from "../../../../../../hooks/useFetch";
@@ -20,9 +22,12 @@ const ResultMatch = (props: ResultMatchProps) => {
 
   const { claimToken } = useClaimToken();
   const { checkClaimed } = useBettingContract();
+  const { chainId } = useWeb3React();
+  const isWrongChain = useMemo(() => !(chainId === +BIRD_CHAIN_ID), [chainId]);
 
   useEffect(() => {
     if (!questions || questionStatus !== QUESTION_STATUS.CORRECT_ANSWER) return;
+    if (isWrongChain) return;
 
     const checkUserClaimed = async () => {
       const claimed = await checkClaimed(
@@ -31,6 +36,7 @@ const ResultMatch = (props: ResultMatchProps) => {
       );
       setIsClaimed(claimed);
     };
+
     checkUserClaimed();
   }, [questions, recheckClaim]);
 
