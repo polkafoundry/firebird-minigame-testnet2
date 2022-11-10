@@ -20,7 +20,7 @@ const MatchScore = () => {
   };
   const dataTable = [
     {
-      date: "Nov 06 - Sunday",
+      date: "Nov 20 - Nov 26",
       matches: [
         {
           id: 1,
@@ -45,7 +45,7 @@ const MatchScore = () => {
           winnerAddress: "0x493f...7e6c",
         },
       ],
-      groupRound: "Group stage - Round 1",
+      groupRound: "Round 1",
     },
   ];
   const loading = false;
