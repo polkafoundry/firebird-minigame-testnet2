@@ -130,6 +130,7 @@ const PredictQuestion = (props: QuestionProps) => {
           />
         ) : undefined
       }
+      error={error}
     >
       <div>
         <div className="flex items-center justify-between max-w-[660px] w-full mx-auto">
@@ -150,20 +151,6 @@ const PredictQuestion = (props: QuestionProps) => {
             dataQuestion?.away_icon,
           )}
         </div>
-        {error?.birdToken === false && (
-          <p className="mt-3 text-12/16 text-[#FF0021] text-center font-inter">
-            Not enough PKF to pay for the gas fee. Click{" "}
-            <a
-              href={URLS.FAUCET_TESTNET}
-              target={"_blank"}
-              rel="norefferer"
-              className="text-[#0085FF] underline cursor-pointer"
-            >
-              here
-            </a>{" "}
-            to faucet.
-          </p>
-        )}
       </div>
     </Question>
   );

@@ -1,5 +1,6 @@
 // import { BigNumber } from "ethers";
 import { useWeb3React } from "@web3-react/core";
+import clsx from "clsx";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
 import { API_BASE_URL, QUESTION_STATUS } from "../../../../../../constants";
@@ -94,11 +95,13 @@ const ResultMatch = (props: ResultMatchProps) => {
   };
 
   return (
-    <div className="mt-10">
-      <div className="bg-orange-100 p-5 grid grid-cols-2 gap-y-5">
+    <div className="mt-3 px-16">
+      <div className="bg-[#F2F2F2] p-5 grid grid-cols-2 gap-y-5">
         <div className="flex flex-col">
-          <span>Deposit Amount:</span>
-          <span className="font-semibold">
+          <span className="font-inter text-12/18 font-bold opacity-50 uppercase">
+            Deposit Amount:
+          </span>
+          <span className="font-semibold text-16/20 font-tthoves mt-1">
             {questions?.bet_amount
               ? convertHexToStringNumber(questions?.bet_amount)
               : "0"}{" "}
@@ -106,64 +109,83 @@ const ResultMatch = (props: ResultMatchProps) => {
           </span>
         </div>
         <div className="flex flex-col">
-          <span>Match Result</span>
-          {questionStatus !== QUESTION_STATUS.CORRECT_ANSWER &&
-            questionStatus !== QUESTION_STATUS.WRONG_ANSWER && (
-              <span className="font-semibold">Updating...</span>
+          <span className="font-inter text-12/18 font-bold opacity-50 uppercase">
+            Match Result
+          </span>
+          <div className="text-16/20 font-tthoves mt-1">
+            {questionStatus !== QUESTION_STATUS.CORRECT_ANSWER &&
+              questionStatus !== QUESTION_STATUS.WRONG_ANSWER && (
+                <span className="font-semibold">Updating...</span>
+              )}
+            {questionStatus === QUESTION_STATUS.CORRECT_ANSWER && (
+              <div className="flex">
+                <img
+                  src="images/icon-correct-answer.svg"
+                  alt=""
+                  className="mr-1"
+                />
+                <span className="font-semibold text-[#14B64D]">
+                  Correct answer
+                </span>
+              </div>
             )}
-          {questionStatus === QUESTION_STATUS.CORRECT_ANSWER && (
-            <div className="flex">
-              <img
-                src="images/icon-correct-answer.svg"
-                alt=""
-                className="mr-2"
-              />
-              <span className="font-semibold text-green-600">
-                Correct answer
-              </span>
-            </div>
-          )}
-          {questionStatus === QUESTION_STATUS.WRONG_ANSWER && (
-            <div className="flex">
-              <img src="images/icon-wrong-answer.svg" alt="" className="mr-2" />
-              <span className="font-semibold text-red-600">Wrong answer</span>
-            </div>
-          )}
+            {questionStatus === QUESTION_STATUS.WRONG_ANSWER && (
+              <div className="flex">
+                <img
+                  src="images/icon-wrong-answer.svg"
+                  alt=""
+                  className="mr-1"
+                />
+                <span className="font-semibold text-[#FF3E57]">
+                  Wrong answer
+                </span>
+              </div>
+            )}
+          </div>
         </div>
         <div className="flex flex-col">
-          <span>Earned amount</span>
-          <span className="font-semibold">{displayEarnedAmount()}</span>
+          <span className="font-inter text-12/18 font-bold opacity-50 uppercase">
+            Earned amount
+          </span>
+          <span className="font-semibold text-16/20 font-tthoves mt-1">
+            {displayEarnedAmount()}
+          </span>
         </div>
         <div className="flex flex-col">
-          <span>Amount to claim</span>
-          <span className="font-semibold">
+          <span className="font-inter text-12/18 font-bold opacity-50 uppercase">
+            Amount to claim
+          </span>
+          <span className="font-semibold text-16/20 font-tthoves mt-1">
             {convertHexToStringNumber(questions?.total_claim) + " $BIRD"}
+            {questionStatus === QUESTION_STATUS.CORRECT_ANSWER && isClaimed && (
+              <span className="text-12/20 font-normal"> (Claimed)</span>
+            )}
           </span>
         </div>
       </div>
 
-      {questionStatus === QUESTION_STATUS.CORRECT_ANSWER && (
-        <div className="mt-5 flex">
-          {!isClaimed && (
-            <button
-              className="px-10 py-2 bg-black text-white rounded-xl mr-10"
-              onClick={handleClaimToken}
-              disabled={loadingClaim}
-            >
-              {loadingClaim ? "Loading" : "Claim token"}
-            </button>
-          )}
-          <a
-            href="/history"
-            target={"_blank"}
-            rel="norefferer"
-            className="px-10 py-2 border-2 border-black rounded-xl flex items-center"
+      <div className="mt-3 flex justify-center text-14/20 font-tthoves font-semibold text-white">
+        {questionStatus === QUESTION_STATUS.CORRECT_ANSWER && (
+          <button
+            className={clsx(
+              "px-10 py-2 bg-[#EB522F] rounded-lg mr-2",
+              isClaimed && "pointer-events-none opacity-50",
+            )}
+            onClick={handleClaimToken}
+            disabled={loadingClaim}
           >
-            My history
-            <img src="/images/icon-next.svg" alt="" className="ml-2" />
-          </a>
-        </div>
-      )}
+            {loadingClaim ? "Loading" : "Claim token"}
+          </button>
+        )}
+        <a
+          href="/history"
+          target={"_blank"}
+          rel="norefferer"
+          className="px-10 py-2 bg-black rounded-lg"
+        >
+          My history
+        </a>
+      </div>
     </div>
   );
 };

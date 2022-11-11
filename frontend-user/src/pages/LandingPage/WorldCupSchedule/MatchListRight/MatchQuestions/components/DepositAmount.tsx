@@ -1,13 +1,14 @@
 import {
   MAX_DEPOSIT_AMOUNT,
   NUMBER_PATTERN,
+  URLS,
 } from "../../../../../../constants";
 import { useMyWeb3 } from "../../../../../../hooks/useMyWeb3";
 
 type DepositAmountProps = {
   depositAmount: string;
   handleChangeDepositAmount: any;
-  errors: string[];
+  errors?: string[];
   isFullBetting?: boolean;
   winRate?: string;
 };
@@ -16,7 +17,7 @@ const DepositAmount = (props: DepositAmountProps) => {
   const {
     depositAmount,
     handleChangeDepositAmount,
-    errors,
+    // errors,
     isFullBetting = false,
     winRate,
   } = props;
@@ -37,58 +38,74 @@ const DepositAmount = (props: DepositAmountProps) => {
     handleChangeDepositAmount(maxValue);
   };
 
-  // console.log("depositAmount, ", depositAmount, winRate);
-
   return (
     <>
-      <div className="mt-10">
-        <div className="flex justify-between">
-          <span className="font-semibold text-xl">Deposit Amount:</span>
-          <span>Balance: {birdBalance || 0} $BIRD</span>
+      <div className="mt-10 bg-[#F2F2F2] px-3 py-5 rounded-lg font-inter">
+        <div className="flex justify-between max-w-[340px]">
+          <span className="font-bold text-12/18">Deposit Amount:</span>
+          <span className="text-12/16 opacity-70">
+            Balance: <span className="font-bold">{birdBalance || 0} $BIRD</span>
+          </span>
         </div>
-        <p>
-          Maximum is 1,000 BIRD/question. Don’t have BIRD token? Click{" "}
-          <span>
-            <a href="" className="underline font-semibold">
-              here
-            </a>
-          </span>{" "}
-          to faucet.
-        </p>
-        <div className="flex items-center border mt-5 py-2 px-5">
-          <input
-            type="text"
-            className="flex-1 outline-none"
-            value={depositAmount}
-            onChange={onChange}
-            placeholder="Enter Number"
-          />
-          <span className="mr-5 font-semibold">$BIRD</span>
-          <button
-            className="px-10 py-1 bg-yellow-400"
-            onClick={handleSelectMax}
+        <div className="flex items-start mt-2">
+          <div className="flex items-center max-w-[340px] border p-1 bg-white rounded-lg">
+            <input
+              type="text"
+              className="flex-1 outline-none text-14-24 pl-2.5 min-w-0"
+              value={depositAmount}
+              onChange={onChange}
+              placeholder="Enter"
+            />
+            <span className="mr-2 font-semibold font-tthoves text-14/20">
+              $BIRD
+            </span>
+            <button
+              className="px-8 py-2.5 bg-black font-tthoves text-14/20 text-white rounded-lg"
+              onClick={handleSelectMax}
+            >
+              Max
+            </button>
+          </div>
+
+          <ul className="text-12/16 pl-8 list-disc ">
+            {!depositAmount && (
+              <li>Please enter the number of $BIRD you want to deposit.</li>
+            )}
+            {depositAmount && (
+              <>
+                <li className="opacity-70 mt-1.5">
+                  <span className="font-bold">Correct Prediction:</span> You
+                  will claim{" "}
+                  {(Number(depositAmount) * Number(winRate)).toFixed(2)} $BIRD
+                  (including your deposit amount).
+                </li>
+                <li className="opacity-70 mt-1.5">
+                  <span className="font-bold">Wrong Prediction:</span> You will
+                  lose your deposit amount.
+                </li>
+                {isFullBetting && (
+                  <li className="opacity-70 mt-1.5">
+                    If the total number of goals scored is 2, you will get your
+                    deposit back of 100$ BIRD.
+                  </li>
+                )}
+              </>
+            )}
+          </ul>
+        </div>
+        <p className="text-12/16 mt-2">
+          Maximum is 1,000 BIRD/question.{" "}
+          <a
+            href={URLS.FAUCET_TESTNET}
+            target={"_blank"}
+            rel="norefferer"
+            className="text-[#0085FF] ml-5"
           >
-            Max
-          </button>
-        </div>
+            Don’t have BIRD token?
+          </a>
+        </p>
       </div>
-      {depositAmount && (
-        <ul className="mt-10 p-3 bg-yellow-200 pl-10 list-disc">
-          <li>
-            Correct Prediction: You will claim{" "}
-            {(Number(depositAmount) * Number(winRate)).toFixed(2)} $BIRD
-            (including your deposit amount).
-          </li>
-          <li>Wrong Prediction: You will lose your deposit amount.</li>
-          {isFullBetting && (
-            <li>
-              If the total number of goals scored is 2, you will get your
-              deposit back of 100$ BIRD.
-            </li>
-          )}
-        </ul>
-      )}
-      {errors?.length ? (
+      {/* {errors?.length ? (
         <ul className="mt-10">
           {errors?.map((error: any) => (
             <li key={error} className="text-red-600 font-semibold mt-2">
@@ -96,7 +113,7 @@ const DepositAmount = (props: DepositAmountProps) => {
             </li>
           ))}
         </ul>
-      ) : null}
+      ) : null} */}
     </>
   );
 };
