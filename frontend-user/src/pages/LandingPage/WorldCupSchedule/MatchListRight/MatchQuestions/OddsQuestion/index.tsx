@@ -84,7 +84,6 @@ const OddsQuestion = (props: QuestionProps) => {
                   getOptionColorFromIndex(
                     dataQuestion,
                     index,
-                    "bg-[#EDEDED]",
                     optionWhoWin,
                     isSubmitted,
                     finalResultIndex,
@@ -114,6 +113,7 @@ const OddsQuestion = (props: QuestionProps) => {
                 ? dataQuestion?.options[optionWhoWin]?.winRate
                 : 0
             }
+            optionWhoWin={optionWhoWin}
           />
         )}
         {isSubmitted && (

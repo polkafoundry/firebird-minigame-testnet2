@@ -17,7 +17,7 @@ import {
 const betPlaceString = ["under", "draw", "over"];
 
 const OverUnderQuestion = (props: QuestionProps) => {
-  const { dataQuestion = {}, title, betType, needApprove } = props;
+  const { dataQuestion = {}, title, betType, needApprove, error } = props;
   const [optionWhoWin, setOptionWhoWin] = useState<number>(0);
   const [depositAmount, setDepositAmount] = useState<string>("");
 
@@ -72,6 +72,7 @@ const OverUnderQuestion = (props: QuestionProps) => {
       isSubmitted={isSubmitted}
       matchEnded={matchEnded}
       loading={loadingApprove || loadingBetting}
+      error={error}
     >
       <div>
         <div className="flex items-start justify-center w-full min-w-[500px] space-x-2 px-16">
@@ -87,7 +88,6 @@ const OverUnderQuestion = (props: QuestionProps) => {
                   getOptionColorFromIndex(
                     dataQuestion,
                     index,
-                    "bg-[#EDEDED]",
                     optionWhoWin,
                     isSubmitted,
                     finalResultIndex,
@@ -123,6 +123,7 @@ const OverUnderQuestion = (props: QuestionProps) => {
                 ? dataQuestion?.options[optionWhoWin]?.winRate
                 : 0
             }
+            optionWhoWin={optionWhoWin}
           />
         )}
         {isSubmitted && (

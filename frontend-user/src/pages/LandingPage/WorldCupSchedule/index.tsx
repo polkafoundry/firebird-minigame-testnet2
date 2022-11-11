@@ -24,7 +24,7 @@ export type FilterTypes = {
 const WorldCupSchedule = () => {
   const { account, isWrongChain } = useMyWeb3();
 
-  const [selectedMatchId, setSelectedMatchId] = useState<number | undefined>(1);
+  const [selectedMatchId, setSelectedMatchId] = useState<number | undefined>();
   const [dataTable, setDataTable] = useState<any[]>([]);
   const [filter, setFilter] = useState<FilterTypes>({
     predicted: 0,
