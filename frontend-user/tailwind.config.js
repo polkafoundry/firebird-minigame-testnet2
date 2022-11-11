@@ -25,6 +25,7 @@ module.exports = {
     fontFamily: {
       tthoves: ["TTHoves"],
       inter: ["Inter"],
+      oswald: ["Oswald"],
     },
     fontSize: {
       "10/14": ["10px", { lineHeight: "14px" }],
