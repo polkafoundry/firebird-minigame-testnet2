@@ -62,9 +62,9 @@ export default class FetchLiveMatchJob implements JobContract {
     let data: any = {
       id: match.id,
       ht_home_score: matchData.event?.homeScore?.period1,
-      ft_home_score: matchData.event?.homeScore?.normaltime || matchData.event?.homeScore?.period1,
+      ft_home_score: matchData.event?.homeScore?.normaltime || matchData.event?.homeScore?.display || matchData.event?.homeScore?.period1,
       ht_away_score: matchData.event?.awayScore?.period1,
-      ft_away_score: matchData.event?.awayScore?.normaltime || matchData.event?.awayScore?.period1,
+      ft_away_score: matchData.event?.awayScore?.normaltime || matchData.event?.awayScore?.display || matchData.event?.awayScore?.period1,
     }
 
     if (matchData.event?.status?.code != 0) {
