@@ -86,16 +86,24 @@ export default class MatchService {
 
     if (isNaN(page) || isNaN(size) || parseInt(page) <= 0 || parseInt(size) <= 0)
       throw new InvalidParamException('page or size must be specified as positive number')
-    let matches = await this.buildQueryService(params)
+    let matchesQuery = this.buildQueryService(params)
       .preload('bettings', (query) => {
         query.where('user_address', params.wallet_address || null)
       })
       .preload('predicts', (query) => {
         query.where('user_address', params.wallet_address || null)
       })
-      .preload('bet_count', (query) => {
-        query.where('user_address', params.wallet_address || null)
+      .leftOuterJoin('bet_counts', query => {
+        query.on('matchs.match_id', '=', 'bet_counts.match_id')
+          .andOnVal('user_address', params.wallet_address || null)
       })
+
+    if ('is_completed_bet' in params && 'wallet_address' in params) {
+      matchesQuery = params.is_completed_bet == 'true' ? matchesQuery.where('bet_counts.bet_count', 5) : matchesQuery.where('bet_counts.bet_count', '<>', 5)
+    }
+
+    let matches = await matchesQuery
+      .select(['matchs.*', 'bet_counts.bet_count as count'])
       .paginate(page, size)
     matches = JSON.parse(JSON.stringify(matches))
     return {
@@ -103,7 +111,7 @@ export default class MatchService {
       data: matches.data.map((match) => {
         let obj = {
           ...match,
-          is_completed_bet: match.bet_count ? match.bet_count.bet_count == 5 : false,
+          is_completed_bet: match.bet_count ? match.bet_count == 5 : false,
         }
         delete obj.bettings
         delete obj.predicts

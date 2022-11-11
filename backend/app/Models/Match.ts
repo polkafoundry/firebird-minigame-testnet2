@@ -132,6 +132,9 @@ export default class Match extends BaseModel {
     foreignKey: 'match_id',
   })
   public predicts: HasMany<typeof Predicts>
+
+  @column({ columnName: 'count' })
+  public count: string
 }
 
 module.exports = Match
