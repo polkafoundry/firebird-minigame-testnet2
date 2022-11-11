@@ -45,7 +45,7 @@ const InputScore = (props: InputScoreProps) => {
       <input
         type="text"
         className={clsx(
-          "w-12 h-12 p-2 text-18/24 font-semibold text-center bg-white outline-none",
+          "w-12 h-12 p-2 text-18/24 font-semibold text-center bg-white outline-none rounded-lg",
           getInputStyle(),
           className,
         )}
