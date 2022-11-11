@@ -1,10 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { QuestionProps } from "..";
-import {
-  MATCH_STATUS,
-  QUESTION_STATUS,
-  URLS,
-} from "../../../../../../constants";
+import { MATCH_STATUS, QUESTION_STATUS } from "../../../../../../constants";
 import useBirdToken from "../../../../../../hooks/useBirdToken";
 import usePost from "../../../../../../hooks/usePost";
 import usePredicting from "../../../../../../hooks/usePredicting";
