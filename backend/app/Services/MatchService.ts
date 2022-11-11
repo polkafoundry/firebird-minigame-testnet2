@@ -111,7 +111,7 @@ export default class MatchService {
       data: matches.data.map((match) => {
         let obj = {
           ...match,
-          is_completed_bet: match.bet_count ? match.bet_count == 5 : false,
+          is_completed_bet: match.count ? match.count == 5 : false,
         }
         delete obj.bettings
         delete obj.predicts
