@@ -93,7 +93,9 @@ const MatchQuestions = (props: MatchQuestionProps) => {
         questionStatus:
           predictsData.length === 0 ||
           dataQuestion?.start_time * 1000 > new Date().getTime()
-            ? QUESTION_STATUS.NOT_PREDICTED
+            ? predictsData[0]?.home_score && predictsData[0]?.away_score
+              ? QUESTION_STATUS.PREDICTED
+              : QUESTION_STATUS.NOT_PREDICTED
             : getQuestionStatus(predictsData[0]),
       };
 
@@ -274,18 +276,21 @@ const MatchQuestions = (props: MatchQuestionProps) => {
         needApprove={needApprove}
         betType={BET_TYPE.ODD_EVEN_FULL_TIME}
         title="3. Who will win the full match?"
+        error={{ birdToken: predictConditions.birdToken }}
       />
       <OverUnderQuestion
         dataQuestion={questions[3]}
         needApprove={needApprove}
         betType={BET_TYPE.OVER_UNDER_HALF_TIME}
         title="4. Will the 1st half total goals be higher or lower than the total goals below?"
+        error={{ birdToken: predictConditions.birdToken }}
       />
       <OverUnderQuestion
         dataQuestion={questions[4]}
         needApprove={needApprove}
         betType={BET_TYPE.OVER_UNDER_FULL_TIME}
         title="5. Will the full match total goals be higher or lower than the total goals below?"
+        error={{ birdToken: predictConditions.birdToken }}
       />
     </div>
   );

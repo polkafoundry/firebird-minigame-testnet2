@@ -3,12 +3,12 @@ import { BET_PLACE } from "../../../../../../constants";
 export const getOptionColorFromIndex = (
   question: any,
   index: number,
-  defaultClass?: string,
   optionWhoWin?: number,
   isSubmitted?: boolean,
   finalResultIndex?: number,
 ) => {
-  if (!question) return defaultClass;
+  const defaultStyles = "bg-[#EDEDED]";
+  if (!question) return defaultStyles;
 
   const correctStyles = "bg-[#14B64D33] border-[#14B64D]";
   const wrongStyles = "bg-[#FF3E5733] border-[#3a0013] border-2 opacity-50";
@@ -26,7 +26,7 @@ export const getOptionColorFromIndex = (
     return "opacity-50 bg-[#EDEDED]";
   } else if (optionWhoWin === index) return selectedStyles;
 
-  return defaultClass;
+  return defaultStyles;
 };
 
 export const getOptionIndexByBetPlace = (bet_place: string) => {
