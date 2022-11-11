@@ -5,6 +5,7 @@ type BorderBoxProps = {
   icon?: string;
   className?: string;
   onClick?: any;
+  boxType?: string;
 };
 
 const BorderBox = (props: BorderBoxProps) => {

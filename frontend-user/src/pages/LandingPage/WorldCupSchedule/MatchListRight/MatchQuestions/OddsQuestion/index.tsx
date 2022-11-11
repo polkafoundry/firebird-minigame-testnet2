@@ -18,7 +18,7 @@ const betPlaceString = ["home", "draw", "away"];
 
 const OddsQuestion = (props: QuestionProps) => {
   const { dataQuestion = {}, title, betType, needApprove, error } = props;
-  const errors: string[] = [];
+  // const errors: string[] = [];
   const [optionWhoWin, setOptionWhoWin] = useState<number>(0);
   const [depositAmount, setDepositAmount] = useState<string>("");
 
@@ -75,7 +75,7 @@ const OddsQuestion = (props: QuestionProps) => {
       <div>
         <div className="flex items-center justify-center w-full min-w-[500px] space-x-2 px-16">
           {dataQuestion?.options?.map((option: any, index: number) => (
-            <div key={index} className={clsx("flex flex-col w-full")}>
+            <div key={index} className="flex flex-col w-full">
               <BorderBox
                 label={option?.label}
                 icon={option?.icon}
