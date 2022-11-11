@@ -9,9 +9,12 @@ import BorderBox from "../components/BorderBox";
 import DepositAmount from "../components/DepositAmount";
 import Question from "../components/Question";
 import ResultMatch from "../components/ResultMatch";
-import { getOptionColorFromIndex } from "../components/utils";
+import {
+  getFinalResultIndex,
+  getOptionColorFromIndex,
+} from "../components/utils";
 
-const betPlaceString = ["under", "", "over"];
+const betPlaceString = ["under", "draw", "over"];
 
 const OverUnderQuestion = (props: QuestionProps) => {
   const { dataQuestion = {}, title, betType, needApprove } = props;
@@ -24,6 +27,10 @@ const OverUnderQuestion = (props: QuestionProps) => {
   const questionStatus = dataQuestion?.questionStatus;
   const isSubmitted = questionStatus !== QUESTION_STATUS.NOT_PREDICTED;
   const matchEnded = dataQuestion?.match_status === MATCH_STATUS.FINISHED;
+  const finalResultIndex = getFinalResultIndex(
+    dataQuestion?.result,
+    dataQuestion?.bet_place,
+  );
 
   useEffect(() => {
     if (!dataQuestion) return;
@@ -67,44 +74,40 @@ const OverUnderQuestion = (props: QuestionProps) => {
       loading={loadingApprove || loadingBetting}
     >
       <div>
-        <div className="flex items-start justify-between">
+        <div className="flex items-start justify-center w-full min-w-[500px] space-x-2 px-16">
           {dataQuestion?.options?.map((option: any, index: number) => (
-            <div
-              key={option?.label}
-              className="flex flex-col items-center w-full max-w-[120px]"
-            >
+            <div key={option?.label} className="flex flex-col w-full">
               <BorderBox
                 label={option?.label}
                 icon={option?.icon}
                 className={clsx(
-                  isSubmitted ? "pointer-events-none" : "cursor-pointer",
-                  !option?.isDisableClick &&
-                    getOptionColorFromIndex(
-                      dataQuestion,
-                      index,
-                      "",
-                      optionWhoWin,
-                    ),
+                  isSubmitted || option?.isDisableClick
+                    ? "pointer-events-none"
+                    : "cursor-pointer",
+                  getOptionColorFromIndex(
+                    dataQuestion,
+                    index,
+                    "bg-[#EDEDED]",
+                    optionWhoWin,
+                    isSubmitted,
+                    finalResultIndex,
+                  ),
                 )}
                 onClick={() =>
                   !option?.isDisableClick && handleChangeOptionWhoWin(index)
                 }
+                boxType={betPlaceString[index]}
               />
-              <span className="text-sm text-yellow-400 mt-1 h-5">
-                {optionWhoWin === index && option?.description}
-              </span>
               <span
                 className={clsx(
-                  "rounded-md px-5 mt-2",
-                  getOptionColorFromIndex(
-                    dataQuestion,
-                    index,
-                    "bg-gray-200",
-                    optionWhoWin,
-                  ),
+                  "mt-2 text-16/24 font-inter text-center",
+                  isSubmitted && finalResultIndex !== index && "opacity-50",
                 )}
               >
                 {option?.winRate}
+              </span>
+              <span className="text-12/16 opacity-70 text-center">
+                {option?.description}
               </span>
             </div>
           ))}

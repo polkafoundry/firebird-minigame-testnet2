@@ -4,13 +4,19 @@ import { MATCH_STATUS, QUESTION_STATUS } from "../../../../../../constants";
 import useBirdToken from "../../../../../../hooks/useBirdToken";
 import usePost from "../../../../../../hooks/usePost";
 import usePredicting from "../../../../../../hooks/usePredicting";
-import BorderBox from "../components/BorderBox";
-import InputNumber from "../components/InputNumber";
+import InputScore from "../components/InputScore";
 import NotificationBox from "../components/NotificationBox";
 import Question from "../components/Question";
 
 const PredictQuestion = (props: QuestionProps) => {
-  const { dataQuestion = {}, title, needApprove, account } = props;
+  const {
+    dataQuestion = {},
+    title,
+    needApprove,
+    account,
+    error,
+    predictPrize = "",
+  } = props;
 
   const { approveBirdToken, loadingApprove } = useBirdToken();
   const { loadingPredicting, predicting } = usePredicting();
@@ -22,17 +28,22 @@ const PredictQuestion = (props: QuestionProps) => {
   const isSubmitted =
     dataQuestion?.questionStatus !== QUESTION_STATUS.NOT_PREDICTED;
   const matchEnded = dataQuestion?.match_status === MATCH_STATUS.FINISHED;
+  // const isSubmitted = true;
+  // const matchEnded = false;
 
   const shouldLoadPredictInfo = useMemo(() => {
     return !!account && matchEnded && dataQuestion?.match_id;
   }, [account, matchEnded, dataQuestion]);
 
+  // TODO: missing state QUESTION_STATUS.PREDICTED
   const questionStatus = useMemo(() => {
     if (!matchEnded) return dataQuestion?.questionStatus;
     if (predictInfo?.is_final_winner) return QUESTION_STATUS.WINNER;
     if (predictInfo?.predict_winner) return QUESTION_STATUS.CORRECT_ANSWER;
     else return QUESTION_STATUS.WRONG_ANSWER;
   }, [dataQuestion?.questionStatus, predictInfo]);
+
+  // const questionStatus = QUESTION_STATUS.WINNER;
 
   const { response } = usePost<any>(
     "/predict/get-match-predict-info",
@@ -85,6 +96,17 @@ const PredictQuestion = (props: QuestionProps) => {
     await predicting(_matchID, _homeScore, _awayScore);
   };
 
+  const renderMatchNameDetail = (home_name: string, home_icon: string) => {
+    return (
+      <div className="flex flex-col items-center justify-center flex-1">
+        {home_icon && <img src={home_icon} className="w-12 h-12" alt="" />}
+        <span className="mt-2 text-16/20 font-tthoves font-semibold capitalize text-center">
+          {home_name && home_name.toLowerCase()}
+        </span>
+      </div>
+    );
+  };
+
   return (
     <Question
       title={title}
@@ -92,41 +114,37 @@ const PredictQuestion = (props: QuestionProps) => {
       isSubmitted={isSubmitted}
       matchEnded={matchEnded}
       loading={loadingApprove || loadingPredicting}
+      predictBoxComponent={
+        isSubmitted ? (
+          <NotificationBox
+            type={questionStatus}
+            homeScore={dataQuestion?.ft_home_score}
+            awayScore={dataQuestion?.ft_away_score}
+            homePredictedScore={dataQuestion?.home_score}
+            awayPredictedScore={dataQuestion?.away_score}
+            predictPrize={predictPrize}
+          />
+        ) : undefined
+      }
+      error={error}
     >
       <div>
-        <div className="flex items-center justify-between">
-          <BorderBox
-            label={dataQuestion?.home_name}
-            icon={dataQuestion?.home_icon}
+        <div className="flex items-center justify-between max-w-[660px] w-full mx-auto">
+          {renderMatchNameDetail(
+            dataQuestion?.home_name,
+            dataQuestion?.home_icon,
+          )}
+          <InputScore
+            inputTeam1={inputTeam1}
+            inputTeam2={inputTeam2}
+            handleChangeInputTeam1={handleChangeInputTeam1}
+            handleChangeInputTeam2={handleChangeInputTeam2}
+            questionStatus={questionStatus}
+            matchEnded={matchEnded}
           />
-          <div className="flex space-x-5 items-baseline">
-            <InputNumber
-              input={inputTeam1}
-              handleChange={handleChangeInputTeam1}
-              type={questionStatus}
-              disabled={matchEnded}
-            />
-            <span className="text-4xl font-semibold block">:</span>
-            <InputNumber
-              input={inputTeam2}
-              handleChange={handleChangeInputTeam2}
-              type={questionStatus}
-              disabled={matchEnded}
-            />
-          </div>
-          <BorderBox
-            label={dataQuestion?.away_name}
-            icon={dataQuestion?.away_icon}
-          />
-        </div>
-        {/* {error && <p className="text-red-600 font-semibold mt-2">{error}</p>} */}
-        <div>
-          {isSubmitted && (
-            <NotificationBox
-              type={questionStatus}
-              homeScore={dataQuestion?.ft_home_score}
-              awayScore={dataQuestion?.ft_away_score}
-            />
+          {renderMatchNameDetail(
+            dataQuestion?.away_name,
+            dataQuestion?.away_icon,
           )}
         </div>
       </div>

@@ -8,6 +8,7 @@ export const MAX_DEPOSIT_AMOUNT = 1000;
 
 export const URLS = {
   HOME: "/",
+  EVENT: "/event",
   LEADERBOARD: "/leaderboard",
   HISTORY: "/history",
   FAUCET_TESTNET: "https://faucet.firefly.firebirdchain.com/",
@@ -78,3 +79,54 @@ export const HISTORY_NAV_VALUES = {
   GOALS: 1,
   MATCH_SCORE: 2,
 };
+
+export type RoundTypes = {
+  value: number;
+  label: string;
+  prize: string;
+};
+
+export const rounds: Array<RoundTypes> = [
+  {
+    label: "GROUP STAGE - ROUND 1",
+    prize: "$20",
+    value: 1,
+  },
+  {
+    label: "GROUP STAGE - ROUND 2",
+    prize: "$20",
+    value: 15, // fake
+    // value: 2,
+  },
+  {
+    label: "GROUP STAGE - ROUND 3",
+    prize: "$20",
+    value: 16, // fake
+    // value: 3,
+  },
+  {
+    label: "PLAYOFFS ROUND OF 16",
+    prize: "$30",
+    value: 116,
+  },
+  {
+    label: "QUARTERFINAL",
+    prize: "$50",
+    value: 18,
+  },
+  {
+    label: "SEMIFINAL",
+    prize: "$70",
+    value: 14,
+  },
+  {
+    label: "PLAYOFFS 3RD PLACE FINAL",
+    prize: "$80",
+    value: 34,
+  },
+  {
+    label: "FINAL",
+    prize: "$100",
+    value: 12,
+  },
+];

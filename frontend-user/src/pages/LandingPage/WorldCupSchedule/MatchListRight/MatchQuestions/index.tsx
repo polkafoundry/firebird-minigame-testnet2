@@ -7,6 +7,7 @@ import {
   QUESTION_STATUS,
 } from "../../../../../constants";
 import useBirdToken from "../../../../../hooks/useBirdToken";
+import usePredictConditions from "../../../../../hooks/usePredictConditions";
 import { getImgSrc } from "../../../../../utils";
 import { getOptionIndexByBetPlace } from "./components/utils";
 import OddsQuestion from "./OddsQuestion";
@@ -19,21 +20,32 @@ export type QuestionProps = {
   title: string;
   needApprove: boolean;
   betType?: typeof BET_TYPE[keyof typeof BET_TYPE];
+  error?: {
+    birdToken?: boolean;
+  };
+  predictPrize?: string;
 };
 
 type MatchQuestionProps = {
   dataQuestion: any;
   account: string | undefined;
+  isWrongChain: boolean;
 };
 
+// TODO: pairing with api
+const predictPrize = "$20";
+
 const MatchQuestions = (props: MatchQuestionProps) => {
-  const { dataQuestion, account } = props;
+  const { dataQuestion, account, isWrongChain } = props;
   const [needApprove, setNeedApprove] = useState<boolean>(false);
 
   const { getBirdAllowance } = useBirdToken();
+  const predictConditions = usePredictConditions();
 
   useEffect(() => {
     if (!account) return;
+    if (isWrongChain) return;
+
     const getBalanceAllow = async () => {
       const bal = await getBirdAllowance(account);
       const need = BigNumber.from(bal).lte(0);
@@ -46,6 +58,11 @@ const MatchQuestions = (props: MatchQuestionProps) => {
 
   useEffect(() => {
     if (!dataQuestion) return;
+
+    const lowerScore = (ratio: any) =>
+      Math.floor(ratio) === ratio ? ratio - 1 : Math.floor(ratio);
+    const upperScore = (ratio: any) =>
+      Math.floor(ratio) === ratio ? ratio + 1 : Math.round(ratio);
 
     const bindData = () => {
       console.log("dataQuestion", dataQuestion);
@@ -144,6 +161,8 @@ const MatchQuestions = (props: MatchQuestionProps) => {
           {
             label: "Lower",
             winRate: dataQuestion?.ou_ht_under,
+            description:
+              "≤ " + lowerScore(dataQuestion?.ou_ht_ratio) + " goals scored",
           },
           {
             label: `Total ${dataQuestion?.ou_ht_ratio || 0} goals`,
@@ -152,6 +171,8 @@ const MatchQuestions = (props: MatchQuestionProps) => {
           {
             label: "Higher",
             winRate: dataQuestion?.ou_ht_over,
+            description:
+              "> " + upperScore(dataQuestion?.ou_ht_ratio) + " goals scored",
           },
         ],
         optionSelected: getOptionIndexByBetPlace(question4?.bet_place),
@@ -169,6 +190,8 @@ const MatchQuestions = (props: MatchQuestionProps) => {
           {
             label: "Lower",
             winRate: dataQuestion?.ou_ft_under,
+            description:
+              "≤ " + lowerScore(dataQuestion?.ou_ft_ratio) + " goals scored",
           },
           {
             label: `Total ${dataQuestion?.ou_ft_ratio || 0} goals`,
@@ -177,6 +200,8 @@ const MatchQuestions = (props: MatchQuestionProps) => {
           {
             label: "Higher",
             winRate: dataQuestion?.ou_ft_over,
+            description:
+              "> " + upperScore(dataQuestion?.ou_ft_ratio) + " goals scored",
           },
         ],
         optionSelected: getOptionIndexByBetPlace(question5?.bet_place),
@@ -225,8 +250,8 @@ const MatchQuestions = (props: MatchQuestionProps) => {
 
   return (
     <div className="w-full p-5">
-      <span className="">
-        Select questions, predict the match & submit your answer.{" "}
+      <span className="text-16/24 font-inter">
+        Select questions, predict the match & submit your answer.
       </span>
 
       <PredictQuestion
@@ -234,12 +259,15 @@ const MatchQuestions = (props: MatchQuestionProps) => {
         dataQuestion={questions[0]}
         needApprove={needApprove}
         title="1. What will the match score be?"
+        error={{ birdToken: predictConditions.birdToken }}
+        predictPrize={predictPrize}
       />
       <OddsQuestion
         dataQuestion={questions[1]}
         needApprove={needApprove}
         betType={BET_TYPE.ODD_EVEN_HALF_TIME}
         title="2. Who will win the 1st half?"
+        error={{ birdToken: predictConditions.birdToken }}
       />
       <OddsQuestion
         dataQuestion={questions[2]}
@@ -259,7 +287,6 @@ const MatchQuestions = (props: MatchQuestionProps) => {
         betType={BET_TYPE.OVER_UNDER_FULL_TIME}
         title="5. Will the full match total goals be higher or lower than the total goals below?"
       />
-      {/* <FourthQuestion /> */}
     </div>
   );
 };

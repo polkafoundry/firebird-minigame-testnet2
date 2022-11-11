@@ -1,19 +1,39 @@
-import { QUESTION_STATUS } from "../../../../../../constants";
+import clsx from "clsx";
+import { QUESTION_STATUS, URLS } from "../../../../../../constants";
 
 type NotificationBoxTypes = {
   type: typeof QUESTION_STATUS[keyof typeof QUESTION_STATUS];
   homeScore: string | undefined;
   awayScore: string | undefined;
+  homePredictedScore?: string;
+  awayPredictedScore?: string;
+  predictPrize: string;
 };
 
 const NotificationBox = (props: NotificationBoxTypes) => {
-  const { type, awayScore = 0, homeScore = 0 } = props;
+  const {
+    type,
+    awayScore = 0,
+    homeScore = 0,
+    homePredictedScore,
+    awayPredictedScore,
+    predictPrize,
+  } = props;
+  const baseHref =
+    typeof window !== "undefined" && window.location.origin
+      ? window.location.origin
+      : "";
 
   //#region RENER REGION
 
   const renderLinkUpdateScore = () => (
     <span>
-      <a href="#" className="font-medium underline">
+      <a
+        href={baseHref + URLS.LEADERBOARD}
+        target={"_blank"}
+        rel="norefferer"
+        className="underline text-[#2F91EB]"
+      >
         here
       </a>
       .
@@ -22,60 +42,124 @@ const NotificationBox = (props: NotificationBoxTypes) => {
 
   const renderNotiBoxPredicted = () => (
     <>
-      <div className="flex space-x-5">
-        <img src="/images/icon-predict.svg" alt="" />
-        <span>Predicted</span>
+      <div className="flex w-full items-center">
+        <img
+          src="/images/landing-page/predicted.png"
+          alt=""
+          className="w-[88px] h-[88px]"
+        />
+        <div className="ml-3">
+          <div className="text-16/20 font-tthoves font-semibold">
+            Predicted{" ("}
+            {homePredictedScore}:{awayPredictedScore}
+            {")"}
+          </div>
+          <p className="text-14/24 mt-1 font-inter">
+            If your answer is correct, you will be added to the whitelist and
+            have a chance to win{" "}
+            <span className="font-bold">{predictPrize}</span>. The result will
+            be updated {renderLinkUpdateScore()}
+          </p>
+        </div>
       </div>
-      <p className="text-center mt-5">
-        If your answer is correct, you will be added to the whitelist and have a
-        chance to win $20. The result will be updated {renderLinkUpdateScore()}
-      </p>
     </>
   );
 
   const renderNotiBoxCorrectAnswer = () => (
     <>
-      <div className="flex space-x-5">
-        <img src="/images/icon-correct-answer.svg" alt="" />
-        <span className="text-green-600">Correct answer</span>
+      <div className="flex w-full items-center">
+        <img
+          src="/images/landing-page/predicted-correct.png"
+          alt=""
+          className="w-[88px] h-[88px]"
+        />
+        <div className="ml-3">
+          <div className="text-16/20 font-tthoves font-semibold text-[#14B64D]">
+            Correct answer
+          </div>
+          <div className="text-14/24 mt-1 font-inter flex flex-col">
+            <p>
+              Your prediction is correct and have been added to the whitelist.
+            </p>
+            <p>The result will be updated {renderLinkUpdateScore()}</p>
+          </div>
+        </div>
       </div>
-      <p className="text-center mt-5">
-        Your prediction is correct and have been added to the whitelist. The
-        result will be updated {renderLinkUpdateScore()}
-      </p>
     </>
   );
 
   const renderNotiBoxWrongAnswer = () => (
     <>
-      <div className="flex space-x-5">
-        <img src="/images/icon-wrong-answer.svg" alt="" />
-        <span className="text-red-600">Wrong answer</span>
+      <div className="flex w-full items-center">
+        <img
+          src="/images/landing-page/predicted-wrong.png"
+          alt=""
+          className="w-[88px] h-[88px]"
+        />
+        <div className="ml-3">
+          <div className="text-16/20 font-tthoves font-semibold text-[#FF3E57]">
+            Wrong answer
+          </div>
+          <div className="text-14/24 mt-1 font-inter flex flex-col">
+            <p>
+              Your prediction is incorrect. Better luck next time! Don't give
+              up.
+            </p>
+            <p>
+              The correct score is{" "}
+              <span className="font-bold">{`${homeScore}:${awayScore}`}</span>.
+            </p>
+          </div>
+        </div>
       </div>
-      <p className="text-center mt-5">
-        Your prediction is incorrect. The correct score is{" "}
-        <span className="font-medium">{`${homeScore} : ${awayScore}`}</span>.
-      </p>
     </>
   );
 
   const renderNotiBoxWinWhitelist = () => (
     <>
-      <div className="flex space-x-5">
-        <img src="/images/icon-winner-whitelist.svg" alt="" />
-        <span className="text-yellow-600">$20 Winner</span>
+      <div className="flex w-full items-center">
+        <img
+          src="/images/landing-page/predicted-winner.png"
+          alt=""
+          className="w-[88px] h-[88px]"
+        />
+        <div className="ml-3">
+          <div className="text-16/20 font-tthoves font-semibold text-[#DA8300]">
+            {predictPrize} Winner
+          </div>
+          <div className="text-14/24 mt-1 font-inter flex flex-col">
+            <p>Congratulations! You have won {predictPrize}.</p>
+            <p>Check the result {renderLinkUpdateScore()}</p>
+          </div>
+        </div>
       </div>
-      <p className="text-center mt-5">
-        Congratulations! You have won $20. Check the result{" "}
-        {renderLinkUpdateScore()}
-      </p>
     </>
   );
 
   //#endregion END REDNER REGION
 
+  const getBackgroundColor = () => {
+    switch (type) {
+      case QUESTION_STATUS.PREDICTED:
+        return "bg-[#F2F2F2]";
+      case QUESTION_STATUS.CORRECT_ANSWER:
+        return "bg-[#e8f8ee]";
+      case QUESTION_STATUS.WRONG_ANSWER:
+        return "bg-[#ffecef]";
+      case QUESTION_STATUS.WINNER:
+        return "bg-[#fffced]";
+      default:
+        return "bg-[#F2F2F2]";
+    }
+  };
+
   return (
-    <div className="flex flex-col items-center mt-5 p-5 bg-orange-100 ">
+    <div
+      className={clsx(
+        "flex flex-col items-center mt-3 p-3",
+        getBackgroundColor(),
+      )}
+    >
       {type === QUESTION_STATUS.PREDICTED && renderNotiBoxPredicted()}
       {type === QUESTION_STATUS.CORRECT_ANSWER && renderNotiBoxCorrectAnswer()}
       {type === QUESTION_STATUS.WRONG_ANSWER && renderNotiBoxWrongAnswer()}

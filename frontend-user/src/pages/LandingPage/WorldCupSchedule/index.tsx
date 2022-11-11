@@ -1,8 +1,7 @@
 import clsx from "clsx";
 import moment from "moment";
 import { useEffect, useState } from "react";
-import DropDown from "../../../components/base/DropDown";
-import { API_BASE_LOGO_TEAM } from "../../../constants";
+import { API_BASE_LOGO_TEAM, rounds } from "../../../constants";
 import useFetch from "../../../hooks/useFetch";
 import { useMyWeb3 } from "../../../hooks/useMyWeb3";
 import { groupArrayById } from "../../../utils";
@@ -13,39 +12,27 @@ import Schedule from "./Schedule";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const queryString = require("query-string");
 
-const predictedOptions = [
-  { label: "Predicted: All", value: 0 },
-  { label: "Predicted: Yes", value: 1 },
-  { label: "Predicted: No", value: 2 },
-];
-
-const statusOptions = [
-  { label: "Status: All", value: 0 },
-  { label: "Status: 1", value: 1 },
-  { label: "Status: 2", value: 2 },
-];
-
-type FilterTypes = {
+export type FilterTypes = {
   predicted: number;
-  status: number;
+  status: string;
   page: number;
   size: number;
-  round_name: number;
+  round_name: typeof rounds[keyof typeof rounds];
   wallet_address: string;
 };
 
 const WorldCupSchedule = () => {
-  const { account } = useMyWeb3();
+  const { account, isWrongChain } = useMyWeb3();
 
-  const [selectedMatchId, setSelectedMatchId] = useState<number | undefined>();
+  const [selectedMatchId, setSelectedMatchId] = useState<number | undefined>(1);
   const [dataTable, setDataTable] = useState<any[]>([]);
   const [filter, setFilter] = useState<FilterTypes>({
     predicted: 0,
-    status: 0,
+    status: "",
     page: 1,
     size: 20,
     wallet_address: "",
-    round_name: 15,
+    round_name: rounds[0].value,
   });
 
   const { data, loading } = useFetch<any>(
@@ -76,7 +63,6 @@ const WorldCupSchedule = () => {
       newTableData.push({
         date: key,
         matches: value,
-        groupRound: "Group stage - Round 1",
       });
     }
     setDataTable(newTableData);
@@ -114,42 +100,27 @@ const WorldCupSchedule = () => {
       <Schedule />
       <HeadingPrimary title="Match List" />
       <div className="max-w-screen-main mx-auto w-full">
-        <div className="w-[55%] mt-10">
-          <div className="flex justify-between items-center">
-            <span className="text-2xl font-semibold">Match List (GMT +7)</span>
-            <div>
-              <DropDown
-                label="Predicted"
-                items={predictedOptions}
-                selectedValue={filter.predicted}
-                onChange={handleChangePredicted}
-                className="bg-orange-200 w-[160px] rounded-xl border"
-                itemsClassName="bg-orange-200 rounded-xl"
-              />
-              <DropDown
-                label="Status"
-                items={statusOptions}
-                selectedValue={filter.status}
-                onChange={handleChangeStatus}
-                className="bg-orange-200 w-[160px] rounded-xl border ml-5"
-                itemsClassName="bg-orange-200 rounded-xl"
-              />
-            </div>
-          </div>
-        </div>
         <div className={clsx("flex flex-col mt-5 relative", "md:flex-row")}>
           <div
-            className={clsx("w-full  h-fit", "md:w-[55%] md:sticky md:top-10")}
+            className={clsx("w-full h-fit", "md:w-[44%] md:sticky md:top-10")}
           >
             <MatchListTable
               selectedMatchId={selectedMatchId}
               handleSelectMatch={handleSelectMatch}
               dataTable={dataTable}
               loading={loading}
+              filter={filter}
+              setFilter={setFilter}
+              handleChangePredicted={handleChangePredicted}
+              handleChangeStatus={handleChangeStatus}
             />
           </div>
-          <div className="w-full md:w-[45%]">
-            <MatchListRight account={account} matchId={selectedMatchId} />
+          <div className="w-full md:w-[56%]">
+            <MatchListRight
+              account={account}
+              isWrongChain={isWrongChain}
+              matchId={selectedMatchId}
+            />
           </div>
         </div>
       </div>

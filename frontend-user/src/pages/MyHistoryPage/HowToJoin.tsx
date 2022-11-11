@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import Button from "../../components/base/Button";
-import { quickGuide } from "../../constants";
+import { quickGuide, URLS } from "../../constants";
 import { WalletContext } from "../../context/WalletContext";
 import { useMyWeb3 } from "../../hooks/useMyWeb3";
 import { displayWalletAddress } from "../../utils";
@@ -106,7 +106,7 @@ const HowToJoin = () => {
                 } $BIRD`}</p>
               ) : (
                 <a
-                  href="https://faucet.firefly.firebirdchain.com/"
+                  href={URLS.FAUCET_TESTNET}
                   target={"_blank"}
                   rel="norefferer"
                   className="h-auto rounded-xl font-semibold underline text-sm"
@@ -129,7 +129,7 @@ const HowToJoin = () => {
                 <p className="m-0 font-semibold">{`${realTimeBalance} $${nativeCurrency}`}</p>
               ) : (
                 <a
-                  href="https://faucet.firefly.firebirdchain.com/"
+                  href={URLS.FAUCET_TESTNET}
                   target={"_blank"}
                   rel="norefferer"
                   className="h-auto rounded-xl font-semibold underline text-sm"
