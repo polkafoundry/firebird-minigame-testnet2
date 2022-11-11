@@ -171,7 +171,7 @@ export default class CalcBettingJob implements JobContract {
                 : 0,
             is_calculated: true,
           })
-      } else if (match.ou_ht_ratio < match.ht_home_score + match.ht_away_score) {
+      } else if (match.ou_ft_ratio < match.ft_home_score + match.ft_away_score) {
         // ratio < total score
         await BettingModel.query()
           .where('id', ouFTBets[i]?.id)
