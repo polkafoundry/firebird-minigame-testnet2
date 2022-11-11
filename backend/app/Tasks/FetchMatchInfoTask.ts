@@ -8,6 +8,7 @@ const UPDATE_MATCH_STATISTICS = 'UpdateMatchStatistics'
 const UPDATE_MATCH_INFO = 'UpdateMatchInfo'
 const USER_BETTING = 'UserBetting'
 const USER_PREDICT = 'UserPredicting'
+const USER_CLAIM = 'UserClaim'
 
 let ARRAY_EVENTS = [
   CREATE_MATCH,
@@ -15,6 +16,7 @@ let ARRAY_EVENTS = [
   UPDATE_MATCH_INFO,
   USER_BETTING,
   USER_PREDICT,
+  USER_CLAIM,
 ]
 
 const initTask = async () => {

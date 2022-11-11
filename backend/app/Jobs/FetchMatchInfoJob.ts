@@ -16,6 +16,7 @@ const UPDATE_MATCH_STATISTICS = 'UpdateMatchStatistics'
 const UPDATE_MATCH_INFO = 'UpdateMatchInfo'
 const USER_BETTING = 'UserBetting'
 const USER_PREDICT = 'UserPredicting'
+const USER_CLAIM = 'UserClaim'
 
 const STEP = parseInt(process.env.CRAWL_STEP || '5000', 10)
 
@@ -288,6 +289,22 @@ export default class FetchMatchInfoJob implements JobContract {
               betCountData.bet_count = 1
               await betCountData.save()
             }
+          }
+          break
+        case USER_CLAIM:
+          const bet = await BettingModel.query()
+            .where('match_id', event.returnValues.matchID)
+            .andWhere('user_address', event.returnValues.user)
+            .andWhere('bet_type', event.returnValues.betType)
+            .first()
+          if (bet) {
+            await BettingModel.query()
+              .where('match_id', event.returnValues.matchID)
+              .andWhere('user_address', event.returnValues.user)
+              .andWhere('bet_type', event.returnValues.betType)
+              .update({
+                has_claim: true,
+              })
           }
           break
         default:
