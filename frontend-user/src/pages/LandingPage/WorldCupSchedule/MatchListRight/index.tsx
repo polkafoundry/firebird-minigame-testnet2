@@ -21,7 +21,7 @@ const nav = [
 
 const MatchListRight = (props: MatchListRightProps) => {
   const { matchId, account, isWrongChain } = props;
-  const [selectedNav, setSelectedNav] = useState<number>(1);
+  const [selectedNav, setSelectedNav] = useState<number>(account ? 1 : 2);
 
   const fetchMatchDetailUrl = `/match/detail/${matchId}?wallet_address=${account}`;
   const { data } = useFetch<any>(fetchMatchDetailUrl, !!matchId);
