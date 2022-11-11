@@ -49,10 +49,14 @@ export default class FetchLiveMatchJob implements JobContract {
   public key = 'FetchLiveMatchJob'
 
   public async handle() {
-    // Do somethign with you job data
-    const liveMatches = await new MatchService().getLiveMatch()
-    console.log(liveMatches)
-    await Promise.all(liveMatches.map((match) => this._updateLiveMatch(match)))
+    try {
+      // Do somethign with you job data
+      const liveMatches = await new MatchService().getLiveMatch()
+      console.log('liveMatches: ', liveMatches)
+      await Promise.all(liveMatches.map((match) => this._updateLiveMatch(match)))
+    } catch (error) {
+      console.log('error FetchLiveMatchJob: ', error.message)
+    }
   }
   private async _updateLiveMatch(match) {
     const matchData: any = await new MatchApiService().getData({
