@@ -12,13 +12,15 @@ const BorderBox = (props: BorderBoxProps) => {
   return (
     <div
       className={clsx(
-        "flex space-x-2 justify-center w-full max-w-[180px] items-center py-2 border rounded-xl",
+        "flex space-x-2 justify-center w-full min-h-[44px] items-center py-2 border rounded-xl",
         className,
       )}
       onClick={onClick}
     >
-      {icon && <img src={icon} className="w-4 h-4" alt="" />}
-      <span className="text-sm">{label}</span>
+      {icon && <img src={icon} className="w-6 h-6" alt="" />}
+      <span className="text-16/20 font-tthoves font-semibold capitalize">
+        {label.toLowerCase()}
+      </span>
     </div>
   );
 };

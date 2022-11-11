@@ -254,6 +254,7 @@ const MatchQuestions = (props: MatchQuestionProps) => {
         needApprove={needApprove}
         betType={BET_TYPE.ODD_EVEN_HALF_TIME}
         title="2. Who will win the 1st half?"
+        error={{ birdToken: predictConditions.birdToken }}
       />
       <OddsQuestion
         dataQuestion={questions[2]}

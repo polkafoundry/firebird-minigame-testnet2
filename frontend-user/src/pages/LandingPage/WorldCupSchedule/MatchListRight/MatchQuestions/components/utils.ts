@@ -5,19 +5,27 @@ export const getOptionColorFromIndex = (
   index: number,
   defaultClass?: string,
   optionWhoWin?: number,
+  isSubmitted?: boolean,
+  finalResultIndex?: number,
 ) => {
   if (!question) return defaultClass;
-  if (question.isSubmitted) {
-    if (question.results?.optionSelected === index) {
-      if (question.results?.optionSelected === question.results?.optionEnded) {
-        return "bg-green-400";
+
+  const correctStyles = "bg-[#14B64D33] border-[#14B64D]";
+  const wrongStyles = "bg-[#FF3E5733] border-[#3a0013] border-2 opacity-50";
+  const selectedStyles = "bg-[#3A001333] border-[#3a0013] border-2";
+
+  if (isSubmitted) {
+    if (question.optionSelected === index) {
+      if (question?.result === "win") {
+        return correctStyles;
       } else {
-        return "border border-red-400 text-red-400 font-semibold";
+        return wrongStyles;
       }
-    } else if (question.results?.optionEnded === index) return "bg-green-400";
-  } else {
-    if (optionWhoWin === index) return "bg-yellow-400 border-yellow-400";
-  }
+    } else if (finalResultIndex === index) return correctStyles;
+
+    return "opacity-50 bg-[#EDEDED]";
+  } else if (optionWhoWin === index) return selectedStyles;
+
   return defaultClass;
 };
 
@@ -33,5 +41,16 @@ export const getOptionIndexByBetPlace = (bet_place: string) => {
       return 0;
     case BET_PLACE.OVER:
       return 2;
+  }
+};
+
+export const getFinalResultIndex = (result: string, bet_place: string) => {
+  switch (result) {
+    case "win":
+      return getOptionIndexByBetPlace(bet_place);
+    case "draw":
+      return 1;
+    case "lose":
+      return getOptionIndexByBetPlace(bet_place) === 0 ? 2 : 0;
   }
 };

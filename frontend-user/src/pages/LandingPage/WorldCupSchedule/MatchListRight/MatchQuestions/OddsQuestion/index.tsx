@@ -9,12 +9,15 @@ import BorderBox from "../components/BorderBox";
 import DepositAmount from "../components/DepositAmount";
 import Question from "../components/Question";
 import ResultMatch from "../components/ResultMatch";
-import { getOptionColorFromIndex } from "../components/utils";
+import {
+  getFinalResultIndex,
+  getOptionColorFromIndex,
+} from "../components/utils";
 
 const betPlaceString = ["home", "draw", "away"];
 
 const OddsQuestion = (props: QuestionProps) => {
-  const { dataQuestion = {}, title, betType, needApprove } = props;
+  const { dataQuestion = {}, title, betType, needApprove, error } = props;
   const errors: string[] = [];
   const [optionWhoWin, setOptionWhoWin] = useState<number>(0);
   const [depositAmount, setDepositAmount] = useState<string>("");
@@ -25,6 +28,10 @@ const OddsQuestion = (props: QuestionProps) => {
   const questionStatus = dataQuestion?.questionStatus;
   const isSubmitted = questionStatus !== QUESTION_STATUS.NOT_PREDICTED;
   const matchEnded = dataQuestion?.match_status === MATCH_STATUS.FINISHED;
+  const finalResultIndex = getFinalResultIndex(
+    dataQuestion?.result,
+    dataQuestion?.bet_place,
+  );
 
   useEffect(() => {
     if (!dataQuestion) return;
@@ -63,17 +70,12 @@ const OddsQuestion = (props: QuestionProps) => {
       isSubmitted={isSubmitted}
       matchEnded={matchEnded}
       loading={loadingApprove || loadingBetting}
+      error={error}
     >
       <div>
-        <div className="flex items-start justify-between">
+        <div className="flex items-center justify-center w-full min-w-[500px] space-x-2 px-16">
           {dataQuestion?.options?.map((option: any, index: number) => (
-            <div
-              key={index}
-              className={clsx(
-                "flex flex-col items-center w-full",
-                option?.label === "Draw" ? "max-w-[100px]" : "max-w-[180px]",
-              )}
-            >
+            <div key={index} className={clsx("flex flex-col w-full")}>
               <BorderBox
                 label={option?.label}
                 icon={option?.icon}
@@ -82,25 +84,22 @@ const OddsQuestion = (props: QuestionProps) => {
                   getOptionColorFromIndex(
                     dataQuestion,
                     index,
-                    "",
+                    "bg-[#EDEDED]",
                     optionWhoWin,
+                    isSubmitted,
+                    finalResultIndex,
                   ),
                 )}
                 onClick={() => handleChangeOptionWhoWin(index)}
               />
-              <span
+              <div
                 className={clsx(
-                  "rounded-md px-5 mt-2",
-                  getOptionColorFromIndex(
-                    dataQuestion,
-                    index,
-                    "bg-gray-200",
-                    optionWhoWin,
-                  ),
+                  "mt-2 text-16/24 font-inter text-center",
+                  isSubmitted && finalResultIndex !== index && "opacity-50",
                 )}
               >
                 {option?.winRate}
-              </span>
+              </div>
             </div>
           ))}
         </div>
@@ -109,7 +108,7 @@ const OddsQuestion = (props: QuestionProps) => {
           <DepositAmount
             depositAmount={depositAmount}
             handleChangeDepositAmount={handleChangeDepositAmount}
-            errors={errors}
+            // errors={errors}
             winRate={
               dataQuestion?.options
                 ? dataQuestion?.options[optionWhoWin]?.winRate
