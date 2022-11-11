@@ -21,19 +21,27 @@
   }
 }
 
-.iconHover {
+.iconHoverAnimated {
   .image {
-    background: url(../../../public/images/bg-icon.svg) no-repeat;
     width: 44px;
     height: 44px;
-    background-size: contain;
+  }
+  .iconBackground {
+    position: absolute;
+    width: 36px;
+    height: 36px;
+    transition: all 0.8s cubic-bezier(0.075, 0.82, 0.165, 1) 0s;
+  }
+  .iconHoverBorder {
     transition: all 0.8s cubic-bezier(0.075, 0.82, 0.165, 1) 0s;
   }
   &:hover {
     .image {
-      transform: rotate(45deg) scale(1.2);
-      * {
-        transform: rotate(-45deg) scale(0.9);
+      .iconHoverBorder {
+        transform: rotate(60deg) scale(1.2);
+      }
+      .iconBackground {
+        transform: scale(1.1);
       }
     }
   }
@@ -43,7 +51,6 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  // text-fill-color: transparent;
 }
 
 .gameFrame {
