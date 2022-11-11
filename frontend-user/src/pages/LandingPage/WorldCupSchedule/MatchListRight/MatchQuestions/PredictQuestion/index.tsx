@@ -150,7 +150,7 @@ const PredictQuestion = (props: QuestionProps) => {
             dataQuestion?.away_icon,
           )}
         </div>
-        {error?.birdToken && (
+        {error?.birdToken === false && (
           <p className="mt-3 text-12/16 text-[#FF0021] text-center font-inter">
             Not enough PKF to pay for the gas fee. Click{" "}
             <a
