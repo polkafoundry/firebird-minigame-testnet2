@@ -108,10 +108,10 @@ const MatchListRight = (props: MatchListRightProps) => {
         {nav.map((item: any) => (
           <div
             className={clsx(
-              "flex justify-center items-center text-center text-14/20 font-bold text-black",
+              "flex justify-center items-center text-center text-14/20 font-bold",
               selectedNav === item.value
-                ? "bg-white"
-                : "bg-[#F2F2F2] opacity-50",
+                ? "bg-[#3A0013] text-white"
+                : "bg-white opacity-50 text-black",
             )}
             key={item.value}
             onClick={() => setSelectedNav(item.value)}

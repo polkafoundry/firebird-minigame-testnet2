@@ -39,6 +39,7 @@ const InputNumber = (props: InputNumberProps) => {
       case QUESTION_STATUS.NOT_PREDICTED:
       case QUESTION_STATUS.PREDICTED:
         return "bg-[#F2F2F2] rounded-lg";
+      case QUESTION_STATUS.WINNER:
       case QUESTION_STATUS.CORRECT_ANSWER:
         return "text-[#14B64D] bg-[#e8f8ee]";
       case QUESTION_STATUS.WRONG_ANSWER:
@@ -52,7 +53,7 @@ const InputNumber = (props: InputNumberProps) => {
     <input
       type="text"
       className={clsx(
-        "w-12 h-12 p-2 text-18/24 font-semibold text-center bg-white outline-none",
+        "w-12 h-12 p-2 text-18/24 font-semibold text-center bg-white outline-none rounded-lg",
         getInputStyle(),
         className,
       )}
@@ -91,7 +92,9 @@ const InputScore = (props: InputScoreProps) => {
       <span
         className={clsx(
           "text-24/32 font-semibold block",
-          questionStatus === QUESTION_STATUS.CORRECT_ANSWER && "text-[#14B64D]",
+          [QUESTION_STATUS.CORRECT_ANSWER, QUESTION_STATUS.WINNER].includes(
+            questionStatus,
+          ) && "text-[#14B64D]",
           questionStatus === QUESTION_STATUS.WRONG_ANSWER && "text-[#FF3E57]",
         )}
       >

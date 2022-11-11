@@ -20,7 +20,16 @@ const Question = (props: QuestionProps) => {
     predictBoxComponent,
   } = props;
 
-  const enableSubmit = (!isSubmitted && !matchEnded) || predictBoxComponent;
+  // console.log("(predictBoxComponent :>> ", predictBoxComponent);
+  // console.log("(matchEnded) ||  :>> ", matchEnded);
+  // console.log("(isSubmitted &:>> ", isSubmitted);
+  // console.log("(!2 con &:>> ", !isSubmitted && !matchEnded);
+  // console.log(
+  //   "(!final &:>> ",
+  //   !!((!isSubmitted && !matchEnded) || predictBoxComponent),
+  // );
+  const enableSubmit = Boolean(!isSubmitted && !matchEnded);
+  // console.log("(!enalbesubmit &:>> ", enableSubmit);
 
   return (
     <Disclosure defaultOpen>
