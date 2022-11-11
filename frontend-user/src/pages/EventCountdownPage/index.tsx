@@ -27,10 +27,10 @@ const EventCountdownPage = () => {
   const { day, hour, minute, second } = useCountDown(new Date("11/20/2022"));
 
   const { unityProvider, isLoaded, sendMessage } = useUnityContext({
-    loaderUrl: "buildUnity/BuildTestJavascriptHook.loader.js",
-    dataUrl: "buildUnity/BuildTestJavascriptHook.data",
-    frameworkUrl: "buildUnity/BuildTestJavascriptHook.framework.js",
-    codeUrl: "buildUnity/BuildTestJavascriptHook.wasm",
+    loaderUrl: "buildUnity/BuildFlyWithFirebirds.loader.js",
+    dataUrl: "buildUnity/BuildFlyWithFirebirds.data",
+    frameworkUrl: "buildUnity/BuildFlyWithFirebirds.framework.js",
+    codeUrl: "buildUnity/BuildFlyWithFirebirds.wasm",
     webglContextAttributes: {
       preserveDrawingBuffer: true,
     },
@@ -57,7 +57,7 @@ const EventCountdownPage = () => {
         <span className="text-24/32 tracking-widest font-semibold mt-2 uppercase">
           🔥 coming soon 🔥
         </span>
-        <div className="flex space-x-8 mt-16">
+        <div className="flex space-x-8 mt-10">
           <TimeField label="days" value={day} />
           <span className="text-[120px] leading-[120px] pt-10">:</span>
 
@@ -80,7 +80,7 @@ const EventCountdownPage = () => {
         />
       </div>
 
-      <div className="flex flex-col mx-auto pt-40 max-w-screen-main pb-20 items-center px-[160px]">
+      <div className="flex flex-col mx-auto pt-40 max-w-screen-main pb-20 items-center px-20 lg:px-[160px]">
         <div className="grid grid-cols-2">
           <div className="flex flex-col">
             <span className="text-40/52 font-semibold">Fly with Firebird</span>
@@ -179,6 +179,8 @@ const EventCountdownPage = () => {
           ) : null}
           <Unity className="w-full h-full" unityProvider={unityProvider} />
         </div>
+
+        <img src="/images/powered-mirai.png" alt="" />
 
         {/* <div className="relative w-full max-w-[960px] h-[600px] mt-[100px]">
           {isLoaded === false && (
