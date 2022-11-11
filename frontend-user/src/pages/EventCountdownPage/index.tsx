@@ -21,6 +21,45 @@ const TimeField = ({ value, label }: TimeFieldProps) => {
   );
 };
 
+const ColonField = () => (
+  <span className="text-[120px] leading-[120px] pt-10">:</span>
+);
+
+const CustomField = ({
+  label,
+  iconUri,
+  href,
+}: {
+  label: string;
+  iconUri: string;
+  href: string;
+}) => {
+  return (
+    <a
+      href={href}
+      className={clsx(
+        styles.iconHoverAnimated,
+        "flex w-fit bg-[#F7F7F8] rounded-[20px] h-[72px] px-6 items-center cursor-pointer",
+      )}
+    >
+      <div
+        className={clsx(
+          styles.image,
+          "relative mr-4 flex items-center justify-center",
+        )}
+      >
+        <img
+          src="/images/icon-hover-border.svg"
+          alt=""
+          className={styles.iconHoverBorder}
+        />
+        <img src={iconUri} alt="" className={styles.iconBackground} />
+      </div>
+      <span className="text-22/32 font-semibold">{label}</span>
+    </a>
+  );
+};
+
 const EventCountdownPage = () => {
   const { account } = useMyWeb3();
 
@@ -59,13 +98,13 @@ const EventCountdownPage = () => {
         </span>
         <div className="flex space-x-8 mt-10">
           <TimeField label="days" value={day} />
-          <span className="text-[120px] leading-[120px] pt-10">:</span>
+          <ColonField />
 
           <TimeField label="HOURS" value={hour} />
-          <span className="text-[120px] leading-[120px] pt-10">:</span>
+          <ColonField />
 
           <TimeField label="MINUTES" value={minute} />
-          <span className="text-[120px] leading-[120px] pt-10">:</span>
+          <ColonField />
 
           <TimeField label="SECONDS" value={second} />
         </div>
@@ -102,48 +141,18 @@ const EventCountdownPage = () => {
               </span>
             </div>
           </div>
-          <div className="flex flex-col items-end">
-            <a
-              href="/"
-              className={clsx(
-                styles.iconHover,
-                "flex w-fit bg-[#F7F7F8] rounded-[20px] h-[72px] px-6 items-center cursor-pointer",
-              )}
-            >
-              <div
-                className={clsx(
-                  styles.image,
-                  "mr-4 flex items-center justify-center",
-                )}
-              >
-                <img
-                  src="/images/icon-search-color.svg"
-                  alt=""
-                  className="absolute"
-                />
-              </div>
-              <span className="text-22/32 font-semibold">How to play</span>
-            </a>
 
-            <a
+          <div className="flex flex-col items-end space-y-2">
+            <CustomField
               href="/"
-              className={clsx(
-                styles.iconHover,
-                "flex w-fit bg-[#F7F7F8] rounded-[20px] h-[72px] px-6 items-center cursor-pointer mt-2",
-              )}
-            >
-              <div
-                className={clsx(
-                  styles.image,
-                  "mr-4 flex items-center justify-center",
-                )}
-              >
-                <img src="/images/icon-gift.svg" alt="" />
-              </div>
-              <span className="text-22/32 font-semibold">
-                Reward distribution
-              </span>
-            </a>
+              iconUri="/images/icon-hover-search.svg"
+              label="How to play"
+            />
+            <CustomField
+              href="/"
+              iconUri="/images/icon-hover-gift.svg"
+              label="Reward distribution"
+            />
           </div>
         </div>
 

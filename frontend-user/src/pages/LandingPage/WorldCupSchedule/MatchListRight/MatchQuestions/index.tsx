@@ -165,7 +165,7 @@ const MatchQuestions = (props: MatchQuestionProps) => {
               "≤ " + lowerScore(dataQuestion?.ou_ht_ratio) + " goals scored",
           },
           {
-            label: `Total ${dataQuestion?.ou_ht_ratio || 0} goals`,
+            label: `${dataQuestion?.ou_ht_ratio || 0} goals`,
             isDisableClick: true,
           },
           {
@@ -194,7 +194,7 @@ const MatchQuestions = (props: MatchQuestionProps) => {
               "≤ " + lowerScore(dataQuestion?.ou_ft_ratio) + " goals scored",
           },
           {
-            label: `Total ${dataQuestion?.ou_ft_ratio || 0} goals`,
+            label: `${dataQuestion?.ou_ft_ratio || 0} goals`,
             isDisableClick: true,
           },
           {
