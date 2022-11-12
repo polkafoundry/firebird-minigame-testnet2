@@ -63,6 +63,15 @@ const OddsQuestion = (props: QuestionProps) => {
     setDepositAmount(value);
   };
 
+  const notHasBettingResult =
+    dataQuestion?.match_status === "finished" && !dataQuestion?.result;
+
+  const getWinRateColor = (index?: number) => {
+    if ((isSubmitted && finalResultIndex !== index) || notHasBettingResult)
+      return "opacity-50";
+  };
+  const isEnableBetting = !isSubmitted && !notHasBettingResult;
+
   return (
     <Question
       title={title}
@@ -80,7 +89,7 @@ const OddsQuestion = (props: QuestionProps) => {
                 label={option?.label}
                 icon={option?.icon}
                 className={clsx(
-                  isSubmitted ? "pointer-events-none" : "cursor-pointer",
+                  !isEnableBetting ? "pointer-events-none" : "cursor-pointer",
                   getOptionColorFromIndex(
                     dataQuestion,
                     index,
@@ -94,7 +103,7 @@ const OddsQuestion = (props: QuestionProps) => {
               <div
                 className={clsx(
                   "mt-2 text-16/24 font-inter text-center",
-                  isSubmitted && finalResultIndex !== index && "opacity-50",
+                  getWinRateColor(index),
                 )}
               >
                 {option?.winRate}

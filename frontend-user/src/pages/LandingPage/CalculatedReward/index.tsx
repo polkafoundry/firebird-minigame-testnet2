@@ -114,7 +114,7 @@ const CalculatedReward = () => {
   };
 
   return (
-    <div className="mt-[120px] max-w-[1280px] w-full mx-auto">
+    <div className="mt-[120px] px-20 max-w-screen-main w-full mx-auto">
       <div className="w-full mx-auto">
         <div className="flex justify-between items-end">
           <div className="flex  flex-col ml-[130px]">
@@ -147,7 +147,7 @@ const CalculatedReward = () => {
           {/* <div className="flex justify-center z-10">
             <ButtonStyled
               title="Leaderboard"
-              className="w-[200px] bg-[#EB522F] mr-3"
+              className="w-[200px] bg-main mr-3"
             />
             <ButtonStyled
               title="My history"
@@ -172,20 +172,26 @@ const CalculatedReward = () => {
                   <span className="text-12/18 font-bold font-tthoves opacity-80">
                     TOTAL REWARDS
                   </span>
-                  <span className="text-36/48 font-bold italic">$5,230</span>
+                  <span className="text-36/48 font-bold font-tthoves italic">
+                    $5,230
+                  </span>
                 </div>
                 <div className="w-full">
                   <div className="flex items-center justify-between py-6 px-8 border-b border-[#714755]">
                     <div className="text-10/14 opacity-80">
                       For match score prediction winners
                     </div>
-                    <div className="text-24/32 font-bold italic">$1,720</div>
+                    <div className="text-24/32 font-bold font-tthoves italic">
+                      $1,720
+                    </div>
                   </div>
                   <div className="flex items-center justify-between py-6 px-8">
                     <div className="text-10/14 opacity-80">
                       For who win & total goal prediction leaderboard
                     </div>
-                    <div className="text-24/32 font-bold italic">$3,600</div>
+                    <div className="text-24/32 font-bold font-tthoves italic">
+                      $3,600
+                    </div>
                   </div>
                 </div>
               </div>
@@ -230,7 +236,7 @@ const CalculatedReward = () => {
               </p>
               <a href="https://gamefi.org/" target="_blank" rel="noreferrer">
                 <ButtonStyled
-                  className="mt-7 w-[200px] bg-[#EB522F] text-white font-semibold font-tthoves"
+                  className="mt-7 w-[200px] bg-main text-white font-semibold font-tthoves"
                   title="Join now"
                 />
               </a>

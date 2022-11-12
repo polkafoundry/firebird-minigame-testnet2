@@ -5,7 +5,7 @@ import { URLS } from "../../../constants";
 import { WalletContext } from "../../../context/WalletContext";
 import { useMyWeb3 } from "../../../hooks/useMyWeb3";
 import { displayWalletAddress } from "../../../utils";
-import Button from "../Button";
+import styles from "./header.module.scss";
 
 type RouteTypes = {
   label: string;
@@ -13,10 +13,10 @@ type RouteTypes = {
 };
 
 const routes: Array<RouteTypes> = [
-  {
-    label: "Event",
-    uri: URLS.EVENT,
-  },
+  // {
+  //   label: "Event",
+  //   uri: URLS.EVENT,
+  // },
   {
     label: "Firefly Testnet",
     uri: URLS.FAUCET_TESTNET,
@@ -36,7 +36,8 @@ const routes: Array<RouteTypes> = [
 ];
 
 const HeaderDefaultLayout = () => {
-  const { setShowModal, connectedAccount } = useContext(WalletContext);
+  const { setShowModal, connectedAccount, handleSwitchChain } =
+    useContext(WalletContext);
   const { isWrongChain, nativeCurrency, realTimeBalance } = useMyWeb3();
 
   const [openMenuMobile, setOpenMenuMobile] = useState<boolean>(false);
@@ -96,20 +97,28 @@ const HeaderDefaultLayout = () => {
       <nav
         className={clsx(
           "w-full h-full flex items-center justify-between max-w-screen-main text-white",
-          "md:px-[120px]",
-          "xs:px-[60px]",
+          "main:px-20",
+          "lg:px-10",
           "pl-5 pr-6",
         )}
       >
-        <a href="/">
-          <img src="/images/logo-text.svg" alt="" />
-        </a>
+        <div className="flex">
+          <a href="/">
+            <img src="/images/logo-text.svg" alt="" />
+          </a>
+          <img
+            src="/images/landing-page/banner-text.png"
+            alt=""
+            className="ml-2 hidden lg:block"
+          />
+        </div>
         <div className={clsx("gap-5 hidden", "md:flex md:items-center")}>
           {routes.map((item: RouteTypes, index: number) => (
             <a
               key={index}
               href={item.uri}
               className={clsx(
+                "font-inter text-16/24",
                 location.pathname === item.uri
                   ? "text-main font-semibold"
                   : "hover:text-red-500",
@@ -118,8 +127,25 @@ const HeaderDefaultLayout = () => {
               {item.label}
             </a>
           ))}
-          <Button
-            className="bg-main p-[2px] h-10 rounded-md"
+
+          <button
+            className={clsx(
+              "ml-5 lg:ml-10 px-4 py-1.5 flex rounded-lg text-14/20 text-white font-tthoves items-center",
+              styles.backgroundGradient,
+              !isWrongChain && "pointer-events-none",
+            )}
+            onClick={handleSwitchChain}
+          >
+            {!isWrongChain && (
+              <img src="./images/icon-edit.svg" alt="" className="mr-1.5" />
+            )}
+            <span className="flex-1">
+              {!isWrongChain ? "FireflyTestnet" : "Switch chain"}
+            </span>
+          </button>
+
+          <button
+            className="bg-main p-0.5 h-9 min-w-[177px] rounded-lg text-14/20 font-tthoves"
             onClick={openConnectModal}
           >
             {connectedAccount ? (
@@ -134,7 +160,7 @@ const HeaderDefaultLayout = () => {
             ) : (
               <span className="font-semibold">Connect Wallet</span>
             )}
-          </Button>
+          </button>
         </div>
         <div
           className={clsx("block cursor-pointer", "md:hidden")}

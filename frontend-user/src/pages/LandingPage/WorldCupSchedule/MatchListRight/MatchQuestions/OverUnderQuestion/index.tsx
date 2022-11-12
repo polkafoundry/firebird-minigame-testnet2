@@ -44,6 +44,16 @@ const OverUnderQuestion = (props: QuestionProps) => {
     setDepositAmount(value);
   };
 
+  const notHasBettingResult =
+    dataQuestion?.match_status === "finished" && !dataQuestion?.result;
+
+  const getWinRateColor = (index?: number) => {
+    if ((isSubmitted && finalResultIndex !== index) || notHasBettingResult)
+      return "opacity-50";
+  };
+  const isEnableClick = (isDisableClick: any) =>
+    !isSubmitted && !isDisableClick && !notHasBettingResult;
+
   const handleSubmit = async () => {
     const dataSubmit = {
       _matchID: dataQuestion?.match_id,
@@ -82,7 +92,7 @@ const OverUnderQuestion = (props: QuestionProps) => {
                 label={option?.label}
                 icon={option?.icon}
                 className={clsx(
-                  isSubmitted || option?.isDisableClick
+                  !isEnableClick(option?.isDisableClick)
                     ? "pointer-events-none"
                     : "cursor-pointer",
                   getOptionColorFromIndex(
@@ -101,7 +111,7 @@ const OverUnderQuestion = (props: QuestionProps) => {
               <span
                 className={clsx(
                   "mt-2 text-16/24 font-inter text-center",
-                  isSubmitted && finalResultIndex !== index && "opacity-50",
+                  getWinRateColor(index),
                 )}
               >
                 {option?.winRate}

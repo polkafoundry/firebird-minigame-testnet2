@@ -7,9 +7,11 @@ import WorldCupSchedule from "./WorldCupSchedule";
 const LangdingPage = () => {
   return (
     <LandingLayout>
-      {/* <HomeBanner /> */}
+      <div className="w-full">
+        <img src="./images/landing-page/banner.png" alt="" className="w-full" />
+      </div>
 
-      <div className="flex flex-col w-full">
+      <div className="mt-[-240px] lg:mt-[-280px] flex flex-col w-full">
         <WorldCupSchedule />
         <CalculatedReward />
         <PredictionRule />

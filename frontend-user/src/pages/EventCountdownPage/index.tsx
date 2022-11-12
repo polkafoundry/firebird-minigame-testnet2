@@ -130,7 +130,7 @@ const EventCountdownPage = () => {
             <p className="mt-2 mb-0 text-18/32">
               Let’s warm up with our mini game while waiting for the big news.
               Top 10 scorers will share a prize pool of{" "}
-              <span className="rounded-[4px] bg-[#eb522f] p-1 text-white font-semibold">
+              <span className="rounded-[4px] bg-main p-1 text-white font-semibold">
                 $100
               </span>
             </p>
