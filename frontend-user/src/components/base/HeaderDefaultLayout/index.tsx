@@ -13,10 +13,10 @@ type RouteTypes = {
 };
 
 const routes: Array<RouteTypes> = [
-  {
-    label: "Event",
-    uri: URLS.EVENT,
-  },
+  // {
+  //   label: "Event",
+  //   uri: URLS.EVENT,
+  // },
   {
     label: "Firefly Testnet",
     uri: URLS.FAUCET_TESTNET,
@@ -96,7 +96,7 @@ const HeaderDefaultLayout = () => {
       <nav
         className={clsx(
           "w-full h-full flex items-center justify-between max-w-screen-main text-white",
-          "md:px-[120px]",
+          "md:px-20",
           "xs:px-[60px]",
           "pl-5 pr-6",
         )}

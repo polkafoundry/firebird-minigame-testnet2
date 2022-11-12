@@ -39,7 +39,7 @@ const MatchGuide = (props: MatchGuideProps) => {
             {!account && (
               <div className="h-[176px] flex justify-center items-center">
                 <button
-                  className="py-2 px-9 rounded-lg bg-[#EB522F] text-white justify-center font-semibold font-tthoves text-14/20"
+                  className="py-2 px-9 rounded-lg bg-main text-white justify-center font-semibold font-tthoves text-14/20"
                   onClick={() => setShowModal && setShowModal(true)}
                 >
                   Connect Wallet
@@ -197,7 +197,7 @@ const MatchGuide = (props: MatchGuideProps) => {
 
       <div className="flex justify-center">
         <button
-          className="w-1/2 py-4 rounded-full bg-[#EB522F] text-white justify-center font-semibold font-tthoves text-16/24"
+          className="w-1/2 py-4 rounded-full bg-main text-white justify-center font-semibold font-tthoves text-16/24"
           onClick={handleClickPredictionRule}
         >
           Prediction Rule

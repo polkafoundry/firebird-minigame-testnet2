@@ -64,7 +64,7 @@ const Question = (props: QuestionProps) => {
             {enableSubmit && (
               <div className="flex justify-center">
                 <button
-                  className="mt-3 p-2 w-[178px] rounded-lg bg-[#EB522F] text-white text-14/20 font-tthoves font-semibold"
+                  className="mt-3 p-2 w-[178px] rounded-lg bg-main text-white text-14/20 font-tthoves font-semibold"
                   onClick={handleSubmit}
                   disabled={loading}
                 >

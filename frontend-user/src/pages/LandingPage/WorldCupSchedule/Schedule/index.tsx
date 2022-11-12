@@ -44,7 +44,7 @@ const Schedule = () => {
               <div
                 className={clsx(
                   index === 0 || index === 5
-                    ? "text-28/36 text-[#EB522F]"
+                    ? "text-28/36 text-main"
                     : "text-20/28",
                   "font-semibold",
                 )}

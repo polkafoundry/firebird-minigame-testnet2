@@ -114,7 +114,7 @@ const CalculatedReward = () => {
   };
 
   return (
-    <div className="mt-[120px] max-w-[1280px] w-full mx-auto">
+    <div className="mt-[120px] px-20 max-w-screen-main w-full mx-auto">
       <div className="w-full mx-auto">
         <div className="flex justify-between items-end">
           <div className="flex  flex-col ml-[130px]">
@@ -147,7 +147,7 @@ const CalculatedReward = () => {
           {/* <div className="flex justify-center z-10">
             <ButtonStyled
               title="Leaderboard"
-              className="w-[200px] bg-[#EB522F] mr-3"
+              className="w-[200px] bg-main mr-3"
             />
             <ButtonStyled
               title="My history"
@@ -230,7 +230,7 @@ const CalculatedReward = () => {
               </p>
               <a href="https://gamefi.org/" target="_blank" rel="noreferrer">
                 <ButtonStyled
-                  className="mt-7 w-[200px] bg-[#EB522F] text-white font-semibold font-tthoves"
+                  className="mt-7 w-[200px] bg-main text-white font-semibold font-tthoves"
                   title="Join now"
                 />
               </a>
