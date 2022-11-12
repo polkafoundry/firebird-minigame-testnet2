@@ -114,7 +114,7 @@ const CalculatedReward = () => {
   };
 
   return (
-    <div className="mt-[120px] px-20 max-w-screen-main w-full mx-auto">
+    <div className="mt-[120px] px-5 main:px-20 max-w-screen-main w-full mx-auto">
       <div className="w-full mx-auto">
         <div className="flex justify-between items-end">
           <div className="flex  flex-col ml-[130px]">

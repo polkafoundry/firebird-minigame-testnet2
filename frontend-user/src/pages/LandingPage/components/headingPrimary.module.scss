@@ -1,13 +1,25 @@
 .headingPrimaryGradient {
   font-family: "Inter";
   font-style: normal;
-  font-size: 140px;
-  line-height: 140px;
+  font-size: 70px;
+  line-height: 70px;
   letter-spacing: 4px;
   font-weight: 700;
   user-select: none;
 
   opacity: 0.4;
+  @media (min-width: theme("screens.xs")) {
+    font-size: 90px;
+    line-height: 90px;
+  }
+  @media (min-width: theme("screens.md")) {
+    font-size: 120px;
+    line-height: 120px;
+  }
+  @media (min-width: theme("screens.lg")) {
+    font-size: 140px;
+    line-height: 140px;
+  }
 }
 
 .colorPrimary {
@@ -30,7 +42,19 @@
 .headingPrimary {
   font-family: "TTHoves";
   font-weight: 600;
-  font-size: 36px;
-  line-height: 48px;
+  font-size: 18px;
+  line-height: 24px;
   text-transform: uppercase;
+  @media (min-width: theme("screens.xs")) {
+    font-size: 22px;
+    line-height: 30px;
+  }
+  @media (min-width: theme("screens.md")) {
+    font-size: 26px;
+    line-height: 36px;
+  }
+  @media (min-width: theme("screens.lg")) {
+    font-size: 36px;
+    line-height: 48px;
+  }
 }

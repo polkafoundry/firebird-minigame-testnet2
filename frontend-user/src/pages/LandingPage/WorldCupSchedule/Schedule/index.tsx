@@ -13,7 +13,14 @@ const schedule = [
 
 const Schedule = () => {
   return (
-    <div className={clsx("pt-[140px] text-white", styles.scheduleBg)}>
+    <div
+      className={clsx(
+        "pt-[80px] text-white",
+        "xs:pt-[100px]",
+        "md:pt-[140px]",
+        styles.scheduleBg,
+      )}
+    >
       <HeadingPrimary
         backroundTitle="SCHEDULE"
         title="2022 Qatar World Cup Schedule"
@@ -23,7 +30,7 @@ const Schedule = () => {
       />
       <div
         className={clsx(
-          "flex mt-[-50px] px-20 relative overflow-hidden",
+          "flex mt-[-80px] md:mt-[-50px] px-12 main:px-20 relative overflow-hidden",
           styles.schedule,
         )}
       >
@@ -62,18 +69,22 @@ const Schedule = () => {
               )}
             >
               {index === 0 && (
-                <img
-                  src="./images/landing-page/football.png"
-                  alt=""
-                  className="translate-x-[-45px]"
-                />
+                <div className="w-16 md:w-[90px]">
+                  <img
+                    src="./images/landing-page/football.png"
+                    alt=""
+                    className="translate-x-[-32px] md:translate-x-[-45px] w-full"
+                  />
+                </div>
               )}
               {index === 5 && (
-                <img
-                  src="./images/landing-page/cup.png"
-                  alt=""
-                  className="text-end translate-x-[35px]"
-                />
+                <div className="w-12 md:w-[70px]">
+                  <img
+                    src="./images/landing-page/cup.png"
+                    alt=""
+                    className="text-end translate-x-[24px] md:translate-x-[35px]"
+                  />
+                </div>
               )}
             </div>
             <div

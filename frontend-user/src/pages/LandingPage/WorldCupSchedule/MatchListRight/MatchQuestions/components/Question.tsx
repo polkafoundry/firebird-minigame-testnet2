@@ -36,7 +36,7 @@ const Question = (props: QuestionProps) => {
           <Disclosure.Button className="block w-full select-none cursor-pointer p-5">
             <div className="text-16/20 font-tthoves font-semibold flex justify-between items-center text-left">
               <span>{title}</span>
-              <div className="w-[14px]">
+              <div className="ml-2 w-[14px]">
                 <img
                   src="./images/icon-arrow-down.svg"
                   alt=""

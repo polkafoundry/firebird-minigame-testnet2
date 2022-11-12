@@ -82,7 +82,14 @@ const OddsQuestion = (props: QuestionProps) => {
       error={error}
     >
       <div>
-        <div className="flex items-center justify-center w-full min-w-[500px] space-x-2 px-16">
+        <div
+          className={clsx(
+            "flex items-center w-full space-x-2 overflow-x-auto",
+            "xs:justify-center",
+            "md:px-4",
+            "2md:min-w-[520px] 2md:px-16",
+          )}
+        >
           {dataQuestion?.options?.map((option: any, index: number) => (
             <div key={index} className="flex flex-col w-full">
               <BorderBox
