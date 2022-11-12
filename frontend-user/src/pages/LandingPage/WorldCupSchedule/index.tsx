@@ -13,7 +13,7 @@ import Schedule from "./Schedule";
 const queryString = require("query-string");
 
 export type FilterTypes = {
-  predicted: number;
+  vvv: string;
   status: string;
   page: number;
   size: number;
@@ -27,7 +27,7 @@ const WorldCupSchedule = () => {
   const [selectedMatchId, setSelectedMatchId] = useState<number | undefined>();
   const [dataTable, setDataTable] = useState<any[]>([]);
   const [filter, setFilter] = useState<FilterTypes>({
-    predicted: 0,
+    vvv: "",
     status: "",
     page: 1,
     size: 20,
@@ -80,7 +80,7 @@ const WorldCupSchedule = () => {
   const handleChangePredicted = (value: any) => {
     setFilter((prevFilter: FilterTypes) => ({
       ...prevFilter,
-      predicted: value,
+      vvv: value,
     }));
   };
 
