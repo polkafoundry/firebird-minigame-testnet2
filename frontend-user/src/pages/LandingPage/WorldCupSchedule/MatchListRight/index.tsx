@@ -33,6 +33,11 @@ const MatchListRight = (props: MatchListRightProps) => {
   const isEnded = moment(new Date()).diff(startTime, "minutes") >= 90;
   const isLiving = startTime.getTime() <= new Date().getTime() && !isEnded;
 
+  const getMatchScore = (score: any) =>
+    [MATCH_STATUS.LIVE, MATCH_STATUS.FINISHED].includes(matchData?.match_status)
+      ? score || 0
+      : "-";
+
   return (
     <div className="flex flex-col rounded-lg md:ml-6 bg-[#F2F2F2]">
       <div
@@ -59,21 +64,21 @@ const MatchListRight = (props: MatchListRightProps) => {
               <div className="">
                 <div className="rounded-full bg-white text-black flex justify-center items-center w-[140px] h-[60px] mx-5">
                   <span className="text-24/32 font-semibold">
-                    {matchData?.match_status === MATCH_STATUS.UPCOMING
-                      ? "-"
-                      : matchData?.ft_home_score || 0}
+                    {getMatchScore(matchData?.ft_home_score)}
                   </span>
                   <span className="text-24/32 font-semibold mx-2">:</span>
                   <span className="text-24/32 font-semibold">
-                    {matchData?.match_status === MATCH_STATUS.UPCOMING
-                      ? "-"
-                      : matchData?.ft_away_score || 0}
+                    {getMatchScore(matchData?.ft_away_score)}
                   </span>
                 </div>
-                <span className="mt-2.5 opacity-70 text-16/24">
-                  (1st half {matchData?.ht_home_score}-
-                  {matchData?.ht_away_score})
-                </span>
+                {[MATCH_STATUS.LIVE, MATCH_STATUS.FINISHED].includes(
+                  matchData?.match_status,
+                ) && (
+                  <span className="mt-2.5 opacity-70 text-16/24">
+                    (1st half {matchData?.ht_home_score}-
+                    {matchData?.ht_away_score})
+                  </span>
+                )}
               </div>
               <div className="flex flex-col gap-2 flex-1">
                 <img
