@@ -56,17 +56,23 @@ const MatchListRight = (props: MatchListRightProps) => {
                   {matchData.home_name.toLowerCase()}
                 </span>
               </div>
-              <div className="rounded-full bg-white text-black flex justify-center items-center w-[140px] h-[60px] mx-5">
-                <span className="text-24/32 font-semibold">
-                  {matchData?.match_status === MATCH_STATUS.UPCOMING
-                    ? "-"
-                    : matchData?.ft_home_score || 0}
-                </span>
-                <span className="text-24/32 font-semibold mx-2">:</span>
-                <span className="text-24/32 font-semibold">
-                  {matchData?.match_status === MATCH_STATUS.UPCOMING
-                    ? "-"
-                    : matchData?.ft_away_score || 0}
+              <div className="">
+                <div className="rounded-full bg-white text-black flex justify-center items-center w-[140px] h-[60px] mx-5">
+                  <span className="text-24/32 font-semibold">
+                    {matchData?.match_status === MATCH_STATUS.UPCOMING
+                      ? "-"
+                      : matchData?.ft_home_score || 0}
+                  </span>
+                  <span className="text-24/32 font-semibold mx-2">:</span>
+                  <span className="text-24/32 font-semibold">
+                    {matchData?.match_status === MATCH_STATUS.UPCOMING
+                      ? "-"
+                      : matchData?.ft_away_score || 0}
+                  </span>
+                </div>
+                <span className="mt-2.5 opacity-70 text-16/24">
+                  (1st half {matchData?.ht_home_score}-
+                  {matchData?.ht_away_score})
                 </span>
               </div>
               <div className="flex flex-col gap-2 flex-1">
