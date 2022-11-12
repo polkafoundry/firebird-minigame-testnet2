@@ -37,10 +37,10 @@ const PredictQuestion = (props: QuestionProps) => {
   const questionStatus = useMemo(() => {
     if (!matchEnded) return dataQuestion?.questionStatus;
 
-    if (predictInfo?.is_final_winner === account) return QUESTION_STATUS.WINNER;
+    if (predictInfo?.is_final_winner) return QUESTION_STATUS.WINNER;
     if (predictInfo?.predict_winner) return QUESTION_STATUS.CORRECT_ANSWER;
     else return QUESTION_STATUS.WRONG_ANSWER;
-  }, [dataQuestion?.questionStatus, predictInfo, account]);
+  }, [dataQuestion?.questionStatus, predictInfo]);
 
   const { response } = usePost<any>(
     "/predict/get-match-predict-info",

@@ -18,9 +18,9 @@ const headingTable = [
 ];
 
 const predictedOptions = [
-  { label: "All", value: "" },
-  { label: "Yes", value: "true" },
-  { label: "No", value: "false" },
+  { label: "All", value: 0 },
+  { label: "Yes", value: 1 },
+  { label: "No", value: 2 },
 ];
 
 const statusOptions = [
@@ -109,7 +109,7 @@ const MatchListTable = (props: MatchListTableProps) => {
               <DropDown
                 label="Predicted"
                 items={predictedOptions}
-                selectedValue={filter?.is_completed_bet}
+                selectedValue={filter.predicted}
                 onChange={handleChangePredicted}
                 className="w-[110px] ml-2 text-14/24"
                 itemsClassName=""
@@ -121,7 +121,7 @@ const MatchListTable = (props: MatchListTableProps) => {
               <DropDown
                 label="Status"
                 items={statusOptions}
-                selectedValue={filter?.match_status}
+                selectedValue={filter.status}
                 onChange={handleChangeStatus}
                 className="w-[110px] ml-2 text-14/24"
                 itemsClassName=""
