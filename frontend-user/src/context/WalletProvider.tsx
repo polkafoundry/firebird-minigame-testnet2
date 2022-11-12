@@ -20,6 +20,7 @@ const WalletProvider = (props: any) => {
     handleConnectorDisconnect,
     connectedAccount,
     tryActivate,
+    handleSwitchChain,
   } = useProviderConnects();
 
   // auto activate accoung from localStorage
@@ -58,6 +59,7 @@ const WalletProvider = (props: any) => {
         setWalletName,
         logout,
         connectedAccount,
+        handleSwitchChain,
       }}
     >
       {props.children}

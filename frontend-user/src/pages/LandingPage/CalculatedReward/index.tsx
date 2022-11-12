@@ -172,20 +172,26 @@ const CalculatedReward = () => {
                   <span className="text-12/18 font-bold font-tthoves opacity-80">
                     TOTAL REWARDS
                   </span>
-                  <span className="text-36/48 font-bold italic">$5,230</span>
+                  <span className="text-36/48 font-bold font-tthoves italic">
+                    $5,230
+                  </span>
                 </div>
                 <div className="w-full">
                   <div className="flex items-center justify-between py-6 px-8 border-b border-[#714755]">
                     <div className="text-10/14 opacity-80">
                       For match score prediction winners
                     </div>
-                    <div className="text-24/32 font-bold italic">$1,720</div>
+                    <div className="text-24/32 font-bold font-tthoves italic">
+                      $1,720
+                    </div>
                   </div>
                   <div className="flex items-center justify-between py-6 px-8">
                     <div className="text-10/14 opacity-80">
                       For who win & total goal prediction leaderboard
                     </div>
-                    <div className="text-24/32 font-bold italic">$3,600</div>
+                    <div className="text-24/32 font-bold font-tthoves italic">
+                      $3,600
+                    </div>
                   </div>
                 </div>
               </div>
