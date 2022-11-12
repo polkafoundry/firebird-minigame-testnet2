@@ -114,22 +114,37 @@ const CalculatedReward = () => {
   };
 
   return (
-    <div className="mt-[147px] max-w-screen-main w-full mx-auto">
-      <div className="w-full m-auto">
-        <HeadingPrimary
-          backroundTitle="Calculated"
-          title="How the rewards are calculated?"
-        />
-        <p className="text-center text-18/32">
-          All rewards will be airdropped to the winners after Firebird Cup
-          events ends.
-        </p>
+    <div className="mt-[120px] max-w-[1280px] w-full mx-auto">
+      <div className="w-full mx-auto">
+        <div className="flex justify-between items-end">
+          <div className="flex  flex-col ml-[130px]">
+            <HeadingPrimary
+              backroundTitle="Calculated"
+              title="How the rewards are calculated?"
+              textAlign="text-left"
+            />
+            <p className="text-18/32">
+              In addition to the Phoenix Cup, you can join the side events
+              conducted by Firebird & our partners to earn extra prizes.
+            </p>
+          </div>
+          <div className="ml-12 flex justify-center px-6 py-2.5 bg-black text-white">
+            <img src="/images/landing-page/predicted-winner.png" alt="" />
+            <div className="flex flex-col ml-8 font-tthoves">
+              <span className="text-16/20 font-semibold uppercase">
+                Total Rewards
+              </span>
+              <span className="text-48/60 font-bold italic">$1,720</span>
+            </div>
+          </div>
+        </div>
+
         <div
           className={clsx(
-            "mt-9 px-[100px] w-full flex flex-col relative text-white",
+            "mt-9 p-[60px] flex flex-col text-white bg-[#3A0013]",
           )}
         >
-          <div className="flex justify-center z-10">
+          {/* <div className="flex justify-center z-10">
             <ButtonStyled
               title="Leaderboard"
               className="w-[200px] bg-[#EB522F] mr-3"
@@ -138,13 +153,54 @@ const CalculatedReward = () => {
               title="My history"
               className="w-[200px] bg-black text-white"
             />
+          </div> */}
+
+          <div className="flex">
+            <div className="flex flex-col justify-between font-inter w-fit max-w-[460px]">
+              <div>
+                <span className="text-36/48 font-semibold font-tthoves">
+                  Phoenix Cup
+                </span>
+                <p className="mt-2 text-18/32">
+                  All rewards will be airdropped to the winners after Firebird
+                  Cup events ends.
+                </p>
+              </div>
+
+              <div className="flex bg-[#4d192a]">
+                <div className="flex flex-col items-center justify-center py-6 px-8 border-r border-[#714755]">
+                  <span className="text-12/18 font-bold font-tthoves opacity-80">
+                    TOTAL REWARDS
+                  </span>
+                  <span className="text-36/48 font-bold italic">$5,230</span>
+                </div>
+                <div className="w-full">
+                  <div className="flex items-center justify-between py-6 px-8 border-b border-[#714755]">
+                    <div className="text-10/14 opacity-80">
+                      For match score prediction winners
+                    </div>
+                    <div className="text-24/32 font-bold italic">$1,720</div>
+                  </div>
+                  <div className="flex items-center justify-between py-6 px-8">
+                    <div className="text-10/14 opacity-80">
+                      For who win & total goal prediction leaderboard
+                    </div>
+                    <div className="text-24/32 font-bold italic">$3,600</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex-1 ml-10">
+              <img
+                src="./images/landing-page/monsterra-sponser.png"
+                alt=""
+                className="w-full"
+              />
+            </div>
           </div>
-          <div
-            className={clsx(
-              "z-10 mt-10 px-[52px] pt-[57px] pb-[67px] rounded-[20px] bg-black",
-              styles.backgroundImage,
-            )}
-          >
+
+          <div className={clsx("mt-5 px-[45px] pt-[49px] pb-[30px] bg-black")}>
             <div className="flex flex-col lg:flex-row lg:space-x-5 space-y-5 lg:space-y-0">
               <div className="flex-[3]">
                 <p className="text-center text-26/32 font-semibold">
@@ -158,6 +214,55 @@ const CalculatedReward = () => {
                 </p>
                 {renderTableFinalRewards()}
               </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 gap-5  mt-5 font-inter">
+          <div className="flex bg-black text-white">
+            <div className="w-[55%] pt-[64px] pl-[30px] pb-[30px] pr-[60px]">
+              <div className="text-32/40 font-semibold font-tthoves">
+                Exclusive incentives for GameFi.org’s members.
+              </div>
+              <p className="mt-3 text-18/32 text">
+                Join the Phoenix Cup on Firebird, climb the leaderboard & have a
+                chain to gain additional bonuses.
+              </p>
+              <a href="https://gamefi.org/" target="_blank" rel="noreferrer">
+                <ButtonStyled
+                  className="mt-7 w-[200px] bg-[#EB522F] text-white font-semibold font-tthoves"
+                  title="Join now"
+                />
+              </a>
+            </div>
+            <div className="w-[45%]">
+              <img
+                src="./images/landing-page/gamefi.png"
+                alt=""
+                className="w-full"
+              />
+            </div>
+          </div>
+          <div className="flex bg-black text-white">
+            <div className="w-[55%] pt-[64px] pl-[30px] pb-[30px] pr-[60px]">
+              <div className="text-32/40 font-semibold font-tthoves">
+                Blockchain Football
+              </div>
+              <p className="mt-3 text-18/32 text">
+                Blockchain Football accompanies Firebird in this Phoenix Cup
+                event and provides another opportunity for users to hunt for
+                attractive rewards.
+              </p>
+              <div className="mt-14 text-24/32 italic font-tthoves font-bold">
+                COMING SOON
+              </div>
+            </div>
+            <div className="w-[45%]">
+              <img
+                src="./images/landing-page/block-chain-football.png"
+                alt=""
+                className="w-full"
+              />
             </div>
           </div>
         </div>

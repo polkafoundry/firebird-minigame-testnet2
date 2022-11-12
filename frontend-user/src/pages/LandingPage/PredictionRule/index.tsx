@@ -32,7 +32,7 @@ const predictionRules = [
 
 const PredictionRule = () => {
   return (
-    <div>
+    <div id="prediction-rule" className="mt-[120px]">
       <HeadingPrimary title="Prediction Rule" />
       <div
         className={clsx("bg-white text-white mt-20 flex", styles.predictRuleBg)}

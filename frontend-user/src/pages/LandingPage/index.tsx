@@ -11,8 +11,8 @@ const LangdingPage = () => {
 
       <div className="flex flex-col w-full">
         <WorldCupSchedule />
-        <PredictionRule />
         <CalculatedReward />
+        <PredictionRule />
         <Banner />
       </div>
     </LandingLayout>

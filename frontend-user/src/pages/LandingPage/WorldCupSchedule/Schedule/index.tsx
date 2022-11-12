@@ -1,5 +1,4 @@
 import clsx from "clsx";
-import React from "react";
 import HeadingPrimary from "../../components/HeadingPrimary";
 import styles from "./schedule.module.scss";
 
@@ -14,7 +13,7 @@ const schedule = [
 
 const Schedule = () => {
   return (
-    <div className={clsx("pt-[140px] mb-20 text-white", styles.scheduleBg)}>
+    <div className={clsx("pt-[140px] text-white", styles.scheduleBg)}>
       <HeadingPrimary
         backroundTitle="SCHEDULE"
         title="2022 Qatar World Cup Schedule"

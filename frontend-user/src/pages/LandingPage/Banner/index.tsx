@@ -23,7 +23,7 @@ const Banner = () => {
   return (
     <div
       className={clsx(
-        "mt-20 mb-10 px-[100px] text-white max-w-screen-main w-full mx-auto",
+        "mt-20 mb-[-230px] px-[100px] text-white max-w-screen-main w-full mx-auto",
       )}
     >
       <div
@@ -45,7 +45,7 @@ const Banner = () => {
               key={item.title}
               className=" flex items-center mb-3 space-x-3 bg-black rounded-xl py-3 px-7 w-[294px]"
             >
-              <img src={item.icon} alt="" className="W-10 h-10" />
+              <img src={item.icon} alt="" className="w-10 h-10" />
               <div className="flex flex-col">
                 <span className="text-14/24 font-normal">{item.title}</span>
                 <span className="text-22/32 font-semibold">
