@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import moment from "moment";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MATCH_STATUS } from "../../../../constants";
 import useFetch from "../../../../hooks/useFetch";
 import { getImgSrc } from "../../../../utils";
@@ -21,7 +21,11 @@ const nav = [
 
 const MatchListRight = (props: MatchListRightProps) => {
   const { matchId, account, isWrongChain } = props;
-  const [selectedNav, setSelectedNav] = useState<number>(account ? 1 : 2);
+  const [selectedNav, setSelectedNav] = useState<number>(1);
+
+  useEffect(() => {
+    setSelectedNav(account ? 1 : 2);
+  }, [account]);
 
   const fetchMatchDetailUrl = `/match/detail/${matchId}?wallet_address=${account}`;
   const { data } = useFetch<any>(fetchMatchDetailUrl, !!matchId);

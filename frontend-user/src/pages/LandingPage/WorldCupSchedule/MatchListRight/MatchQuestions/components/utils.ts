@@ -13,6 +13,10 @@ export const getOptionColorFromIndex = (
   const correctStyles = "bg-[#14B64D33] border-[#14B64D]";
   const wrongStyles = "bg-[#FF3E5733] border-[#3a0013] border-2 opacity-50";
   const selectedStyles = "bg-[#3A001333] border-[#3a0013] border-2";
+  const notIsAnswerStyles = "opacity-50 bg-[#EDEDED]";
+
+  if (question?.match_status === "finished" && !question?.result)
+    return notIsAnswerStyles;
 
   if (isSubmitted) {
     if (question.optionSelected === index) {
@@ -23,7 +27,7 @@ export const getOptionColorFromIndex = (
       }
     } else if (finalResultIndex === index) return correctStyles;
 
-    return "opacity-50 bg-[#EDEDED]";
+    return notIsAnswerStyles;
   } else if (optionWhoWin === index) return selectedStyles;
 
   return defaultStyles;

@@ -47,19 +47,37 @@ const Question = (props: QuestionProps) => {
           </Disclosure.Button>
           <Disclosure.Panel className="px-5 pb-5">
             {children}
-            {error?.birdToken === false && (
-              <p className="mt-3 text-12/16 text-[#FF0021] text-center font-inter">
-                Not enough PKF to pay for the gas fee. Click{" "}
-                <a
-                  href={URLS.FAUCET_TESTNET}
-                  target={"_blank"}
-                  rel="norefferer"
-                  className="text-[#0085FF] underline cursor-pointer"
-                >
-                  here
-                </a>{" "}
-                to faucet.
-              </p>
+            {error && (
+              <div className="mt-3">
+                {error?.birdToken === false && (
+                  <p className="text-12/16 text-[#FF0021] text-center font-inter">
+                    Not enough $BIRD to anwser the questions. Click{" "}
+                    <a
+                      href={URLS.FAUCET_TESTNET}
+                      target={"_blank"}
+                      rel="norefferer"
+                      className="text-[#0085FF] underline cursor-pointer"
+                    >
+                      here
+                    </a>{" "}
+                    to faucet.
+                  </p>
+                )}
+                {error?.gasFee === false && (
+                  <p className="text-12/16 text-[#FF0021] text-center font-inter">
+                    Not enough PKF to pay for the gas fee. Click{" "}
+                    <a
+                      href={URLS.FAUCET_TESTNET}
+                      target={"_blank"}
+                      rel="norefferer"
+                      className="text-[#0085FF] underline cursor-pointer"
+                    >
+                      here
+                    </a>{" "}
+                    to faucet.
+                  </p>
+                )}
+              </div>
             )}
             {enableSubmit && (
               <div className="flex justify-center">
