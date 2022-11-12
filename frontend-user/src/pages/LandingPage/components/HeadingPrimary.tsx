@@ -6,6 +6,7 @@ type HeadingPrimaryProps = {
   backroundTitle?: string;
   backgroundColor?: string;
   titleColor?: string;
+  textAlign?: string;
   isColorSecondary?: boolean;
 };
 
@@ -15,6 +16,7 @@ const HeadingPrimary = (props: HeadingPrimaryProps) => {
     backroundTitle = title,
     backgroundColor = "text-white",
     titleColor = "text-black",
+    textAlign = "text-center",
     isColorSecondary,
   } = props;
   return (
@@ -23,13 +25,21 @@ const HeadingPrimary = (props: HeadingPrimaryProps) => {
         className={clsx(
           styles.headingPrimaryGradient,
           backgroundColor,
+          textAlign,
           isColorSecondary ? styles.colorSecondary : styles.colorPrimary,
         )}
       >
         {backroundTitle}
       </p>
-      <div className="flex items-center justify-center absolute bottom-3 w-full">
-        <h5 className={clsx(styles.headingPrimary, titleColor, "mr-[15px]")}>
+      <div className="flex items-center absolute bottom-3 w-full">
+        <h5
+          className={clsx(
+            styles.headingPrimary,
+            titleColor,
+            textAlign,
+            "mr-[15px] w-full",
+          )}
+        >
           {title}
         </h5>
       </div>
