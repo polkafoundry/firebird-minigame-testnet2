@@ -3,6 +3,13 @@
   background-size: cover;
 }
 
+.textStroke {
+  color: white;
+  -webkit-text-fill-color: black;
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: white;
+}
+
 .scrollDown {
   animation: pulse 2.5s infinite;
 }

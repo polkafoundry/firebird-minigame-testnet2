@@ -12,7 +12,7 @@ const TimeField = ({ value, label }: TimeFieldProps) => {
   return (
     <>
       <div className="flex flex-col items-center">
-        <span className="text-[200px] leading-[200px] font-semibold">
+        <span className="text-[200px] leading-[200px] font-normal font-oswald w-[200px]">
           {value}
         </span>
         <span className="text-main mt-10 text-20/28 uppercase font-semibold">{`[ ${label} ]`}</span>
@@ -22,7 +22,11 @@ const TimeField = ({ value, label }: TimeFieldProps) => {
 };
 
 const ColonField = () => (
-  <span className="text-[120px] leading-[120px] pt-10">:</span>
+  <span
+    className={clsx("text-[120px] leading-[120px] pt-10", styles.textStroke)}
+  >
+    :
+  </span>
 );
 
 const CustomField = ({
@@ -39,7 +43,7 @@ const CustomField = ({
       href={href}
       className={clsx(
         styles.iconHoverAnimated,
-        "flex w-fit bg-[#F7F7F8] rounded-[20px] h-[72px] px-6 items-center cursor-pointer",
+        "flex bg-[#F7F7F8] rounded-[20px] h-[72px] px-6 items-center cursor-pointer w-full max-w-[384px]",
       )}
     >
       <div
