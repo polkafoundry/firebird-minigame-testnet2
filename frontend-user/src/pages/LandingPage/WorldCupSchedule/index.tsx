@@ -96,7 +96,7 @@ const WorldCupSchedule = () => {
   };
 
   return (
-    <div className="flex flex-col pt-20 mt-10">
+    <div className="flex flex-col pt-20">
       <Schedule />
       <HeadingPrimary title="Match List" />
       <div className="max-w-screen-main px-5 main:px-20 mx-auto w-full">
