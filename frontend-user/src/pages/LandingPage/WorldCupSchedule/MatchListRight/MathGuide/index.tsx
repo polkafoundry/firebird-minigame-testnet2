@@ -5,6 +5,7 @@ import { WalletContext } from "../../../../../context/WalletContext";
 import { useMyWeb3 } from "../../../../../hooks/useMyWeb3";
 import usePredictConditions from "../../../../../hooks/usePredictConditions";
 import { displayWalletAddress } from "../../../../../utils";
+import { scrollToId } from "../../../../../utils/domElement";
 import { requestSupportNetwork } from "../../../../../utils/setupNetwork";
 import styles from "./matchGuide.module.scss";
 
@@ -24,6 +25,10 @@ const MatchGuide = (props: MatchGuideProps) => {
   const { realTimeBalance, nativeCurrency, account, birdBalance } = useMyWeb3();
 
   const predictConditions = usePredictConditions();
+
+  const handleClickPredictionRule = () => {
+    scrollToId("#prediction-rule");
+  };
 
   return (
     <div className="flex flex-col my-5">
@@ -191,7 +196,10 @@ const MatchGuide = (props: MatchGuideProps) => {
       </div>
 
       <div className="flex justify-center">
-        <button className="w-1/2 py-4 rounded-full bg-[#EB522F] text-white justify-center font-semibold font-tthoves text-16/24">
+        <button
+          className="w-1/2 py-4 rounded-full bg-[#EB522F] text-white justify-center font-semibold font-tthoves text-16/24"
+          onClick={handleClickPredictionRule}
+        >
           Prediction Rule
         </button>
       </div>
