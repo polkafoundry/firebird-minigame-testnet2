@@ -1,15 +1,14 @@
 import clsx from "clsx";
 import HeadingPrimary from "../../components/HeadingPrimary";
-import styles from "./schedule.module.scss";
 
-const schedule = [
-  { title: "Group stage", time: "Nov 20-Dec 02" },
-  { title: "Round of 16", time: "Dec 03-06" },
-  { title: "Quarter-finals", time: "Dec 09-10" },
-  { title: "Semi-finals", time: "Dec 13-14" },
-  { title: "Third-place match", time: "Dec 17" },
-  { title: "Final", time: "Dec 18" },
-];
+// const schedule = [
+//   { title: "Group stage", time: "Nov 20-Dec 02" },
+//   { title: "Round of 16", time: "Dec 03-06" },
+//   { title: "Quarter-finals", time: "Dec 09-10" },
+//   { title: "Semi-finals", time: "Dec 13-14" },
+//   { title: "Third-place match", time: "Dec 17" },
+//   { title: "Final", time: "Dec 18" },
+// ];
 
 const Schedule = () => {
   return (
