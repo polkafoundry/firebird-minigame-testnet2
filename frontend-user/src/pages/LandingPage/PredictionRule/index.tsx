@@ -35,7 +35,10 @@ const PredictionRule = () => {
     <div id="prediction-rule" className="mt-[120px]">
       <HeadingPrimary title="Prediction Rule" />
       <div
-        className={clsx("bg-white text-white mt-20 flex", styles.predictRuleBg)}
+        className={clsx(
+          "bg-white text-white mt-20 flex flex-col sm:flex-row",
+          styles.predictRuleBg,
+        )}
       >
         {predictionRules.map((ruleRow, indexRuleRow) => (
           <div

@@ -34,34 +34,37 @@ const CalculatedReward = () => {
     const lastIndex = totalRewardTable.data.length - 1;
 
     return (
-      <div className="mt-5">
-        <div className={clsx("flex font-semibold", styles.totalRewardRow)}>
-          {totalRewardTable.headings.map((heading) => (
-            <div key={heading} className="text-14/24">
-              {heading}
+      <div className="mt-5 overflow-x-auto sm:overflow-x-visible">
+        <div>
+          <div
+            className={clsx("flex font-semibold w-full", styles.totalRewardRow)}
+          >
+            {totalRewardTable.headings.map((heading) => (
+              <div key={heading} className="text-14/24">
+                {heading}
+              </div>
+            ))}
+          </div>
+          {totalRewardTable.data.map((reward, index) => (
+            <div
+              key={reward.id}
+              className={clsx("flex items-center", styles.totalRewardRow)}
+            >
+              <div>{reward.round}</div>
+              <div>{reward.matches}</div>
+              <div className="flex justify-end items-center font-bold">
+                ${reward.prize}
+                {index === lastIndex && (
+                  <img
+                    src="/images/landing-page/icon-cup.png"
+                    alt=""
+                    className="ml-3"
+                  />
+                )}
+              </div>
             </div>
           ))}
         </div>
-
-        {totalRewardTable.data.map((reward, index) => (
-          <div
-            key={reward.id}
-            className={clsx("flex items-center", styles.totalRewardRow)}
-          >
-            <div>{reward.round}</div>
-            <div>{reward.matches}</div>
-            <div className="flex justify-end items-center font-bold">
-              ${reward.prize}
-              {index === lastIndex && (
-                <img
-                  src="/images/landing-page/icon-cup.png"
-                  alt=""
-                  className="ml-3"
-                />
-              )}
-            </div>
-          </div>
-        ))}
       </div>
     );
   };
@@ -116,8 +119,13 @@ const CalculatedReward = () => {
   return (
     <div className="mt-[120px] px-5 main:px-20 max-w-screen-main w-full mx-auto">
       <div className="w-full mx-auto">
-        <div className="flex justify-between items-end">
-          <div className="flex  flex-col ml-[130px]">
+        <div
+          className={clsx(
+            "flex flex-col justify-between items-center",
+            "2md:flex-row 2md:items-end",
+          )}
+        >
+          <div className="flex flex-col ml-5 lg:ml-[130px] lg:pr-12">
             <HeadingPrimary
               backroundTitle="Calculated"
               title="How the rewards are calculated?"
@@ -128,7 +136,7 @@ const CalculatedReward = () => {
               conducted by Firebird & our partners to earn extra prizes.
             </p>
           </div>
-          <div className="ml-12 flex justify-center px-6 py-2.5 bg-black text-white">
+          <div className="flex justify-center px-6 py-2.5 bg-black text-white w-full 2md:w-fit">
             <img src="/images/landing-page/predicted-winner.png" alt="" />
             <div className="flex flex-col ml-8 font-tthoves">
               <span className="text-16/20 font-semibold uppercase">
@@ -141,7 +149,7 @@ const CalculatedReward = () => {
 
         <div
           className={clsx(
-            "mt-9 p-[60px] flex flex-col text-white bg-[#3A0013]",
+            "mt-9 p-5 sm:p-10 lg:p-[60px] flex flex-col text-white bg-[#3A0013]",
           )}
         >
           {/* <div className="flex justify-center z-10">
@@ -155,8 +163,8 @@ const CalculatedReward = () => {
             />
           </div> */}
 
-          <div className="flex">
-            <div className="flex flex-col justify-between font-inter w-fit max-w-[460px]">
+          <div className="flex flex-col 2md:flex-row justify-center items-center ">
+            <div className="flex flex-col justify-between items-start font-inter w-full 2md:w-fit 2md:max-w-[460px] ">
               <div>
                 <span className="text-36/48 font-semibold font-tthoves">
                   Phoenix Cup
@@ -167,8 +175,8 @@ const CalculatedReward = () => {
                 </p>
               </div>
 
-              <div className="flex bg-[#4d192a]">
-                <div className="flex flex-col items-center justify-center py-6 px-8 border-r border-[#714755]">
+              <div className="flex flex-col xs:flex-row bg-[#4d192a] mt-5 lg:mt-[40px] w-full">
+                <div className="flex flex-col items-center justify-center py-6 px-8 border-b xs:border-b-0 xs:border-r border-[#714755]">
                   <span className="text-12/18 font-bold font-tthoves opacity-80">
                     TOTAL REWARDS
                   </span>
@@ -197,7 +205,7 @@ const CalculatedReward = () => {
               </div>
             </div>
 
-            <div className="flex-1 ml-10">
+            <div className="flex-1 mt-5 ml-0 w-full 2md:ml-5 lg:ml-10  2md:mt-0 ">
               <img
                 src="./images/landing-page/monsterra-sponser.png"
                 alt=""
@@ -206,7 +214,11 @@ const CalculatedReward = () => {
             </div>
           </div>
 
-          <div className={clsx("mt-5 px-[45px] pt-[49px] pb-[30px] bg-black")}>
+          <div
+            className={clsx(
+              "mt-5 px-5 sm:px-[45px] pt-[49px] pb-[30px] bg-black",
+            )}
+          >
             <div className="flex flex-col lg:flex-row lg:space-x-5 space-y-5 lg:space-y-0">
               <div className="flex-[3]">
                 <p className="text-center text-26/32 font-semibold">
@@ -224,9 +236,9 @@ const CalculatedReward = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-5  mt-5 font-inter">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mt-5 font-inter">
           <div className="flex bg-black text-white">
-            <div className="w-[55%] pt-[64px] pl-[30px] pb-[30px] pr-[60px]">
+            <div className="w-[70%] lg:w-[55%] pt-[64px] pl-[30px] pb-[30px] pr-[60px]">
               <div className="text-32/40 font-semibold font-tthoves">
                 Exclusive incentives for GameFi.org’s members.
               </div>
@@ -241,7 +253,7 @@ const CalculatedReward = () => {
                 />
               </a>
             </div>
-            <div className="w-[45%]">
+            <div className="w-[30%] lg:w-[45%]">
               <img
                 src="./images/landing-page/gamefi.png"
                 alt=""
@@ -250,7 +262,7 @@ const CalculatedReward = () => {
             </div>
           </div>
           <div className="flex bg-black text-white">
-            <div className="w-[55%] pt-[64px] pl-[30px] pb-[30px] pr-[60px]">
+            <div className="w-[70%] lg:w-[55%] pt-[64px] pl-[30px] pb-[30px] pr-[60px]">
               <div className="text-32/40 font-semibold font-tthoves">
                 Blockchain Football
               </div>
@@ -263,7 +275,7 @@ const CalculatedReward = () => {
                 COMING SOON
               </div>
             </div>
-            <div className="w-[45%]">
+            <div className="w-[30%] lg:w-[45%]">
               <img
                 src="./images/landing-page/block-chain-football.png"
                 alt=""

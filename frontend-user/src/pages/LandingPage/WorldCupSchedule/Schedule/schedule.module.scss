@@ -10,6 +10,9 @@
   @media (min-width: theme("screens.md")) {
     height: 710px;
   }
+  @media (min-width: theme("screens.main")) {
+    height: 800px;
+  }
 }
 
 .schedule > div {

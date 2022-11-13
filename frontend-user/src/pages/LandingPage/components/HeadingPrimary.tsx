@@ -31,7 +31,7 @@ const HeadingPrimary = (props: HeadingPrimaryProps) => {
       >
         {backroundTitle}
       </p>
-      <div className="flex items-center absolute bottom-3 w-full">
+      <div className="flex items-center absolute bottom-0 xs:bottom-3 w-full">
         <h5
           className={clsx(
             styles.headingPrimary,
