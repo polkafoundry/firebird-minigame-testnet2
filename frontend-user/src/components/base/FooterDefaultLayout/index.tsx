@@ -51,7 +51,7 @@ const FooterDefaultLayout = () => {
     <div className={clsx("text-white w-full", styles.background)}>
       <div
         className={clsx(
-          "flex flex-col relative max-w-screen-main mx-auto pb-7 text-center pt-[60px] mb-3 box-border",
+          "flex flex-col relative max-w-screen-main mx-auto pb-7 text-center pt-[60px] box-border",
           "md:px-40 md:pt-24 md:text-left",
         )}
       >
@@ -69,12 +69,12 @@ const FooterDefaultLayout = () => {
           />
         </div>
 
-        <div className="w-full flex">
+        <div className="w-full flex px-7">
           <div className="flex flex-col max-w-full w-full md:max-w-[300px] items-center md:items-start">
             <div className="flex">
               <img src="/images/logo-text.svg" alt="" />
             </div>
-            <p className="text-sm mt-3">
+            <p className="text-14/24 mt-3">
               Follow us on Firebird official groups and channels so you won’t
               miss anything!
             </p>
@@ -130,7 +130,7 @@ const FooterDefaultLayout = () => {
             </div>
           </div>
         </div>
-        <p className="text-center md:mt-16 mt-3">
+        <p className="text-14/24 text-center text-[#AEAEAE] xs:text-white md:mt-16 mt-3">
           Copyright © 2022 . All rights reserved.
         </p>
       </div>
