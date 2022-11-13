@@ -72,13 +72,6 @@ const useProviderConnects = () => {
     setConnectLoading(false);
   }, []);
 
-  const handleSwitchChain = async () => {
-    const provider = (window as any).ethereum;
-    if (provider.networkVersion !== BIRD_CHAIN_ID) {
-      await requestSupportNetwork();
-    }
-  };
-
   return {
     tryActivate,
     connectedAccount,
@@ -88,7 +81,6 @@ const useProviderConnects = () => {
     connectWalletLoading: connectLoading,
     currentConnector,
     handleConnectorDisconnect,
-    handleSwitchChain,
   };
 };
 

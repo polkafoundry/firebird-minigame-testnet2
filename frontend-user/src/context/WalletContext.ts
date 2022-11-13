@@ -12,7 +12,6 @@ export type WalletContextType = {
   showModal?: boolean;
   setShowModal?: Dispatch<SetStateAction<boolean>>;
   connectedAccount?: any;
-  handleSwitchChain?: () => void;
 };
 
 export const WalletContext = createContext<WalletContextType>({});

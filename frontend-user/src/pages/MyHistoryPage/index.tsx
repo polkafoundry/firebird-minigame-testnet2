@@ -7,6 +7,7 @@ import { BETTING_RESULT, HISTORY_NAV_VALUES } from "../../constants";
 import { useMyWeb3 } from "../../hooks/useMyWeb3";
 import usePost from "../../hooks/usePost";
 import { convertHexToStringNumber } from "../../utils";
+import HeadingPrimary from "../LandingPage/components/HeadingPrimary";
 import HistoryTable from "./HistoryTable";
 import HowToJoin from "./HowToJoin";
 import Statistics from "./Statistic";
@@ -33,11 +34,11 @@ const headings = {
     "Match",
     "Question",
     "Answer",
-    "Date-time",
+    // "Date-time",
     "Result",
-    "Deposited",
-    "Earned",
-    "Amount to claim",
+    "Deposited ($BIRD)",
+    "Earned ($BIRD)",
+    "Amount to claim ($BIRD)",
     "Claim",
   ],
 };
@@ -49,15 +50,15 @@ type FilterTypes = {
 };
 
 const resultOptions = [
-  { label: "Result: All", value: undefined },
-  { label: "Result: Win", value: BETTING_RESULT.WIN },
-  { label: "Result: Draw", value: BETTING_RESULT.DRAW },
-  { label: "Result: Lose", value: BETTING_RESULT.LOSE },
+  { label: "All", value: undefined },
+  { label: "Win", value: BETTING_RESULT.WIN },
+  { label: "Draw", value: BETTING_RESULT.DRAW },
+  { label: "Lose", value: BETTING_RESULT.LOSE },
 ];
 const claimedOptions = [
-  { label: "Claimed: All", value: undefined },
-  { label: "Claimed: Yes", value: true },
-  { label: "Claimed: No", value: false },
+  { label: "All", value: undefined },
+  { label: "Yes", value: true },
+  { label: "No", value: false },
 ];
 
 const MyHistoryPage = () => {
@@ -110,7 +111,7 @@ const MyHistoryPage = () => {
       const newStatistics = {
         prediction_times: resData.total,
         correct_answers: resData.wins,
-        win_rate: (resData.wins / resData.total) * 100,
+        win_rate: ((resData.wins / resData.total) * 100).toFixed(2) + "%",
         earned: resData.earnedToken
           ? convertHexToStringNumber(resData.earnedToken)
           : "Updating...",
@@ -150,20 +151,29 @@ const MyHistoryPage = () => {
 
   return (
     <DefaultLayout>
-      <div className="flex flex-col items-center mb-10 pt-40">
-        <div className="flex flex-col mx-auto max-w-[1240px] w-full">
-          <div className="w-full p-9 border-[1px] rounded-lg border-gray-400">
-            <span className="text-4xl font-semibold">Prediction History</span>
+      <div className="flex flex-col items-center pt-20 px-5 xs:px-10 md:px-20 relative">
+        <div className="absolute top-20 right-0">
+          <img src="./images/history/top.svg" alt="" />
+        </div>
+        <div className="z-10 flex flex-col mx-auto w-full max-w-screen-main pt-[60px] md:pt-20">
+          <div className="w-full">
+            <HeadingPrimary
+              backroundTitle="History"
+              title="prediction history"
+              textAlign="text-left"
+            />
 
-            <div className="flex flex-col p-5">
-              <div className="flex mt-8 border-gray-100 border-b-[1px]">
+            <div className="flex flex-col mt-6">
+              <div className="flex border-[#F2F2F2] border-b-[1px] space-x-14 font-tthoves">
                 {nav.map((item: NavItemTypes) => (
                   <div
                     key={item.value}
-                    className={clsx("cursor-pointer px-4 py-2 text-gray-400", {
-                      "border-b-2 border-black text-black font-semibold":
-                        navActived === item.value,
-                    })}
+                    className={clsx(
+                      "cursor-pointer py-2 font-semibold",
+                      navActived === item.value
+                        ? "border-b-2 border-main text-main opacity-100"
+                        : "opacity-50",
+                    )}
                     onClick={() => setNavActived(item.value)}
                   >
                     {item.label}
@@ -173,62 +183,77 @@ const MyHistoryPage = () => {
 
               <Statistics data={statistics} navActived={navActived} />
 
-              <div className="flex items-center mt-10">
-                <div className="flex  w-full justify-between items-baseline">
-                  <span className="text-lg font-semibold">Prediction List</span>
-                  <div>
-                    <DropDown
-                      label="Result"
-                      items={resultOptions}
-                      selectedValue={resultSelected}
-                      onChange={handleChangeResult}
-                      className="w-[160px] rounded-xl border"
-                      itemsClassName="rounded-xl"
-                      bgColor="black"
-                    />
-                    <DropDown
-                      label="Claimed"
-                      items={claimedOptions}
-                      selectedValue={claimSelected}
-                      onChange={handleChangeClaim}
-                      className="w-[160px] rounded-xl border ml-5"
-                      itemsClassName="rounded-xl"
-                      bgColor="black"
-                    />
+              <div className="overflow-x-auto">
+                <div className="flex items-center mt-10 bg-[#F2F2F2]">
+                  <div className="flex w-full justify-between items-start">
+                    <div className="title-background">Prediction List</div>
+                    <div className="flex flex-col items-end lg:flex-row mt-4 pr-5">
+                      <div className="flex ">
+                        <div>
+                          <span className="text-14/20 font-semibold">
+                            Predicted
+                          </span>
+                          <DropDown
+                            label="Predicted"
+                            items={resultOptions}
+                            selectedValue={resultSelected}
+                            onChange={handleChangeResult}
+                            className="w-[110px] ml-2 text-14/24"
+                            itemsClassName=""
+                            bgColor="white"
+                          />
+                        </div>
+                        <div className="ml-4">
+                          <span className="text-14/20 font-semibold">
+                            Status
+                          </span>
+                          <DropDown
+                            label="Status"
+                            items={claimedOptions}
+                            selectedValue={claimSelected}
+                            onChange={handleChangeClaim}
+                            className="w-[110px] ml-2 text-14/24"
+                            itemsClassName=""
+                            bgColor="white"
+                          />
+                        </div>
+                      </div>
+                      <div className="ml-4 flex items-center mt-2 lg:mt-0">
+                        <span className="text-14/20 font-semibold">Search</span>
+                        <div className="flex rounded-md bg-white w-[272px] px-3 py-1.5 ml-2">
+                          <input
+                            type="text"
+                            name="search"
+                            placeholder="Search match"
+                            className="outline-none bg-transparent min-w-0 flex-1 text-black"
+                            value={filter.search}
+                            onChange={handleFilter}
+                          />
+                          <img src="/images/icon-search.svg" alt="" />
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
-
-                <div className="flex rounded-md bg-black w-[180px] px-4 py-2 ml-5">
-                  <input
-                    type="text"
-                    name="search"
-                    placeholder="Search match"
-                    className="outline-none bg-transparent min-w-0 flex-1 text-white"
-                    value={filter.search}
-                    onChange={handleFilter}
-                  />
-                  <img src="/images/icon-search.svg" alt="" />
+                <div className="flex bg-[#F2F2F2] px-5 pt-2 pb-10">
+                  {loading && <div>loading</div>}
+                  {!loading && account && (
+                    <HistoryTable
+                      headings={
+                        navActived === HISTORY_NAV_VALUES.GOALS
+                          ? headings.whoWin
+                          : headings.matchScore
+                      }
+                      dataTable={dataTable}
+                      tableLoading={false}
+                      isWhoWinTable={navActived === HISTORY_NAV_VALUES.GOALS}
+                      account={account}
+                    />
+                  )}
+                  {!loading && !account && (
+                    <div>Please connect wallet to see prediction list</div>
+                  )}
                 </div>
-              </div>
-
-              <div className="flex">
-                {loading && <div>loading</div>}
-                {!loading && account && (
-                  <HistoryTable
-                    headings={
-                      navActived === HISTORY_NAV_VALUES.GOALS
-                        ? headings.whoWin
-                        : headings.matchScore
-                    }
-                    dataTable={dataTable}
-                    tableLoading={false}
-                    isWhoWinTable={navActived === HISTORY_NAV_VALUES.GOALS}
-                    account={account}
-                  />
-                )}
-                {!loading && !account && (
-                  <div>Please connect wallet to see prediction list</div>
-                )}
               </div>
 
               <Pagination

@@ -1,8 +1,12 @@
 import clsx from "clsx";
-import MatchName from "../../components/base/Table/MatchName";
-import MatchPredict from "../../components/base/Table/MatchPredict";
-import { BET_PLACE, BET_TYPE } from "../../constants";
-import { convertHexToStringNumber, getDateTime, getImgSrc } from "../../utils";
+import MatchName from "../../../components/base/Table/MatchName";
+import MatchPredict from "../../../components/base/Table/MatchPredict";
+import { BET_PLACE, BET_TYPE } from "../../../constants";
+import {
+  convertHexToStringNumber,
+  getDateTime,
+  getImgSrc,
+} from "../../../utils";
 import styles from "./historyTable.module.scss";
 
 type HistoryTableTypes = {
@@ -76,11 +80,11 @@ const HistoryTable = (props: HistoryTableTypes) => {
   if (tableLoading) renderLoading();
 
   return (
-    <div className="mt-3 border w-full overflow-x-auto">
+    <div className="mt-3 bg-white w-full overflow-x-auto">
       <div
         id="match-score"
         className={clsx(
-          "flex bg-gray-400 p-5 font-semibold min-w-fit",
+          "flex items-center text-16/20 bg-[#3A0013] rounded-t-lg text-white p-5 font-semibold font-tthoves min-w-fit",
           isWhoWinTable ? styles.whoWinRow : styles.matchScoreRow,
         )}
       >
@@ -93,7 +97,7 @@ const HistoryTable = (props: HistoryTableTypes) => {
         <div
           key={rowData.match_id + index}
           className={clsx(
-            "flex items-center px-5 py-2 border hover:bg-yellow-200 min-w-fit",
+            "flex items-center px-5 py-2 border-t  hover:bg-yellow-200 font-inter text-14/24  min-w-fit",
             isWhoWinTable ? styles.whoWinRow : styles.matchScoreRow,
           )}
         >
@@ -137,12 +141,14 @@ const HistoryTable = (props: HistoryTableTypes) => {
                 }}
               />
               <div>{getQuestionByBetType(rowData.bet_type)}</div>
-              <div>{getAnswerText(rowData)}</div>
-              <div>{getDateTime(rowData.created_at)}</div>
+              <div className="capitalize">
+                {getAnswerText(rowData).toLowerCase()}
+              </div>
+              {/* <div>{getDateTime(rowData.created_at)}</div> */}
               <MatchPredict result={rowData.result} />
-              <div>{convertHexToStringNumber(rowData.bet_amount)} $BIRD</div>
-              <div>{getEarnedAmount(rowData.result_num)} $BIRD</div>
-              <div>{convertHexToStringNumber(rowData.total_claim)} $BIRD</div>
+              <div>{convertHexToStringNumber(rowData.bet_amount)}</div>
+              <div>{getEarnedAmount(rowData.result_num)}</div>
+              <div>{convertHexToStringNumber(rowData.total_claim)}</div>
               <div>
                 {rowData.total_claim > 0 &&
                   (rowData.has_claim ? "Claimed" : renderClaimButton())}

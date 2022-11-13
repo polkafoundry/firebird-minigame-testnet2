@@ -1,10 +1,11 @@
 import { useContext, useEffect, useState } from "react";
-import Button from "../../components/base/Button";
-import { quickGuide, URLS } from "../../constants";
-import { WalletContext } from "../../context/WalletContext";
-import { useMyWeb3 } from "../../hooks/useMyWeb3";
-import { displayWalletAddress } from "../../utils";
-import { requestSupportNetwork } from "../../utils/setupNetwork";
+import Button from "../../../components/base/Button";
+import { quickGuide, URLS } from "../../../constants";
+import { WalletContext } from "../../../context/WalletContext";
+import { useMyWeb3 } from "../../../hooks/useMyWeb3";
+import { displayWalletAddress } from "../../../utils";
+import { requestSupportNetwork } from "../../../utils/setupNetwork";
+import HeadingPrimary from "../../LandingPage/components/HeadingPrimary";
 
 const iconCheck = "/images/icon-correct-answer.svg";
 const iconUnCheck = "/images/icon-wrong-answer.svg";
@@ -41,11 +42,15 @@ const HowToJoin = () => {
 
   return (
     <div className="flex flex-col mt-8 w-full">
-      <span className="text-4xl font-semibold pl-9">How to join</span>
+      <HeadingPrimary
+        backroundTitle="Join"
+        title="how to join"
+        textAlign="text-left"
+      />
 
       <div className="grid grid-cols-3 gap-4 mt-8">
         <div className="flex flex-col p-5 border-[1px] rounded-lg border-gray-300">
-          <span className="text-lg font-semibold">Conditions to join</span>
+          <span className="title-background">Conditions to join</span>
           <ul className="flex flex-col gap-2 mt-4 text-sm">
             <li className="grid grid-cols-2 gap-2">
               <div className="flex items-center gap-2">
@@ -145,7 +150,7 @@ const HowToJoin = () => {
         </div>
 
         <div className="flex flex-col p-5 border-[1px] rounded-lg border-gray-300">
-          <span className="text-lg font-semibold">Quick guide</span>
+          <span className="title-background">Quick guide</span>
           <ul className="flex flex-col gap-2 mt-4 mb-auto">
             {quickGuide.map((item: string, index: number) => (
               <li className="flex gap-2" key={item}>
@@ -162,7 +167,7 @@ const HowToJoin = () => {
         </div>
 
         <div className="flex flex-col p-5 border-[1px] rounded-lg border-gray-300">
-          <span className="text-lg font-semibold">Reward Distribution</span>
+          <span className="title-background">Reward Distribution</span>
           <div className="flex flex-col gap-1 mt-4">
             All rewards will be airdropped to the winners after Firebird Cup
             events ends.

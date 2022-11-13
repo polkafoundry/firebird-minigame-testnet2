@@ -28,3 +28,11 @@
     url(../public/fonts/TTHoves-Bold.ttf) format("svg"),
     url(../public/fonts/TTHoves-Bold.ttf) format("embedded-opentype");
 }
+
+@layer components {
+  .title-background {
+    @apply text-20/28 font-tthoves font-bold text-white py-1.5 pl-[30px] uppercase min-w-[275px];
+    background: url("./assets/images/bg-group-stage.svg") no-repeat;
+    background-position: top left;
+  }
+}

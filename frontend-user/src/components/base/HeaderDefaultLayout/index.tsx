@@ -5,6 +5,7 @@ import { URLS } from "../../../constants";
 import { WalletContext } from "../../../context/WalletContext";
 import { useMyWeb3 } from "../../../hooks/useMyWeb3";
 import { displayWalletAddress } from "../../../utils";
+import { requestSupportNetwork } from "../../../utils/setupNetwork";
 import styles from "./header.module.scss";
 
 type RouteTypes = {
@@ -36,8 +37,7 @@ const routes: Array<RouteTypes> = [
 ];
 
 const HeaderDefaultLayout = () => {
-  const { setShowModal, connectedAccount, handleSwitchChain } =
-    useContext(WalletContext);
+  const { setShowModal, connectedAccount } = useContext(WalletContext);
   const { isWrongChain, nativeCurrency, realTimeBalance } = useMyWeb3();
 
   const [openMenuMobile, setOpenMenuMobile] = useState<boolean>(false);
@@ -128,21 +128,23 @@ const HeaderDefaultLayout = () => {
             </a>
           ))}
 
-          <button
-            className={clsx(
-              "ml-5 lg:ml-10 px-4 py-1.5 flex rounded-lg text-14/20 text-white font-tthoves items-center",
-              styles.backgroundGradient,
-              !isWrongChain && "pointer-events-none",
-            )}
-            onClick={handleSwitchChain}
-          >
-            {!isWrongChain && (
-              <img src="./images/icon-edit.svg" alt="" className="mr-1.5" />
-            )}
-            <span className="flex-1">
-              {!isWrongChain ? "FireflyTestnet" : "Switch chain"}
-            </span>
-          </button>
+          {connectedAccount && (
+            <button
+              className={clsx(
+                "ml-5 lg:ml-10 px-4 py-1.5 flex rounded-lg text-14/20 text-white font-tthoves items-center",
+                styles.backgroundGradient,
+                !isWrongChain && "pointer-events-none",
+              )}
+              onClick={requestSupportNetwork}
+            >
+              {!isWrongChain && (
+                <img src="./images/icon-edit.svg" alt="" className="mr-1.5" />
+              )}
+              <span className="flex-1">
+                {!isWrongChain ? "FireflyTestnet" : "Switch chain"}
+              </span>
+            </button>
+          )}
 
           <button
             className="bg-main p-0.5 h-9 min-w-[177px] rounded-lg text-14/20 font-tthoves"
