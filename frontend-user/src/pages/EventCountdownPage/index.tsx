@@ -70,10 +70,10 @@ const EventCountdownPage = () => {
   const { day, hour, minute, second } = useCountDown(new Date("11/20/2022"));
 
   const { unityProvider, isLoaded, sendMessage } = useUnityContext({
-    loaderUrl: "buildUnity/BuildFlyWithFirebirds.loader.js",
-    dataUrl: "buildUnity/BuildFlyWithFirebirds.data",
-    frameworkUrl: "buildUnity/BuildFlyWithFirebirds.framework.js",
-    codeUrl: "buildUnity/BuildFlyWithFirebirds.wasm",
+    loaderUrl: "buildUnity/BuildProd.loader.js",
+    dataUrl: "buildUnity/BuildProd.data",
+    frameworkUrl: "buildUnity/BuildProd.framework.js",
+    codeUrl: "buildUnity/BuildProd.wasm",
     webglContextAttributes: {
       preserveDrawingBuffer: true,
     },
