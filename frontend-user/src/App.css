@@ -30,6 +30,18 @@
 }
 
 @layer components {
+  .btn-rounded {
+    @apply cursor-pointer p-4 rounded-full font-tthoves font-semibold flex justify-center duration-300 transition-colors;
+  }
+
+  .btn-primary {
+    @apply bg-main text-white hover:outline hover:outline-1 hover:outline-main hover:bg-white hover:text-main;
+  }
+
+  .btn-black {
+    @apply bg-black text-white hover:outline hover:outline-1 hover:outline-black hover:bg-white hover:text-black;
+  }
+
   .title-background {
     @apply text-20/28 font-tthoves font-bold text-white py-1.5 pl-[30px] uppercase min-w-[275px];
     background: url("./assets/images/bg-group-stage.svg") no-repeat;

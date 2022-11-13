@@ -1,10 +1,20 @@
+// import { useEffect } from "react";
+// import { useLocation } from "react-router-dom";
 import LandingLayout from "../../components/layout/LandingLayout";
+// import { scrollToId } from "../../utils/domElement";
 import Banner from "./Banner";
 import CalculatedReward from "./CalculatedReward";
 import PredictionRule from "./PredictionRule";
 import WorldCupSchedule from "./WorldCupSchedule";
 
 const LangdingPage = () => {
+  // const location = useLocation();
+  // useEffect(() => {
+  //   if (location.hash) {
+  //     scrollToId(location?.hash);
+  //   }
+  // }, [location.hash]);
+
   return (
     <LandingLayout>
       <div className="w-full pt-20">

@@ -150,8 +150,8 @@ const MyHistoryPage = () => {
   };
 
   return (
-    <DefaultLayout>
-      <div className="flex flex-col items-center pt-20 px-5 xs:px-10 md:px-20 relative">
+    <DefaultLayout hasBackgroundImg={false}>
+      <div className="flex flex-col items-center pt-20 pb-40 px-5 xs:px-10 md:px-20 relative">
         <div className="absolute top-20 right-0">
           <img src="./images/history/top.svg" alt="" />
         </div>
@@ -185,10 +185,10 @@ const MyHistoryPage = () => {
 
               <div className="overflow-x-auto">
                 <div className="flex items-center mt-10 bg-[#F2F2F2]">
-                  <div className="flex w-full justify-between items-start">
+                  <div className="flex flex-col sm:flex-row w-full justify-between items-start">
                     <div className="title-background">Prediction List</div>
-                    <div className="flex flex-col items-end lg:flex-row mt-4 pr-5">
-                      <div className="flex ">
+                    <div className="flex flex-col items-start ml-5 sm:items-end lg:flex-row mt-4 pr-5">
+                      <div className="flex">
                         <div>
                           <span className="text-14/20 font-semibold">
                             Predicted
@@ -218,7 +218,7 @@ const MyHistoryPage = () => {
                           />
                         </div>
                       </div>
-                      <div className="ml-4 flex items-center mt-2 lg:mt-0">
+                      <div className="sm:ml-4 flex items-center mt-2 lg:mt-0">
                         <span className="text-14/20 font-semibold">Search</span>
                         <div className="flex rounded-md bg-white w-[272px] px-3 py-1.5 ml-2">
                           <input
@@ -267,6 +267,9 @@ const MyHistoryPage = () => {
           </div>
 
           <HowToJoin />
+        </div>
+        <div className="absolute bottom-0 left-0">
+          <img src="./images/history/footer.svg" alt="" />
         </div>
       </div>
     </DefaultLayout>
