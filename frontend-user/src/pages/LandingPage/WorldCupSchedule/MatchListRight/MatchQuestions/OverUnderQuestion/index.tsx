@@ -1,9 +1,10 @@
 import clsx from "clsx";
 import { BigNumber } from "ethers";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { QuestionProps } from "..";
 import { MATCH_STATUS, QUESTION_STATUS } from "../../../../../../constants";
 import useBetting from "../../../../../../hooks/useBetting";
+import useBettingContract from "../../../../../../hooks/useBettingContract";
 import useBirdToken from "../../../../../../hooks/useBirdToken";
 import BorderBox from "../components/BorderBox";
 import DepositAmount from "../components/DepositAmount";
@@ -12,30 +13,51 @@ import ResultMatch from "../components/ResultMatch";
 import {
   getFinalResultIndex,
   getOptionColorFromIndex,
+  getOptionIndexByBetPlace,
 } from "../components/utils";
 
 const betPlaceString = ["under", "draw", "over"];
 
 const OverUnderQuestion = (props: QuestionProps) => {
-  const { dataQuestion = {}, title, betType, needApprove, error } = props;
+  const {
+    dataQuestion: questionProp = {},
+    title,
+    betType,
+    needApprove,
+    error,
+  } = props;
+
   const [optionWhoWin, setOptionWhoWin] = useState<number>(0);
   const [depositAmount, setDepositAmount] = useState<string>("");
+  const [dataQuestion, setDataQuestion] = useState<any>();
 
   const { approveBirdToken, loadingApprove } = useBirdToken();
   const { betting, loadingBetting } = useBetting();
+  const { getBettingUpdate } = useBettingContract();
 
-  const questionStatus = dataQuestion?.questionStatus;
-  const isSubmitted = questionStatus !== QUESTION_STATUS.NOT_PREDICTED;
-  const matchEnded = dataQuestion?.match_status === MATCH_STATUS.FINISHED;
-  const finalResultIndex = getFinalResultIndex(
-    dataQuestion?.result,
-    dataQuestion?.bet_place,
-  );
+  useEffect(() => {
+    if (!questionProp) return;
+    setDataQuestion(questionProp);
+  }, [questionProp]);
 
   useEffect(() => {
     if (!dataQuestion) return;
     setOptionWhoWin(dataQuestion?.optionSelected);
   }, [dataQuestion]);
+
+  const questionStatus = useMemo(
+    () => dataQuestion?.questionStatus,
+    [dataQuestion?.questionStatus],
+  );
+  const isSubmitted = questionStatus !== QUESTION_STATUS.NOT_PREDICTED;
+  const matchEnded = useMemo(
+    () => dataQuestion?.match_status === MATCH_STATUS.FINISHED,
+    [dataQuestion?.match_status],
+  );
+  const finalResultIndex = getFinalResultIndex(
+    dataQuestion?.result,
+    dataQuestion?.bet_place,
+  );
 
   const handleChangeOptionWhoWin = (option: number) => {
     setOptionWhoWin(option);
@@ -73,6 +95,17 @@ const OverUnderQuestion = (props: QuestionProps) => {
     }
 
     await betting(_matchID, _amount, _betType, _betPlace);
+
+    // update result
+    const res = await getBettingUpdate(_matchID, _betType);
+    if (!res) return;
+    const newDataQuestion = {
+      ...dataQuestion,
+      questionStatus: QUESTION_STATUS.PREDICTED,
+      optionSelected: getOptionIndexByBetPlace(res.place),
+      bet_amount: BigNumber.from(res.amount).toString(),
+    };
+    setDataQuestion(newDataQuestion);
   };
 
   return (

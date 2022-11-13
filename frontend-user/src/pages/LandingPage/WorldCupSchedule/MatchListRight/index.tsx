@@ -28,7 +28,7 @@ const MatchListRight = (props: MatchListRightProps) => {
   }, [account]);
 
   const fetchMatchDetailUrl = `/match/detail/${matchId}?wallet_address=${account}`;
-  const { data } = useFetch<any>(fetchMatchDetailUrl, !!matchId);
+  const { data } = useFetch<any>(fetchMatchDetailUrl, !!matchId, true);
 
   const matchData = data?.data;
   const startTime = new Date(matchData?.start_time * 1000);
