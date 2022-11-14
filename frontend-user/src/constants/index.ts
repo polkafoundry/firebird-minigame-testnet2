@@ -13,7 +13,6 @@ export const BASE_HREF =
 
 export const URLS = {
   HOME: "/",
-  EVENT: "/event",
   LEADERBOARD: "/leaderboard",
   HISTORY: "/history",
   FAUCET_TESTNET: "https://faucet.firefly.firebirdchain.com/",
