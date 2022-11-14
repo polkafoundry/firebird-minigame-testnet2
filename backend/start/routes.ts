@@ -36,12 +36,12 @@ Route.group(() => {
 
   Route.post('/claim/get-sig', 'ClaimController.claimToken')
 
-  Route.get('/predict/get-list-winner', 'PredictWinnerController.getListPredictWinner')
   Route.post('/predict/get-match-predict-info', 'PredictWinnerController.checkPredictByMatch')
 
   Route.post('/predict/get-predict-history', 'PredictWinnerController.getUserPredictHistory')
 
-  Route.get('/predict/predict-by-match', 'PredictWinnerController.predictCountByMatch')
+  Route.get('/predict/predict-winner-in-match', 'PredictWinnerController.getListPredictWinner')
+  Route.get('/predict/predict-winner-count-by-match', 'PredictWinnerController.predictCountByMatch')
   Route.post('/predict/history', 'PredictWinnerController.getUserPredictHistory')
   Route.post('/predict/update-status', 'PredictWinnerController.updatePredictStatus')
 

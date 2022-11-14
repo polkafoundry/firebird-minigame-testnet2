@@ -49,17 +49,8 @@ export default class PredictWinnerService {
     }
   }
 
-  public async predictCountByMatch({ request }): Promise<any> {
-    const matchID = request.input('match_id')
-
-    if (!matchID) return HelperUtils.responseErrorInternal('Match ID required')
-
+  public async predictCountByMatch(): Promise<any> {
     try {
-      const matchInfo = await this.MatchModel.query().where('match_id', matchID).first()
-      if (!matchInfo) {
-        return HelperUtils.responseErrorInternal('Match not found')
-      }
-
       let predictInMatch = await this.Database.from((subquery) => {
         subquery
           .from('matchs')
