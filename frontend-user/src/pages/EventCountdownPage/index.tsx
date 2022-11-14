@@ -104,7 +104,7 @@ const EventCountdownPage = () => {
     <DefaultLayout>
       <div
         className={clsx(
-          "flex flex-col w-full h-screen text-white justify-center items-center relative",
+          "flex flex-col w-full h-screen min-h-[550px] xs:min-h-[600px] md:min-h-[800px] text-white justify-center items-center relative",
           styles.banner,
         )}
       >
