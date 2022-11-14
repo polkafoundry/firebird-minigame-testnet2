@@ -107,6 +107,7 @@ module.exports = Object.freeze({
     '14': 70,
     '34': 80,
     '12': 100,
+    '15': 100,
   },
   NAME_BY_ROUND: {
     '1': 'ROUND 1',

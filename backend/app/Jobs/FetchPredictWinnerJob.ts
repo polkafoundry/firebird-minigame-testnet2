@@ -117,7 +117,7 @@ export default class FetchPredictWinnerJob implements JobContract {
               predict_winner: event.returnValues.matchID,
               final_winner: event.returnValues.winner,
               randomness: event.returnValues.result,
-              rewards: Const.PREDICT_REWARD_BY_ROUND[match.round],
+              rewards: Const.PREDICT_REWARD_BY_ROUND[match.round_name],
             })
           break
         default:
