@@ -2,7 +2,6 @@ import { Dialog } from "@headlessui/react";
 import { SUPPORTED_WALLETS } from "../../../constants/connectors";
 import { useMyWeb3 } from "../../../hooks/useMyWeb3";
 import { displayWalletAddress } from "../../../utils";
-import Button from "../Button";
 import ConnectWalletBox from "./ConnectWalletBox";
 
 type ConnectWalletDialogTypes = {
@@ -59,20 +58,18 @@ const ConnectWalletDialog = (props: ConnectWalletDialogTypes) => {
           </div>
         </div>
 
-        {isWrongChain ? (
-          <div className="text-red-600">Wrong chain Id</div>
-        ) : (
-          <>
-            <div className="flex justify-between mt-2">
-              <span className="opacity-70">Balance</span>
-              <span className="font-semibold">{`${realTimeBalance} ${nativeCurrency}`}</span>
-            </div>
-            <div className="flex justify-between mt-2">
-              <span className="opacity-70">Network</span>
-              <span className="font-semibold">FireflyTestnet</span>
-            </div>
-          </>
-        )}
+        <div className="flex justify-between mt-2">
+          <span className="opacity-70">Balance</span>
+          <span className="font-semibold">{`${realTimeBalance} ${nativeCurrency}`}</span>
+        </div>
+        <div className="flex justify-between mt-2">
+          <span className="opacity-70">Network</span>
+          {isWrongChain ? (
+            <div className="text-red-600 font-semibold">Wrong chain</div>
+          ) : (
+            <span className="font-semibold">FireflyTestnet</span>
+          )}
+        </div>
         <div className="flex justify-between mt-2">
           <span className="opacity-70">Wallet</span>
           <span className="font-semibold">Web3</span>
