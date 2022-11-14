@@ -18,6 +18,7 @@ import HistoryTable from "./HistoryTable";
 import HowToJoin from "./HowToJoin";
 import Statistics from "./Statistic";
 import queryString from "query-string";
+import InputSearch from "../../components/base/InputSearch";
 
 type NavItemTypes = {
   label: string;
@@ -195,7 +196,7 @@ const MyHistoryPage = () => {
   };
 
   return (
-    <DefaultLayout hasBackgroundImg={false}>
+    <DefaultLayout>
       <div className="flex flex-col items-center pt-20 pb-40 px-5 xs:px-10 md:px-20 relative">
         <div className="absolute top-20 right-0">
           <img src="./images/history/top.svg" alt="" />
@@ -266,21 +267,11 @@ const MyHistoryPage = () => {
                       </div>
                       <div className="sm:ml-4 flex items-center mt-2 lg:mt-0">
                         <span className="text-14/20 font-semibold">Search</span>
-                        <div className="flex rounded-md bg-white w-[272px] px-3 py-1.5 ml-2">
-                          <input
-                            type="text"
-                            name="search"
-                            placeholder="Search match"
-                            className="outline-none bg-transparent min-w-0 flex-1 text-black"
-                            value={filter.search}
-                            onChange={handleSearch}
-                          />
-                          <img
-                            src="/images/icon-search.svg"
-                            alt=""
-                            className="cursor-pointer"
-                          />
-                        </div>
+                        <InputSearch
+                          className="flex rounded-md bg-white w-[272px] px-3 py-1.5 ml-2"
+                          value={filter.search}
+                          onChange={handleSearch}
+                        />
                       </div>
                     </div>
                   </div>
@@ -331,7 +322,7 @@ const MyHistoryPage = () => {
                             <Pagination
                               className="justify-center mt-10"
                               currentPage={filter.page}
-                              totalCount={statistics.prediction_times}
+                              totalCount={500}
                               pageSize={PAGE_LIMIT}
                               onPageChange={handleChangePage}
                             />

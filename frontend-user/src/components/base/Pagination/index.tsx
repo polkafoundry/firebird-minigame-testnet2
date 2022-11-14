@@ -6,10 +6,11 @@ const iconArrow = "/images/components/pagination/icon-previous.svg";
 const arrowStyles =
   "bg-[#3A0013] w-10 h-10 rounded-md flex justify-center items-center";
 const itemStyles = {
-  unActiveStyle: "cursor-pointer text-gray-400 hover:text-[#3A0013]",
-  activeStyles: "text-[#3A0013] cursor-default",
+  unActiveStyle:
+    "cursor-pointer text-black opacity-60 hover:text-main hover:opacity-90",
+  activeStyles: "text-main cursor-default",
 };
-const dotStyles = "text-gray-400 cursor-default";
+const dotStyles = "text-black opacity-60 cursor-default";
 
 type PaginationProps = {
   onPageChange: (data: any) => void;
@@ -65,7 +66,7 @@ const Pagination = (props: PaginationProps) => {
       <li
         className={clsx(
           styles.paginationItem,
-          currentPage === 1 ? "opacity-50 cursor-default" : "cursor-pointer",
+          currentPage === 1 ? "opacity-60 cursor-default" : "cursor-pointer",
           "mr-2",
         )}
         onClick={onPrevious}
@@ -106,9 +107,10 @@ const Pagination = (props: PaginationProps) => {
       <li
         className={clsx(
           styles.paginationItem,
+          "ml-2",
           currentPage === lastPage
             ? "opacity-50 cursor-default"
-            : "ml-2 cursor-pointer",
+            : "cursor-pointer",
         )}
         onClick={onNext}
       >

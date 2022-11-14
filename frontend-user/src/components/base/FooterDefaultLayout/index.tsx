@@ -1,5 +1,4 @@
 import clsx from "clsx";
-import styles from "./footer.module.scss";
 
 const buyPkfExchanges = [
   {
@@ -39,12 +38,7 @@ const siteMaps = [
   },
 ];
 
-type FooterDefaultLayout = {
-  hasBackgroundImg?: boolean;
-};
-const FooterDefaultLayout = (props: FooterDefaultLayout) => {
-  const { hasBackgroundImg = true } = props;
-
+const FooterDefaultLayout = () => {
   const handleScrollToTop = () => {
     window.scrollTo({
       top: 0,
@@ -53,12 +47,7 @@ const FooterDefaultLayout = (props: FooterDefaultLayout) => {
   };
 
   return (
-    <div
-      className={clsx(
-        "text-white w-full",
-        hasBackgroundImg ? styles.background : "bg-black",
-      )}
-    >
+    <div className={clsx("text-white w-full pt-[48px]", "bg-black")}>
       <div
         className={clsx(
           "flex flex-col relative max-w-screen-main mx-auto pb-7 text-center pt-[60px] box-border",

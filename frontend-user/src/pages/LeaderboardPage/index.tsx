@@ -6,7 +6,7 @@ import WhoWin from "./WhoWin";
 const LeaderboardPage = () => {
   return (
     <DefaultLayout>
-      <div className="flex flex-col mx-auto max-w-[1240px] mb-10 pt-32">
+      <div className="flex flex-col mx-auto max-w-screen-main mb-10 pt-[140px]">
         <MatchScore />
         <WhoWin currentRank={10} />
       </div>

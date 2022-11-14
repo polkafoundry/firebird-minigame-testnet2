@@ -1,5 +1,7 @@
 import clsx from "clsx";
-import React from "react";
+import React, { useState } from "react";
+import InputSearch from "../../../components/base/InputSearch";
+import HeadingPrimary from "../../LandingPage/components/HeadingPrimary";
 import RewardBanner from "../RewardBanner";
 import styles from "./whoWin.module.scss";
 
@@ -13,26 +15,28 @@ const rankData = [
 
 const WhoWin = (props: any) => {
   const { currentRank } = props;
+  const [filter, setSearch] = useState<any>();
+  const handleSearch = (e: any) => {
+    setSearch(e.target.value);
+  };
+
   return (
     <div className="mt-20">
-      <div className="flex justify-between">
-        <div className="flex flex-col text-4xl font-semibold">
-          <span>Who win & Total Goals </span>
-          <span> Leaderboard</span>
-        </div>
-        <RewardBanner
-          reward={3600}
-          winner="Top 30"
-          redirectUrl="#"
-          className="bg-green-200"
-        />
-      </div>
+      <HeadingPrimary
+        backroundTitle="Total Goals"
+        title="Who win & Total Goals"
+      />
+      <RewardBanner reward="$3,600" winner="Top 30" redirectUrl="#" />
       <div className="mt-10">
         <span>
           Your current rank:{" "}
           <span className="font-semibold">#{currentRank}</span>
         </span>
-        <input className="outline-none ml-10" placeholder="Search wallet" />
+        <InputSearch
+          className="flex rounded-md bg-white w-[272px] px-3 py-1.5 ml-2"
+          value={filter.search}
+          onChange={handleSearch}
+        />
       </div>
       <div className="mt-3 border">
         <div

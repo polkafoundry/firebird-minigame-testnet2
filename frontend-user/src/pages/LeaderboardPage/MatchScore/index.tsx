@@ -1,4 +1,5 @@
 import { useState } from "react";
+import HeadingPrimary from "../../LandingPage/components/HeadingPrimary";
 import RewardBanner from "../RewardBanner";
 import MatchListTable from "./MatchListTable";
 import WinnerRewards from "./WinnerRewards";
@@ -51,18 +52,11 @@ const MatchScore = () => {
   const loading = false;
   return (
     <div>
-      <div className="flex justify-between">
-        <div className="flex flex-col text-4xl font-semibold">
-          <span>Match Score</span>
-          <span>Prediction Winners</span>
-        </div>
-        <RewardBanner
-          reward={1720}
-          winner="64 winners"
-          redirectUrl="#"
-          className="bg-pink-200"
-        />
-      </div>
+      <HeadingPrimary
+        backroundTitle="Match Score"
+        title="Match Score Prediction Winners"
+      />
+      <RewardBanner reward="$1,720" winner="64 winners" redirectUrl="#" />
       <div className="mt-20 flex">
         <div className="w-[55%]">
           <MatchListTable
