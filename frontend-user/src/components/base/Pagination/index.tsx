@@ -4,10 +4,10 @@ import { DOTS, usePagination } from "./usePagination";
 
 const iconArrow = "/images/components/pagination/icon-previous.svg";
 const arrowStyles =
-  "bg-black w-10 h-10 rounded-md flex justify-center items-center";
+  "bg-[#3A0013] w-10 h-10 rounded-md flex justify-center items-center";
 const itemStyles = {
-  unActiveStyle: "cursor-pointer text-gray-400 hover:text-black",
-  activeStyles: "text-black cursor-default",
+  unActiveStyle: "cursor-pointer text-gray-400 hover:text-[#3A0013]",
+  activeStyles: "text-[#3A0013] cursor-default",
 };
 const dotStyles = "text-gray-400 cursor-default";
 
