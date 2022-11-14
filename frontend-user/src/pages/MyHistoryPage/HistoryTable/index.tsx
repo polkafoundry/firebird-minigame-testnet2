@@ -113,9 +113,9 @@ const HistoryTable = (props: HistoryTableTypes) => {
               </div>
               <div>{getDateTime(rowData.created_at)}</div>
               {rowData.match_predicted ? (
-                <div className="font-tthoves font-semibold">Waiting...</div>
-              ) : (
                 <MatchPredict isCorrect={rowData.result} />
+              ) : (
+                <div className="font-tthoves font-semibold">Waiting...</div>
               )}
               <div>{rowData.final_winner === account ? "Yes" : "No"}</div>
               <div>

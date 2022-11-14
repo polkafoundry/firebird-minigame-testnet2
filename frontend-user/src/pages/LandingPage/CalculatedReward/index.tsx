@@ -128,7 +128,7 @@ const CalculatedReward = () => {
             "2md:flex-row 2md:items-end",
           )}
         >
-          <div className="flex flex-col ml-5 lg:ml-[130px] lg:pr-12">
+          <div className="flex-1 flex flex-col ml-5 lg:ml-[130px] mr-10">
             <HeadingPrimary
               backroundTitle="Calculated"
               title="How the rewards are calculated?"
