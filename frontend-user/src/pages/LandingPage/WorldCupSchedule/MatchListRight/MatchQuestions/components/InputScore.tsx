@@ -45,7 +45,7 @@ const InputNumber = (props: InputNumberProps) => {
       case QUESTION_STATUS.WRONG_ANSWER:
         return "text-[#FF3E57] bg-[#ffecef]";
       default:
-        return "";
+        return "bg-white";
     }
   };
 
@@ -53,7 +53,7 @@ const InputNumber = (props: InputNumberProps) => {
     <input
       type="text"
       className={clsx(
-        "w-12 h-12 p-2 text-18/24 font-semibold text-center bg-white outline-none rounded-lg",
+        "w-12 h-12 p-2 text-18/24 font-semibold text-center outline-none rounded-lg",
         getInputStyle(),
         className,
       )}

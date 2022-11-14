@@ -4,15 +4,16 @@ import MainDefaultLayout from "../base/MainDefaultLayout";
 
 type LayoutProps = {
   children?: any;
+  hasBackgroundImg?: boolean;
 };
 const DefaultLayout = (props: LayoutProps) => {
-  const { children } = props;
+  const { children, hasBackgroundImg } = props;
 
   return (
     <>
       <HeaderDefaultLayout />
       <MainDefaultLayout>{children}</MainDefaultLayout>
-      <FooterDefaultLayout />
+      <FooterDefaultLayout hasBackgroundImg={hasBackgroundImg} />
     </>
   );
 };

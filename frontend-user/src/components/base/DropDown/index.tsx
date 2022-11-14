@@ -49,11 +49,11 @@ const DropDown = (props: DropDownProps) => {
             <Menu.Button className="inline-flex w-full justify-between items-center rounded-xl px-3 py-1.5 text-base font-semibold">
               {selectedItem?.label || label}
               <img
-                className={clsx("cursor-pointer w-3 h-3", open && "rotate-180")}
+                className={clsx("cursor-pointer w-2 h-2", open && "rotate-180")}
                 src={
                   bgColor === "black"
                     ? "/images/icon-arrow-down-white.svg"
-                    : "/images/icon-arrow-down.svg"
+                    : "/images/icon-dropdown.svg"
                 }
                 alt=""
               />

@@ -11,6 +11,7 @@ type DepositAmountProps = {
   errors?: string[];
   isFullBetting?: boolean;
   winRate?: string;
+  optionWhoWin: number;
 };
 
 const DepositAmount = (props: DepositAmountProps) => {
@@ -20,6 +21,7 @@ const DepositAmount = (props: DepositAmountProps) => {
     // errors,
     isFullBetting = false,
     winRate,
+    optionWhoWin,
   } = props;
   const { birdBalance } = useMyWeb3();
 
@@ -40,7 +42,7 @@ const DepositAmount = (props: DepositAmountProps) => {
 
   return (
     <>
-      <div className="mt-10 bg-[#F2F2F2] px-3 py-5 rounded-lg font-inter">
+      <div className="mt-3 bg-[#F2F2F2] px-3 py-5 rounded-lg font-inter">
         <div className="flex justify-between max-w-[340px]">
           <span className="font-bold text-12/18">Deposit Amount:</span>
           <span className="text-12/16 opacity-70">
@@ -67,7 +69,7 @@ const DepositAmount = (props: DepositAmountProps) => {
             </button>
           </div>
 
-          <ul className="text-12/16 pl-8 list-disc ">
+          <ul className="text-12/16 pl-8 list-disc">
             {!depositAmount && (
               <li>Please enter the number of $BIRD you want to deposit.</li>
             )}
@@ -76,8 +78,10 @@ const DepositAmount = (props: DepositAmountProps) => {
                 <li className="opacity-70 mt-1.5">
                   <span className="font-bold">Correct Prediction:</span> You
                   will claim{" "}
-                  {(Number(depositAmount) * Number(winRate)).toFixed(2)} $BIRD
-                  (including your deposit amount).
+                  {[0, 1, 2].includes(optionWhoWin)
+                    ? (Number(depositAmount) * Number(winRate)).toFixed(2)
+                    : ""}{" "}
+                  $BIRD (including your deposit amount).
                 </li>
                 <li className="opacity-70 mt-1.5">
                   <span className="font-bold">Wrong Prediction:</span> You will

@@ -1,6 +1,14 @@
 .banner {
   background: url(/assets/images/countdown/bg-countdown-banner.png) no-repeat;
   background-size: cover;
+  background-position: center;
+}
+
+.textStroke {
+  color: white;
+  -webkit-text-fill-color: black;
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: white;
 }
 
 .scrollDown {

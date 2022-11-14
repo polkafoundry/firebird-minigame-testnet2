@@ -41,7 +41,6 @@ export const useMyWeb3 = () => {
     let balance: any = "0";
     const getBirdToken = async () => {
       balance = account ? await getBirdBalance(account) : "0";
-      console.log("balanceOf", account, balance);
       setState((preState: any) => ({
         ...preState,
         account: account,

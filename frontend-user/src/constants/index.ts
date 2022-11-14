@@ -22,8 +22,8 @@ export const NUMBER_PATTERN = /^\d{1,10}?\.?(\d{1,18})?$/;
 export const quickGuide = [
   "Select a match",
   "Answer questions & submit your predictions",
-  "The match results will be updated.",
-  "Check the leadeborad menu to see your rank.",
+  "The match results will be updated",
+  "Check the Leaderboard menu to see your rank",
 ];
 
 export enum QUESTION_STATUS {

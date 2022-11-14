@@ -168,7 +168,7 @@ const ResultMatch = (props: ResultMatchProps) => {
         {questionStatus === QUESTION_STATUS.CORRECT_ANSWER && (
           <button
             className={clsx(
-              "px-10 py-2 bg-[#EB522F] rounded-lg mr-2",
+              "px-10 py-2 bg-main rounded-lg mr-2",
               isClaimed && "pointer-events-none opacity-50",
             )}
             onClick={handleClaimToken}
