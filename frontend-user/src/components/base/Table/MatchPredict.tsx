@@ -9,7 +9,7 @@ type MatchPredictProps = {
 
 const MatchPredict = (props: MatchPredictProps) => {
   const { isCorrect = true, isDisplayText = true, result } = props;
-  const textColor = isCorrect ? "text-green-500" : "text-red-500";
+  const textColor = isCorrect ? "text-[#43c571]" : "text-[#ff6478]";
   const iconSrc = isCorrect
     ? "/images/icon-correct-answer.svg"
     : "/images/icon-wrong-answer.svg";
@@ -22,7 +22,7 @@ const MatchPredict = (props: MatchPredictProps) => {
           <img src={iconSrc} alt="" className={iconSize} />
           {isDisplayText && (
             <span className={clsx(textColor, "font-semibold ml-1")}>
-              {isCorrect ? "Correct" : "Incorrect"}
+              {isCorrect ? "Correct" : "InCorrect"}
             </span>
           )}
         </>

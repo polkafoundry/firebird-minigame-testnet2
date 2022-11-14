@@ -1,9 +1,14 @@
 import clsx from "clsx";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import DropDown from "../../components/base/DropDown";
 import Pagination from "../../components/base/Pagination";
 import DefaultLayout from "../../components/layout/DefaultLayout";
-import { BETTING_RESULT, HISTORY_NAV_VALUES } from "../../constants";
+import {
+  BASE_HREF,
+  BETTING_RESULT,
+  HISTORY_NAV_VALUES,
+  URLS,
+} from "../../constants";
 import { useMyWeb3 } from "../../hooks/useMyWeb3";
 import usePost from "../../hooks/usePost";
 import { convertHexToStringNumber } from "../../utils";
@@ -34,7 +39,6 @@ const headings = {
     "Match",
     "Question",
     "Answer",
-    // "Date-time",
     "Result",
     "Deposited ($BIRD)",
     "Earned ($BIRD)",
@@ -44,9 +48,10 @@ const headings = {
 };
 
 type FilterTypes = {
-  result: string;
-  claimed: string;
+  result: string | undefined;
+  claimed: boolean | undefined;
   search: string;
+  page: number;
 };
 
 const resultOptions = [
@@ -61,43 +66,38 @@ const claimedOptions = [
   { label: "No", value: false },
 ];
 
+const PAGE_LIMIT = 10;
 const MyHistoryPage = () => {
   const { account } = useMyWeb3();
   const [dataTable, setDataTable] = useState<any>([]);
   const [statistics, setStatistics] = useState<any>({});
   const [filter, setFilter] = useState<FilterTypes>({
-    claimed: "",
-    result: "",
+    claimed: claimedOptions[0].value,
+    result: resultOptions[0].value,
     search: "",
+    page: 1,
   });
-  const [resultSelected, setResultSelected] = useState<any>(
-    resultOptions[0].value,
-  );
-  const [claimSelected, setClaimSelected] = useState<any>(
-    claimedOptions[0].value,
-  );
-  const [currentPage, setCurrentPage] = useState<number>(1);
 
   const [navActived, setNavActived] = useState<
     typeof HISTORY_NAV_VALUES[keyof typeof HISTORY_NAV_VALUES]
   >(HISTORY_NAV_VALUES.GOALS);
 
-  const shouldLoadPredictInfo = useMemo(() => {
-    return !!account && resultSelected && claimSelected;
-  }, [account, resultSelected, claimSelected]);
+  // const shouldLoadPredictInfo = useMemo(() => {
+  //   return !!account && filter.result && filter.claimed;
+  // }, [account, filter.result, filter.claimed]);
 
   const { response, loading } = usePost<any>(
     navActived === HISTORY_NAV_VALUES.GOALS
       ? "/betting/history"
       : "/predict/history",
     {
-      page: currentPage,
-      limit: 10,
+      page: filter.page,
+      limit: PAGE_LIMIT,
       address: account,
-      result: resultSelected,
-      is_claim: claimSelected,
+      result: filter.result,
+      is_claim: filter.claimed,
     },
-    shouldLoadPredictInfo,
+    !!account,
   );
 
   useEffect(() => {
@@ -111,24 +111,35 @@ const MyHistoryPage = () => {
       const newStatistics = {
         prediction_times: resData.total,
         correct_answers: resData.wins,
-        win_rate: ((resData.wins / resData.total) * 100).toFixed(2) + "%",
+        win_rate: resData.wins
+          ? ((resData.wins / resData.total) * 100).toFixed(2) + "%"
+          : "0%",
         earned: resData.earnedToken
           ? convertHexToStringNumber(resData.earnedToken)
-          : "Updating...",
+          : "0",
         current_rank: "Updating...",
         win_whitelist: resData.finalWinner,
       };
-
+      console.log(
+        "resData?.bettings?.data || resData?.predicts?.data :>> ",
+        resData,
+      );
       setDataTable(resData?.bettings?.data || resData?.predicts?.data);
       setStatistics(newStatistics);
     }
   }, [response]);
 
   const handleChangeResult = (value: any) => {
-    setResultSelected(value);
+    setFilter((prev: FilterTypes) => ({
+      ...prev,
+      result: value,
+    }));
   };
   const handleChangeClaim = (value: any) => {
-    setClaimSelected(value);
+    setFilter((prev: FilterTypes) => ({
+      ...prev,
+      claimed: value,
+    }));
   };
 
   useEffect(() => {
@@ -138,15 +149,19 @@ const MyHistoryPage = () => {
     return () => clearTimeout(timer);
   }, [filter]);
 
-  const handleFilter = (e: any) => {
+  const handleSearch = (e: any) => {
     setFilter((prevFilter: FilterTypes) => ({
       ...prevFilter,
       [e.target.name]: e.target.value,
     }));
+    console.log("filter", filter);
   };
 
   const handleChangePage = (value: number) => {
-    setCurrentPage(value);
+    setFilter((prevFilter: FilterTypes) => ({
+      ...prevFilter,
+      page: value,
+    }));
   };
 
   return (
@@ -160,7 +175,6 @@ const MyHistoryPage = () => {
             <HeadingPrimary
               backroundTitle="History"
               title="prediction history"
-              textAlign="text-left"
             />
 
             <div className="flex flex-col mt-6">
@@ -196,27 +210,29 @@ const MyHistoryPage = () => {
                           <DropDown
                             label="Predicted"
                             items={resultOptions}
-                            selectedValue={resultSelected}
+                            selectedValue={filter.result}
                             onChange={handleChangeResult}
                             className="w-[110px] ml-2 text-14/24"
                             itemsClassName=""
                             bgColor="white"
                           />
                         </div>
-                        <div className="ml-4">
-                          <span className="text-14/20 font-semibold">
-                            Status
-                          </span>
-                          <DropDown
-                            label="Status"
-                            items={claimedOptions}
-                            selectedValue={claimSelected}
-                            onChange={handleChangeClaim}
-                            className="w-[110px] ml-2 text-14/24"
-                            itemsClassName=""
-                            bgColor="white"
-                          />
-                        </div>
+                        {navActived === HISTORY_NAV_VALUES.GOALS && (
+                          <div className="ml-4">
+                            <span className="text-14/20 font-semibold">
+                              Claimed
+                            </span>
+                            <DropDown
+                              label="Claimed"
+                              items={claimedOptions}
+                              selectedValue={filter.claimed}
+                              onChange={handleChangeClaim}
+                              className="w-[110px] ml-2 text-14/24"
+                              itemsClassName=""
+                              bgColor="white"
+                            />
+                          </div>
+                        )}
                       </div>
                       <div className="sm:ml-4 flex items-center mt-2 lg:mt-0">
                         <span className="text-14/20 font-semibold">Search</span>
@@ -227,42 +243,75 @@ const MyHistoryPage = () => {
                             placeholder="Search match"
                             className="outline-none bg-transparent min-w-0 flex-1 text-black"
                             value={filter.search}
-                            onChange={handleFilter}
+                            onChange={handleSearch}
                           />
-                          <img src="/images/icon-search.svg" alt="" />
+                          <img
+                            src="/images/icon-search.svg"
+                            alt=""
+                            className="cursor-pointer"
+                          />
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div className="flex bg-[#F2F2F2] px-5 pt-2 pb-10">
-                  {loading && <div>loading</div>}
-                  {!loading && account && (
-                    <HistoryTable
-                      headings={
-                        navActived === HISTORY_NAV_VALUES.GOALS
-                          ? headings.whoWin
-                          : headings.matchScore
-                      }
-                      dataTable={dataTable}
-                      tableLoading={false}
-                      isWhoWinTable={navActived === HISTORY_NAV_VALUES.GOALS}
-                      account={account}
-                    />
-                  )}
-                  {!loading && !account && (
-                    <div>Please connect wallet to see prediction list</div>
+                <div className="bg-[#F2F2F2] px-5 pt-2 pb-10">
+                  {loading && <div>Loading...</div>}
+                  {!loading && (
+                    <>
+                      {!dataTable || !dataTable.length ? (
+                        <div className="flex flex-col items-center w-full pt-14 pb-4 px-10">
+                          <img
+                            src="./images/icon-not-found.svg"
+                            alt=""
+                            className="w-[125px] h-[125px]"
+                          />
+                          <p>You haven’t predicted any matches</p>
+                          <a
+                            href={BASE_HREF + URLS.HOME + "#prediction-rule"}
+                            className="min-w-[255px] w-[30%] mt-10 btn-rounded btn-primary"
+                          >
+                            Prediction Now
+                          </a>
+                        </div>
+                      ) : (
+                        <>
+                          {!account && (
+                            <div>
+                              Please connect wallet to see prediction list
+                            </div>
+                          )}
+                          {account && (
+                            <HistoryTable
+                              headings={
+                                navActived === HISTORY_NAV_VALUES.GOALS
+                                  ? headings.whoWin
+                                  : headings.matchScore
+                              }
+                              dataTable={dataTable}
+                              tableLoading={false}
+                              isWhoWinTable={
+                                navActived === HISTORY_NAV_VALUES.GOALS
+                              }
+                              account={account}
+                            />
+                          )}
+
+                          {account && (
+                            <Pagination
+                              className="justify-center mt-10"
+                              currentPage={filter.page}
+                              totalCount={statistics.total}
+                              pageSize={PAGE_LIMIT}
+                              onPageChange={handleChangePage}
+                            />
+                          )}
+                        </>
+                      )}
+                    </>
                   )}
                 </div>
               </div>
-
-              <Pagination
-                className="justify-center mt-10"
-                currentPage={currentPage}
-                totalCount={100}
-                pageSize={5}
-                onPageChange={handleChangePage}
-              />
             </div>
           </div>
 

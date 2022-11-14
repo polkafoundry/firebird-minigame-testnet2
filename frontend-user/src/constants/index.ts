@@ -6,6 +6,11 @@ export const BIRD_TOKEN_CONTRACT = process.env.REACT_APP_BIRD_TOKEN_CONTRACT;
 
 export const MAX_DEPOSIT_AMOUNT = 1000;
 
+export const BASE_HREF =
+  typeof window !== "undefined" && window.location.origin
+    ? window.location.origin
+    : "";
+
 export const URLS = {
   HOME: "/",
   EVENT: "/event",

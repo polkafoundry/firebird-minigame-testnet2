@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { quickGuide, URLS } from "../../../constants";
+import { BASE_HREF, quickGuide, URLS } from "../../../constants";
 import { WalletContext } from "../../../context/WalletContext";
 import { useMyWeb3 } from "../../../hooks/useMyWeb3";
 import { displayWalletAddress } from "../../../utils";
@@ -23,10 +23,7 @@ const HowToJoin = () => {
     account,
     birdBalance,
   } = useMyWeb3();
-  const baseHref =
-    typeof window !== "undefined" && window.location.origin
-      ? window.location.origin
-      : "";
+
   const { setShowModal } = useContext(WalletContext);
   const [predictConditions, setPredictConditions] = useState<ConditionTypes>({
     birdToken: false,
@@ -44,14 +41,10 @@ const HowToJoin = () => {
   }, [isWrongChain, realTimeBalance, nativeCurrency, account]);
 
   return (
-    <div className="flex flex-col mt-8 w-full">
-      <HeadingPrimary
-        backroundTitle="Join"
-        title="how to join"
-        textAlign="text-left"
-      />
+    <div className="flex flex-col mt-20 w-full">
+      <HeadingPrimary backroundTitle="Join" title="how to join" />
 
-      <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 gap-1 mt-8">
+      <div className="grid grid-cols-1 xs:grid-cols-2 2md:grid-cols-3 gap-1 mt-8">
         <div className="flex flex-col rounded-bl-lg bg-[#F2F2F2]">
           <span className="title-background">Conditions to join</span>
           <div className="mt-3 px-5 pb-10 h-full">
@@ -151,7 +144,7 @@ const HowToJoin = () => {
                 </li>
               </ul>
               <a
-                href={baseHref + URLS.HOME + "#prediction-rule"}
+                href={BASE_HREF + URLS.HOME + "#prediction-rule"}
                 target="_blank"
                 rel="noreferrer"
                 className="w-full btn-rounded btn-primary mt-auto"
@@ -176,7 +169,7 @@ const HowToJoin = () => {
                 ))}
               </ul>
               <a
-                href={baseHref + URLS.HOME + "#prediction-rule"}
+                href={BASE_HREF + URLS.HOME + "#prediction-rule"}
                 target="_blank"
                 rel="noreferrer"
                 className="w-full btn-rounded btn-black mt-auto"
@@ -199,7 +192,7 @@ const HowToJoin = () => {
                 </p>
               </div>
               <a
-                href={baseHref + URLS.HOME + "#reward-distribution"}
+                href={BASE_HREF + URLS.HOME + "#reward-distribution"}
                 target="_blank"
                 rel="noreferrer"
                 className="w-full btn-rounded btn-black mt-auto"
