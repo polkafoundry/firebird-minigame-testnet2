@@ -31,7 +31,7 @@ const Statistics = (props: any) => {
           </div>
           <div className={boxStyles.box}>
             <span className={boxStyles.title}>Current rank</span>
-            <span className={boxStyles.number}>{data.current_rank}</span>
+            <span className={boxStyles.number}>#{data.current_rank}</span>
           </div>
         </>
       ) : (

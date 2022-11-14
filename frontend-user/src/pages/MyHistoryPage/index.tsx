@@ -9,6 +9,7 @@ import {
   HISTORY_NAV_VALUES,
   URLS,
 } from "../../constants";
+import useFetch from "../../hooks/useFetch";
 import { useMyWeb3 } from "../../hooks/useMyWeb3";
 import usePost from "../../hooks/usePost";
 import { convertHexToStringNumber } from "../../utils";
@@ -16,6 +17,7 @@ import HeadingPrimary from "../LandingPage/components/HeadingPrimary";
 import HistoryTable from "./HistoryTable";
 import HowToJoin from "./HowToJoin";
 import Statistics from "./Statistic";
+import queryString from "query-string";
 
 type NavItemTypes = {
   label: string;
@@ -54,6 +56,16 @@ type FilterTypes = {
   page: number;
 };
 
+type StatisticTypes = {
+  prediction_times: any;
+  correct_answers: any;
+  win_rate: any;
+  earned: any;
+  current_rank?: any;
+  win_whitelist: any;
+  total?: any;
+};
+
 const resultOptions = [
   { label: "All", value: undefined },
   { label: "Win", value: BETTING_RESULT.WIN },
@@ -70,7 +82,13 @@ const PAGE_LIMIT = 10;
 const MyHistoryPage = () => {
   const { account } = useMyWeb3();
   const [dataTable, setDataTable] = useState<any>([]);
-  const [statistics, setStatistics] = useState<any>({});
+  const [statistics, setStatistics] = useState<StatisticTypes>({
+    prediction_times: 0,
+    correct_answers: 0,
+    win_rate: 0,
+    earned: 0,
+    win_whitelist: 0,
+  });
   const [filter, setFilter] = useState<FilterTypes>({
     claimed: claimedOptions[0].value,
     result: resultOptions[0].value,
@@ -81,6 +99,22 @@ const MyHistoryPage = () => {
   const [navActived, setNavActived] = useState<
     typeof HISTORY_NAV_VALUES[keyof typeof HISTORY_NAV_VALUES]
   >(HISTORY_NAV_VALUES.GOALS);
+
+  const { data: leaderboardData } = useFetch<any>(
+    "/leaderboard?" +
+      queryString.stringify({
+        wallet_address: account,
+        startTime: "2022-11-01T00:00:00.000Z",
+        endTime: "2022-12-31T23:59:00.000Z",
+      }),
+  );
+
+  useEffect(() => {
+    setStatistics((prev: StatisticTypes) => ({
+      ...prev,
+      current_rank: leaderboardData?.data?.position,
+    }));
+  }, [leaderboardData]);
 
   // const shouldLoadPredictInfo = useMemo(() => {
   //   return !!account && filter.result && filter.claimed;
@@ -117,13 +151,9 @@ const MyHistoryPage = () => {
         earned: resData.earnedToken
           ? convertHexToStringNumber(resData.earnedToken)
           : "0",
-        current_rank: "Updating...",
         win_whitelist: resData.finalWinner,
       };
-      console.log(
-        "resData?.bettings?.data || resData?.predicts?.data :>> ",
-        resData,
-      );
+
       setDataTable(resData?.bettings?.data || resData?.predicts?.data);
       setStatistics(newStatistics);
     }
@@ -301,7 +331,7 @@ const MyHistoryPage = () => {
                             <Pagination
                               className="justify-center mt-10"
                               currentPage={filter.page}
-                              totalCount={statistics.total}
+                              totalCount={statistics.prediction_times}
                               pageSize={PAGE_LIMIT}
                               onPageChange={handleChangePage}
                             />
