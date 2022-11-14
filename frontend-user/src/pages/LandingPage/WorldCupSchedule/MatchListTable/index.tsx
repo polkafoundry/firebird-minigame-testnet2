@@ -133,14 +133,14 @@ const MatchListTable = (props: MatchListTableProps) => {
 
         <div className="flex justify-between items-center bg-[#3A0013] text-white mt-1">
           <div
-            className="h-12 w-12 cursor-pointer flex justify-center items-center"
+            className="h-12 w-12 cursor-pointer flex justify-center items-center select-none"
             onClick={previousGroup}
           >
             <img src="/images/icon-previous.svg" alt="" />
           </div>
           <div className="text-20/28 font-bold uppercase">{priodDate}</div>
           <div
-            className="h-12 w-12 cursor-pointer flex justify-center items-center"
+            className="h-12 w-12 cursor-pointer flex justify-center items-center select-none"
             onClick={nextGroup}
           >
             <img
