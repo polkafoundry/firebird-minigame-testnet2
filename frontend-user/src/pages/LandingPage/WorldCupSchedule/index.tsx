@@ -13,8 +13,8 @@ import Schedule from "./Schedule";
 const queryString = require("query-string");
 
 export type FilterTypes = {
-  predicted: number;
-  status: string;
+  is_completed_bet: string;
+  match_status: string;
   page: number;
   size: number;
   round_name: typeof rounds[keyof typeof rounds];
@@ -27,8 +27,8 @@ const WorldCupSchedule = () => {
   const [selectedMatchId, setSelectedMatchId] = useState<number | undefined>();
   const [dataTable, setDataTable] = useState<any[]>([]);
   const [filter, setFilter] = useState<FilterTypes>({
-    predicted: 0,
-    status: "",
+    is_completed_bet: "",
+    match_status: "",
     page: 1,
     size: 20,
     wallet_address: "",
@@ -80,14 +80,14 @@ const WorldCupSchedule = () => {
   const handleChangePredicted = (value: any) => {
     setFilter((prevFilter: FilterTypes) => ({
       ...prevFilter,
-      predicted: value,
+      is_completed_bet: value,
     }));
   };
 
   const handleChangeStatus = (value: any) => {
     setFilter((prevFilter: FilterTypes) => ({
       ...prevFilter,
-      status: value,
+      match_status: value,
     }));
   };
 
