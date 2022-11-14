@@ -106,8 +106,7 @@ export const rounds: Array<RoundTypes> = [
   {
     label: "GROUP STAGE - ROUND 3",
     prize: "$20",
-    value: 16, // fake
-    // value: 3,
+    value: 3,
   },
   {
     label: "PLAYOFFS ROUND OF 16",

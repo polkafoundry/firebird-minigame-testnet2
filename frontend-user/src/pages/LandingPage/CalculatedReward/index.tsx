@@ -1,5 +1,4 @@
 import clsx from "clsx";
-import ButtonStyled from "../../../components/base/Button/ButtonStyled";
 import HeadingPrimary from "../components/HeadingPrimary";
 import styles from "./calculatedReward.module.scss";
 
