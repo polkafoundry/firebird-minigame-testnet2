@@ -98,7 +98,7 @@ export default class MatchService {
           .andOnVal('user_address', params.wallet_address || null)
       })
 
-    if ('is_completed_bet' in params && 'wallet_address' in params) {
+    if ('is_completed_bet' in params && params.is_completed_bet.length && 'wallet_address' in params) {
       matchesQuery = params.is_completed_bet == 'true' ? matchesQuery.where('bet_counts.bet_count', 5) : matchesQuery.where('bet_counts.bet_count', '<>', 5)
     }
 
