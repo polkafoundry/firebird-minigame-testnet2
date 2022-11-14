@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import { BigNumber } from "ethers";
 import { useEffect, useMemo, useState } from "react";
+import { toast } from "react-toastify";
 import { QuestionProps } from "..";
 import { MATCH_STATUS, QUESTION_STATUS } from "../../../../../../constants";
 import useBetting from "../../../../../../hooks/useBetting";
@@ -90,11 +91,17 @@ const OverUnderQuestion = (props: QuestionProps) => {
 
     const { _amount, _betPlace, _betType, _matchID } = dataSubmit;
 
+    if (!_betPlace) {
+      toast.warning("Bet place Required");
+      return;
+    }
+
     if (needApprove) {
       await approveBirdToken();
     }
 
-    await betting(_matchID, _amount, _betType, _betPlace);
+    const bettingResult = await betting(_matchID, _amount, _betType, _betPlace);
+    if (!bettingResult) return;
 
     // update result
     const res = await getBettingUpdate(_matchID, _betType);

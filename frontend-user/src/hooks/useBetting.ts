@@ -44,11 +44,14 @@ const useBetting = () => {
           setLoadingBetting(false);
 
           toast.success("Submit answer successful");
+          return true;
         }
+        return;
       } catch (error: any) {
         console.log("ERR betting: ", error?.message);
         toast.error("Fail to submit answer");
         setLoadingBetting(false);
+        return;
       }
     },
     [library, account],

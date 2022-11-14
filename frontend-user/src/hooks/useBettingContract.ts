@@ -68,7 +68,36 @@ const useBettingContract = () => {
           return res;
         }
       } catch (error: any) {
-        console.log("ERR getResultUpdate: ", error?.message);
+        console.log("ERR getBettingUpdate: ", error?.message);
+        setLoadingBetting(false);
+        return false;
+      }
+    },
+    [library, account],
+  );
+
+  const getPredictingUpdate = useCallback(
+    async (_matchId: string | undefined) => {
+      if (!BETTING_CONTRACT || !account) {
+        toast.error("Fail to load contract or account is not connected");
+        return false;
+      }
+
+      setLoadingBetting(true);
+      try {
+        const contract = getContract(
+          BETTING_CONTRACT,
+          BETTING_ABI,
+          library,
+          account,
+        );
+
+        if (contract) {
+          const res = await contract.userPredictByMatch(account, _matchId);
+          return res;
+        }
+      } catch (error: any) {
+        console.log("ERR getPredictingUpdate: ", error?.message);
         setLoadingBetting(false);
         return false;
       }
@@ -79,6 +108,7 @@ const useBettingContract = () => {
   return {
     checkClaimed,
     getBettingUpdate,
+    getPredictingUpdate,
     loadingBetting,
   };
 };

@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
+import { toast } from "react-toastify";
 import { QuestionProps } from "..";
 import { MATCH_STATUS, QUESTION_STATUS } from "../../../../../../constants";
+import useBettingContract from "../../../../../../hooks/useBettingContract";
 import useBirdToken from "../../../../../../hooks/useBirdToken";
 import usePost from "../../../../../../hooks/usePost";
 import usePredicting from "../../../../../../hooks/usePredicting";
@@ -10,7 +12,7 @@ import Question from "../components/Question";
 
 const PredictQuestion = (props: QuestionProps) => {
   const {
-    dataQuestion = {},
+    dataQuestion: questionProp = {},
     title,
     needApprove,
     account,
@@ -20,14 +22,24 @@ const PredictQuestion = (props: QuestionProps) => {
 
   const { approveBirdToken, loadingApprove } = useBirdToken();
   const { loadingPredicting, predicting } = usePredicting();
+  const { getPredictingUpdate } = useBettingContract();
 
   const [predictInfo, setPredictInfo] = useState<any>();
   const [inputTeam1, setInputTeam1] = useState<string>("");
   const [inputTeam2, setInputTeam2] = useState<string>("");
+  const [dataQuestion, setDataQuestion] = useState<any>();
+
+  useEffect(() => {
+    if (!questionProp) return;
+    setDataQuestion(questionProp);
+  }, [questionProp]);
 
   const isSubmitted =
     dataQuestion?.questionStatus !== QUESTION_STATUS.NOT_PREDICTED;
-  const matchEnded = dataQuestion?.match_status === MATCH_STATUS.FINISHED;
+  const matchEnded = useMemo(
+    () => dataQuestion?.match_status === MATCH_STATUS.FINISHED,
+    [dataQuestion?.match_status],
+  );
 
   const shouldLoadPredictInfo = useMemo(() => {
     return !!account && matchEnded && dataQuestion?.match_id;
@@ -85,12 +97,28 @@ const PredictQuestion = (props: QuestionProps) => {
 
     console.log("submit q1", dataSubmit);
     const { _matchID, _homeScore, _awayScore } = dataSubmit;
+    if (_homeScore === "" || _awayScore === "") {
+      toast.warning("Home score / Away score is required");
+      return;
+    }
 
     if (needApprove) {
       await approveBirdToken();
     }
 
-    await predicting(_matchID, _homeScore, _awayScore);
+    const predictResult = await predicting(_matchID, _homeScore, _awayScore);
+    if (!predictResult) return;
+
+    // update result
+    const res = await getPredictingUpdate(_matchID);
+    if (!res) return;
+    const newDataQuestion = {
+      ...dataQuestion,
+      questionStatus: QUESTION_STATUS.PREDICTED,
+      home_score: _homeScore,
+      away_score: _awayScore,
+    };
+    setDataQuestion(newDataQuestion);
   };
 
   const renderMatchNameDetail = (home_name: string, home_icon: string) => {
