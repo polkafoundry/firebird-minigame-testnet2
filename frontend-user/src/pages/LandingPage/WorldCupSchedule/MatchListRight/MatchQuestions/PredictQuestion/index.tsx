@@ -98,7 +98,7 @@ const PredictQuestion = (props: QuestionProps) => {
     console.log("submit q1", dataSubmit);
     const { _matchID, _homeScore, _awayScore } = dataSubmit;
     if (_homeScore === "" || _awayScore === "") {
-      toast.warning("Home score / Away score is required");
+      toast.warning("Please select one answer");
       return;
     }
 
