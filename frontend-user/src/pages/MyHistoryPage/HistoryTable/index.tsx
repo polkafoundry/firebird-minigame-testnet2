@@ -7,6 +7,7 @@ import {
   getDateTime,
   getImgSrc,
 } from "../../../utils";
+import ClaimTokenRow from "../ClaimTokenRow";
 import styles from "./historyTable.module.scss";
 
 type HistoryTableTypes = {
@@ -23,12 +24,6 @@ const HistoryTable = (props: HistoryTableTypes) => {
   const renderLoading = () => {
     return <div className="">Loading ... </div>;
   };
-
-  const renderClaimButton = () => (
-    <button className="bg-black text-white px-5 rounded-xl py-2">
-      Claim token
-    </button>
-  );
 
   const getQuestionByBetType = (betType: string) => {
     switch (betType) {
@@ -118,7 +113,7 @@ const HistoryTable = (props: HistoryTableTypes) => {
               </div>
               <div>{getDateTime(rowData.created_at)}</div>
               {rowData.match_predicted ? (
-                <div>Waiting...</div>
+                <div className="font-tthoves font-semibold">Waiting...</div>
               ) : (
                 <MatchPredict isCorrect={rowData.result} />
               )}
@@ -144,20 +139,19 @@ const HistoryTable = (props: HistoryTableTypes) => {
               <div className="capitalize">
                 {getAnswerText(rowData).toLowerCase()}
               </div>
-              {/* <div>{getDateTime(rowData.created_at)}</div> */}
-              <MatchPredict result={rowData.result} />
+              <MatchPredict isCorrect={rowData.result === "win"} />
               <div>{convertHexToStringNumber(rowData.bet_amount)}</div>
               <div>{getEarnedAmount(rowData.result_num)}</div>
               <div>{convertHexToStringNumber(rowData.total_claim)}</div>
-              <div>
-                {rowData.total_claim > 0 &&
-                  (rowData.has_claim ? "Claimed" : renderClaimButton())}
-              </div>
+              <ClaimTokenRow
+                account={account}
+                data={rowData}
+                isCorrect={rowData.result === "win"}
+              />
             </>
           )}
         </div>
       ))}
-      <div></div>
     </div>
   );
 };

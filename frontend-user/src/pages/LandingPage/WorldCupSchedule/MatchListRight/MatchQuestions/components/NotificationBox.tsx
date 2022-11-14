@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { QUESTION_STATUS, URLS } from "../../../../../../constants";
+import { BASE_HREF, QUESTION_STATUS, URLS } from "../../../../../../constants";
 
 type NotificationBoxTypes = {
   type: typeof QUESTION_STATUS[keyof typeof QUESTION_STATUS];
@@ -19,17 +19,13 @@ const NotificationBox = (props: NotificationBoxTypes) => {
     awayPredictedScore,
     predictPrize,
   } = props;
-  const baseHref =
-    typeof window !== "undefined" && window.location.origin
-      ? window.location.origin
-      : "";
 
   //#region RENER REGION
 
   const renderLinkUpdateScore = () => (
     <span>
       <a
-        href={baseHref + URLS.LEADERBOARD}
+        href={BASE_HREF + URLS.LEADERBOARD}
         target={"_blank"}
         rel="norefferer"
         className="underline text-[#2F91EB]"
