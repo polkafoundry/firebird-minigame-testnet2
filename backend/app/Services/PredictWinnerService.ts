@@ -124,10 +124,7 @@ export default class PredictWinnerService {
   public async updatePredictStatus(request): Promise<any> {
     const matchID = request.input('match_id')
     const match = await this.MatchModel.query().where('match_id', matchID).first()
-    const predicts = await this.PredictModel.query()
-      .where('match_id', matchID)
-      .where('match_predicted', false)
-      .exec()
+    const predicts = await this.PredictModel.query().where('match_id', matchID).exec()
     for (let i = 0; i < predicts.length; i++) {
       if (
         match.ft_home_score == predicts[i].home_score &&
