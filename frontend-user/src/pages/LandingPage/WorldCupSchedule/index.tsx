@@ -105,7 +105,7 @@ const WorldCupSchedule = () => {
           <div
             className={clsx(
               styles.scrollLayout,
-              "w-full h-fit",
+              "w-full h-fit sticky top-5",
               "md:w-[44%] md:sticky md:top-10",
             )}
           >
@@ -120,7 +120,7 @@ const WorldCupSchedule = () => {
               handleChangeStatus={handleChangeStatus}
             />
           </div>
-          <div className={clsx(styles.scrollLayout, "w-full md:w-[56%]")}>
+          <div className={"w-full md:w-[56%]"}>
             <MatchListRight
               account={account}
               isWrongChain={isWrongChain}

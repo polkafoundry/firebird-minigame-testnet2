@@ -1,5 +1,5 @@
 .scrollLayout {
-  max-height: max(600px, 90vh);
+  max-height: 90vh;
   overflow-y: auto;
   &::-webkit-scrollbar {
     width: 10px;
