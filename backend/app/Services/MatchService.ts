@@ -30,7 +30,7 @@ export default class MatchService {
     if ('round_name' in params) {
       builder = builder.where('round_name', params.round_name)
     }
-    if ('match_status' in params) {
+    if ('match_status' in params && params.match_status.length) {
       builder = builder.where('match_status', params.match_status)
     }
 
@@ -98,7 +98,7 @@ export default class MatchService {
           .andOnVal('user_address', params.wallet_address || null)
       })
 
-    if ('is_completed_bet' in params && 'wallet_address' in params) {
+    if ('is_completed_bet' in params && params.is_completed_bet.length && 'wallet_address' in params) {
       matchesQuery = params.is_completed_bet == 'true' ? matchesQuery.where('bet_counts.bet_count', 5) : matchesQuery.where('bet_counts.bet_count', '<>', 5)
     }
 

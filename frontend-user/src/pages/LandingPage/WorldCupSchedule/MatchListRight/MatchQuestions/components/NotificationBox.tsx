@@ -46,9 +46,7 @@ const NotificationBox = (props: NotificationBoxTypes) => {
         />
         <div className="ml-3">
           <div className="text-16/20 font-tthoves font-semibold">
-            Predicted{" ("}
-            {homePredictedScore}:{awayPredictedScore}
-            {")"}
+            {`Predicted (${homePredictedScore} : ${awayPredictedScore})`}
           </div>
           <p className="text-14/24 mt-1 font-inter">
             If your answer is correct, you will be added to the whitelist and

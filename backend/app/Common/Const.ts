@@ -90,12 +90,12 @@ module.exports = Object.freeze({
     UPCOMING: 'upcoming',
     LIVE: 'live',
     FINISHED: 'finished',
-    POSTPONED: 'postponed'
+    POSTPONED: 'postponed',
   },
   MF_KEY: {
     TENANT_ID: process.env.MF_TENANT_ID,
     SECRET_KEY: process.env.MF_SECRET_KEY,
-    EVENT_NAME: process.env.MF_EVENT_NAME
+    EVENT_NAME: process.env.MF_EVENT_NAME,
   },
   MF_ENDPOINT: process.env.MF_ENDPOINT,
   PREDICT_REWARD_BY_ROUND: {
