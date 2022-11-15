@@ -104,7 +104,7 @@ export default class MatchService {
       })
 
     if ('is_completed_bet' in params && params.is_completed_bet.length && 'wallet_address' in params) {
-      matchesQuery = params.is_completed_bet == 'true' ? matchesQuery.where('bet_counts.bet_count', 5) : matchesQuery.where('bet_counts.bet_count', '<>', 5)
+      matchesQuery = params.is_completed_bet == 'true' ? matchesQuery.where('bet_counts.bet_count', 5) : matchesQuery.whereNot('bet_counts.bet_count', 5)
     }
 
     let matches = await matchesQuery
