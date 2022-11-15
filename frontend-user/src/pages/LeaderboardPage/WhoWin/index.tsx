@@ -1,12 +1,13 @@
 import clsx from "clsx";
-import React, { useEffect, useState } from "react";
+import queryString from "query-string";
+import { useEffect, useState } from "react";
 import InputSearch from "../../../components/base/InputSearch";
+import { BASE_HREF, URLS } from "../../../constants";
 import useFetch from "../../../hooks/useFetch";
+import { useMyWeb3 } from "../../../hooks/useMyWeb3";
 import HeadingPrimary from "../../LandingPage/components/HeadingPrimary";
 import RewardBanner from "../RewardBanner";
 import styles from "./whoWin.module.scss";
-import queryString from "query-string";
-import { useMyWeb3 } from "../../../hooks/useMyWeb3";
 
 const headingTable = ["No", "Wallet address", "Prize", "Earned $BIRD"];
 const rankData = [
@@ -51,7 +52,11 @@ const WhoWin = () => {
         backroundTitle="Total Goals"
         title="Who win & Total Goals"
       />
-      <RewardBanner reward="$3,600" winner="Top 30" redirectUrl="#" />
+      <RewardBanner
+        reward="$3,600"
+        winner="Top 30"
+        redirectUrl={BASE_HREF + URLS.HOME + "# reward-distribution"}
+      />
       <div className="mt-10 font-inter flex justify-between items-center">
         <div className="flex items-baseline">
           {account ? (

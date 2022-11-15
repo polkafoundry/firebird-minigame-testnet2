@@ -60,6 +60,9 @@ export default class Betting extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
+
+  @column()
+  public sent_to_mf_at: number
 }
 
 module.exports = Betting

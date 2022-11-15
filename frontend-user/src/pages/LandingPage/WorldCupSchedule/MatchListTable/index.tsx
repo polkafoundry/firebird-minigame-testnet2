@@ -91,7 +91,7 @@ const MatchListTable = (props: MatchListTableProps) => {
   }, [dataTable]);
 
   return (
-    <div className="bg-[#F2F2F2]">
+    <div className="">
       <div
         className={clsx(
           "uppercase text-20/28 font-bold text-white px-[30px] py-1.5 w-fit",

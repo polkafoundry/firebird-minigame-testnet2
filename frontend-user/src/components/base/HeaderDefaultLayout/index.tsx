@@ -23,7 +23,7 @@ const routes: Array<RouteTypes> = [
     uri: URLS.FAUCET_TESTNET,
   },
   {
-    label: "Firebird Cup",
+    label: "Phoenix Cup",
     uri: URLS.HOME,
   },
   {

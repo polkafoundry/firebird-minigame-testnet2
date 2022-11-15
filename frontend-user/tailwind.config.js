@@ -26,6 +26,8 @@ module.exports = {
     },
     fontFamily: {
       tthoves: ["TTHoves"],
+      tthovesBold: ["TTHoves Bold"],
+      tthovesMedium: ["TTHoves Medium"],
       inter: ["Inter"],
       oswald: ["Oswald"],
     },

@@ -185,10 +185,10 @@ const HowToJoin = () => {
           <div className="mt-3 px-5 pb-10 h-full">
             <div className="bg-white h-full flex flex-col p-5">
               <div className="flex flex-col gap-2 text-14/24 font-inter mb-9">
-                All rewards will be airdropped to the winners after Firebird Cup
+                All rewards will be airdropped to the winners after Phoenix Cup
                 events ends.
                 <p className="m-0 font-semibold">
-                  Total rewards for Firebird Cup: $5,320
+                  Total rewards for Phoenix Cup: $5,320
                 </p>
               </div>
               <a

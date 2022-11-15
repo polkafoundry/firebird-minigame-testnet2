@@ -1,77 +1,138 @@
-import { useState } from "react";
+import clsx from "clsx";
+import moment from "moment";
+import { useEffect, useState } from "react";
+import { BASE_HREF, rounds, URLS } from "../../../constants";
+import useFetch from "../../../hooks/useFetch";
+import { useMyWeb3 } from "../../../hooks/useMyWeb3";
+import { getImgSrc, groupArrayById } from "../../../utils";
 import HeadingPrimary from "../../LandingPage/components/HeadingPrimary";
 import RewardBanner from "../RewardBanner";
 import MatchListTable from "./MatchListTable";
-import WinnerRewards from "./WinnerRewards";
+import styles from "./matchScore.module.scss";
+import WinnerMatch from "./WinnerMatch";
 
-const reward = "20";
-const winnerAddress = "0x493f...5e6c";
-const winnerRewardsData = [
-  { id: 1, no: 1, address: "0x493f...5e6c" },
-  { id: 2, no: 2, address: "0x493f...5e6c" },
-  { id: 3, no: 3, address: "0x493f...5e6c" },
-  { id: 4, no: 4, address: "0x493f...5e6c" },
-  { id: 5, no: 5, address: "0x493f...5e6c" },
-];
+export type FilterTypes = {
+  is_completed_bet: string;
+  match_status: string;
+  page: number;
+  size: number;
+  round_name: typeof rounds[keyof typeof rounds];
+  wallet_address: string;
+};
 
 const MatchScore = () => {
   const [selectedMatchId, setSelectedMatchId] = useState<number | undefined>();
-  const handleSelectMatch = (id: number) => {
+  const [reward, setReward] = useState<string>("");
+  const { account } = useMyWeb3();
+
+  const [dataTable, setDataTable] = useState<any[]>([]);
+  const [filter, setFilter] = useState<FilterTypes>({
+    is_completed_bet: "",
+    match_status: "",
+    page: 1,
+    size: 20,
+    wallet_address: "",
+    round_name: rounds[0].value,
+  });
+
+  const { data, loading } = useFetch<any>(
+    "/predict/predict-winner-count-by-match",
+  );
+
+  useEffect(() => {
+    const rawData = data?.data?.map((item: any) => {
+      return {
+        ...item,
+        dateString: moment(new Date(item?.start_time * 1000)).format(
+          "MMM DD - dddd",
+        ),
+        homeTeam: {
+          name: item?.home_name,
+          icon: getImgSrc(item?.home_icon),
+        },
+        awayTeam: {
+          name: item?.away_name,
+          icon: getImgSrc(item?.away_icon),
+        },
+      };
+    });
+    const groupData = groupArrayById(rawData, "dateString");
+
+    const newTableData = [];
+    for (const [key, value] of Object.entries(groupData)) {
+      newTableData.push({
+        date: key,
+        matches: value,
+      });
+    }
+    setDataTable(newTableData);
+  }, [data]);
+
+  useEffect(() => {
+    if (!account) return;
+
+    setFilter((prevFilter: FilterTypes) => ({
+      ...prevFilter,
+      wallet_address: account,
+    }));
+  }, [account]);
+
+  const handleSelectMatch = (id: number, reward: string) => {
     setSelectedMatchId(id);
+    setReward(reward);
+    console.log("first", reward);
   };
-  const dataTable = [
-    {
-      date: "Nov 20 - Nov 26",
-      matches: [
-        {
-          id: 1,
-          homeTeam: { icon: "", name: "Quatar" },
-          awayTeam: {
-            icon: "",
-            name: "Ecudor",
-          },
-          whitelist: 23,
-          reward: 20,
-          winnerAddress: "0x493f...7e6c",
-        },
-        {
-          id: 2,
-          homeTeam: { icon: "", name: "Quatar" },
-          awayTeam: {
-            icon: "",
-            name: "Ecudor",
-          },
-          whitelist: 23,
-          reward: 20,
-          winnerAddress: "0x493f...7e6c",
-        },
-      ],
-      groupRound: "Round 1",
-    },
-  ];
-  const loading = false;
+
+  const handleChangePredicted = (value: any) => {
+    setFilter((prevFilter: FilterTypes) => ({
+      ...prevFilter,
+      is_completed_bet: value,
+    }));
+  };
+
+  const handleChangeStatus = (value: any) => {
+    setFilter((prevFilter: FilterTypes) => ({
+      ...prevFilter,
+      match_status: value,
+    }));
+  };
+
   return (
     <div>
       <HeadingPrimary
         backroundTitle="Match Score"
         title="Match Score Prediction Winners"
       />
-      <RewardBanner reward="$1,720" winner="64 winners" redirectUrl="#" />
-      <div className="mt-20 flex">
-        <div className="w-[55%]">
+      <RewardBanner
+        reward="$6,820"
+        winner="64 winners"
+        redirectUrl={BASE_HREF + URLS.HOME + "#reward-distribution"}
+      />
+
+      <div className={clsx("flex flex-col mt-8 relative", "md:flex-row")}>
+        <div
+          className={clsx(
+            styles.scrollLayout,
+            "w-full h-fit",
+            "md:w-[50%] md:sticky md:top-10",
+          )}
+        >
           <MatchListTable
             selectedMatchId={selectedMatchId}
             handleSelectMatch={handleSelectMatch}
             dataTable={dataTable}
             loading={loading}
+            filter={filter}
+            setFilter={setFilter}
+            handleChangePredicted={handleChangePredicted}
+            handleChangeStatus={handleChangeStatus}
           />
         </div>
-        <div className="flex-1 ml-10">
-          <WinnerRewards
+        <div className={"w-full md:w-[50%]"}>
+          <WinnerMatch
+            matchId={selectedMatchId}
             reward={reward}
-            winnerAddress={winnerAddress}
-            dataTable={winnerRewardsData}
-            selectedMatchId={selectedMatchId}
+            account={account}
           />
         </div>
       </div>

@@ -119,4 +119,13 @@ module.exports = Object.freeze({
     '34': 'PLAYOFFS 3RD PLACE FINAL',
     '12': 'FINAL',
   },
+  ADMIN_ACCOUNT: process.env.ADMIN_ACCOUNT ? JSON.parse(process.env.ADMIN_ACCOUNT) : [],
+  PRIZE: {
+    1: 700,
+    2: 400,
+    3: 250,
+    10: 150,
+    20: 70,
+    30: 50
+  },
 })
