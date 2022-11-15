@@ -22,9 +22,8 @@ export type FilterTypes = {
 
 const MatchScore = () => {
   const [selectedMatchId, setSelectedMatchId] = useState<number | undefined>();
-  const [finalWinner, setFinalWinner] = useState<string>("");
   const [reward, setReward] = useState<string>("");
-  const { account, isWrongChain } = useMyWeb3();
+  const { account } = useMyWeb3();
 
   const [dataTable, setDataTable] = useState<any[]>([]);
   const [filter, setFilter] = useState<FilterTypes>({
@@ -78,13 +77,8 @@ const MatchScore = () => {
     }));
   }, [account]);
 
-  const handleSelectMatch = (
-    id: number,
-    finnalWinner: string,
-    reward: string,
-  ) => {
+  const handleSelectMatch = (id: number, reward: string) => {
     setSelectedMatchId(id);
-    setFinalWinner(finnalWinner);
     setReward(reward);
     console.log("first", reward);
   };
@@ -110,7 +104,7 @@ const MatchScore = () => {
         title="Match Score Prediction Winners"
       />
       <RewardBanner
-        reward="$1,720"
+        reward="$6,820"
         winner="64 winners"
         redirectUrl={BASE_HREF + URLS.HOME + "#reward-distribution"}
       />

@@ -18,7 +18,8 @@ const WinnerMatch = (props: MatchListRightProps) => {
   );
 
   const matchData = data?.data;
-  console.log("matchData :>> ", matchData);
+  const listWinner = matchData?.listWinner;
+  console.log("matchData :>> ", listWinner);
 
   const isWinner = account === matchData?.finalWinner;
 
@@ -77,7 +78,16 @@ const WinnerMatch = (props: MatchListRightProps) => {
         )}
       </div>
 
-      <div className="grid grid-cols-2 h-12 cursor-pointer"></div>
+      <div className="p-5">
+        <div className="flex">
+          <div>NO</div>
+          <div>Wallet address</div>
+        </div>
+        <div className="flex">
+          <div></div>
+          <div></div>
+        </div>
+      </div>
     </div>
   );
 };

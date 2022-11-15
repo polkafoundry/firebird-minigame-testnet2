@@ -144,7 +144,7 @@ const CalculatedReward = () => {
               <span className="text-16/20 font-semibold uppercase">
                 Total Rewards
               </span>
-              <span className="text-48/60 font-tthovesBold italic">$1,720</span>
+              <span className="text-48/60 font-tthovesBold italic">$6,820</span>
             </div>
           </div>
         </div>
@@ -192,7 +192,7 @@ const CalculatedReward = () => {
                       For match score prediction winners
                     </div>
                     <div className="text-24/32 font-tthovesBold italic">
-                      $1,720
+                      $6,820
                     </div>
                   </div>
                   <div className="flex items-center justify-between py-6 px-8">

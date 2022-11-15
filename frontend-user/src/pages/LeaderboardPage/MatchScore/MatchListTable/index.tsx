@@ -25,7 +25,7 @@ const statusOptions = [
 const REGEX_DATE = /(\w.*) -/g;
 
 type MatchListTableProps = {
-  handleSelectMatch: (id: number, finnalWinner: string, reward: string) => void;
+  handleSelectMatch: (id: number, reward: string) => void;
   loading: boolean;
   dataTable: Array<any>;
   selectedMatchId: number | undefined;
@@ -173,7 +173,6 @@ const MatchListTable = (props: MatchListTableProps) => {
                     onClick={() =>
                       handleSelectMatch(
                         match?.match_id,
-                        match?.final_winner,
                         rounds[groupStageIndex].prize,
                       )
                     }
