@@ -142,7 +142,7 @@ const CalculatedReward = () => {
             <img src="/images/landing-page/predicted-winner.png" alt="" />
             <div className="flex flex-col ml-8 font-tthoves">
               <span className="text-16/20 font-semibold uppercase">
-                Total Rewards
+                public testnet total rewards
               </span>
               <span className="text-48/60 font-tthovesBold italic">$6,820</span>
             </div>
@@ -172,7 +172,7 @@ const CalculatedReward = () => {
                   Phoenix Cup
                 </span>
                 <p className="mt-2 text-18/32">
-                  All rewards will be airdropped to the winners after Firebird
+                  All rewards will be airdropped to the winners after Phoenix
                   Cup events ends.
                 </p>
               </div>
@@ -192,7 +192,7 @@ const CalculatedReward = () => {
                       For match score prediction winners
                     </div>
                     <div className="text-24/32 font-tthovesBold italic">
-                      $6,820
+                      $1,720
                     </div>
                   </div>
                   <div className="flex items-center justify-between py-6 px-8">

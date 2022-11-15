@@ -18,7 +18,7 @@ const WinnerMatch = (props: MatchListRightProps) => {
   );
 
   const matchData = data?.data;
-  const listWinner = matchData?.listWinner;
+  const listWinner = matchData?.listWinner.slice(0, 6);
   console.log("matchData :>> ", listWinner);
 
   const isWinner = account === matchData?.finalWinner;
@@ -61,14 +61,16 @@ const WinnerMatch = (props: MatchListRightProps) => {
                 ? "Unfortunately, you did not win this match reward."
                 : "Congratulations! You have won " + reward + "."}
             </div>
-            <a
-              href=""
-              target="_blank"
-              rel="noreferrer"
-              className="bg-black px-8 py-2 mt-3 rounded-lg"
-            >
-              View transaction
-            </a>
+            {matchData?.finalWinner && (
+              <a
+                href={"https://firefly.birdscan.io/tx/" + matchData?.tx}
+                target="_blank"
+                rel="noreferrer"
+                className="bg-black px-8 py-2 mt-3 rounded-lg font-semibold font-tthoves"
+              >
+                View transaction
+              </a>
+            )}
           </>
         ) : (
           <>
@@ -79,14 +81,36 @@ const WinnerMatch = (props: MatchListRightProps) => {
       </div>
 
       <div className="p-5">
-        <div className="flex">
-          <div>NO</div>
-          <div>Wallet address</div>
-        </div>
-        <div className="flex">
-          <div></div>
-          <div></div>
-        </div>
+        {!matchId ? (
+          <div className="text-16/24 font-semibold">
+            Please Select Match First
+          </div>
+        ) : (
+          <>
+            <div className="flex bg-[#3A0013] text-white text-12/18 font-inter font-bold uppercase px-5 py-3">
+              <div className="opacity-80 w-[20%]">No</div>
+              <div className="opacity-80 flex-1">Wallet address</div>
+            </div>
+            {!listWinner || !listWinner.length ? (
+              <div>Not found</div>
+            ) : (
+              <>
+                {listWinner.map((item: any, index: number) => (
+                  <div
+                    key={item.id}
+                    className="flex items-center text-14/24 font-inter px-5 py-3 min-h-[65px] bg-white border-b-2 border-[#F2F2F2]"
+                  >
+                    <div className="w-[20%]">{index + 1}</div>
+                    <div className="flex-1">
+                      {item?.user_address &&
+                        displayWalletAddress(item?.user_address)}
+                    </div>
+                  </div>
+                ))}
+              </>
+            )}
+          </>
+        )}
       </div>
     </div>
   );

@@ -1,20 +1,15 @@
-// .tableRow > div:first-child {
-//   width: 69px;
-// }
-// .tableRow > div:nth-child(2) {
-//   width: 306px;
-// }
-// .tableRow > div:nth-child(3) {
-//   width: 60px;
-// }
-// .tableRow > div:nth-child(4) {
-//   width: 80px;
-// }
-// .tableRow > div:last-child {
-//   width: 70px;
-// }
-
 .tableRow > div {
   flex: 1;
   text-align: center;
+}
+.tableRow > div:first-child {
+  flex: 1;
+  text-align: left;
+}
+
+.backgroundImage {
+  background-image: url("/assets/images/bg-top-leaderboard.svg");
+  background-repeat: no-repeat;
+  background-position: top left;
+  background-size: contain;
 }

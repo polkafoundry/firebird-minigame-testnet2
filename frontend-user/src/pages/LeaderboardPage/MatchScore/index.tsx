@@ -109,7 +109,12 @@ const MatchScore = () => {
         redirectUrl={BASE_HREF + URLS.HOME + "#reward-distribution"}
       />
 
-      <div className={clsx("flex flex-col mt-8 relative", "md:flex-row")}>
+      <div
+        className={clsx(
+          "px-5 main:px-20 flex flex-col mt-8 relative",
+          "md:flex-row",
+        )}
+      >
         <div
           className={clsx(
             styles.scrollLayout,

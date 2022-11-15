@@ -50,7 +50,7 @@ const RewardBanner = (props: RewardBannerProps) => {
         rel="noreferrer"
         className="mt-3 btn-rounded btn-black w-[240px]"
       >
-        More Details
+        More Detail
       </a>
     </div>
   );

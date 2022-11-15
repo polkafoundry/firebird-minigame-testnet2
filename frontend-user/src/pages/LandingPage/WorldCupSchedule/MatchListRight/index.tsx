@@ -88,12 +88,12 @@ const MatchListRight = (props: MatchListRightProps) => {
                 </div>
                 {[MATCH_STATUS.LIVE, MATCH_STATUS.FINISHED].includes(
                   matchData?.match_status,
-                ) && (
+                ) && matchData?.is_half_time ? (
                   <span className="mt-2.5 opacity-70 text-16/24">
                     (1st half {matchData?.ht_home_score}-
                     {matchData?.ht_away_score})
                   </span>
-                )}
+                ) : null}
               </div>
               <div className="flex flex-col gap-2 flex-1">
                 <img

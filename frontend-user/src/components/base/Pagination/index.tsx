@@ -3,14 +3,6 @@ import styles from "./pagination.module.scss";
 import { DOTS, usePagination } from "./usePagination";
 
 const iconArrow = "/images/components/pagination/icon-previous.svg";
-const arrowStyles =
-  "bg-[#3A0013] w-10 h-10 rounded-md flex justify-center items-center";
-const itemStyles = {
-  unActiveStyle:
-    "cursor-pointer text-black opacity-60 hover:text-main hover:opacity-90",
-  activeStyles: "text-main cursor-default",
-};
-const dotStyles = "text-black opacity-60 cursor-default";
 
 type PaginationProps = {
   onPageChange: (data: any) => void;
@@ -19,6 +11,7 @@ type PaginationProps = {
   currentPage: number;
   pageSize: number;
   className: string;
+  isDarkMode?: boolean;
 };
 
 const Pagination = (props: PaginationProps) => {
@@ -29,6 +22,7 @@ const Pagination = (props: PaginationProps) => {
     currentPage,
     pageSize,
     className,
+    isDarkMode = false,
   } = props;
 
   const paginationRange = usePagination({
@@ -37,6 +31,19 @@ const Pagination = (props: PaginationProps) => {
     siblingCount,
     pageSize,
   });
+
+  const arrowStyles = `bg-${
+    isDarkMode ? "main" : "[#3A0013]"
+  } w-10 h-10 rounded-md flex justify-center items-center`;
+  const itemStyles = {
+    unActiveStyle: `cursor-pointer text-${
+      isDarkMode ? "white" : "black"
+    } opacity-60 hover:text-main hover:opacity-90`,
+    activeStyles: "text-main cursor-default",
+  };
+  const dotStyles = `text-${
+    isDarkMode ? "white" : "black"
+  } opacity-60 cursor-default`;
 
   const lastPage =
     (paginationRange && paginationRange[paginationRange.length - 1]) || 1;
