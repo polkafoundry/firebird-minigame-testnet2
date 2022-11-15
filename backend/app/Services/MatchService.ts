@@ -109,6 +109,7 @@ export default class MatchService {
 
     let matches = await matchesQuery
       .select(['matchs.*', 'bet_counts.bet_count as count'])
+      .orderBy('matchs.start_time', 'asc')
       .paginate(page, size)
     matches = JSON.parse(JSON.stringify(matches))
     return {
