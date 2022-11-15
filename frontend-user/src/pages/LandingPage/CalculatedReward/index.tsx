@@ -130,7 +130,7 @@ const CalculatedReward = () => {
           <div className="flex-1 flex flex-col ml-5 lg:ml-[130px] mr-10">
             <HeadingPrimary
               backroundTitle="Calculated"
-              title="How the rewards are calculated?"
+              title="Valuable Rewards From Companions"
               textAlign="text-left"
             />
             <p className="text-18/32">
@@ -144,14 +144,14 @@ const CalculatedReward = () => {
               <span className="text-16/20 font-semibold uppercase">
                 Total Rewards
               </span>
-              <span className="text-48/60 font-bold italic">$1,720</span>
+              <span className="text-48/60 font-tthovesBold italic">$1,720</span>
             </div>
           </div>
         </div>
 
         <div
           className={clsx(
-            "mt-9 p-5 sm:p-10 lg:p-[60px] flex flex-col text-white bg-[#3A0013]",
+            "mt-9 p-5 sm:p-10 lg:p-[60px] flex flex-col text-white bg-[#3A0013] rounded-[4px]",
           )}
         >
           {/* <div className="flex justify-center z-10">
@@ -182,8 +182,8 @@ const CalculatedReward = () => {
                   <span className="text-12/18 font-bold font-tthoves opacity-80">
                     TOTAL REWARDS
                   </span>
-                  <span className="text-36/48 font-bold font-tthoves italic">
-                    $5,230
+                  <span className="text-36/48 font-tthovesBold italic">
+                    $5,320
                   </span>
                 </div>
                 <div className="w-full">
@@ -191,7 +191,7 @@ const CalculatedReward = () => {
                     <div className="text-10/14 opacity-80">
                       For match score prediction winners
                     </div>
-                    <div className="text-24/32 font-bold font-tthoves italic">
+                    <div className="text-24/32 font-tthovesBold italic">
                       $1,720
                     </div>
                   </div>
@@ -199,7 +199,7 @@ const CalculatedReward = () => {
                     <div className="text-10/14 opacity-80">
                       For who win & total goal prediction leaderboard
                     </div>
-                    <div className="text-24/32 font-bold font-tthoves italic">
+                    <div className="text-24/32 font-tthovesBold italic">
                       $3,600
                     </div>
                   </div>
@@ -239,7 +239,7 @@ const CalculatedReward = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mt-5 font-inter">
-          <div className="flex bg-black text-white">
+          <div className="flex bg-black text-white rounded-[4px]">
             <div className="w-[70%] lg:w-[55%] pt-[64px] pl-[30px] pb-[30px] pr-[60px]">
               <div className="text-32/40 font-semibold font-tthoves">
                 Exclusive incentives for GameFi.org’s members.
@@ -265,7 +265,7 @@ const CalculatedReward = () => {
               />
             </div>
           </div>
-          <div className="flex bg-black text-white">
+          <div className="flex bg-black text-white rounded-[4px]">
             <div className="w-[70%] lg:w-[55%] pt-[64px] pl-[30px] pb-[30px] pr-[60px]">
               <div className="text-32/40 font-semibold font-tthoves">
                 Blockchain Football

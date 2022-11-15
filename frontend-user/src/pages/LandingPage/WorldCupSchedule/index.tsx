@@ -1,17 +1,16 @@
 import clsx from "clsx";
 import moment from "moment";
+import queryString from "query-string";
 import { useEffect, useState } from "react";
-import { API_BASE_LOGO_TEAM, rounds } from "../../../constants";
+import { rounds } from "../../../constants";
 import useFetch from "../../../hooks/useFetch";
 import { useMyWeb3 } from "../../../hooks/useMyWeb3";
-import { groupArrayById } from "../../../utils";
+import { getImgSrc, groupArrayById } from "../../../utils";
 import HeadingPrimary from "../components/HeadingPrimary";
 import MatchListRight from "./MatchListRight";
 import MatchListTable from "./MatchListTable";
 import Schedule from "./Schedule";
 import styles from "./schedule.module.scss";
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const queryString = require("query-string");
 
 export type FilterTypes = {
   is_completed_bet: string;
@@ -49,11 +48,11 @@ const WorldCupSchedule = () => {
         ),
         homeTeam: {
           name: item?.home_name,
-          icon: API_BASE_LOGO_TEAM + item?.home_icon + ".png",
+          icon: getImgSrc(item?.home_icon),
         },
         awayTeam: {
           name: item?.away_name,
-          icon: API_BASE_LOGO_TEAM + item?.away_icon + ".png",
+          icon: getImgSrc(item?.away_icon),
         },
       };
     });
@@ -105,7 +104,7 @@ const WorldCupSchedule = () => {
           <div
             className={clsx(
               styles.scrollLayout,
-              "w-full h-fit sticky top-5",
+              "w-full h-fit",
               "md:w-[44%] md:sticky md:top-10",
             )}
           >

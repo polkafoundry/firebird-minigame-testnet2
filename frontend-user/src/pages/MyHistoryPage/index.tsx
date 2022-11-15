@@ -292,7 +292,7 @@ const MyHistoryPage = () => {
                             href={BASE_HREF + URLS.HOME + "#prediction-rule"}
                             className="min-w-[255px] w-[30%] mt-10 btn-rounded btn-primary"
                           >
-                            Prediction Now
+                            Predict Now
                           </a>
                         </div>
                       ) : (
