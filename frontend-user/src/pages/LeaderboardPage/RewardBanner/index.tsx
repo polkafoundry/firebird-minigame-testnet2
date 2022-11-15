@@ -37,7 +37,7 @@ const RewardBanner = (props: RewardBannerProps) => {
           <span
             className={clsx(
               "font-tthovesBold italic",
-              !isLargeText ? "text-32/60" : "text-48/60</div>",
+              !isLargeText ? "text-32/60" : "text-48/60",
             )}
           >
             {winner}
