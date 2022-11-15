@@ -49,7 +49,48 @@ export default class PredictWinnerService {
     }
   }
 
-  public async getListPredictWinner(request): Promise<any> {
+  public async predictCountByMatch(): Promise<any> {
+    try {
+      let predictInMatch = await this.Database.from((subquery) => {
+        subquery
+          .from('matchs')
+          .joinRaw(
+            `INNER JOIN predicts ON matchs.match_id = predicts.match_id AND predicts.result = true`
+          )
+          .select('matchs.home_name')
+          .select('matchs.away_name')
+          .select('matchs.match_id')
+          .select('matchs.home_icon')
+          .select('matchs.away_icon')
+          .select('matchs.start_time')
+      })
+        .joinRaw(`AS result`)
+        .joinRaw(`LEFT JOIN predict_winners ON result.match_id = predict_winners.match_id`)
+        .groupBy('result.home_name')
+        .groupBy('result.away_name')
+        .groupBy('result.match_id')
+        .groupBy('result.home_icon')
+        .groupBy('result.away_icon')
+        .groupBy('result.start_time')
+        .groupBy('predict_winners.final_winner')
+        .groupBy('predict_winners.rewards')
+        .select('result.home_name')
+        .select('result.away_name')
+        .select('result.match_id')
+        .select('result.home_icon')
+        .select('result.away_icon')
+        .select('result.start_time')
+        .select('predict_winners.final_winner')
+        .select('predict_winners.rewards')
+        .count('* as total')
+
+      return HelperUtils.responseSuccess(predictInMatch)
+    } catch (error) {
+      return HelperUtils.responseErrorInternal(error)
+    }
+  }
+
+  public async getListPredictWinner({ request }): Promise<any> {
     const matchID = request.input('match_id')
 
     if (!matchID) return HelperUtils.responseErrorInternal('Match ID required')
@@ -62,13 +103,19 @@ export default class PredictWinnerService {
 
       const predictList = await this.PredictModel.query()
         .where('match_id', matchID)
-        .andWhere('home_score', matchInfo.ft_home_score)
-        .andWhere('away_score', matchInfo.ft_away_score)
+        .andWhere('result', true)
+        .andWhere('match_predicted', true)
         .exec()
+      const predictWinner = await this.PredictWinner.query().where('match_id', matchID).first()
+
       if (!predictList || predictList.length === 0) {
         return HelperUtils.responseErrorInternal('Not predict winner in match')
       }
-      return HelperUtils.responseSuccess(predictList)
+      return HelperUtils.responseSuccess({
+        listWinner: predictList,
+        finalWinner: predictWinner?.final_winner,
+        rewards: predictWinner?.rewards,
+      })
     } catch (error) {
       return HelperUtils.responseErrorInternal(error)
     }
@@ -77,10 +124,7 @@ export default class PredictWinnerService {
   public async updatePredictStatus(request): Promise<any> {
     const matchID = request.input('match_id')
     const match = await this.MatchModel.query().where('match_id', matchID).first()
-    const predicts = await this.PredictModel.query()
-      .where('match_id', matchID)
-      .where('match_predicted', false)
-      .exec()
+    const predicts = await this.PredictModel.query().where('match_id', matchID).exec()
     for (let i = 0; i < predicts.length; i++) {
       if (
         match.ft_home_score == predicts[i].home_score &&

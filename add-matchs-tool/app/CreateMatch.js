@@ -22,8 +22,8 @@ const boxMintInBatch = 140;
 const createMatch = async () => {
   try {
     const mData = await matchData();
-    // console.log("xxx", mData[1]);
-
+    // console.log("xxx", mData);
+    // return;
     web3 = getWeb3();
     // Get wallet address
     walletAddress = web3.eth.accounts.privateKeyToAccount(PRIVATE_KEY).address;

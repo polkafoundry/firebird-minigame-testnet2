@@ -42,7 +42,7 @@ const matchData = async () => {
     };
     matchInfo.push(mData);
   }
-  console.log(matchInfo);
+  // console.log(matchInfo);
   return matchInfo;
 };
 

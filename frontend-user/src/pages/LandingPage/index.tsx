@@ -1,18 +1,34 @@
+// import { useEffect } from "react";
+// import { useLocation } from "react-router-dom";
 import LandingLayout from "../../components/layout/LandingLayout";
+// import { scrollToId } from "../../utils/domElement";
 import Banner from "./Banner";
 import CalculatedReward from "./CalculatedReward";
 import PredictionRule from "./PredictionRule";
 import WorldCupSchedule from "./WorldCupSchedule";
 
 const LangdingPage = () => {
+  // const location = useLocation();
+  // useEffect(() => {
+  //   if (location.hash) {
+  //     scrollToId(location?.hash);
+  //   }
+  // }, [location.hash]);
+
   return (
     <LandingLayout>
-      {/* <HomeBanner /> */}
+      <div className="w-full pt-20">
+        <img
+          src="./images/landing-page/banner.png"
+          alt=""
+          className="w-full select-none"
+        />
+      </div>
 
-      <div className="flex flex-col w-full">
+      <div className="mt-[-150px] xs:mt-[-180px] md:mt-[-200px] lg:mt-[-220px] flex flex-col w-full">
         <WorldCupSchedule />
-        <PredictionRule />
         <CalculatedReward />
+        <PredictionRule />
         <Banner />
       </div>
     </LandingLayout>

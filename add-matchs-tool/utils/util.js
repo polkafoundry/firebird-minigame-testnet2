@@ -50,21 +50,17 @@ const randomScore = (num) => {
   };
 };
 
-const callTransaction = async (web3, callData, private_key, address, contract) => {
+const callTransaction = async (web3, callData, private_key, from, to, nonce, value) => {
   try {
     const privateKey = Buffer.from(private_key, "hex");
     const obj = {
-      from: address,
-      to: contract,
-      value: 0,
+      from: from,
+      to: to,
+      value: value,
       data: callData,
     };
 
-    const [gasPrice, estimateGas, nonce] = await Promise.all([
-      web3.eth.getGasPrice(),
-      web3.eth.estimateGas(obj),
-      web3.eth.getTransactionCount(address, "pending"),
-    ]);
+    const [gasPrice, estimateGas] = await Promise.all([web3.eth.getGasPrice(), web3.eth.estimateGas(obj)]);
     const txObject = {
       ...obj,
       nonce: nonce,
@@ -78,9 +74,10 @@ const callTransaction = async (web3, callData, private_key, address, contract) =
     tx.sign(privateKey);
     const raw_tx = "0x" + tx.serialize().toString("hex");
     // console.log({ raw_tx })
-
+    // web3.eth.sendSignedTransaction(raw_tx).on("receipt", console.log);
     await web3.eth.sendSignedTransaction(raw_tx, (err, txHash) => {
       console.log("txHash:", txHash);
+      return;
     });
   } catch (error) {
     console.log("errorr: ", error.message);

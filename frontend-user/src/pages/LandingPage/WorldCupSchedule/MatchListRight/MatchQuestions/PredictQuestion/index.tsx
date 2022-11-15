@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
+import { toast } from "react-toastify";
 import { QuestionProps } from "..";
 import { MATCH_STATUS, QUESTION_STATUS } from "../../../../../../constants";
+import useBettingContract from "../../../../../../hooks/useBettingContract";
 import useBirdToken from "../../../../../../hooks/useBirdToken";
 import usePost from "../../../../../../hooks/usePost";
 import usePredicting from "../../../../../../hooks/usePredicting";
@@ -10,7 +12,7 @@ import Question from "../components/Question";
 
 const PredictQuestion = (props: QuestionProps) => {
   const {
-    dataQuestion = {},
+    dataQuestion: questionProp = {},
     title,
     needApprove,
     account,
@@ -20,16 +22,24 @@ const PredictQuestion = (props: QuestionProps) => {
 
   const { approveBirdToken, loadingApprove } = useBirdToken();
   const { loadingPredicting, predicting } = usePredicting();
+  const { getPredictingUpdate } = useBettingContract();
 
   const [predictInfo, setPredictInfo] = useState<any>();
   const [inputTeam1, setInputTeam1] = useState<string>("");
   const [inputTeam2, setInputTeam2] = useState<string>("");
+  const [dataQuestion, setDataQuestion] = useState<any>();
+
+  useEffect(() => {
+    if (!questionProp) return;
+    setDataQuestion(questionProp);
+  }, [questionProp]);
 
   const isSubmitted =
     dataQuestion?.questionStatus !== QUESTION_STATUS.NOT_PREDICTED;
-  const matchEnded = dataQuestion?.match_status === MATCH_STATUS.FINISHED;
-  // const isSubmitted = true;
-  // const matchEnded = false;
+  const matchEnded = useMemo(
+    () => dataQuestion?.match_status === MATCH_STATUS.FINISHED,
+    [dataQuestion?.match_status],
+  );
 
   const shouldLoadPredictInfo = useMemo(() => {
     return !!account && matchEnded && dataQuestion?.match_id;
@@ -38,12 +48,11 @@ const PredictQuestion = (props: QuestionProps) => {
   // TODO: missing state QUESTION_STATUS.PREDICTED
   const questionStatus = useMemo(() => {
     if (!matchEnded) return dataQuestion?.questionStatus;
-    if (predictInfo?.is_final_winner) return QUESTION_STATUS.WINNER;
+
+    if (predictInfo?.is_final_winner === account) return QUESTION_STATUS.WINNER;
     if (predictInfo?.predict_winner) return QUESTION_STATUS.CORRECT_ANSWER;
     else return QUESTION_STATUS.WRONG_ANSWER;
-  }, [dataQuestion?.questionStatus, predictInfo]);
-
-  // const questionStatus = QUESTION_STATUS.WINNER;
+  }, [dataQuestion?.questionStatus, predictInfo, account]);
 
   const { response } = usePost<any>(
     "/predict/get-match-predict-info",
@@ -88,12 +97,28 @@ const PredictQuestion = (props: QuestionProps) => {
 
     console.log("submit q1", dataSubmit);
     const { _matchID, _homeScore, _awayScore } = dataSubmit;
+    if (_homeScore === "" || _awayScore === "") {
+      toast.warning("Please select one answer");
+      return;
+    }
 
     if (needApprove) {
       await approveBirdToken();
     }
 
-    await predicting(_matchID, _homeScore, _awayScore);
+    const predictResult = await predicting(_matchID, _homeScore, _awayScore);
+    if (!predictResult) return;
+
+    // update result
+    const res = await getPredictingUpdate(_matchID);
+    if (!res) return;
+    const newDataQuestion = {
+      ...dataQuestion,
+      questionStatus: QUESTION_STATUS.PREDICTED,
+      home_score: _homeScore,
+      away_score: _awayScore,
+    };
+    setDataQuestion(newDataQuestion);
   };
 
   const renderMatchNameDetail = (home_name: string, home_icon: string) => {
@@ -127,6 +152,7 @@ const PredictQuestion = (props: QuestionProps) => {
         ) : undefined
       }
       error={error}
+      matchStatus={dataQuestion?.match_status}
     >
       <div>
         <div className="flex items-center justify-between max-w-[660px] w-full mx-auto">
@@ -140,7 +166,7 @@ const PredictQuestion = (props: QuestionProps) => {
             handleChangeInputTeam1={handleChangeInputTeam1}
             handleChangeInputTeam2={handleChangeInputTeam2}
             questionStatus={questionStatus}
-            matchEnded={matchEnded}
+            matchStatus={dataQuestion?.match_status}
           />
           {renderMatchNameDetail(
             dataQuestion?.away_name,

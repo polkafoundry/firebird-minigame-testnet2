@@ -140,7 +140,7 @@ export default class CalcBettingJob implements JobContract {
             ou_statistics: match.ou_ht_ratio,
             result: 'draw',
             result_num: 0,
-            total_claim: 0,
+            total_claim: ouHTBets[i]?.bet_amount,
             is_calculated: true,
           })
       }
@@ -161,17 +161,17 @@ export default class CalcBettingJob implements JobContract {
             result_num:
               ouFTBets[i]?.bet_place === 'under'
                 ? new BigNumber(amount)
-                    .multipliedBy(new BigNumber(match.ou_ht_under))
+                    .multipliedBy(new BigNumber(match.ou_ft_under))
                     .minus(new BigNumber(amount))
                     .toFixed()
                 : -amount,
             total_claim:
               ouFTBets[i]?.bet_place === 'under'
-                ? new BigNumber(amount).multipliedBy(new BigNumber(match.ou_ht_under)).toFixed()
+                ? new BigNumber(amount).multipliedBy(new BigNumber(match.ou_ft_under)).toFixed()
                 : 0,
             is_calculated: true,
           })
-      } else if (match.ou_ht_ratio < match.ht_home_score + match.ht_away_score) {
+      } else if (match.ou_ft_ratio < match.ft_home_score + match.ft_away_score) {
         // ratio < total score
         await BettingModel.query()
           .where('id', ouFTBets[i]?.id)
@@ -202,7 +202,7 @@ export default class CalcBettingJob implements JobContract {
             ou_statistics: match.ou_ft_ratio,
             result: 'draw',
             result_num: 0,
-            total_claim: 0,
+            total_claim: ouFTBets[i]?.bet_amount,
             is_calculated: true,
           })
       }

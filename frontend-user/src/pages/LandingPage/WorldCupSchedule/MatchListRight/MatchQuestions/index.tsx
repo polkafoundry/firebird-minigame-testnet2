@@ -1,14 +1,16 @@
 import { BigNumber } from "ethers";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   BET_TYPE,
   MATCH_RESULT,
   MATCH_STATUS,
   QUESTION_STATUS,
 } from "../../../../../constants";
+import { WalletContext } from "../../../../../context/WalletContext";
 import useBirdToken from "../../../../../hooks/useBirdToken";
 import usePredictConditions from "../../../../../hooks/usePredictConditions";
 import { getImgSrc } from "../../../../../utils";
+import { requestSupportNetwork } from "../../../../../utils/setupNetwork";
 import { getOptionIndexByBetPlace } from "./components/utils";
 import OddsQuestion from "./OddsQuestion";
 import OverUnderQuestion from "./OverUnderQuestion";
@@ -20,9 +22,7 @@ export type QuestionProps = {
   title: string;
   needApprove: boolean;
   betType?: typeof BET_TYPE[keyof typeof BET_TYPE];
-  error?: {
-    birdToken?: boolean;
-  };
+  error?: any;
   predictPrize?: string;
 };
 
@@ -41,6 +41,7 @@ const MatchQuestions = (props: MatchQuestionProps) => {
 
   const { getBirdAllowance } = useBirdToken();
   const predictConditions = usePredictConditions();
+  const { setShowModal } = useContext(WalletContext);
 
   useEffect(() => {
     if (!account) return;
@@ -93,7 +94,9 @@ const MatchQuestions = (props: MatchQuestionProps) => {
         questionStatus:
           predictsData.length === 0 ||
           dataQuestion?.start_time * 1000 > new Date().getTime()
-            ? QUESTION_STATUS.NOT_PREDICTED
+            ? predictsData[0]?.home_score && predictsData[0]?.away_score
+              ? QUESTION_STATUS.PREDICTED
+              : QUESTION_STATUS.NOT_PREDICTED
             : getQuestionStatus(predictsData[0]),
       };
 
@@ -165,7 +168,7 @@ const MatchQuestions = (props: MatchQuestionProps) => {
               "≤ " + lowerScore(dataQuestion?.ou_ht_ratio) + " goals scored",
           },
           {
-            label: `Total ${dataQuestion?.ou_ht_ratio || 0} goals`,
+            label: `${dataQuestion?.ou_ht_ratio || 0} goals`,
             isDisableClick: true,
           },
           {
@@ -194,7 +197,7 @@ const MatchQuestions = (props: MatchQuestionProps) => {
               "≤ " + lowerScore(dataQuestion?.ou_ft_ratio) + " goals scored",
           },
           {
-            label: `Total ${dataQuestion?.ou_ft_ratio || 0} goals`,
+            label: `${dataQuestion?.ou_ft_ratio || 0} goals`,
             isDisableClick: true,
           },
           {
@@ -237,16 +240,37 @@ const MatchQuestions = (props: MatchQuestionProps) => {
     }
   };
 
-  const renderEmptyQuestion = () => {
+  //render Empty Question
+  if (!account || !dataQuestion || dataQuestion.length === 0 || isWrongChain)
     return (
-      <div className="flex text-center text-xl font-semibold h-40 items-center justify-center">
-        {!account ? "Please Connect Wallet First" : "Please Select Match First"}
+      <div className="flex text-center text-xl font-semibold h-40 items-center justify-center bg-white m-8">
+        {!account ? (
+          <button
+            className="py-2 px-9 rounded-lg bg-main text-white justify-center font-semibold font-tthoves text-14/20"
+            onClick={() => setShowModal && setShowModal(true)}
+          >
+            Connect Wallet
+          </button>
+        ) : (
+          <>
+            {isWrongChain ? (
+              <button
+                className="py-2 px-9 rounded-lg bg-main text-white justify-center font-semibold font-tthoves text-14/20"
+                onClick={requestSupportNetwork}
+              >
+                Switch chain
+              </button>
+            ) : (
+              <>
+                {!dataQuestion || dataQuestion.length === 0
+                  ? "Please Select Match First"
+                  : ""}
+              </>
+            )}
+          </>
+        )}
       </div>
     );
-  };
-
-  if (!account || !dataQuestion || dataQuestion.length === 0)
-    return renderEmptyQuestion();
 
   return (
     <div className="w-full p-5">
@@ -259,7 +283,7 @@ const MatchQuestions = (props: MatchQuestionProps) => {
         dataQuestion={questions[0]}
         needApprove={needApprove}
         title="1. What will the match score be?"
-        error={{ birdToken: predictConditions.birdToken }}
+        error={predictConditions}
         predictPrize={predictPrize}
       />
       <OddsQuestion
@@ -267,25 +291,28 @@ const MatchQuestions = (props: MatchQuestionProps) => {
         needApprove={needApprove}
         betType={BET_TYPE.ODD_EVEN_HALF_TIME}
         title="2. Who will win the 1st half?"
-        error={{ birdToken: predictConditions.birdToken }}
+        error={predictConditions}
       />
       <OddsQuestion
         dataQuestion={questions[2]}
         needApprove={needApprove}
         betType={BET_TYPE.ODD_EVEN_FULL_TIME}
         title="3. Who will win the full match?"
+        error={predictConditions}
       />
       <OverUnderQuestion
         dataQuestion={questions[3]}
         needApprove={needApprove}
         betType={BET_TYPE.OVER_UNDER_HALF_TIME}
         title="4. Will the 1st half total goals be higher or lower than the total goals below?"
+        error={predictConditions}
       />
       <OverUnderQuestion
         dataQuestion={questions[4]}
         needApprove={needApprove}
         betType={BET_TYPE.OVER_UNDER_FULL_TIME}
         title="5. Will the full match total goals be higher or lower than the total goals below?"
+        error={predictConditions}
       />
     </div>
   );

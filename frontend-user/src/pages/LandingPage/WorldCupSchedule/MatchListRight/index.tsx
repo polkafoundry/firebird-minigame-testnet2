@@ -1,8 +1,9 @@
 import clsx from "clsx";
 import moment from "moment";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MATCH_STATUS } from "../../../../constants";
 import useFetch from "../../../../hooks/useFetch";
+import usePredictConditions from "../../../../hooks/usePredictConditions";
 import { getImgSrc } from "../../../../utils";
 import styles from "./matchListRight.module.scss";
 import MatchQuestions from "./MatchQuestions";
@@ -21,10 +22,24 @@ const nav = [
 
 const MatchListRight = (props: MatchListRightProps) => {
   const { matchId, account, isWrongChain } = props;
+
   const [selectedNav, setSelectedNav] = useState<number>(1);
+  const predictConditions = usePredictConditions();
+
+  useEffect(() => {
+    setSelectedNav(
+      account &&
+        !isWrongChain &&
+        matchId &&
+        predictConditions.gasFee &&
+        predictConditions.birdToken
+        ? 1
+        : 2,
+    );
+  }, [account, matchId]);
 
   const fetchMatchDetailUrl = `/match/detail/${matchId}?wallet_address=${account}`;
-  const { data } = useFetch<any>(fetchMatchDetailUrl, !!matchId);
+  const { data } = useFetch<any>(fetchMatchDetailUrl, !!matchId, true);
 
   const matchData = data?.data;
   const startTime = new Date(matchData?.start_time * 1000);
@@ -32,6 +47,11 @@ const MatchListRight = (props: MatchListRightProps) => {
 
   const isEnded = moment(new Date()).diff(startTime, "minutes") >= 90;
   const isLiving = startTime.getTime() <= new Date().getTime() && !isEnded;
+
+  const getMatchScore = (score: any) =>
+    [MATCH_STATUS.LIVE, MATCH_STATUS.FINISHED].includes(matchData?.match_status)
+      ? score || 0
+      : "-";
 
   return (
     <div className="flex flex-col rounded-lg md:ml-6 bg-[#F2F2F2]">
@@ -56,18 +76,24 @@ const MatchListRight = (props: MatchListRightProps) => {
                   {matchData.home_name.toLowerCase()}
                 </span>
               </div>
-              <div className="rounded-full bg-white text-black flex justify-center items-center w-[140px] h-[60px] mx-5">
-                <span className="text-24/32 font-semibold">
-                  {matchData?.match_status === MATCH_STATUS.UPCOMING
-                    ? "-"
-                    : matchData?.ft_home_score || 0}
-                </span>
-                <span className="text-24/32 font-semibold mx-2">:</span>
-                <span className="text-24/32 font-semibold">
-                  {matchData?.match_status === MATCH_STATUS.UPCOMING
-                    ? "-"
-                    : matchData?.ft_away_score || 0}
-                </span>
+              <div className="">
+                <div className="rounded-full bg-white text-black flex justify-center items-center w-[140px] h-[60px] mx-5">
+                  <span className="text-24/32 font-semibold">
+                    {getMatchScore(matchData?.ft_home_score)}
+                  </span>
+                  <span className="text-24/32 font-semibold mx-2">:</span>
+                  <span className="text-24/32 font-semibold">
+                    {getMatchScore(matchData?.ft_away_score)}
+                  </span>
+                </div>
+                {[MATCH_STATUS.LIVE, MATCH_STATUS.FINISHED].includes(
+                  matchData?.match_status,
+                ) && (
+                  <span className="mt-2.5 opacity-70 text-16/24">
+                    (1st half {matchData?.ht_home_score}-
+                    {matchData?.ht_away_score})
+                  </span>
+                )}
               </div>
               <div className="flex flex-col gap-2 flex-1">
                 <img

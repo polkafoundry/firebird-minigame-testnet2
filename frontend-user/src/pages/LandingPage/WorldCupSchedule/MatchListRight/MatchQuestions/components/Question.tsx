@@ -1,5 +1,5 @@
 import { Disclosure } from "@headlessui/react";
-import { URLS } from "../../../../../../constants";
+import { MATCH_STATUS, URLS } from "../../../../../../constants";
 
 type QuestionProps = {
   title: string;
@@ -10,6 +10,7 @@ type QuestionProps = {
   matchEnded?: boolean;
   loading?: boolean;
   error?: any;
+  matchStatus?: string;
 };
 const Question = (props: QuestionProps) => {
   const {
@@ -21,19 +22,12 @@ const Question = (props: QuestionProps) => {
     loading,
     predictBoxComponent,
     error,
+    matchStatus = "",
   } = props;
 
-  // console.log("(predictBoxComponent :>> ", predictBoxComponent);
-  // console.log("(matchEnded) ||  :>> ", matchEnded);
-  // console.log("(isSubmitted &:>> ", isSubmitted);
-  // console.log("(!2 con &:>> ", !isSubmitted && !matchEnded);
-  // console.log(
-  //   "(!final &:>> ",
-  //   !!((!isSubmitted && !matchEnded) || predictBoxComponent),
-  // );
-  const enableSubmit = Boolean(!isSubmitted && !matchEnded);
-  // console.log("(!enalbesubmit &:>> ", enableSubmit);
-
+  const enableSubmit = predictBoxComponent
+    ? ![MATCH_STATUS.FINISHED, MATCH_STATUS.LIVE].includes(matchStatus)
+    : !matchEnded && !isSubmitted;
   return (
     <Disclosure defaultOpen>
       {({ open }) => (
@@ -41,7 +35,7 @@ const Question = (props: QuestionProps) => {
           <Disclosure.Button className="block w-full select-none cursor-pointer p-5">
             <div className="text-16/20 font-tthoves font-semibold flex justify-between items-center text-left">
               <span>{title}</span>
-              <div className="w-[14px]">
+              <div className="ml-2 w-[14px]">
                 <img
                   src="./images/icon-arrow-down.svg"
                   alt=""
@@ -52,24 +46,42 @@ const Question = (props: QuestionProps) => {
           </Disclosure.Button>
           <Disclosure.Panel className="px-5 pb-5">
             {children}
-            {error?.birdToken === false && (
-              <p className="mt-3 text-12/16 text-[#FF0021] text-center font-inter">
-                Not enough PKF to pay for the gas fee. Click{" "}
-                <a
-                  href={URLS.FAUCET_TESTNET}
-                  target={"_blank"}
-                  rel="norefferer"
-                  className="text-[#0085FF] underline cursor-pointer"
-                >
-                  here
-                </a>{" "}
-                to faucet.
-              </p>
+            {error && (
+              <div className="mt-3">
+                {error?.birdToken === false && (
+                  <p className="text-12/16 text-[#FF0021] text-center font-inter">
+                    Not enough $BIRD to anwser the questions. Click{" "}
+                    <a
+                      href={URLS.FAUCET_TESTNET}
+                      target={"_blank"}
+                      rel="norefferer"
+                      className="text-[#0085FF] underline cursor-pointer"
+                    >
+                      here
+                    </a>{" "}
+                    to faucet.
+                  </p>
+                )}
+                {error?.gasFee === false && (
+                  <p className="text-12/16 text-[#FF0021] text-center font-inter">
+                    Not enough PKF to pay for the gas fee. Click{" "}
+                    <a
+                      href={URLS.FAUCET_TESTNET}
+                      target={"_blank"}
+                      rel="norefferer"
+                      className="text-[#0085FF] underline cursor-pointer"
+                    >
+                      here
+                    </a>{" "}
+                    to faucet.
+                  </p>
+                )}
+              </div>
             )}
             {enableSubmit && (
               <div className="flex justify-center">
                 <button
-                  className="mt-3 p-2 w-[178px] rounded-lg bg-[#EB522F] text-white text-14/20 font-tthoves font-semibold"
+                  className="mt-3 p-2 w-[178px] rounded-lg bg-main text-white text-14/20 font-tthoves font-semibold"
                   onClick={handleSubmit}
                   disabled={loading}
                 >

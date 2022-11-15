@@ -1,9 +1,18 @@
 .scheduleBg {
   background-image: url("../../../../assets/images/schedule-bg.png");
   background-repeat: no-repeat;
-  background-position: center;
+  background-position: top right;
   background-size: cover;
-  height: 710px;
+  height: 550px;
+  @media (min-width: theme("screens.sm")) {
+    height: 620px;
+  }
+  @media (min-width: theme("screens.md")) {
+    height: 710px;
+  }
+  @media (min-width: theme("screens.main")) {
+    height: 800px;
+  }
 }
 
 .schedule > div {

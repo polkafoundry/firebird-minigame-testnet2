@@ -16,6 +16,7 @@ const UPDATE_MATCH_STATISTICS = 'UpdateMatchStatistics'
 const UPDATE_MATCH_INFO = 'UpdateMatchInfo'
 const USER_BETTING = 'UserBetting'
 const USER_PREDICT = 'UserPredicting'
+const USER_CLAIM = 'UserClaim'
 
 const STEP = parseInt(process.env.CRAWL_STEP || '5000', 10)
 
@@ -213,26 +214,28 @@ export default class FetchMatchInfoJob implements JobContract {
             bettingData.bet_place = event.returnValues.betPlace
             bettingData.bet_amount = event.returnValues.amount
             await bettingData.save()
-          }
-          let bets = await BetCountModel.query()
-            .where('match_id', event.returnValues.matchID)
-            .andWhere('user_address', event.returnValues.user)
-            .first()
 
-          if (bets) {
-            await BetCountModel.query()
+            let bets = await BetCountModel.query()
               .where('match_id', event.returnValues.matchID)
               .andWhere('user_address', event.returnValues.user)
-              .update({
-                bet_count: bets.bet_count + 1,
-              })
-          } else {
-            let betCountData = new BetCountModel()
-            betCountData.match_id = event.returnValues.matchID
-            betCountData.user_address = event.returnValues.user
-            betCountData.bet_count = 1
-            await betCountData.save()
+              .first()
+
+            if (bets) {
+              await BetCountModel.query()
+                .where('match_id', event.returnValues.matchID)
+                .andWhere('user_address', event.returnValues.user)
+                .update({
+                  bet_count: bets.bet_count + 1,
+                })
+            } else {
+              let betCountData = new BetCountModel()
+              betCountData.match_id = event.returnValues.matchID
+              betCountData.user_address = event.returnValues.user
+              betCountData.bet_count = 1
+              await betCountData.save()
+            }
           }
+
           break
         case USER_PREDICT:
           const userPredict = await PredictModel.query()
@@ -288,6 +291,22 @@ export default class FetchMatchInfoJob implements JobContract {
               betCountData.bet_count = 1
               await betCountData.save()
             }
+          }
+          break
+        case USER_CLAIM:
+          const bet = await BettingModel.query()
+            .where('match_id', event.returnValues.matchID)
+            .andWhere('user_address', event.returnValues.user)
+            .andWhere('bet_type', event.returnValues.betType)
+            .first()
+          if (bet) {
+            await BettingModel.query()
+              .where('match_id', event.returnValues.matchID)
+              .andWhere('user_address', event.returnValues.user)
+              .andWhere('bet_type', event.returnValues.betType)
+              .update({
+                has_claim: true,
+              })
           }
           break
         default:

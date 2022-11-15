@@ -42,11 +42,13 @@ const usePredicting = () => {
           setLoadingPredicting(false);
 
           toast.success("Submit answer successful");
+          return true;
         }
       } catch (error: any) {
         console.log("ERR bettingOdds: ", error?.message);
         toast.error("Fail to submit answer");
         setLoadingPredicting(false);
+        return;
       }
     },
     [library, account],

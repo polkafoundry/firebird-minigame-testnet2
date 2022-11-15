@@ -51,17 +51,17 @@
   padding: 8px 30px;
 }
 .totalRewardRow > div:first-child {
-  min-width: 190px;
-  flex: 3;
+  min-width: 100px;
+  flex: 3.5;
 }
 .totalRewardRow > div:nth-child(2) {
-  min-width: 100px;
+  min-width: 80px;
   flex: 2;
   text-align: center;
 }
 .totalRewardRow > div:last-child {
-  min-width: 260px;
-  flex: 4;
+  min-width: 100px;
+  flex: 5;
   text-align: right;
 }
 

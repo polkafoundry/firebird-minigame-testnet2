@@ -12,10 +12,18 @@ export const fetcher = (url: string, ...args: any) =>
 const useFetch = <T,>(
   uriProps?: string | undefined,
   shouldFetch = true,
+  disableAutoRefetch = false,
 ): useFetchReturnType<T> => {
   const { data, error } = useSWR(
     shouldFetch ? `${API_BASE_URL}${uriProps}` : null,
     fetcher,
+    disableAutoRefetch
+      ? {
+          revalidateIfStale: false,
+          revalidateOnFocus: false,
+          revalidateOnReconnect: false,
+        }
+      : {},
   );
 
   return {

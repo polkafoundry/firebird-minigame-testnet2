@@ -18,9 +18,9 @@ const headingTable = [
 ];
 
 const predictedOptions = [
-  { label: "All", value: 0 },
-  { label: "Yes", value: 1 },
-  { label: "No", value: 2 },
+  { label: "All", value: "" },
+  { label: "Yes", value: "true" },
+  { label: "No", value: "false" },
 ];
 
 const statusOptions = [
@@ -109,7 +109,7 @@ const MatchListTable = (props: MatchListTableProps) => {
               <DropDown
                 label="Predicted"
                 items={predictedOptions}
-                selectedValue={filter.predicted}
+                selectedValue={filter.is_completed_bet}
                 onChange={handleChangePredicted}
                 className="w-[110px] ml-2 text-14/24"
                 itemsClassName=""
@@ -121,7 +121,7 @@ const MatchListTable = (props: MatchListTableProps) => {
               <DropDown
                 label="Status"
                 items={statusOptions}
-                selectedValue={filter.status}
+                selectedValue={filter.match_status}
                 onChange={handleChangeStatus}
                 className="w-[110px] ml-2 text-14/24"
                 itemsClassName=""
@@ -133,14 +133,14 @@ const MatchListTable = (props: MatchListTableProps) => {
 
         <div className="flex justify-between items-center bg-[#3A0013] text-white mt-1">
           <div
-            className="h-12 w-12 cursor-pointer flex justify-center items-center"
+            className="h-12 w-12 cursor-pointer flex justify-center items-center select-none"
             onClick={previousGroup}
           >
             <img src="/images/icon-previous.svg" alt="" />
           </div>
           <div className="text-20/28 font-bold uppercase">{priodDate}</div>
           <div
-            className="h-12 w-12 cursor-pointer flex justify-center items-center"
+            className="h-12 w-12 cursor-pointer flex justify-center items-center select-none"
             onClick={nextGroup}
           >
             <img

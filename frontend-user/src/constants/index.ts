@@ -6,9 +6,13 @@ export const BIRD_TOKEN_CONTRACT = process.env.REACT_APP_BIRD_TOKEN_CONTRACT;
 
 export const MAX_DEPOSIT_AMOUNT = 1000;
 
+export const BASE_HREF =
+  typeof window !== "undefined" && window.location.origin
+    ? window.location.origin
+    : "";
+
 export const URLS = {
   HOME: "/",
-  EVENT: "/event",
   LEADERBOARD: "/leaderboard",
   HISTORY: "/history",
   FAUCET_TESTNET: "https://faucet.firefly.firebirdchain.com/",
@@ -22,8 +26,8 @@ export const NUMBER_PATTERN = /^\d{1,10}?\.?(\d{1,18})?$/;
 export const quickGuide = [
   "Select a match",
   "Answer questions & submit your predictions",
-  "The match results will be updated.",
-  "Check the leadeborad menu to see your rank.",
+  "The match results will be updated",
+  "Check the Leaderboard menu to see your rank",
 ];
 
 export enum QUESTION_STATUS {
@@ -90,7 +94,8 @@ export const rounds: Array<RoundTypes> = [
   {
     label: "GROUP STAGE - ROUND 1",
     prize: "$20",
-    value: 1,
+    value: 3,
+    // value: 1,
   },
   {
     label: "GROUP STAGE - ROUND 2",
@@ -101,7 +106,7 @@ export const rounds: Array<RoundTypes> = [
   {
     label: "GROUP STAGE - ROUND 3",
     prize: "$20",
-    value: 16, // fake
+    value: 1,
     // value: 3,
   },
   {
