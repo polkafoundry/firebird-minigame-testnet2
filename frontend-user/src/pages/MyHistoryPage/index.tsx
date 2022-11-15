@@ -268,7 +268,7 @@ const MyHistoryPage = () => {
                       <div className="sm:ml-4 flex items-center mt-2 lg:mt-0">
                         <span className="text-14/20 font-semibold">Search</span>
                         <InputSearch
-                          className="flex rounded-md bg-white w-[272px] px-3 py-1.5 ml-2"
+                          className="rounded-md bg-white w-[272px] px-3 py-1.5 ml-2"
                           value={filter.search}
                           onChange={handleSearch}
                         />
