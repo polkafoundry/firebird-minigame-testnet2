@@ -3,6 +3,7 @@ import moment from "moment";
 import { useEffect, useState } from "react";
 import { MATCH_STATUS } from "../../../../constants";
 import useFetch from "../../../../hooks/useFetch";
+import usePredictConditions from "../../../../hooks/usePredictConditions";
 import { getImgSrc } from "../../../../utils";
 import styles from "./matchListRight.module.scss";
 import MatchQuestions from "./MatchQuestions";
@@ -21,11 +22,21 @@ const nav = [
 
 const MatchListRight = (props: MatchListRightProps) => {
   const { matchId, account, isWrongChain } = props;
+
   const [selectedNav, setSelectedNav] = useState<number>(1);
+  const predictConditions = usePredictConditions();
 
   useEffect(() => {
-    setSelectedNav(account ? 1 : 2);
-  }, [account]);
+    setSelectedNav(
+      account &&
+        !isWrongChain &&
+        matchId &&
+        predictConditions.gasFee &&
+        predictConditions.birdToken
+        ? 1
+        : 2,
+    );
+  }, [account, matchId]);
 
   const fetchMatchDetailUrl = `/match/detail/${matchId}?wallet_address=${account}`;
   const { data } = useFetch<any>(fetchMatchDetailUrl, !!matchId, true);

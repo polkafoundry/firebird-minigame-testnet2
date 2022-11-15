@@ -16,10 +16,9 @@ const rankData = [
   { no: 4, address: "0xc13***770c", prize: 700, earned: 18300 },
 ];
 
-const WhoWin = (props: any) => {
+const WhoWin = () => {
   const { account } = useMyWeb3();
 
-  const { currentRank } = props;
   const [searchWallet, setSearchWallet] = useState<string>("");
   const handleSearch = (e: any) => {
     setSearchWallet(e.target.value);
@@ -55,15 +54,23 @@ const WhoWin = (props: any) => {
       <RewardBanner reward="$3,600" winner="Top 30" redirectUrl="#" />
       <div className="mt-10 font-inter flex justify-between items-center">
         <div className="flex items-baseline">
-          <span className="uppercase text-14/20 font-bold opacity-70">
-            Your current rank:
-          </span>
-          <span className="font-semibold text-18/24 ml-2">
-            #{leaderboardData?.data?.position}
-          </span>
+          {account ? (
+            <>
+              <span className="uppercase text-14/20 font-bold opacity-70">
+                Your current rank:
+              </span>
+              <span className="font-semibold text-18/24 ml-2">
+                #{leaderboardData?.data?.position}
+              </span>
+            </>
+          ) : (
+            <div className="uppercase text-14/20 font-semibold">
+              Please connect wallet to see your rank
+            </div>
+          )}
         </div>
         <InputSearch
-          className="rounded-md bg-[#292929] text-white w-[272px] px-3 py-1.5 ml-2"
+          className="rounded-md bg-[#292929] text-white w-[30%] max-w-[320px] px-3 py-1.5 ml-2"
           value={searchWallet}
           placeholder="Search wallet"
           onChange={handleSearch}
