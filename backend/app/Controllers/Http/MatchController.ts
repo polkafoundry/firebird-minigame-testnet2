@@ -42,6 +42,13 @@ export default class MatchController {
     } catch (error) {
       return HelperUtils.responseErrorInternal(error.message)
     }
-
+  }
+  public async recalcMatch({ params }) {
+    try {
+      await MatchService.recalcMatch({ matchId: params.match_id })
+      return HelperUtils.responseSuccess('OK')
+    } catch (error) {
+      return HelperUtils.responseErrorInternal(error.message)
+    }
   }
 }

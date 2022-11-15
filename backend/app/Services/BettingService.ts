@@ -82,7 +82,7 @@ export default class BettingService {
             ou_statistics: match.ou_ht_ratio,
             result: 'draw',
             result_num: 0,
-            total_claim: 0,
+            total_claim: ouHTBets[i]?.bet_amount,
             is_calculated: true,
           })
       }
@@ -163,7 +163,7 @@ export default class BettingService {
             ou_statistics: match.ou_ft_ratio,
             result: 'draw',
             result_num: 0,
-            total_claim: 0,
+            total_claim: ouFTBets[i]?.bet_amount,
             is_calculated: true,
           })
       }

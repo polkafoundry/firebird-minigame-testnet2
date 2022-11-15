@@ -100,7 +100,12 @@ const WorldCupSchedule = () => {
       <Schedule />
       <HeadingPrimary title="Match List" />
       <div className="max-w-screen-main px-5 main:px-20 mx-auto w-full">
-        <div className={clsx("flex flex-col mt-5 relative", "md:flex-row")}>
+        <div
+          className={clsx(
+            "flex flex-col mt-5 relative bg-[#F2F2F2]",
+            "md:flex-row",
+          )}
+        >
           <div
             className={clsx(
               styles.scrollLayout,

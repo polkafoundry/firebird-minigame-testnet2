@@ -3,6 +3,8 @@ const Const = require('@ioc:App/Common/Const')
 
 export default class MatchService {
   public MatchModel = require('@ioc:App/Models/Match')
+  public BettingModel = require('@ioc:App/Models/Betting')
+  public RecalcBettingModel = require('@ioc:App/Models/RecalcBetting')
 
   public buildQueryService(params) {
     let builder = this.MatchModel.query()
@@ -11,6 +13,9 @@ export default class MatchService {
     }
     if ('id' in params) {
       builder = builder.where('id', params.id)
+    }
+    if ('match_id' in params) {
+      builder = builder.where('match_id', params.match_id)
     }
     if ('is_create_match_contract' in params) {
       builder = builder.where('is_create_match_contract', params.is_create_match_contract)
@@ -99,11 +104,12 @@ export default class MatchService {
       })
 
     if ('is_completed_bet' in params && params.is_completed_bet.length && 'wallet_address' in params) {
-      matchesQuery = params.is_completed_bet == 'true' ? matchesQuery.where('bet_counts.bet_count', 5) : matchesQuery.where('bet_counts.bet_count', '<>', 5)
+      matchesQuery = params.is_completed_bet == 'true' ? matchesQuery.where('bet_counts.bet_count', 5) : matchesQuery.where(builder => builder.whereNot('bet_counts.bet_count', 5).orWhereNull('bet_counts.bet_count'))
     }
 
     let matches = await matchesQuery
       .select(['matchs.*', 'bet_counts.bet_count as count'])
+      .orderBy('matchs.start_time', 'asc')
       .paginate(page, size)
     matches = JSON.parse(JSON.stringify(matches))
     return {
@@ -152,5 +158,17 @@ export default class MatchService {
         return obj
       }),
     }
+  }
+  public async recalcMatch({ matchId }) {
+    const [match, recalcBetting] = await Promise.all([
+      this.buildQueryService({ match_id: matchId }).first(),
+      this.RecalcBettingModel.query().where('match_id', matchId).where('is_executed', false).first()
+    ])
+    if (!match) throw new Error('Match not found')
+    if (recalcBetting) throw new Error('Re-calc betting is processing...')
+
+    await this.RecalcBettingModel.create({
+      match_id: matchId
+    })
   }
 }
