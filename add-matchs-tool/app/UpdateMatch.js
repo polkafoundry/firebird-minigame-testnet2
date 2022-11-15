@@ -19,11 +19,34 @@ let walletAddress;
 
 const boxMintInBatch = 140;
 
-const createMatch = async () => {
+const updateMatch = async (matchID) => {
   try {
     const mData = await matchData();
-    // console.log("xxx", mData);
-    // return;
+    // console.log("xxx", mData[1]);
+
+    for (let i = 0; i < mData.length; i++) {
+      if (mData[i].mID === matchID) {
+        console.log(mData[i].mInf);
+      }
+    }
+    return;
+    let newInfo = [
+      0,
+      0,
+      0,
+      0,
+      1667743200,
+      "ASTON VILLA",
+      "2361",
+      "MANCHESTER UNITED",
+      "2356",
+      "Villa Park",
+      "15",
+      ,
+      1,
+      1,
+    ];
+
     web3 = getWeb3();
     // Get wallet address
     walletAddress = web3.eth.accounts.privateKeyToAccount(PRIVATE_KEY).address;
@@ -31,18 +54,8 @@ const createMatch = async () => {
     console.log(`Sign with wallet address ${walletAddress}`);
 
     betContract = new web3.eth.Contract(sBirdAbi, BETTING_CONTRACT_ADDRESS);
-    // let xx = await betContract.methods.matchByID(12).call();
-    // console.log(xx);
-    // return;
-    for (let i = 0; i < mData.length; i++) {
-      if (mData[i].mSta.length === 12 && mData[i].mInf.length === 13 && mData[i].mID && mData[i].sofaID) {
-        console.log(mData[i]);
-        let createMatchCallData = betContract.methods
-          .setMatchInfo(mData[i].mID, mData[i].mSta, mData[i].mInf, mData[i].sofaID)
-          .encodeABI();
-        await callTransaction(createMatchCallData);
-      }
-    }
+    let createMatchCallData = betContract.methods.updateMatchInfo(matchID, newInfo).encodeABI();
+    await callTransaction(createMatchCallData);
   } catch (e) {
     console.log("error: ", e.message);
   }
@@ -84,4 +97,5 @@ const callTransaction = async (callData) => {
     console.log("error: ", error.message);
   }
 };
-createMatch();
+
+updateMatch(2);
