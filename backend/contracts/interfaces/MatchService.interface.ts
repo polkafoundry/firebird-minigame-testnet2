@@ -3,4 +3,5 @@ export default interface MatchServiceInterface {
   getListMatch(request): Promise<any>
   getUpcomingMatch(request): Promise<any>
   getLiveMatch(request): Promise<any>
+  recalcMatch(params): Promise<any>
 }

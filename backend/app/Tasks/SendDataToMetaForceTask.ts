@@ -15,12 +15,13 @@ class SendDataToMetaForce {
             bettings = JSON.parse(JSON.stringify(bettings))
             if (!bettings.length) return
             const currentTime = Date.now()
-            const times = Array.from({ length: bettings.length }, (v, i) => {
-                return new Date(currentTime + i).toISOString()
+
+            const timestamps = Array.from({ length: bettings.length }, (v, i) => {
+                return currentTime + i
             })
 
             const res = await Promise.all(
-                bettings.map((betting, index) => this._sendToMetaForce({ betting, time: times[index] }))
+                bettings.map((betting, index) => this._sendToMetaForce({ betting, timestamp: timestamps[index] }))
             )
             const data: any = {
                 success: res.filter(data => data.success).length,
@@ -33,11 +34,11 @@ class SendDataToMetaForce {
             )
         } catch (error) {
             console.log('error SendDataToMetaForceTask: ', error.message)
-            throw new Error(error.message)
         }
     }
-    private async _sendToMetaForce({ betting, time }) {
+    private async _sendToMetaForce({ betting, timestamp }) {
         try {
+            const time = new Date(timestamp).toISOString()
             const token = HelperUtils.getMFToken(`${time}${Const.MF_KEY.EVENT_NAME}${Const.MF_KEY.TENANT_ID}${Const.MF_KEY.SECRET_KEY}`)
 
             const resultNum = new BigNumber(betting.result_num).div(10 ** 18);
@@ -58,7 +59,7 @@ class SendDataToMetaForce {
             })
 
             if (res.data !== 'OK') throw new Error(res.data)
-            await BettingModel.query().where('id', betting.id).update({ is_sent_to_mf: true, updated_at: new Date(), sent_to_mf_at: new Date() })
+            await BettingModel.query().where('id', betting.id).update({ is_sent_to_mf: true, updated_at: new Date(), sent_to_mf_at: timestamp })
 
             return {
                 success: true,
