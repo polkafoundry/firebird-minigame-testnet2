@@ -54,10 +54,10 @@ const MatchListRight = (props: MatchListRightProps) => {
       : "-";
 
   return (
-    <div className="flex flex-col rounded-lg md:ml-6 bg-[#F2F2F2]">
+    <div className="flex flex-col rounded-lg md:ml-6">
       <div
         className={clsx(
-          "flex flex-col items-center justify-center text-center h-auto min-h-[280px] text-white",
+          "flex flex-col items-center justify-center text-center h-auto min-h-[280px] text-white rounded-t-[4px]",
           styles.backgroundStadium,
         )}
       >

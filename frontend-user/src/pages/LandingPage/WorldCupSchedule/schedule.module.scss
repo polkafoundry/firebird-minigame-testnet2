@@ -2,23 +2,16 @@
   max-height: 90vh;
   overflow-y: auto;
   &::-webkit-scrollbar {
-    width: 10px;
-    background-color: #f5f5f5;
+    width: 8px;
   }
   &::-webkit-scrollbar-track {
-    border-radius: 10px;
-    background: rgba(0, 0, 0, 0.1);
-    border: 1px solid #ccc;
+    border-radius: 20px;
+    background: #e0e0e0;
   }
   &::-webkit-scrollbar-thumb {
-    border-radius: 10px;
-    background: linear-gradient(to right, #fff, #e4e4e4);
-    border: 1px solid #aaa;
-  }
-  &::-webkit-scrollbar-thumb:hover {
-    background: #fff;
-  }
-  &::-webkit-scrollbar-thumb:active {
-    background: linear-gradient(to right, #22add4, #1e98ba);
+    border-radius: 20px;
+    background: #3a0013;
+    border: 1px solid #e0e0e0;
+    background-clip: content-box;
   }
 }
