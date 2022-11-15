@@ -115,6 +115,7 @@ export default class PredictWinnerService {
         listWinner: predictList,
         finalWinner: predictWinner?.final_winner,
         rewards: predictWinner?.rewards,
+        tx: predictWinner?.transaction_hash,
       })
     } catch (error) {
       return HelperUtils.responseErrorInternal(error)

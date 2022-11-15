@@ -1,14 +1,12 @@
-import Job from '../Jobs/FetchMatchInfoJob'
+import Job from '../Jobs/FetchUserBettingJob'
 
 const BETTING_START_BLOCK = process.env.BETTING_START_BLOCK
 import Bull from '@ioc:Rocketseat/Bull'
 
-const CREATE_MATCH = 'CreateMatch'
-const UPDATE_MATCH_STATISTICS = 'UpdateMatchStatistics'
-const UPDATE_MATCH_INFO = 'UpdateMatchInfo'
+const USER_BETTING = 'UserBetting'
 const USER_CLAIM = 'UserClaim'
 
-let ARRAY_EVENTS = [CREATE_MATCH, UPDATE_MATCH_STATISTICS, UPDATE_MATCH_INFO, USER_CLAIM]
+let ARRAY_EVENTS = [USER_BETTING, USER_CLAIM]
 
 const initTask = async () => {
   if (!BETTING_START_BLOCK) {

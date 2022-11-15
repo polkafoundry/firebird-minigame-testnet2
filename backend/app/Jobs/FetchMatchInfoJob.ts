@@ -3,20 +3,10 @@ import Logger from '@ioc:Adonis/Core/Logger'
 const RedisMatchInfoUtils = require('@ioc:App/Common/RedisMatchInfoUtils')
 const HelperUtils = require('@ioc:App/Common/HelperUtils')
 const MatchModel = require('@ioc:App/Models/Match')
-const BettingModel = require('@ioc:App/Models/Betting')
-const PredictModel = require('@ioc:App/Models/Predict')
-const BetCountModel = require('@ioc:App/Models/BetCount')
-
-// import CrawlException from 'App/Exceptions/CrawlException'
-
-// const { ADDRESS_ZERO } = require('@ioc:App/Common/Const')
 
 const CREATE_MATCH = 'CreateMatch'
 const UPDATE_MATCH_STATISTICS = 'UpdateMatchStatistics'
 const UPDATE_MATCH_INFO = 'UpdateMatchInfo'
-const USER_BETTING = 'UserBetting'
-const USER_PREDICT = 'UserPredicting'
-const USER_CLAIM = 'UserClaim'
 
 const STEP = parseInt(process.env.CRAWL_STEP || '5000', 10)
 
@@ -177,137 +167,6 @@ export default class FetchMatchInfoJob implements JobContract {
             is_half_time: event.returnValues.mInf.isHalfTime,
             is_full_time: event.returnValues.mInf.isFinished,
           })
-          break
-        case USER_BETTING:
-          const userBetting = await BettingModel.query()
-            .where('match_id', event.returnValues.matchID)
-            .andWhere('user_address', event.returnValues.user)
-            .andWhere('bet_type', event.returnValues.betType)
-            .first()
-          if (userBetting) {
-            await BettingModel.query()
-              .where('match_id', event.returnValues.matchID)
-              .andWhere('user_address', event.returnValues.user)
-              .andWhere('bet_type', event.returnValues.betType)
-              .update({
-                transaction_hash: event.transactionHash,
-                transaction_index: event.transactionIndex,
-                block_number: event.blockNumber,
-                dispatch_at: blockData.timestamp,
-                event_type: event_type,
-                user_address: event.returnValues.user,
-                match_id: event.returnValues.matchID,
-                bet_type: event.returnValues.betType,
-                bet_place: event.returnValues.betPlace,
-                bet_amount: event.returnValues.amount,
-              })
-          } else {
-            let bettingData = new BettingModel()
-            bettingData.transaction_hash = event.transactionHash
-            bettingData.transaction_index = event.transactionIndex
-            bettingData.block_number = event.blockNumber
-            bettingData.dispatch_at = blockData.timestamp
-            bettingData.event_type = event_type
-            bettingData.user_address = event.returnValues.user
-            bettingData.match_id = event.returnValues.matchID
-            bettingData.bet_type = event.returnValues.betType
-            bettingData.bet_place = event.returnValues.betPlace
-            bettingData.bet_amount = event.returnValues.amount
-            await bettingData.save()
-
-            let bets = await BetCountModel.query()
-              .where('match_id', event.returnValues.matchID)
-              .andWhere('user_address', event.returnValues.user)
-              .first()
-
-            if (bets) {
-              await BetCountModel.query()
-                .where('match_id', event.returnValues.matchID)
-                .andWhere('user_address', event.returnValues.user)
-                .update({
-                  bet_count: bets.bet_count + 1,
-                })
-            } else {
-              let betCountData = new BetCountModel()
-              betCountData.match_id = event.returnValues.matchID
-              betCountData.user_address = event.returnValues.user
-              betCountData.bet_count = 1
-              await betCountData.save()
-            }
-          }
-
-          break
-        case USER_PREDICT:
-          const userPredict = await PredictModel.query()
-            .where('match_id', event.returnValues.matchID)
-            .andWhere('user_address', event.returnValues.user)
-            .first()
-          if (userPredict) {
-            await PredictModel.query()
-              .where('match_id', event.returnValues.matchID)
-              .andWhere('user_address', event.returnValues.user)
-              .update({
-                transaction_hash: event.transactionHash,
-                transaction_index: event.transactionIndex,
-                block_number: event.blockNumber,
-                dispatch_at: blockData.timestamp,
-                event_type: event_type,
-                user_address: event.returnValues.user,
-                match_id: event.returnValues.matchID,
-                home_score: event.returnValues.homeScore,
-                away_score: event.returnValues.awayScore,
-                predict_time: event.returnValues.time,
-              })
-          } else {
-            let predictData = new PredictModel()
-            predictData.transaction_hash = event.transactionHash
-            predictData.transaction_index = event.transactionIndex
-            predictData.block_number = event.blockNumber
-            predictData.dispatch_at = blockData.timestamp
-            predictData.event_type = event_type
-            predictData.user_address = event.returnValues.user
-            predictData.match_id = event.returnValues.matchID
-            predictData.home_score = event.returnValues.homeScore
-            predictData.away_score = event.returnValues.awayScore
-            predictData.predict_time = event.returnValues.time
-            await predictData.save()
-
-            let betss = await BetCountModel.query()
-              .where('match_id', event.returnValues.matchID)
-              .andWhere('user_address', event.returnValues.user)
-              .first()
-
-            if (betss) {
-              await BetCountModel.query()
-                .where('match_id', event.returnValues.matchID)
-                .andWhere('user_address', event.returnValues.user)
-                .update({
-                  bet_count: betss.bet_count + 1,
-                })
-            } else {
-              let betCountData = new BetCountModel()
-              betCountData.match_id = event.returnValues.matchID
-              betCountData.user_address = event.returnValues.user
-              betCountData.bet_count = 1
-              await betCountData.save()
-            }
-          }
-          break
-        case USER_CLAIM:
-          const bet = await BettingModel.query()
-            .where('match_id', event.returnValues.matchID)
-            .andWhere('user_address', event.returnValues.user)
-            .andWhere('bet_type', event.returnValues.betType)
-            .first()
-          if (bet) {
-            await BettingModel.query()
-              .where('match_id', event.returnValues.matchID)
-              .andWhere('user_address', event.returnValues.user)
-              .andWhere('bet_type', event.returnValues.betType)
-              .update({
-                has_claim: true,
-              })
-          }
           break
         default:
           console.log('FetchBoxJob: event not supported', event_type)
