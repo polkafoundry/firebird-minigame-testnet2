@@ -21,18 +21,25 @@ const axios = require("axios");
 let web3;
 let walletAddress;
 let wlData;
+let betContract;
+let birdContract;
+let pkfContract;
+
 const StupidBot = async () => {
   wlData = await walletData();
-  // console.log("xxx", wlData);
+
   web3 = getWeb3();
   betContract = new web3.eth.Contract(sBirdAbi, BETTING_CONTRACT_ADDRESS);
+  birdContract = new web3.eth.Contract(birdTokenAbi, BIRD_CONTRACT_ADDRESS);
+  pkfContract = new web3.eth.Contract(erc20ABI, ZERO_ADDRESS);
   // await faucet();
+  // await transferTokenIfNeeded();
   // await approve();
-  await predict(21);
-  await betting(21, "ou_ht");
-  await betting(21, "ou_ft");
-  await betting(21, "odds_ht");
-  await betting(21, "odds_ft");
+  await predict(39);
+  await betting(39, "ou_ht");
+  await betting(39, "ou_ft");
+  await betting(39, "odds_ht");
+  await betting(39, "odds_ft");
   // await claim(11);
   // await sendPKF();
 };
@@ -89,10 +96,9 @@ const approve = async () => {
     let birdTokenContract = new web3.eth.Contract(birdTokenAbi, BIRD_CONTRACT_ADDRESS);
 
     for (let i = 0; i < wlData.adds.length; i++) {
-      let balance = await web3.eth.getBalance(wlData.adds[i]);
-      console.log(balance);
+      // let balance = await web3.eth.getBalance(wlData.adds[i]);
+      console.log(i);
       let nonce = await web3.eth.getTransactionCount(wlData.adds[i], "pending");
-      console.log(nonce);
 
       if (wlData.adds.length === wlData.prik.length) {
         let callData = birdTokenContract.methods
@@ -223,54 +229,21 @@ const claim = async (matchID) => {
   }
 };
 
-const sendPKF = async () => {
+const transferTokenIfNeeded = async () => {
   try {
-    const wlData = await walletData();
-    // console.log("xxx", wlData);
-    // return;
-    web3 = getWeb3();
-    pkfContract = new web3.eth.Contract(erc20ABI, ZERO_ADDRESS);
-
-    let from = web3.eth.accounts.privateKeyToAccount(PRIVATE_KEY).address;
-    // web3.eth.getPendingTransactions((err, pendingTxs) => {
-    //   console.log("Pending transactions are: ", pendingTxs);
-    //   // In case if you want to return pendingTxs
-    //   console.log("xx", pendingTxs);
-    //   return pendingTxs;
-    // });
-    for (let i = 0; i < 5; i++) {
-      let nonce = await web3.eth.getTransactionCount(from, "pending");
-      console.log(nonce);
-      //send PKF
-      await callTransaction(web3, null, PRIVATE_KEY, from, wlData.adds[i], nonce, 100000000000000000);
-    }
-  } catch (e) {
-    console.log("error: ", e.message);
-  }
-};
-
-const sendBird = async () => {
-  try {
-    const wlData = await walletData();
-    // console.log("xxx", wlData);
-    // return;
-    web3 = getWeb3();
-    birdContract = new web3.eth.Contract(birdTokenAbi, BIRD_CONTRACT_ADDRESS);
-    pkfContract = new web3.eth.Contract(erc20ABI, ZERO_ADDRESS);
-
     let from = web3.eth.accounts.privateKeyToAccount(PRIVATE_KEY).address;
     const amount = new BigNumber(1000).times(Math.pow(10, 18)).toFixed();
-    for (let i = 0; i < 5; i++) {
-      let nonce = await web3.eth.getTransactionCount(from, "pending");
-      console.log(nonce + i * 2);
-      console.log(nonce + i * 2 + 1);
-      let transferData = pkfContract.methods.transfer(wlData.adds[i], amount).encodeABI();
+    for (let i = 0; i < wlData.adds.length; i++) {
+      if (i > 310) {
+        let nonce = await web3.eth.getTransactionCount(from, "pending");
+        let transferData = birdContract.methods.transfer(wlData.adds[i], amount).encodeABI();
+        console.log(i);
+        //send BIRD
+        await callTransaction(web3, transferData, PRIVATE_KEY, from, BIRD_CONTRACT_ADDRESS, nonce, 0);
 
-      //send BIRD
-      await callTransaction(web3, transferData, PRIVATE_KEY, from, BIRD_CONTRACT_ADDRESS, nonce + i * 2, 0);
-
-      //send PKF
-      await callTransaction(web3, null, PRIVATE_KEY, from, wlData.adds[i], nonce + i * 2 + 1, 100000000000000000);
+        //send PKF
+        await callTransaction(web3, null, PRIVATE_KEY, from, wlData.adds[i], nonce + 1, 100000000000000000);
+      }
     }
   } catch (e) {
     console.log("error: ", e.message);

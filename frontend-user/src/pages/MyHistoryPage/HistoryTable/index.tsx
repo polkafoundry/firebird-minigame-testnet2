@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import DefaultLoading from "../../../components/base/DefaultLoading";
 import MatchName from "../../../components/base/Table/MatchName";
 import MatchPredict from "../../../components/base/Table/MatchPredict";
 import { BET_PLACE, BET_TYPE } from "../../../constants";
@@ -20,10 +21,6 @@ type HistoryTableTypes = {
 
 const HistoryTable = (props: HistoryTableTypes) => {
   const { tableLoading, isWhoWinTable, headings, dataTable, account } = props;
-
-  const renderLoading = () => {
-    return <div className="">Loading ... </div>;
-  };
 
   const getQuestionByBetType = (betType: string) => {
     switch (betType) {
@@ -72,8 +69,6 @@ const HistoryTable = (props: HistoryTableTypes) => {
     }
   };
 
-  if (tableLoading) renderLoading();
-
   return (
     <div className="mt-3 bg-white w-full overflow-x-auto">
       <div
@@ -88,70 +83,74 @@ const HistoryTable = (props: HistoryTableTypes) => {
         ))}
       </div>
 
-      {dataTable.map((rowData, index) => (
-        <div
-          key={rowData.match_id + index}
-          className={clsx(
-            "flex items-center px-5 py-2 border-t  hover:bg-yellow-200 font-inter text-14/24  min-w-fit",
-            isWhoWinTable ? styles.whoWinRow : styles.matchScoreRow,
-          )}
-        >
-          {!isWhoWinTable && (
-            <>
-              <MatchName
-                team1={{
-                  name: rowData.home_name,
-                  icon: getImgSrc(rowData.home_icon),
-                }}
-                team2={{
-                  name: rowData.away_name,
-                  icon: getImgSrc(rowData.away_icon),
-                }}
-              />
-              <div>
-                {rowData.home_score}:{rowData.away_score}
-              </div>
-              <div>{getDateTime(rowData.created_at)}</div>
-              {rowData.match_predicted ? (
-                <MatchPredict isCorrect={rowData.result} />
-              ) : (
-                <div className="font-tthoves font-semibold">Waiting...</div>
-              )}
-              <div>{rowData.final_winner === account ? "Yes" : "No"}</div>
-              <div>
-                ${rowData.final_winner === account ? rowData.rewards : 0}
-              </div>
-            </>
-          )}
-          {isWhoWinTable && (
-            <>
-              <MatchName
-                team1={{
-                  name: rowData.home_name,
-                  icon: getImgSrc(rowData.home_icon),
-                }}
-                team2={{
-                  name: rowData.away_name,
-                  icon: getImgSrc(rowData.away_icon),
-                }}
-              />
-              <div>{getQuestionByBetType(rowData.bet_type)}</div>
-              <div className="capitalize">
-                {getAnswerText(rowData).toLowerCase()}
-              </div>
-              <MatchPredict isCorrect={rowData.result === "win"} />
-              <div>{convertHexToStringNumber(rowData.bet_amount)}</div>
-              <div>{getEarnedAmount(rowData.result_num)}</div>
-              <div>{convertHexToStringNumber(rowData.total_claim)}</div>
-              <ClaimTokenRow
-                account={account}
-                data={rowData}
-                isCorrect={rowData.result === "win"}
-              />
-            </>
-          )}
-        </div>
-      ))}
+      <div className="relative flex flex-col w-full min-h-[300px]">
+        {tableLoading && <DefaultLoading />}
+
+        {dataTable.map((rowData, index) => (
+          <div
+            key={rowData.match_id + index}
+            className={clsx(
+              "flex items-center px-5 py-2 border-t hover:bg-yellow-200 font-inter text-14/24  min-w-fit",
+              isWhoWinTable ? styles.whoWinRow : styles.matchScoreRow,
+            )}
+          >
+            {!isWhoWinTable && (
+              <>
+                <MatchName
+                  team1={{
+                    name: rowData.home_name,
+                    icon: getImgSrc(rowData.home_icon),
+                  }}
+                  team2={{
+                    name: rowData.away_name,
+                    icon: getImgSrc(rowData.away_icon),
+                  }}
+                />
+                <div>
+                  {rowData.home_score}:{rowData.away_score}
+                </div>
+                <div>{getDateTime(rowData.created_at)}</div>
+                {rowData.match_predicted ? (
+                  <MatchPredict isCorrect={rowData.result} />
+                ) : (
+                  <div className="font-tthoves font-semibold">Waiting...</div>
+                )}
+                <div>{rowData.final_winner === account ? "Yes" : "No"}</div>
+                <div>
+                  ${rowData.final_winner === account ? rowData.rewards : 0}
+                </div>
+              </>
+            )}
+            {isWhoWinTable && (
+              <>
+                <MatchName
+                  team1={{
+                    name: rowData.home_name,
+                    icon: getImgSrc(rowData.home_icon),
+                  }}
+                  team2={{
+                    name: rowData.away_name,
+                    icon: getImgSrc(rowData.away_icon),
+                  }}
+                />
+                <div>{getQuestionByBetType(rowData.bet_type)}</div>
+                <div className="capitalize">
+                  {getAnswerText(rowData).toLowerCase()}
+                </div>
+                <MatchPredict isCorrect={rowData.result === "win"} />
+                <div>{convertHexToStringNumber(rowData.bet_amount)}</div>
+                <div>{getEarnedAmount(rowData.result_num)}</div>
+                <div>{convertHexToStringNumber(rowData.total_claim)}</div>
+                <ClaimTokenRow
+                  account={account}
+                  data={rowData}
+                  isCorrect={rowData.result === "win"}
+                />
+              </>
+            )}
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
