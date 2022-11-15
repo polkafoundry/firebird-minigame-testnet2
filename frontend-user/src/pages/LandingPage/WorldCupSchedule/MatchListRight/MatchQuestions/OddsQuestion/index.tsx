@@ -73,7 +73,7 @@ const OddsQuestion = (props: QuestionProps) => {
     console.log("submit q2, q3", dataSubmit);
 
     if (!_betPlace) {
-      toast.warning("Bet place Required");
+      toast.warning("Please select one answer");
       return;
     }
 

@@ -56,7 +56,16 @@ const useProviderConnects = () => {
     const provider = (window as any).ethereum;
     setConnectLoading(true);
     if (provider.networkVersion !== BIRD_CHAIN_ID) {
-      await requestSupportNetwork();
+      try {
+        await requestSupportNetwork();
+        setConnectLoading(true);
+        await tryActivate(connector);
+        setConnectLoading(false);
+      } catch (error: any) {
+        console.log("ERR requestSupportNetwork", error?.message);
+        setConnectLoading(false);
+      }
+      return;
     }
     await tryActivate(connector);
     setConnectLoading(false);

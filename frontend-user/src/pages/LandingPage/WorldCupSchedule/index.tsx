@@ -9,6 +9,7 @@ import HeadingPrimary from "../components/HeadingPrimary";
 import MatchListRight from "./MatchListRight";
 import MatchListTable from "./MatchListTable";
 import Schedule from "./Schedule";
+import styles from "./schedule.module.scss";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const queryString = require("query-string");
 
@@ -102,7 +103,11 @@ const WorldCupSchedule = () => {
       <div className="max-w-screen-main px-5 main:px-20 mx-auto w-full">
         <div className={clsx("flex flex-col mt-5 relative", "md:flex-row")}>
           <div
-            className={clsx("w-full h-fit", "md:w-[44%] md:sticky md:top-10")}
+            className={clsx(
+              styles.scrollLayout,
+              "w-full h-fit sticky top-5",
+              "md:w-[44%] md:sticky md:top-10",
+            )}
           >
             <MatchListTable
               selectedMatchId={selectedMatchId}
@@ -115,7 +120,7 @@ const WorldCupSchedule = () => {
               handleChangeStatus={handleChangeStatus}
             />
           </div>
-          <div className="w-full md:w-[56%]">
+          <div className={"w-full md:w-[56%]"}>
             <MatchListRight
               account={account}
               isWrongChain={isWrongChain}

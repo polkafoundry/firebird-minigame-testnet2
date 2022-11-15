@@ -23,7 +23,7 @@ const Banner = () => {
   return (
     <div
       className={clsx(
-        "mt-20 mb-[-230px] px-5 lg:px-[100px] text-white max-w-screen-main w-full mx-auto",
+        "mt-20 mb-[-84px] px-5 lg:px-[100px] text-white max-w-screen-main w-full mx-auto",
       )}
     >
       <div

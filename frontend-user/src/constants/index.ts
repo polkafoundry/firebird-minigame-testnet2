@@ -13,7 +13,6 @@ export const BASE_HREF =
 
 export const URLS = {
   HOME: "/",
-  EVENT: "/event",
   LEADERBOARD: "/leaderboard",
   HISTORY: "/history",
   FAUCET_TESTNET: "https://faucet.firefly.firebirdchain.com/",
@@ -95,7 +94,8 @@ export const rounds: Array<RoundTypes> = [
   {
     label: "GROUP STAGE - ROUND 1",
     prize: "$20",
-    value: 1,
+    value: 3,
+    // value: 1,
   },
   {
     label: "GROUP STAGE - ROUND 2",
@@ -106,7 +106,7 @@ export const rounds: Array<RoundTypes> = [
   {
     label: "GROUP STAGE - ROUND 3",
     prize: "$20",
-    value: 16, // fake
+    value: 1,
     // value: 3,
   },
   {

@@ -1,14 +1,16 @@
 import { BigNumber } from "ethers";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   BET_TYPE,
   MATCH_RESULT,
   MATCH_STATUS,
   QUESTION_STATUS,
 } from "../../../../../constants";
+import { WalletContext } from "../../../../../context/WalletContext";
 import useBirdToken from "../../../../../hooks/useBirdToken";
 import usePredictConditions from "../../../../../hooks/usePredictConditions";
 import { getImgSrc } from "../../../../../utils";
+import { requestSupportNetwork } from "../../../../../utils/setupNetwork";
 import { getOptionIndexByBetPlace } from "./components/utils";
 import OddsQuestion from "./OddsQuestion";
 import OverUnderQuestion from "./OverUnderQuestion";
@@ -39,6 +41,7 @@ const MatchQuestions = (props: MatchQuestionProps) => {
 
   const { getBirdAllowance } = useBirdToken();
   const predictConditions = usePredictConditions();
+  const { setShowModal } = useContext(WalletContext);
 
   useEffect(() => {
     if (!account) return;
@@ -237,16 +240,37 @@ const MatchQuestions = (props: MatchQuestionProps) => {
     }
   };
 
-  const renderEmptyQuestion = () => {
+  //render Empty Question
+  if (!account || !dataQuestion || dataQuestion.length === 0 || isWrongChain)
     return (
-      <div className="flex text-center text-xl font-semibold h-40 items-center justify-center">
-        {!account ? "Please Connect Wallet First" : "Please Select Match First"}
+      <div className="flex text-center text-xl font-semibold h-40 items-center justify-center bg-white m-8">
+        {!account ? (
+          <button
+            className="py-2 px-9 rounded-lg bg-main text-white justify-center font-semibold font-tthoves text-14/20"
+            onClick={() => setShowModal && setShowModal(true)}
+          >
+            Connect Wallet
+          </button>
+        ) : (
+          <>
+            {isWrongChain ? (
+              <button
+                className="py-2 px-9 rounded-lg bg-main text-white justify-center font-semibold font-tthoves text-14/20"
+                onClick={requestSupportNetwork}
+              >
+                Switch chain
+              </button>
+            ) : (
+              <>
+                {!dataQuestion || dataQuestion.length === 0
+                  ? "Please Select Match First"
+                  : ""}
+              </>
+            )}
+          </>
+        )}
       </div>
     );
-  };
-
-  if (!account || !dataQuestion || dataQuestion.length === 0)
-    return renderEmptyQuestion();
 
   return (
     <div className="w-full p-5">

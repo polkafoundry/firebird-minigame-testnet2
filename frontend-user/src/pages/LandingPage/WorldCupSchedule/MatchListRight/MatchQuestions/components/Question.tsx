@@ -1,5 +1,5 @@
 import { Disclosure } from "@headlessui/react";
-import { URLS } from "../../../../../../constants";
+import { MATCH_STATUS, URLS } from "../../../../../../constants";
 
 type QuestionProps = {
   title: string;
@@ -7,10 +7,10 @@ type QuestionProps = {
   predictBoxComponent?: JSX.Element | undefined;
   handleSubmit: () => void;
   isSubmitted: boolean;
-  isPredicted?: boolean;
   matchEnded?: boolean;
   loading?: boolean;
   error?: any;
+  matchStatus?: string;
 };
 const Question = (props: QuestionProps) => {
   const {
@@ -18,17 +18,16 @@ const Question = (props: QuestionProps) => {
     children,
     handleSubmit,
     isSubmitted,
-    isPredicted,
     matchEnded,
     loading,
     predictBoxComponent,
     error,
+    matchStatus = "",
   } = props;
 
   const enableSubmit = predictBoxComponent
-    ? isPredicted && !matchEnded
+    ? ![MATCH_STATUS.FINISHED, MATCH_STATUS.LIVE].includes(matchStatus)
     : !matchEnded && !isSubmitted;
-
   return (
     <Disclosure defaultOpen>
       {({ open }) => (

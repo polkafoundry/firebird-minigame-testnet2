@@ -98,7 +98,7 @@ const PredictQuestion = (props: QuestionProps) => {
     console.log("submit q1", dataSubmit);
     const { _matchID, _homeScore, _awayScore } = dataSubmit;
     if (_homeScore === "" || _awayScore === "") {
-      toast.warning("Home score / Away score is required");
+      toast.warning("Please select one answer");
       return;
     }
 
@@ -139,7 +139,6 @@ const PredictQuestion = (props: QuestionProps) => {
       isSubmitted={isSubmitted}
       matchEnded={matchEnded}
       loading={loadingApprove || loadingPredicting}
-      isPredicted={dataQuestion?.home_score && dataQuestion?.away_score}
       predictBoxComponent={
         isSubmitted ? (
           <NotificationBox
@@ -153,6 +152,7 @@ const PredictQuestion = (props: QuestionProps) => {
         ) : undefined
       }
       error={error}
+      matchStatus={dataQuestion?.match_status}
     >
       <div>
         <div className="flex items-center justify-between max-w-[660px] w-full mx-auto">
@@ -166,7 +166,7 @@ const PredictQuestion = (props: QuestionProps) => {
             handleChangeInputTeam1={handleChangeInputTeam1}
             handleChangeInputTeam2={handleChangeInputTeam2}
             questionStatus={questionStatus}
-            matchEnded={matchEnded}
+            matchStatus={dataQuestion?.match_status}
           />
           {renderMatchNameDetail(
             dataQuestion?.away_name,

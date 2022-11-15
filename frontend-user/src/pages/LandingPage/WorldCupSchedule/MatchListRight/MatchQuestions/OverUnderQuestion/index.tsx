@@ -92,7 +92,7 @@ const OverUnderQuestion = (props: QuestionProps) => {
     const { _amount, _betPlace, _betType, _matchID } = dataSubmit;
 
     if (!_betPlace) {
-      toast.warning("Bet place Required");
+      toast.warning("Please select one answer");
       return;
     }
 

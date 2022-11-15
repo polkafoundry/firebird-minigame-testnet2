@@ -1,5 +1,4 @@
 import clsx from "clsx";
-import ButtonStyled from "../../../components/base/Button/ButtonStyled";
 import HeadingPrimary from "../components/HeadingPrimary";
 import styles from "./calculatedReward.module.scss";
 
@@ -249,11 +248,13 @@ const CalculatedReward = () => {
                 Join the Phoenix Cup on Firebird, climb the leaderboard & have a
                 chain to gain additional bonuses.
               </p>
-              <a href="https://gamefi.org/" target="_blank" rel="noreferrer">
-                <ButtonStyled
-                  className="mt-7 w-[200px] bg-main text-white font-semibold font-tthoves"
-                  title="Join now"
-                />
+              <a
+                href="https://gamefi.org/"
+                target="_blank"
+                rel="noreferrer"
+                className="mt-7 w-[200px] btn-rounded bg-main"
+              >
+                Join now
               </a>
             </div>
             <div className="w-[30%] lg:w-[45%]">

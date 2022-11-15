@@ -1,12 +1,16 @@
 import clsx from "clsx";
-import { QUESTION_STATUS, SCORE_PATTER } from "../../../../../../constants";
+import {
+  MATCH_STATUS,
+  QUESTION_STATUS,
+  SCORE_PATTER,
+} from "../../../../../../constants";
 
 type InputNumberProps = {
   input: string;
   handleChange: (data: any) => void;
   className?: string;
   questionStatus: QUESTION_STATUS;
-  matchEnded: boolean;
+  matchStatus: string;
 };
 
 type InputScoreProps = {
@@ -15,7 +19,7 @@ type InputScoreProps = {
   handleChangeInputTeam1: (data: any) => void;
   handleChangeInputTeam2: (data: any) => void;
   questionStatus: QUESTION_STATUS;
-  matchEnded: boolean;
+  matchStatus: string;
 };
 
 const InputNumber = (props: InputNumberProps) => {
@@ -23,7 +27,7 @@ const InputNumber = (props: InputNumberProps) => {
     input,
     handleChange,
     className = "",
-    matchEnded,
+    matchStatus,
     questionStatus,
   } = props;
 
@@ -57,13 +61,9 @@ const InputNumber = (props: InputNumberProps) => {
         getInputStyle(),
         className,
       )}
-      disabled={
-        [
-          QUESTION_STATUS.CORRECT_ANSWER,
-          QUESTION_STATUS.WRONG_ANSWER,
-          QUESTION_STATUS.WINNER,
-        ].includes(questionStatus) || matchEnded
-      }
+      disabled={[MATCH_STATUS.FINISHED, MATCH_STATUS.LIVE].includes(
+        matchStatus,
+      )}
       value={input}
       placeholder="0"
       onChange={onChange}
@@ -78,7 +78,7 @@ const InputScore = (props: InputScoreProps) => {
     handleChangeInputTeam1,
     handleChangeInputTeam2,
     questionStatus,
-    matchEnded,
+    matchStatus,
   } = props;
 
   return (
@@ -87,7 +87,7 @@ const InputScore = (props: InputScoreProps) => {
         input={inputTeam1}
         handleChange={handleChangeInputTeam1}
         questionStatus={questionStatus}
-        matchEnded={matchEnded}
+        matchStatus={matchStatus}
       />
       <span
         className={clsx(
@@ -104,7 +104,7 @@ const InputScore = (props: InputScoreProps) => {
         input={inputTeam2}
         handleChange={handleChangeInputTeam2}
         questionStatus={questionStatus}
-        matchEnded={matchEnded}
+        matchStatus={matchStatus}
       />
     </div>
   );
