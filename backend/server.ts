@@ -20,4 +20,7 @@ new Ignitor(__dirname).httpServer().start().then(() => {
     console.log(`serving app on http://${process.env.HOST}:${process.env.PORT}`)
     const sendDataToMetaForceSchedule = require('@ioc:App/Tasks/SendDataToMetaForceTask')
     sendDataToMetaForceSchedule()
+
+    const recalcBettingTask = require('@ioc:App/Tasks/RecalcBettingTask')
+    recalcBettingTask()
 })

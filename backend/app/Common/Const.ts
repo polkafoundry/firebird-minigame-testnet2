@@ -108,4 +108,5 @@ module.exports = Object.freeze({
     34: 80,
     12: 100,
   },
+  ADMIN_ACCOUNT: process.env.ADMIN_ACCOUNT ? JSON.parse(process.env.ADMIN_ACCOUNT) : [],
 })

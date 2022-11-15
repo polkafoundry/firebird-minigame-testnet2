@@ -3,6 +3,8 @@ const Const = require('@ioc:App/Common/Const')
 
 export default class MatchService {
   public MatchModel = require('@ioc:App/Models/Match')
+  public BettingModel = require('@ioc:App/Models/Betting')
+  public RecalcBettingModel = require('@ioc:App/Models/RecalcBetting')
 
   public buildQueryService(params) {
     let builder = this.MatchModel.query()
@@ -11,6 +13,9 @@ export default class MatchService {
     }
     if ('id' in params) {
       builder = builder.where('id', params.id)
+    }
+    if ('match_id' in params) {
+      builder = builder.where('match_id', params.match_id)
     }
     if ('is_create_match_contract' in params) {
       builder = builder.where('is_create_match_contract', params.is_create_match_contract)
@@ -152,5 +157,17 @@ export default class MatchService {
         return obj
       }),
     }
+  }
+  public async recalcMatch({ matchId }) {
+    const [match, recalcBetting] = await Promise.all([
+      this.buildQueryService({ match_id: matchId }).first(),
+      this.RecalcBettingModel.query().where('match_id', matchId).where('is_executed', false).first()
+    ])
+    if (!match) throw new Error('Match not found')
+    if (recalcBetting) throw new Error('Re-calc betting is processing...')
+
+    await this.RecalcBettingModel.create({
+      match_id: matchId
+    })
   }
 }
