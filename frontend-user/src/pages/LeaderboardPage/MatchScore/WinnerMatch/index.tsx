@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import DefaultLoading from "../../../../components/base/DefaultLoading";
 import useFetch from "../../../../hooks/useFetch";
 import { displayWalletAddress } from "../../../../utils";
 import styles from "./winnerMatch.module.scss";
@@ -12,14 +13,13 @@ type MatchListRightProps = {
 const WinnerMatch = (props: MatchListRightProps) => {
   const { matchId, reward, account } = props;
 
-  const { data } = useFetch<any>(
+  const { data, loading } = useFetch<any>(
     `/predict/predict-winner-in-match?match_id=${matchId}`,
     !!matchId,
   );
 
   const matchData = data?.data;
   const listWinner = matchData?.listWinner.slice(0, 6);
-  console.log("matchData :>> ", listWinner);
 
   const isWinner = account === matchData?.finalWinner;
 
@@ -86,16 +86,18 @@ const WinnerMatch = (props: MatchListRightProps) => {
             Please Select Match First
           </div>
         ) : (
-          <>
+          <div className={clsx("relative", loading && "min-h-[400px]")}>
+            {loading && <DefaultLoading />}
+
             <div className="flex bg-[#3A0013] text-white text-12/18 font-inter font-bold uppercase px-5 py-3">
               <div className="opacity-80 w-[20%]">No</div>
               <div className="opacity-80 flex-1">Wallet address</div>
             </div>
-            {!listWinner || !listWinner.length ? (
+            {!loading && (!listWinner || !listWinner.length) ? (
               <div>Not found</div>
             ) : (
               <>
-                {listWinner.map((item: any, index: number) => (
+                {listWinner?.map((item: any, index: number) => (
                   <div
                     key={item.id}
                     className="flex items-center text-14/24 font-inter px-5 py-3 min-h-[65px] bg-white border-b-2 border-[#F2F2F2]"
@@ -109,7 +111,7 @@ const WinnerMatch = (props: MatchListRightProps) => {
                 ))}
               </>
             )}
-          </>
+          </div>
         )}
       </div>
     </div>

@@ -78,6 +78,21 @@ const claimedOptions = [
   { label: "Yes", value: true },
   { label: "No", value: false },
 ];
+const InitState = {
+  statistics: {
+    prediction_times: 0,
+    correct_answers: 0,
+    win_rate: 0,
+    earned: 0,
+    win_whitelist: 0,
+  },
+  filter: {
+    claimed: claimedOptions[0].value,
+    result: resultOptions[0].value,
+    search: "",
+    page: 1,
+  },
+};
 
 const PAGE_LIMIT = 10;
 const MyHistoryPage = () => {
@@ -85,20 +100,11 @@ const MyHistoryPage = () => {
   const [dataTable, setDataTable] = useState<any>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [totalCount, setTotalCount] = useState<number>(0);
-  const [statistics, setStatistics] = useState<StatisticTypes>({
-    prediction_times: 0,
-    correct_answers: 0,
-    win_rate: 0,
-    earned: 0,
-    win_whitelist: 0,
-  });
+  const [statistics, setStatistics] = useState<StatisticTypes>(
+    InitState.statistics,
+  );
   const [currentRank, setCurrentRank] = useState<number>(0);
-  const [filter, setFilter] = useState<FilterTypes>({
-    claimed: claimedOptions[0].value,
-    result: resultOptions[0].value,
-    search: "",
-    page: 1,
-  });
+  const [filter, setFilter] = useState<FilterTypes>(InitState.filter);
 
   const [navActived, setNavActived] = useState<
     typeof HISTORY_NAV_VALUES[keyof typeof HISTORY_NAV_VALUES]
@@ -130,6 +136,11 @@ const MyHistoryPage = () => {
       claimed: value,
       page: 1,
     }));
+  };
+
+  const handleChangeTab = (value: any) => {
+    setNavActived(value);
+    setStatistics(InitState.statistics);
   };
 
   useEffect(() => {
@@ -270,7 +281,7 @@ const MyHistoryPage = () => {
                         ? "border-b-2 border-main text-main opacity-100 pointer-events-none"
                         : "opacity-50",
                     )}
-                    onClick={() => setNavActived(item.value)}
+                    onClick={() => handleChangeTab(item.value)}
                   >
                     {item.label}
                   </div>
@@ -296,7 +307,7 @@ const MyHistoryPage = () => {
                       />
                       <p>You haven’t predicted any matches</p>
                       <a
-                        href={BASE_HREF + URLS.HOME + "#prediction-rule"}
+                        href={BASE_HREF + URLS.HOME + "#match-list"}
                         className="min-w-[255px] w-[30%] mt-10 btn-rounded btn-primary"
                       >
                         Predict Now

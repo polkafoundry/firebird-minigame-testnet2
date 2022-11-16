@@ -83,7 +83,6 @@ const MatchScore = () => {
   const handleSelectMatch = (id: number, reward: string) => {
     setSelectedMatchId(id);
     setReward(reward);
-    console.log("first", reward);
   };
 
   // const handleChangePredicted = (value: any) => {

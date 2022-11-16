@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import queryString from "query-string";
 import { useEffect, useState } from "react";
+import DefaultLoading from "../../../components/base/DefaultLoading";
 import Pagination from "../../../components/base/Pagination";
 // import InputSearch from "../../../components/base/InputSearch";
 import { BASE_HREF, URLS } from "../../../constants";
@@ -45,9 +46,9 @@ const WhoWin = () => {
     }));
   };
 
-  useEffect(() => {
-    console.log("filter :>> ", filter);
-  }, [filter]);
+  // useEffect(() => {
+  //   console.log("filter :>> ", filter);
+  // }, [filter]);
 
   const { data, loading } = useFetch<any>(
     "/leaderboard?" +
@@ -117,53 +118,54 @@ const WhoWin = () => {
               </div>
             ))}
           </div>
-          {loading ? (
-            <div>Loading...</div>
-          ) : (
-            <>
-              {!rankData || !rankData.length ? (
-                <div>No has data</div>
-              ) : (
-                <>
-                  {leaderboardData?.data.map((item: any) => (
+
+          <div className="relative min-h-[500px]">
+            {loading && <DefaultLoading />}
+
+            {!loading && (!rankData || !rankData.length) ? (
+              <div>Not found</div>
+            ) : (
+              <>
+                {leaderboardData?.data.map((item: any) => (
+                  <div
+                    key={item?.position}
+                    className={clsx(
+                      "flex px-[30px] py-[10px] border-t-2 border-black bg-[#33363D] text-14/24 font-inter",
+                      styles.tableRow,
+                      [1, 2, 3].includes(item?.position) &&
+                        styles.backgroundImage,
+                    )}
+                  >
                     <div
-                      key={item?.position}
                       className={clsx(
-                        "flex px-[30px] py-[10px] border-t-2 border-black bg-[#33363D] text-14/24 font-inter",
-                        styles.tableRow,
                         [1, 2, 3].includes(item?.position) &&
-                          styles.backgroundImage,
+                          "uppercase font-semibold",
                       )}
                     >
-                      <div
-                        className={clsx(
-                          [1, 2, 3].includes(item?.position) &&
-                            "uppercase font-semibold",
-                        )}
-                      >
-                        {[0, 1, 2, 3].includes(item?.position) && "Top "}
-                        {item?.position}
-                      </div>
-                      <div>{displayWalletAddress(item?.userId)}</div>
-                      <div>${item?.prize}</div>
-                      <div>
-                        {Math.floor(item?.sum_earned) === item?.sum_earned
-                          ? item?.sum_earned
-                          : Number(item?.sum_earned).toFixed(2)}
-                      </div>
+                      {[0, 1, 2, 3].includes(item?.position) && "Top "}
+                      {item?.position}
                     </div>
-                  ))}
-                </>
-              )}
-              <Pagination
-                className="justify-center mt-3"
-                currentPage={filter?.page}
-                totalCount={leaderboardData?.total_item}
-                pageSize={PAGE_LIMIT}
-                onPageChange={handleChangePage}
-                isDarkMode
-              />
-            </>
+                    <div>{displayWalletAddress(item?.userId)}</div>
+                    <div>${item?.prize}</div>
+                    <div>
+                      {Math.floor(item?.sum_earned) === item?.sum_earned
+                        ? item?.sum_earned
+                        : Number(item?.sum_earned).toFixed(2)}
+                    </div>
+                  </div>
+                ))}
+              </>
+            )}
+          </div>
+          {!loading && (
+            <Pagination
+              className="justify-center mt-3"
+              currentPage={filter?.page}
+              totalCount={leaderboardData?.total_item}
+              pageSize={PAGE_LIMIT}
+              onPageChange={handleChangePage}
+              isDarkMode
+            />
           )}
         </div>
       </div>

@@ -99,7 +99,10 @@ const WorldCupSchedule = () => {
     <div className="flex flex-col pt-20">
       <Schedule />
       <HeadingPrimary title="Match List" />
-      <div className="max-w-screen-main px-5 main:px-20 mx-auto w-full">
+      <div
+        id="match-list"
+        className="max-w-screen-main px-5 main:px-20 mx-auto w-full"
+      >
         <div
           className={clsx(
             "flex flex-col mt-5 relative bg-[#F2F2F2]",
