@@ -3,7 +3,6 @@ import {
   NUMBER_PATTERN,
   URLS,
 } from "../../../../../../constants";
-import { useMyWeb3 } from "../../../../../../hooks/useMyWeb3";
 
 type DepositAmountProps = {
   depositAmount: string;
@@ -12,18 +11,18 @@ type DepositAmountProps = {
   isFullBetting?: boolean;
   winRate?: string;
   optionWhoWin: number;
+  birdBalance: string;
 };
 
 const DepositAmount = (props: DepositAmountProps) => {
   const {
     depositAmount,
     handleChangeDepositAmount,
-    // errors,
     isFullBetting = false,
     winRate,
     optionWhoWin,
+    birdBalance,
   } = props;
-  const { birdBalance } = useMyWeb3();
 
   const onChange = (e: any) => {
     const valueInput = e.target.value;

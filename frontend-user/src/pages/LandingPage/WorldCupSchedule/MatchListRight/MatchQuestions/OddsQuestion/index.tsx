@@ -26,8 +26,9 @@ const OddsQuestion = (props: QuestionProps) => {
     betType,
     needApprove,
     error,
+    birdBalance = "0",
+    updateBirdBalance,
   } = props;
-  // const errors: string[] = [];
   const [optionWhoWin, setOptionWhoWin] = useState<number>(0);
   const [depositAmount, setDepositAmount] = useState<string>("");
   const [dataQuestion, setDataQuestion] = useState<any>();
@@ -94,6 +95,8 @@ const OddsQuestion = (props: QuestionProps) => {
       bet_amount: BigNumber.from(res.amount).toString(),
     };
     setDataQuestion(newDataQuestion);
+
+    updateBirdBalance();
   };
 
   const handleChangeOptionWhoWin = (option: number) => {
@@ -161,6 +164,7 @@ const OddsQuestion = (props: QuestionProps) => {
 
         {!isSubmitted && !matchEnded && (
           <DepositAmount
+            birdBalance={birdBalance}
             depositAmount={depositAmount}
             handleChangeDepositAmount={handleChangeDepositAmount}
             // errors={errors}
