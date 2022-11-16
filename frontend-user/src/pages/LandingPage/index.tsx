@@ -1,11 +1,13 @@
 import { useEffect } from "react";
 import LandingLayout from "../../components/layout/LandingLayout";
 import { scrollToId } from "../../utils/domElement";
-import Banner from "./Banner";
+import BannerSocials from "./BannerSocials";
 import CalculatedReward from "./CalculatedReward";
 import FAQ from "./FAQ";
 import PredictionRule from "./PredictionRule";
-import WorldCupSchedule from "./WorldCupSchedule";
+import MatchList from "./MatchList";
+import Schedule from "./MatchList/Schedule";
+import HomeBanner from "./HomeBanner";
 
 const LangdingPage = () => {
   useEffect(() => {
@@ -18,20 +20,17 @@ const LangdingPage = () => {
 
   return (
     <LandingLayout>
-      <div className="w-full pt-20">
-        <img
-          src="./images/landing-page/banner.png"
-          alt=""
-          className="w-full select-none"
-        />
+      <HomeBanner />
+      <div className="mt-[-150px] xs:mt-[-180px] md:mt-[-200px] lg:mt-[-220px] pt-20">
+        <Schedule />
       </div>
 
-      <div className="mt-[-150px] xs:mt-[-180px] md:mt-[-200px] lg:mt-[-220px] flex flex-col w-full">
-        <WorldCupSchedule />
+      <div className=" flex flex-col w-full">
+        <MatchList />
         <CalculatedReward />
         <PredictionRule />
         <FAQ />
-        <Banner />
+        <BannerSocials />
       </div>
     </LandingLayout>
   );

@@ -1,9 +1,11 @@
-import React from "react";
-
 const HomeBanner = () => {
   return (
-    <div className="w-full h-screen flex items-center justify-center bg-orange-200">
-      HomeBanner
+    <div className="w-full pt-20">
+      <img
+        src="./images/landing-page/banner.png"
+        alt=""
+        className="w-full select-none"
+      />
     </div>
   );
 };
