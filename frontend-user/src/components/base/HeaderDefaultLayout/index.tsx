@@ -14,10 +14,6 @@ type RouteTypes = {
 };
 
 const routes: Array<RouteTypes> = [
-  // {
-  //   label: "Event",
-  //   uri: URLS.EVENT,
-  // },
   {
     label: "Firefly Testnet",
     uri: URLS.FAUCET_TESTNET,

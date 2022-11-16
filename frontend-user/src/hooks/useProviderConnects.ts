@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import { BIRD_CHAIN_ID } from "../constants/networks";
 import { requestSupportNetwork } from "./../utils/setupNetwork";
 
-const useProviderConnects = () => {
+const useProviderConnects = (handleCloseModal: () => void) => {
   const [walletName, setWalletName] = useState<(undefined | string)[]>([]);
   const [currentConnector, setCurrentConnector] = useState<
     undefined | AbstractConnector
@@ -69,6 +69,7 @@ const useProviderConnects = () => {
     }
     await tryActivate(connector);
     setConnectLoading(false);
+    handleCloseModal();
     setCurrentConnector(connector);
     walletName.indexOf(name) < 0 && setWalletName([...walletName, name]);
   };
