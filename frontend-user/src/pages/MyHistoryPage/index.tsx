@@ -237,7 +237,7 @@ const MyHistoryPage = () => {
                 className="rounded-md bg-white w-[272px] px-3 py-1.5 ml-2"
                 value={filter.search}
                 onChange={handleSearch}
-                placeholder="Enter wallet address"
+                placeholder="Search match"
               />
             </div>
           </div>
@@ -267,7 +267,7 @@ const MyHistoryPage = () => {
                     className={clsx(
                       "cursor-pointer py-2 font-semibold",
                       navActived === item.value
-                        ? "border-b-2 border-main text-main opacity-100"
+                        ? "border-b-2 border-main text-main opacity-100 pointer-events-none"
                         : "opacity-50",
                     )}
                     onClick={() => setNavActived(item.value)}

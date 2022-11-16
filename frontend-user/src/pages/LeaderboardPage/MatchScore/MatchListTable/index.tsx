@@ -1,26 +1,26 @@
 import clsx from "clsx";
 import { useEffect, useMemo, useState } from "react";
 import { FilterTypes } from "..";
-import DropDown from "../../../../components/base/DropDown";
+// import DropDown from "../../../../components/base/DropDown";
 import MatchName from "../../../../components/base/Table/MatchName";
-import { MATCH_STATUS, rounds } from "../../../../constants";
+import { rounds } from "../../../../constants";
 import { displayWalletAddress, getMatchTime } from "../../../../utils";
 import styles from "./matchListTable.module.scss";
 
 const headingTable = ["Time", "Match", "Whitelist", "Rewards", "Winner"];
 
-const predictedOptions = [
-  { label: "All", value: "" },
-  { label: "Yes", value: "true" },
-  { label: "No", value: "false" },
-];
+// const predictedOptions = [
+//   { label: "All", value: "" },
+//   { label: "Yes", value: "true" },
+//   { label: "No", value: "false" },
+// ];
 
-const statusOptions = [
-  { label: "All", value: "" },
-  { label: "Ended", value: MATCH_STATUS.FINISHED },
-  { label: "On going", value: MATCH_STATUS.LIVE },
-  { label: "Not yet", value: MATCH_STATUS.UPCOMING },
-];
+// const statusOptions = [
+//   { label: "All", value: "" },
+//   { label: "Ended", value: MATCH_STATUS.FINISHED },
+//   { label: "On going", value: MATCH_STATUS.LIVE },
+//   { label: "Not yet", value: MATCH_STATUS.UPCOMING },
+// ];
 
 const REGEX_DATE = /(\w.*) -/g;
 
@@ -29,10 +29,10 @@ type MatchListTableProps = {
   loading: boolean;
   dataTable: Array<any>;
   selectedMatchId: number | undefined;
-  filter: any;
+  // filter: any;
   setFilter: any;
-  handleChangePredicted: (value: any) => void;
-  handleChangeStatus: (value: any) => void;
+  // handleChangePredicted: (value: any) => void;
+  // handleChangeStatus: (value: any) => void;
 };
 
 //TODO: get reward from api
@@ -42,10 +42,10 @@ const MatchListTable = (props: MatchListTableProps) => {
     loading,
     dataTable = [],
     selectedMatchId,
-    filter,
+    // filter,
     setFilter,
-    handleChangePredicted,
-    handleChangeStatus,
+    // handleChangePredicted,
+    // handleChangeStatus,
   } = props;
 
   const [groupStageIndex, setGroupStageIndex] = useState<number>(0);
@@ -85,13 +85,13 @@ const MatchListTable = (props: MatchListTableProps) => {
 
   return (
     <div className="bg-[#F2F2F2]">
-      <div className={clsx("title-background bg-[cover] pr-8 w-fit")}>
+      <div className={clsx("title-background pr-8 bg-[cover] w-[330px]")}>
         {rounds[groupStageIndex].label}
       </div>
       <div className="px-5 pt-3 pb-5">
         <div className="flex items-center justify-between ">
           <div className="font-normal text-14/24">(Time Zone: GMT+7)</div>
-          <div className="flex">
+          {/* <div className="flex">
             <div>
               <span className="text-14/20 font-semibold">Predicted</span>
               <DropDown
@@ -116,7 +116,7 @@ const MatchListTable = (props: MatchListTableProps) => {
                 bgColor="white"
               />
             </div>
-          </div>
+          </div> */}
         </div>
 
         <div className="flex justify-between items-center bg-[#3A0013] text-white mt-1">

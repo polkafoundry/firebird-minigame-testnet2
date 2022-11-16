@@ -89,7 +89,7 @@ const DropDown = (props: DropDownProps) => {
                         className={clsx(
                           "block px-3 py-1.5 text-14/24 cursor-pointer hover:bg-black text-white",
                           item.value === selectedItem?.value
-                            ? "bg-black text-white"
+                            ? "bg-black text-white pointer-events-none"
                             : active
                             ? activeStyle
                             : textColor,

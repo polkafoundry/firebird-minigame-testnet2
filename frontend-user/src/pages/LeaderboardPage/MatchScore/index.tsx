@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import moment from "moment";
+// import queryString from "query-string";
 import { useEffect, useState } from "react";
 import { BASE_HREF, rounds, URLS } from "../../../constants";
 import useFetch from "../../../hooks/useFetch";
@@ -37,9 +38,11 @@ const MatchScore = () => {
 
   const { data, loading } = useFetch<any>(
     "/predict/predict-winner-count-by-match",
+    // queryString.stringify({ ...filter }),
   );
 
   useEffect(() => {
+    console.log("filter", filter);
     const rawData = data?.data?.map((item: any) => {
       return {
         ...item,
@@ -83,19 +86,19 @@ const MatchScore = () => {
     console.log("first", reward);
   };
 
-  const handleChangePredicted = (value: any) => {
-    setFilter((prevFilter: FilterTypes) => ({
-      ...prevFilter,
-      is_completed_bet: value,
-    }));
-  };
+  // const handleChangePredicted = (value: any) => {
+  //   setFilter((prevFilter: FilterTypes) => ({
+  //     ...prevFilter,
+  //     is_completed_bet: value,
+  //   }));
+  // };
 
-  const handleChangeStatus = (value: any) => {
-    setFilter((prevFilter: FilterTypes) => ({
-      ...prevFilter,
-      match_status: value,
-    }));
-  };
+  // const handleChangeStatus = (value: any) => {
+  //   setFilter((prevFilter: FilterTypes) => ({
+  //     ...prevFilter,
+  //     match_status: value,
+  //   }));
+  // };
 
   return (
     <div>
@@ -127,10 +130,10 @@ const MatchScore = () => {
             handleSelectMatch={handleSelectMatch}
             dataTable={dataTable}
             loading={loading}
-            filter={filter}
+            // filter={filter}
             setFilter={setFilter}
-            handleChangePredicted={handleChangePredicted}
-            handleChangeStatus={handleChangeStatus}
+            // handleChangePredicted={handleChangePredicted}
+            // handleChangeStatus={handleChangeStatus}
           />
         </div>
         <div className={"w-full md:w-[50%]"}>
