@@ -63,7 +63,6 @@ type StatisticTypes = {
   correct_answers: any;
   win_rate: any;
   earned: any;
-  current_rank?: any;
   win_whitelist: any;
   total?: any;
 };
@@ -93,6 +92,7 @@ const MyHistoryPage = () => {
     earned: 0,
     win_whitelist: 0,
   });
+  const [currentRank, setCurrentRank] = useState<number>(0);
   const [filter, setFilter] = useState<FilterTypes>({
     claimed: claimedOptions[0].value,
     result: resultOptions[0].value,
@@ -114,10 +114,7 @@ const MyHistoryPage = () => {
   );
 
   useEffect(() => {
-    setStatistics((prev: StatisticTypes) => ({
-      ...prev,
-      current_rank: leaderboardData?.data?.position,
-    }));
+    setCurrentRank(leaderboardData?.data?.position);
   }, [leaderboardData]);
 
   const handleChangeResult = (value: any) => {
@@ -280,7 +277,11 @@ const MyHistoryPage = () => {
                 ))}
               </div>
 
-              <Statistics data={statistics} navActived={navActived} />
+              <Statistics
+                data={statistics}
+                currentRank={currentRank}
+                navActived={navActived}
+              />
 
               <div className="overflow-x-auto">
                 {renderFilter()}
