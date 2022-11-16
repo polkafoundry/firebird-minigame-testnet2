@@ -26,6 +26,8 @@ const OverUnderQuestion = (props: QuestionProps) => {
     betType,
     needApprove,
     error,
+    birdBalance = "0",
+    updateBirdBalance,
   } = props;
 
   const [optionWhoWin, setOptionWhoWin] = useState<number>(0);
@@ -113,6 +115,8 @@ const OverUnderQuestion = (props: QuestionProps) => {
       bet_amount: BigNumber.from(res.amount).toString(),
     };
     setDataQuestion(newDataQuestion);
+
+    updateBirdBalance();
   };
 
   return (
@@ -172,6 +176,7 @@ const OverUnderQuestion = (props: QuestionProps) => {
 
         {!isSubmitted && !matchEnded && (
           <DepositAmount
+            birdBalance={birdBalance}
             depositAmount={depositAmount}
             handleChangeDepositAmount={handleChangeDepositAmount}
             errors={dataQuestion?.errors}

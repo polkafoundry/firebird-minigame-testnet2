@@ -8,6 +8,7 @@ import {
 } from "../../../../../constants";
 import { WalletContext } from "../../../../../context/WalletContext";
 import useBirdToken from "../../../../../hooks/useBirdToken";
+import { useMyWeb3 } from "../../../../../hooks/useMyWeb3";
 import usePredictConditions from "../../../../../hooks/usePredictConditions";
 import { getImgSrc } from "../../../../../utils";
 import { requestSupportNetwork } from "../../../../../utils/setupNetwork";
@@ -24,6 +25,8 @@ export type QuestionProps = {
   betType?: typeof BET_TYPE[keyof typeof BET_TYPE];
   error?: any;
   predictPrize?: string;
+  birdBalance?: string;
+  updateBirdBalance?: any;
 };
 
 type MatchQuestionProps = {
@@ -39,6 +42,7 @@ const MatchQuestions = (props: MatchQuestionProps) => {
   const { dataQuestion, account, isWrongChain } = props;
   const [needApprove, setNeedApprove] = useState<boolean>(false);
 
+  const { updateBirdBalance, birdBalance } = useMyWeb3();
   const { getBirdAllowance } = useBirdToken();
   const predictConditions = usePredictConditions();
   const { setShowModal } = useContext(WalletContext);
@@ -292,6 +296,8 @@ const MatchQuestions = (props: MatchQuestionProps) => {
         betType={BET_TYPE.ODD_EVEN_HALF_TIME}
         title="2. Who will win the 1st half?"
         error={predictConditions}
+        birdBalance={birdBalance}
+        updateBirdBalance={updateBirdBalance}
       />
       <OddsQuestion
         dataQuestion={questions[2]}
@@ -299,6 +305,8 @@ const MatchQuestions = (props: MatchQuestionProps) => {
         betType={BET_TYPE.ODD_EVEN_FULL_TIME}
         title="3. Who will win the full match?"
         error={predictConditions}
+        birdBalance={birdBalance}
+        updateBirdBalance={updateBirdBalance}
       />
       <OverUnderQuestion
         dataQuestion={questions[3]}
@@ -306,6 +314,8 @@ const MatchQuestions = (props: MatchQuestionProps) => {
         betType={BET_TYPE.OVER_UNDER_HALF_TIME}
         title="4. Will the 1st half total goals be higher or lower than the total goals below?"
         error={predictConditions}
+        birdBalance={birdBalance}
+        updateBirdBalance={updateBirdBalance}
       />
       <OverUnderQuestion
         dataQuestion={questions[4]}
@@ -313,6 +323,8 @@ const MatchQuestions = (props: MatchQuestionProps) => {
         betType={BET_TYPE.OVER_UNDER_FULL_TIME}
         title="5. Will the full match total goals be higher or lower than the total goals below?"
         error={predictConditions}
+        birdBalance={birdBalance}
+        updateBirdBalance={updateBirdBalance}
       />
     </div>
   );
