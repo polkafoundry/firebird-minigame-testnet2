@@ -1,5 +1,4 @@
 import clsx from "clsx";
-import React from "react";
 import styles from "./banner.module.scss";
 
 const socialsData = [
@@ -23,7 +22,7 @@ const Banner = () => {
   return (
     <div
       className={clsx(
-        "mt-20 mb-[-84px] px-5 lg:px-[100px] text-white max-w-screen-main w-full mx-auto",
+        "mt-10 mb-[-84px] px-5 lg:px-[100px] text-white max-w-screen-main w-full mx-auto",
       )}
     >
       <div
@@ -35,7 +34,7 @@ const Banner = () => {
         <div className="w-[136px]">
           <img src="/images/landing-page/banner-text.png" />
         </div>
-        <div className="mt-5 md:max-w-[480px] text-56/60 text-center">
+        <div className="mt-5 md:max-w-[480px] text-56/60 font-tthoves font-semibold text-center">
           Hit The Leaderboard now!
         </div>
         <p className="mt-[14px]">Be in World Cup trend with our latest news!</p>

@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import { useState } from "react";
 import HeadingPrimary from "../components/HeadingPrimary";
 import styles from "./calculatedReward.module.scss";
 
@@ -28,7 +29,14 @@ const finalRewardTable = {
   ],
 };
 
-const CalculatedReward = () => {
+const CalculatedReward = (props: { ref: any }) => {
+  const { ref } = props;
+  const [isShowDetail, setIsShowDetail] = useState<boolean>(false);
+
+  const handleToggleDetail = () => {
+    setIsShowDetail(!isShowDetail);
+  };
+
   const renderTableTotalRewards = () => {
     const lastIndex = totalRewardTable.data.length - 1;
 
@@ -117,6 +125,7 @@ const CalculatedReward = () => {
 
   return (
     <div
+      ref={ref}
       id="reward-distribution"
       className="mt-[120px] px-5 main:px-20 max-w-screen-main w-full mx-auto"
     >
@@ -127,7 +136,7 @@ const CalculatedReward = () => {
             "2md:flex-row 2md:items-end",
           )}
         >
-          <div className="flex-1 flex flex-col ml-5 lg:ml-[130px] mr-10">
+          <div className="flex-1 flex flex-col ml-5 lg:ml-[50px] mr-5 main:mr-10">
             <HeadingPrimary
               backroundTitle="Calculated"
               title="Valuable Rewards From Companions"
@@ -138,9 +147,9 @@ const CalculatedReward = () => {
               conducted by Firebird & our partners to earn extra prizes.
             </p>
           </div>
-          <div className="flex justify-center px-6 py-2.5 bg-black text-white w-full 2md:w-fit">
+          <div className="flex justify-center items-center px-4 py-2.5 bg-black text-white w-full 2md:w-fit">
             <img src="/images/landing-page/predicted-winner.png" alt="" />
-            <div className="flex flex-col ml-8 font-tthoves">
+            <div className="flex flex-col ml-2 font-tthoves">
               <span className="text-16/20 font-semibold uppercase">
                 public testnet total rewards
               </span>
@@ -154,18 +163,7 @@ const CalculatedReward = () => {
             "mt-9 p-5 sm:p-10 lg:p-[60px] flex flex-col text-white bg-[#3A0013] rounded-[4px]",
           )}
         >
-          {/* <div className="flex justify-center z-10">
-            <ButtonStyled
-              title="Leaderboard"
-              className="w-[200px] bg-main mr-3"
-            />
-            <ButtonStyled
-              title="My history"
-              className="w-[200px] bg-black text-white"
-            />
-          </div> */}
-
-          <div className="flex flex-col 2md:flex-row justify-center items-center ">
+          <div className="flex flex-col 2md:flex-row justify-center items-center">
             <div className="flex flex-col justify-between items-start font-inter w-full 2md:w-fit 2md:max-w-[460px] ">
               <div>
                 <span className="text-36/48 font-semibold font-tthoves">
@@ -205,6 +203,23 @@ const CalculatedReward = () => {
                   </div>
                 </div>
               </div>
+
+              <div className="flex w-full mt-5 text-white text-14/20 font-tthoves">
+                <button
+                  className="bg-main p-2 flex-1 rounded-lg flex justify-center items-center"
+                  onClick={handleToggleDetail}
+                >
+                  {!isShowDetail ? "Show details" : "Hide details"}
+                  <img
+                    src="./images/icon-arrow-down-white.svg"
+                    alt=""
+                    className={clsx("w-2.5 ml-1", isShowDetail && "rotate-180")}
+                  />
+                </button>
+                <button className="bg-black p-2 flex-1 rounded-lg ml-2">
+                  Learn more
+                </button>
+              </div>
             </div>
 
             <div className="flex-1 mt-5 ml-0 w-full 2md:ml-5 lg:ml-10  2md:mt-0 ">
@@ -219,6 +234,7 @@ const CalculatedReward = () => {
           <div
             className={clsx(
               "mt-5 px-5 sm:px-[45px] pt-[49px] pb-[30px] bg-black",
+              !isShowDetail && "hidden",
             )}
           >
             <div className="flex flex-col lg:flex-row lg:space-x-5 space-y-5 lg:space-y-0">
@@ -240,21 +256,27 @@ const CalculatedReward = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mt-5 font-inter">
           <div className="flex bg-black text-white rounded-[4px]">
-            <div className="w-[70%] lg:w-[55%] pt-[64px] pl-[30px] pb-[30px] pr-[60px]">
+            <div className="w-[70%] lg:w-[55%] pt-[44px] pl-[60px] pb-[30px] pr-[60px]">
               <div className="text-32/40 font-semibold font-tthoves">
                 Exclusive incentives for GameFi.org’s members.
               </div>
               <p className="mt-3 text-18/32 text">
                 Join the Phoenix Cup on Firebird, climb the leaderboard & have a
-                chain to gain additional bonuses.
+                chance to gain additional bonuses.
               </p>
+              <div className="mt-3 flex justify-between items-center">
+                <span className="text-16/20 font-semibold opacity-70 font-tthoves">
+                  Pool Prize
+                </span>
+                <span className="text-32/40 font-tthovesBold italic">$500</span>
+              </div>
               <a
                 href="https://gamefi.org/"
                 target="_blank"
                 rel="noreferrer"
-                className="mt-7 w-[200px] btn-rounded bg-main"
+                className="mt-3 w-[200px] p-2 flex-1 rounded-lg flex justify-center items-center bg-main"
               >
-                Join now
+                Learn more
               </a>
             </div>
             <div className="w-[30%] lg:w-[45%]">
@@ -266,7 +288,7 @@ const CalculatedReward = () => {
             </div>
           </div>
           <div className="flex bg-black text-white rounded-[4px]">
-            <div className="w-[70%] lg:w-[55%] pt-[64px] pl-[30px] pb-[30px] pr-[60px]">
+            <div className="w-[70%] lg:w-[55%] pt-[44px] pl-[60px] pb-[30px] pr-[60px]">
               <div className="text-32/40 font-semibold font-tthoves">
                 Blockchain Football
               </div>
