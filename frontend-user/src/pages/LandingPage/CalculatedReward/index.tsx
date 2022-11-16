@@ -29,8 +29,7 @@ const finalRewardTable = {
   ],
 };
 
-const CalculatedReward = (props: { ref: any }) => {
-  const { ref } = props;
+const CalculatedReward = () => {
   const [isShowDetail, setIsShowDetail] = useState<boolean>(false);
 
   const handleToggleDetail = () => {
@@ -125,7 +124,6 @@ const CalculatedReward = (props: { ref: any }) => {
 
   return (
     <div
-      ref={ref}
       id="reward-distribution"
       className="mt-[120px] px-5 main:px-20 max-w-screen-main w-full mx-auto"
     >
