@@ -6,18 +6,28 @@ import styles from "./dialog.module.scss";
 
 type ConnectWalletBoxProps = {
   wallet?: WalletInfo;
-  handleProviderChosen?: (name: string, connector: AbstractConnector) => void;
+  handleProviderChosen?: (
+    name: string,
+    connector: AbstractConnector,
+    closeDialog: () => void,
+  ) => void;
   connectWalletLoading?: boolean;
   walletName?: (string | undefined)[];
+  closeDialog: () => void;
 };
 
 const ConnectWalletBox = (props: ConnectWalletBoxProps) => {
-  const { connectWalletLoading, handleProviderChosen, wallet } = props;
+  const { connectWalletLoading, handleProviderChosen, wallet, closeDialog } =
+    props;
 
   const handleWalletChange = () => {
     wallet &&
       handleProviderChosen &&
-      handleProviderChosen(wallet.name, wallet.connector as AbstractConnector);
+      handleProviderChosen(
+        wallet.name,
+        wallet.connector as AbstractConnector,
+        closeDialog,
+      );
   };
 
   if (!wallet) return <></>;

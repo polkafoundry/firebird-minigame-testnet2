@@ -8,11 +8,8 @@ import { WalletContext } from "./WalletContext";
 
 const WalletProvider = (props: any) => {
   const [showModal, setShowModal] = useState<boolean>(false);
-  const { deactivate } = useWeb3React();
 
-  const closeModal = () => {
-    setShowModal(false);
-  };
+  const { deactivate } = useWeb3React();
 
   const {
     handleProviderChosen,
@@ -23,7 +20,7 @@ const WalletProvider = (props: any) => {
     handleConnectorDisconnect,
     connectedAccount,
     tryActivate,
-  } = useProviderConnects(closeModal);
+  } = useProviderConnects();
 
   // auto activate accoung from localStorage
   useEffect(() => {
@@ -43,6 +40,10 @@ const WalletProvider = (props: any) => {
   const logout = () => {
     deactivate();
     handleConnectorDisconnect();
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
   };
 
   return (

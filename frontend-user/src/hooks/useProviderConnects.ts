@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import { BIRD_CHAIN_ID } from "../constants/networks";
 import { requestSupportNetwork } from "./../utils/setupNetwork";
 
-const useProviderConnects = (handleCloseModal: () => void) => {
+const useProviderConnects = () => {
   const [walletName, setWalletName] = useState<(undefined | string)[]>([]);
   const [currentConnector, setCurrentConnector] = useState<
     undefined | AbstractConnector
@@ -51,6 +51,7 @@ const useProviderConnects = (handleCloseModal: () => void) => {
   const handleProviderChosen = async (
     name: string,
     connector: AbstractConnector,
+    handleCloseModal: () => void,
   ) => {
     // Add Firebird chain to metamask or switch chain
     const provider = (window as any).ethereum;
