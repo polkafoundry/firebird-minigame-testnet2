@@ -1,9 +1,10 @@
-// import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 // import { useLocation } from "react-router-dom";
 import LandingLayout from "../../components/layout/LandingLayout";
 // import { scrollToId } from "../../utils/domElement";
 import Banner from "./Banner";
 import CalculatedReward from "./CalculatedReward";
+import FAQ from "./FAQ";
 import PredictionRule from "./PredictionRule";
 import WorldCupSchedule from "./WorldCupSchedule";
 
@@ -14,6 +15,15 @@ const LangdingPage = () => {
   //     scrollToId(location?.hash);
   //   }
   // }, [location.hash]);
+  const ref = useRef<any>(null);
+  useEffect(() => {
+    if (window.location.hash.includes("prediction-rule")) {
+      // const availabilitySectionNode =
+      //   document.getElementById("prediction-rule");
+      // availabilitySectionNode &&
+      ref.current && ref.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, []);
 
   return (
     <LandingLayout>
@@ -27,8 +37,9 @@ const LangdingPage = () => {
 
       <div className="mt-[-150px] xs:mt-[-180px] md:mt-[-200px] lg:mt-[-220px] flex flex-col w-full">
         <WorldCupSchedule />
-        <CalculatedReward />
+        <CalculatedReward ref={ref} />
         <PredictionRule />
+        <FAQ />
         <Banner />
       </div>
     </LandingLayout>
