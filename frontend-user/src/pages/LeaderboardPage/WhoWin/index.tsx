@@ -116,7 +116,8 @@ const WhoWin = () => {
           <div className="relative min-h-[500px]">
             {loading && <DefaultLoading />}
 
-            {!loading && (!leaderboardData || !leaderboardData.length) ? (
+            {!loading &&
+            (!leaderboardData?.data || !leaderboardData?.data.length) ? (
               <div>Not found</div>
             ) : (
               <>
