@@ -128,4 +128,5 @@ module.exports = Object.freeze({
     20: 70,
     30: 50
   },
+  MAX_REQ_SEND_TO_MF: +(process.env.MAX_REQ_SEND_TO_MF || 500)
 })
