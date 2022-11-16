@@ -19,7 +19,7 @@ class SendDataToMetaForce {
             const timestamps = Array.from({ length: bettings.length }, (v, i) => {
                 return currentTime + i
             })
-
+            const startSend = Date.now()
             const res = await Promise.all(
                 bettings.map((betting, index) => this._sendToMetaForce({ betting, timestamp: timestamps[index] }))
             )
@@ -30,7 +30,7 @@ class SendDataToMetaForce {
             }
 
             Logger.info(
-                `Send ${bettings.length} req to MF and return ${data.success} success, ${data.error} error, error message: ${JSON.stringify(data.error_mess)}`
+                `[${Date.now() - startSend} ms] Send ${bettings.length} req to MF and return ${data.success} success, ${data.error} error, error message: ${JSON.stringify(data.error_mess)}`
             )
         } catch (error) {
             console.log('error SendDataToMetaForceTask: ', error.message)
