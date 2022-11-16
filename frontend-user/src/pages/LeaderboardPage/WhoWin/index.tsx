@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import queryString from "query-string";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import DefaultLoading from "../../../components/base/DefaultLoading";
 import Pagination from "../../../components/base/Pagination";
 // import InputSearch from "../../../components/base/InputSearch";
