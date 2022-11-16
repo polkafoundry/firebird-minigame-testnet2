@@ -1,4 +1,5 @@
 import { Disclosure } from "@headlessui/react";
+import DefaultLoading from "../../../../../../components/base/DefaultLoading";
 import { MATCH_STATUS, URLS } from "../../../../../../constants";
 
 type QuestionProps = {
@@ -31,7 +32,9 @@ const Question = (props: QuestionProps) => {
   return (
     <Disclosure defaultOpen>
       {({ open }) => (
-        <div className="mt-4 rounded-lg bg-white">
+        <div className="mt-4 rounded-lg bg-white relative">
+          {loading && <DefaultLoading />}
+
           <Disclosure.Button className="block w-full select-none cursor-pointer p-5">
             <div className="text-16/20 font-tthoves font-semibold flex justify-between items-center text-left">
               <span>{title}</span>
@@ -85,7 +88,7 @@ const Question = (props: QuestionProps) => {
                   onClick={handleSubmit}
                   disabled={loading}
                 >
-                  {loading ? "Loading" : "Submit answer"}
+                  Submit answer
                 </button>
               </div>
             )}
