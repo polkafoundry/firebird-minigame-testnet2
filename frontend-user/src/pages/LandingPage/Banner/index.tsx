@@ -4,7 +4,7 @@ import { SocialItemTypes, socialsData } from "../../../constants";
 import styles from "./banner.module.scss";
 
 const Banner = () => {
-  const bannerSocials = [socialsData[0], socialsData[5], socialsData[4]];
+  const bannerSocials = [socialsData[0], socialsData[4], socialsData[5]];
 
   return (
     <div

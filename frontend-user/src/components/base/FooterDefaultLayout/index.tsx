@@ -1,6 +1,10 @@
 import Tippy from "@tippyjs/react";
 import clsx from "clsx";
-import { SocialItemTypes, socialsData } from "../../../constants";
+import {
+  LANDING_PAGE_URL,
+  SocialItemTypes,
+  socialsData,
+} from "../../../constants";
 
 const buyPkfExchanges = [
   {
@@ -24,7 +28,7 @@ const buyPkfExchanges = [
 const siteMaps = [
   {
     label: "Bird Nest",
-    url: "/bird-nest",
+    url: LANDING_PAGE_URL + "bird-nest",
   },
   {
     label: "Documentation",
@@ -32,11 +36,11 @@ const siteMaps = [
   },
   {
     label: "Community",
-    url: "/community",
+    url: LANDING_PAGE_URL + "community",
   },
   {
     label: "FAQ",
-    url: "/faq",
+    url: LANDING_PAGE_URL + "faq",
   },
 ];
 
@@ -126,6 +130,7 @@ const FooterDefaultLayout = () => {
                   <a
                     key={index + 100}
                     href={item.url}
+                    target={"_blank"}
                     rel="noreferrer"
                     className="w-full max-w-[120px] hover:underline"
                   >
