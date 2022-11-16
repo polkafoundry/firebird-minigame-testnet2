@@ -10,7 +10,7 @@ import Logger from 'App/Common/Logger'
 class SendDataToMetaForce {
     async sendData() {
         try {
-            const MAX_REQ_SEND_TO_MF = 1000
+            const MAX_REQ_SEND_TO_MF = Const.MAX_REQ_SEND_TO_MF
             let bettings = await BettingModel.query().where('is_calculated', true).where('is_sent_to_mf', false).limit(MAX_REQ_SEND_TO_MF);
             bettings = JSON.parse(JSON.stringify(bettings))
             if (!bettings.length) return
