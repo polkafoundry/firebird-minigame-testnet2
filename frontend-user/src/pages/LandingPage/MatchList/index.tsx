@@ -9,7 +9,6 @@ import { getImgSrc, groupArrayById } from "../../../utils";
 import HeadingPrimary from "../components/HeadingPrimary";
 import MatchListRight from "./MatchListRight";
 import MatchListTable from "./MatchListTable";
-import Schedule from "./Schedule";
 import styles from "./schedule.module.scss";
 
 export type FilterTypes = {
@@ -21,7 +20,7 @@ export type FilterTypes = {
   wallet_address: string;
 };
 
-const WorldCupSchedule = () => {
+const MatchList = () => {
   const { account, isWrongChain } = useMyWeb3();
 
   const [selectedMatchId, setSelectedMatchId] = useState<number | undefined>();
@@ -97,7 +96,6 @@ const WorldCupSchedule = () => {
 
   return (
     <div className="flex flex-col pt-20">
-      <Schedule />
       <HeadingPrimary title="Match List" />
       <div
         id="match-list"
@@ -140,4 +138,4 @@ const WorldCupSchedule = () => {
   );
 };
 
-export default WorldCupSchedule;
+export default MatchList;
