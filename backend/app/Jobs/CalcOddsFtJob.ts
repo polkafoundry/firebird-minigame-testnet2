@@ -54,9 +54,8 @@ export default class CalcOddsFtJob implements JobContract {
         .where('is_calculated_odds_ft', false)
         .where('is_full_time', true)
         .first()
-      console.log('CalcOddsFtJob: ', match)
       if (!match) return
-
+      console.log('CalcOddsFtJob: ', match)
       calcBettingJob({ matchId: match.match_id, betType: Const.BET_TYPE.ODDS_FT })
     } catch (error) {
       console.log('error CalcOddsFtJob: ', error.message)
