@@ -169,7 +169,7 @@ export default class FetchUserBettingInfoJob implements JobContract {
           }
           break
         default:
-          console.log('FetchBoxJob: event not supported', event_type)
+          console.log('FetchUserBettingJob: event not supported', event_type)
           return
       }
     }

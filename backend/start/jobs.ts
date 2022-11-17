@@ -11,6 +11,7 @@ const jobs = [
   'App/Jobs/CalcOuHtJob',
   'App/Jobs/CalcOddsHtJob',
   'App/Jobs/CalcOddsFtJob',
+  'App/Jobs/RequestRandomPredict',
 ]
 
 export default jobs

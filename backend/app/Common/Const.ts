@@ -20,9 +20,9 @@ module.exports = Object.freeze({
     ERC721: 'erc721',
     MYSTERY_BOX: 'box',
   },
-  WEB3_API_URL: 'https://rpc.testnet-firebird.polkafoundry.com/',
+  WEB3_API_URL: 'https://rpc.firefly.firebirdchain.com/',
   WEB3_BSC_API_URL: 'https://data-seed-prebsc-1-s1.binance.org:8545',
-  WEB3_POLYGON_API_URL: 'https://rpc.testnet-firebird.polkafoundry.com',
+  WEB3_POLYGON_API_URL: 'https://rpc.firefly.firebirdchain.com/',
   OFFER_STATUS: {
     OFFERING: 'OFFERING',
     ACCEPTED: 'ACCEPTED',
@@ -126,6 +126,6 @@ module.exports = Object.freeze({
     3: 250,
     10: 150,
     20: 70,
-    30: 50
+    30: 50,
   },
 })
