@@ -8,7 +8,9 @@
     "build": "node ace build --production && cp .env ./build/.env",
     "start": "node build/server.ts",
     "lint": "eslint . --ext=.ts",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "migration-staging": "NODE_ENV=testing node ace migration:run",
+    "migration-prod": "npm run build && node build/ace migration:run"
   },
   "devDependencies": {
     "@adonisjs/assembler": "^5.3.0",
