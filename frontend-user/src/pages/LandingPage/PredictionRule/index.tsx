@@ -44,12 +44,12 @@ const PredictionRule = () => {
           <div
             key={indexRuleRow}
             className={clsx(
-              "flex flex-col justify-between py-10 hover:-translate-y-8 transition",
+              "sm:grid sm:grid-rows-2 py-10 hover:-translate-y-8 transition",
             )}
           >
             {ruleRow.map((rule, indexRule) => {
               return (
-                <div key={indexRule} className="min-h-[300px]">
+                <div key={indexRule} className="">
                   {!rule.image ? (
                     <div
                       className={clsx(
@@ -57,10 +57,17 @@ const PredictionRule = () => {
                         indexRuleRow !== 1 && "pt-10",
                       )}
                     >
-                      <span className="text-32/40 font-semibold">
+                      <span
+                        className="text-32/40 font-semibold"
+                        data-aos="fade-up"
+                      >
                         {rule.title}
                       </span>
-                      <p className="mt-3 text-18/32 font-normal">
+                      <p
+                        className="mt-3 text-18/32 font-normal"
+                        data-aos="fade-up"
+                        data-aos-delay="200"
+                      >
                         {rule.description}
                       </p>
                     </div>

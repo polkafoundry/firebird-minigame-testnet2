@@ -7,3 +7,5 @@ coverage
 tmp
 /.idea/
 *.log
+*.env
+.env.testing

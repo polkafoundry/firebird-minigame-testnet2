@@ -1,26 +1,27 @@
 import clsx from "clsx";
 import { useEffect, useMemo, useState } from "react";
 import { FilterTypes } from "..";
-import DropDown from "../../../../components/base/DropDown";
+import DefaultLoading from "../../../../components/base/DefaultLoading";
+// import DropDown from "../../../../components/base/DropDown";
 import MatchName from "../../../../components/base/Table/MatchName";
-import { MATCH_STATUS, rounds } from "../../../../constants";
+import { rounds } from "../../../../constants";
 import { displayWalletAddress, getMatchTime } from "../../../../utils";
 import styles from "./matchListTable.module.scss";
 
 const headingTable = ["Time", "Match", "Whitelist", "Rewards", "Winner"];
 
-const predictedOptions = [
-  { label: "All", value: "" },
-  { label: "Yes", value: "true" },
-  { label: "No", value: "false" },
-];
+// const predictedOptions = [
+//   { label: "All", value: "" },
+//   { label: "Yes", value: "true" },
+//   { label: "No", value: "false" },
+// ];
 
-const statusOptions = [
-  { label: "All", value: "" },
-  { label: "Ended", value: MATCH_STATUS.FINISHED },
-  { label: "On going", value: MATCH_STATUS.LIVE },
-  { label: "Not yet", value: MATCH_STATUS.UPCOMING },
-];
+// const statusOptions = [
+//   { label: "All", value: "" },
+//   { label: "Ended", value: MATCH_STATUS.FINISHED },
+//   { label: "On going", value: MATCH_STATUS.LIVE },
+//   { label: "Not yet", value: MATCH_STATUS.UPCOMING },
+// ];
 
 const REGEX_DATE = /(\w.*) -/g;
 
@@ -29,10 +30,10 @@ type MatchListTableProps = {
   loading: boolean;
   dataTable: Array<any>;
   selectedMatchId: number | undefined;
-  filter: any;
+  // filter: any;
   setFilter: any;
-  handleChangePredicted: (value: any) => void;
-  handleChangeStatus: (value: any) => void;
+  // handleChangePredicted: (value: any) => void;
+  // handleChangeStatus: (value: any) => void;
 };
 
 //TODO: get reward from api
@@ -42,10 +43,10 @@ const MatchListTable = (props: MatchListTableProps) => {
     loading,
     dataTable = [],
     selectedMatchId,
-    filter,
+    // filter,
     setFilter,
-    handleChangePredicted,
-    handleChangeStatus,
+    // handleChangePredicted,
+    // handleChangeStatus,
   } = props;
 
   const [groupStageIndex, setGroupStageIndex] = useState<number>(0);
@@ -85,13 +86,13 @@ const MatchListTable = (props: MatchListTableProps) => {
 
   return (
     <div className="bg-[#F2F2F2]">
-      <div className={clsx("title-background bg-[cover] pr-8 w-fit")}>
+      <div className={clsx("title-background pr-8 bg-[cover] w-[320px]")}>
         {rounds[groupStageIndex].label}
       </div>
       <div className="px-5 pt-3 pb-5">
         <div className="flex items-center justify-between ">
           <div className="font-normal text-14/24">(Time Zone: GMT+7)</div>
-          <div className="flex">
+          {/* <div className="flex">
             <div>
               <span className="text-14/20 font-semibold">Predicted</span>
               <DropDown
@@ -116,7 +117,7 @@ const MatchListTable = (props: MatchListTableProps) => {
                 bgColor="white"
               />
             </div>
-          </div>
+          </div> */}
         </div>
 
         <div className="flex justify-between items-center bg-[#3A0013] text-white mt-1">
@@ -139,7 +140,8 @@ const MatchListTable = (props: MatchListTableProps) => {
           </div>
         </div>
 
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto relative">
+          {loading && <DefaultLoading />}
           <div
             className={clsx(
               "flex bg-[#3A0013] min-w-fit text-white px-5 py-3 text-12/18 uppercase font-inter font-bold",
@@ -152,51 +154,44 @@ const MatchListTable = (props: MatchListTableProps) => {
               </div>
             ))}
           </div>
-          {loading ? (
-            <div>Loading ...</div>
-          ) : (
-            dataTable?.map((matchInfo: any, index: number) => (
-              <div key={index} className="">
-                <div className="text-12/18 font-bold px-5 py-[11px] uppercase opacity-80">
-                  {matchInfo?.date}
-                </div>
-                {matchInfo?.matches?.map((match: any) => (
-                  <div
-                    key={match?.match_id}
-                    className={clsx(
-                      "flex items-center cursor-pointer hover:bg-orange-300 transition-all duration-300 mb-0.5 last:mb-0 px-5 py-2 min-w-fit text-14/24 ",
-                      styles.tableRow,
-                      selectedMatchId === match?.match_id
-                        ? "bg-amber-200"
-                        : "bg-white",
-                    )}
-                    onClick={() =>
-                      handleSelectMatch(
-                        match?.match_id,
-                        rounds[groupStageIndex].prize,
-                      )
-                    }
-                  >
-                    <div className="flex items-center">
-                      {getMatchTime(match?.start_time * 1000)}
-                    </div>
-                    <MatchName
-                      team1={match?.homeTeam}
-                      team2={match?.awayTeam}
-                    />
-
-                    <div>{match?.total + " address"}</div>
-                    <div>{rounds[groupStageIndex].prize}</div>
-                    <div>
-                      {match.final_winner
-                        ? displayWalletAddress(match.final_winner)
-                        : "No winner"}
-                    </div>
-                  </div>
-                ))}
+          {dataTable?.map((matchInfo: any, index: number) => (
+            <div key={index} className="">
+              <div className="text-12/18 font-bold px-5 py-[11px] uppercase opacity-80">
+                {matchInfo?.date}
               </div>
-            ))
-          )}
+              {matchInfo?.matches?.map((match: any) => (
+                <div
+                  key={match?.match_id}
+                  className={clsx(
+                    "flex items-center cursor-pointer hover:bg-orange-300 transition-all duration-300 mb-0.5 last:mb-0 px-5 py-2 min-w-fit text-14/24 ",
+                    styles.tableRow,
+                    selectedMatchId === match?.match_id
+                      ? "bg-amber-200"
+                      : "bg-white",
+                  )}
+                  onClick={() =>
+                    handleSelectMatch(
+                      match?.match_id,
+                      rounds[groupStageIndex].prize,
+                    )
+                  }
+                >
+                  <div className="flex items-center">
+                    {getMatchTime(match?.start_time * 1000)}
+                  </div>
+                  <MatchName team1={match?.homeTeam} team2={match?.awayTeam} />
+
+                  <div>{match?.total + " address"}</div>
+                  <div>{rounds[groupStageIndex].prize}</div>
+                  <div>
+                    {match.final_winner
+                      ? displayWalletAddress(match.final_winner)
+                      : "No winner"}
+                  </div>
+                </div>
+              ))}
+            </div>
+          ))}
         </div>
       </div>
     </div>

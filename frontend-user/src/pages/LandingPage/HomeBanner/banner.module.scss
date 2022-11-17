@@ -1,0 +1,45 @@
+.homeBanner {
+  background: url(/assets/images/bg-banner.png) 0 0 no-repeat;
+  background-size: cover;
+}
+.imgBenzema {
+  width: 36%;
+  right: 8%;
+  bottom: -4%;
+}
+.imgMessi {
+  width: 27%;
+  right: 12%;
+  bottom: -8%;
+}
+.imgModric {
+  width: 15%;
+  right: 0;
+  bottom: 0;
+}
+.imgNeymar {
+  width: 28%;
+  right: 3%;
+  bottom: -2%;
+}
+.imgRonaldo {
+  width: 24%;
+  right: 1%;
+  bottom: 31%;
+}
+
+.reward {
+  position: absolute;
+  left: 0;
+  bottom: 14%;
+  width: 55%;
+  height: 20%;
+  background: url(/assets/images/bg-banner-reward.svg) 0 0 no-repeat;
+  background-size: cover;
+  padding-left: 8%;
+}
+.bannerText {
+  position: absolute;
+  left: 10%;
+  bottom: 35%;
+}

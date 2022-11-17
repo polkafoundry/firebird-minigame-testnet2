@@ -51,6 +51,7 @@ const useProviderConnects = () => {
   const handleProviderChosen = async (
     name: string,
     connector: AbstractConnector,
+    handleCloseModal: () => void,
   ) => {
     // Add Firebird chain to metamask or switch chain
     const provider = (window as any).ethereum;
@@ -69,6 +70,7 @@ const useProviderConnects = () => {
     }
     await tryActivate(connector);
     setConnectLoading(false);
+    handleCloseModal();
     setCurrentConnector(connector);
     walletName.indexOf(name) < 0 && setWalletName([...walletName, name]);
   };

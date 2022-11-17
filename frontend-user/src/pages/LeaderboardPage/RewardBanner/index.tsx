@@ -37,7 +37,7 @@ const RewardBanner = (props: RewardBannerProps) => {
           <span
             className={clsx(
               "font-tthovesBold italic",
-              !isLargeText ? "text-32/60" : "text-48/60</div>",
+              !isLargeText ? "text-32/60" : "text-48/60",
             )}
           >
             {winner}
@@ -50,7 +50,7 @@ const RewardBanner = (props: RewardBannerProps) => {
         rel="noreferrer"
         className="mt-3 btn-rounded btn-black w-[240px]"
       >
-        More Details
+        More Detail
       </a>
     </div>
   );

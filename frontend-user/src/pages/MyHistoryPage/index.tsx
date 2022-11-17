@@ -1,6 +1,9 @@
 import clsx from "clsx";
+import queryString from "query-string";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import DropDown from "../../components/base/DropDown";
+import InputSearch from "../../components/base/InputSearch";
 import Pagination from "../../components/base/Pagination";
 import DefaultLayout from "../../components/layout/DefaultLayout";
 import {
@@ -11,14 +14,12 @@ import {
 } from "../../constants";
 import useFetch from "../../hooks/useFetch";
 import { useMyWeb3 } from "../../hooks/useMyWeb3";
-import usePost from "../../hooks/usePost";
+import { getMyHistory } from "../../requests/getMyHistory";
 import { convertHexToStringNumber } from "../../utils";
 import HeadingPrimary from "../LandingPage/components/HeadingPrimary";
 import HistoryTable from "./HistoryTable";
 import HowToJoin from "./HowToJoin";
 import Statistics from "./Statistic";
-import queryString from "query-string";
-import InputSearch from "../../components/base/InputSearch";
 
 type NavItemTypes = {
   label: string;
@@ -62,7 +63,6 @@ type StatisticTypes = {
   correct_answers: any;
   win_rate: any;
   earned: any;
-  current_rank?: any;
   win_whitelist: any;
   total?: any;
 };
@@ -78,24 +78,33 @@ const claimedOptions = [
   { label: "Yes", value: true },
   { label: "No", value: false },
 ];
-
-const PAGE_LIMIT = 10;
-const MyHistoryPage = () => {
-  const { account } = useMyWeb3();
-  const [dataTable, setDataTable] = useState<any>([]);
-  const [statistics, setStatistics] = useState<StatisticTypes>({
+const InitState = {
+  statistics: {
     prediction_times: 0,
     correct_answers: 0,
     win_rate: 0,
     earned: 0,
     win_whitelist: 0,
-  });
-  const [filter, setFilter] = useState<FilterTypes>({
+  },
+  filter: {
     claimed: claimedOptions[0].value,
     result: resultOptions[0].value,
     search: "",
     page: 1,
-  });
+  },
+};
+
+const PAGE_LIMIT = 10;
+const MyHistoryPage = () => {
+  const { account } = useMyWeb3();
+  const [dataTable, setDataTable] = useState<any>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [totalCount, setTotalCount] = useState<number>(0);
+  const [statistics, setStatistics] = useState<StatisticTypes>(
+    InitState.statistics,
+  );
+  const [currentRank, setCurrentRank] = useState<number>(0);
+  const [filter, setFilter] = useState<FilterTypes>(InitState.filter);
 
   const [navActived, setNavActived] = useState<
     typeof HISTORY_NAV_VALUES[keyof typeof HISTORY_NAV_VALUES]
@@ -111,81 +120,85 @@ const MyHistoryPage = () => {
   );
 
   useEffect(() => {
-    setStatistics((prev: StatisticTypes) => ({
-      ...prev,
-      current_rank: leaderboardData?.data?.position,
-    }));
+    setCurrentRank(leaderboardData?.data?.position);
   }, [leaderboardData]);
-
-  // const shouldLoadPredictInfo = useMemo(() => {
-  //   return !!account && filter.result && filter.claimed;
-  // }, [account, filter.result, filter.claimed]);
-
-  const { response, loading } = usePost<any>(
-    navActived === HISTORY_NAV_VALUES.GOALS
-      ? "/betting/history"
-      : "/predict/history",
-    {
-      page: filter.page,
-      limit: PAGE_LIMIT,
-      address: account,
-      result: filter.result,
-      is_claim: filter.claimed,
-    },
-    !!account,
-  );
-
-  useEffect(() => {
-    if (!response) return;
-
-    if (response?.status !== 200) {
-      console.log("ERR get predict history: ", response?.message);
-    } else {
-      const resData = response.data;
-
-      const newStatistics = {
-        prediction_times: resData.total,
-        correct_answers: resData.wins,
-        win_rate: resData.wins
-          ? ((resData.wins / resData.total) * 100).toFixed(2) + "%"
-          : "0%",
-        earned: resData.earnedToken
-          ? convertHexToStringNumber(resData.earnedToken)
-          : "0",
-        win_whitelist: resData.finalWinner,
-      };
-
-      setDataTable(resData?.bettings?.data || resData?.predicts?.data);
-      setStatistics(newStatistics);
-    }
-  }, [response]);
 
   const handleChangeResult = (value: any) => {
     setFilter((prev: FilterTypes) => ({
       ...prev,
       result: value,
+      page: 1,
     }));
   };
   const handleChangeClaim = (value: any) => {
     setFilter((prev: FilterTypes) => ({
       ...prev,
       claimed: value,
+      page: 1,
     }));
   };
 
+  const handleChangeTab = (value: any) => {
+    setNavActived(value);
+    setStatistics(InitState.statistics);
+  };
+
   useEffect(() => {
-    const timer = setTimeout(() => {
-      console.log("fetch new history", filter);
+    setLoading(true);
+    const timer = setTimeout(async () => {
+      if (!account) return;
+      const uri =
+        navActived === HISTORY_NAV_VALUES.GOALS
+          ? "/betting/history"
+          : "/predict/history";
+      const params = {
+        page: filter?.page,
+        limit: PAGE_LIMIT,
+        address: account,
+        result: filter?.result,
+        is_claim: filter?.claimed,
+      };
+
+      try {
+        const res = await getMyHistory(uri, params);
+        setLoading(false);
+        // console.log("getMyHistory: ", res);
+        if (res?.status !== 200) {
+          toast.error(res?.message || "Fail to load history");
+          return;
+        }
+
+        const resData = res?.data || {};
+
+        const newStatistics = {
+          prediction_times: resData?.total,
+          correct_answers: resData?.wins,
+          win_rate: resData?.wins
+            ? ((resData?.wins / resData?.total) * 100).toFixed(2) + "%"
+            : "0%",
+          earned: resData?.earnedToken
+            ? convertHexToStringNumber(resData?.earnedToken)
+            : "0",
+          win_whitelist: resData?.finalWinner,
+        };
+
+        setStatistics(newStatistics);
+        setTotalCount(resData?.bettings?.meta?.total);
+        setDataTable(resData?.bettings?.data || resData?.predicts?.data);
+      } catch (error: any) {
+        toast.error(error?.message || "Fail to load history");
+        setLoading(false);
+      }
     }, 500);
+
     return () => clearTimeout(timer);
-  }, [filter]);
+  }, [filter, account, navActived]);
 
   const handleSearch = (e: any) => {
     setFilter((prevFilter: FilterTypes) => ({
       ...prevFilter,
       [e.target.name]: e.target.value,
     }));
-    console.log("filter", filter);
   };
 
   const handleChangePage = (value: number) => {
@@ -193,6 +206,55 @@ const MyHistoryPage = () => {
       ...prevFilter,
       page: value,
     }));
+  };
+
+  const renderFilter = () => {
+    return (
+      <div className="flex items-center mt-10 bg-[#F2F2F2]">
+        <div className="flex flex-col sm:flex-row w-full justify-between items-start">
+          <div className="title-background">Prediction List</div>
+          <div className="flex flex-col items-start ml-5 sm:items-end lg:flex-row mt-4 pr-5">
+            <div className="flex">
+              <div>
+                <span className="text-14/20 font-semibold">Predicted</span>
+                <DropDown
+                  label="Predicted"
+                  items={resultOptions}
+                  selectedValue={filter.result}
+                  onChange={handleChangeResult}
+                  className="w-[110px] ml-2 text-14/24"
+                  itemsClassName=""
+                  bgColor="white"
+                />
+              </div>
+              {navActived === HISTORY_NAV_VALUES.GOALS && (
+                <div className="ml-4">
+                  <span className="text-14/20 font-semibold">Claimed</span>
+                  <DropDown
+                    label="Claimed"
+                    items={claimedOptions}
+                    selectedValue={filter.claimed}
+                    onChange={handleChangeClaim}
+                    className="w-[110px] ml-2 text-14/24"
+                    itemsClassName=""
+                    bgColor="white"
+                  />
+                </div>
+              )}
+            </div>
+            <div className="sm:ml-4 flex items-center mt-2 lg:mt-0">
+              <span className="text-14/20 font-semibold">Search</span>
+              <InputSearch
+                className="rounded-md bg-white w-[272px] px-3 py-1.5 ml-2"
+                value={filter.search}
+                onChange={handleSearch}
+                placeholder="Search match"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
   };
 
   return (
@@ -216,119 +278,63 @@ const MyHistoryPage = () => {
                     className={clsx(
                       "cursor-pointer py-2 font-semibold",
                       navActived === item.value
-                        ? "border-b-2 border-main text-main opacity-100"
+                        ? "border-b-2 border-main text-main opacity-100 pointer-events-none"
                         : "opacity-50",
                     )}
-                    onClick={() => setNavActived(item.value)}
+                    onClick={() => handleChangeTab(item.value)}
                   >
                     {item.label}
                   </div>
                 ))}
               </div>
 
-              <Statistics data={statistics} navActived={navActived} />
+              <Statistics
+                data={statistics}
+                currentRank={currentRank}
+                navActived={navActived}
+              />
 
               <div className="overflow-x-auto">
-                <div className="flex items-center mt-10 bg-[#F2F2F2]">
-                  <div className="flex flex-col sm:flex-row w-full justify-between items-start">
-                    <div className="title-background">Prediction List</div>
-                    <div className="flex flex-col items-start ml-5 sm:items-end lg:flex-row mt-4 pr-5">
-                      <div className="flex">
-                        <div>
-                          <span className="text-14/20 font-semibold">
-                            Predicted
-                          </span>
-                          <DropDown
-                            label="Predicted"
-                            items={resultOptions}
-                            selectedValue={filter.result}
-                            onChange={handleChangeResult}
-                            className="w-[110px] ml-2 text-14/24"
-                            itemsClassName=""
-                            bgColor="white"
-                          />
-                        </div>
-                        {navActived === HISTORY_NAV_VALUES.GOALS && (
-                          <div className="ml-4">
-                            <span className="text-14/20 font-semibold">
-                              Claimed
-                            </span>
-                            <DropDown
-                              label="Claimed"
-                              items={claimedOptions}
-                              selectedValue={filter.claimed}
-                              onChange={handleChangeClaim}
-                              className="w-[110px] ml-2 text-14/24"
-                              itemsClassName=""
-                              bgColor="white"
-                            />
-                          </div>
-                        )}
-                      </div>
-                      <div className="sm:ml-4 flex items-center mt-2 lg:mt-0">
-                        <span className="text-14/20 font-semibold">Search</span>
-                        <InputSearch
-                          className="rounded-md bg-white w-[272px] px-3 py-1.5 ml-2"
-                          value={filter.search}
-                          onChange={handleSearch}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="bg-[#F2F2F2] px-5 pt-2 pb-10">
-                  {loading && <div>Loading...</div>}
-                  {!loading && (
-                    <>
-                      {!dataTable || !dataTable.length ? (
-                        <div className="flex flex-col items-center w-full pt-14 pb-4 px-10">
-                          <img
-                            src="./images/icon-not-found.svg"
-                            alt=""
-                            className="w-[125px] h-[125px]"
-                          />
-                          <p>You haven’t predicted any matches</p>
-                          <a
-                            href={BASE_HREF + URLS.HOME + "#prediction-rule"}
-                            className="min-w-[255px] w-[30%] mt-10 btn-rounded btn-primary"
-                          >
-                            Predict Now
-                          </a>
-                        </div>
-                      ) : (
-                        <>
-                          {!account && (
-                            <div>
-                              Please connect wallet to see prediction list
-                            </div>
-                          )}
-                          {account && (
-                            <HistoryTable
-                              headings={
-                                navActived === HISTORY_NAV_VALUES.GOALS
-                                  ? headings.whoWin
-                                  : headings.matchScore
-                              }
-                              dataTable={dataTable}
-                              tableLoading={false}
-                              isWhoWinTable={
-                                navActived === HISTORY_NAV_VALUES.GOALS
-                              }
-                              account={account}
-                            />
-                          )}
+                {renderFilter()}
 
-                          {account && (
-                            <Pagination
-                              className="justify-center mt-10"
-                              currentPage={filter.page}
-                              totalCount={500}
-                              pageSize={PAGE_LIMIT}
-                              onPageChange={handleChangePage}
-                            />
-                          )}
-                        </>
-                      )}
+                <div className="bg-[#F2F2F2] px-5 pt-2 pb-10">
+                  {dataTable?.length === 0 && !loading ? (
+                    <div className="flex flex-col items-center w-full pt-14 pb-4 px-10">
+                      <img
+                        src="./images/icon-not-found.svg"
+                        alt=""
+                        className="w-[125px] h-[125px]"
+                      />
+                      <p>You haven’t predicted any matches</p>
+                      <a
+                        href={BASE_HREF + URLS.HOME + "#match-list"}
+                        className="min-w-[255px] w-[30%] mt-10 btn-rounded btn-primary"
+                      >
+                        Predict Now
+                      </a>
+                    </div>
+                  ) : !account ? (
+                    <div>Please connect wallet to see prediction list</div>
+                  ) : (
+                    <>
+                      <HistoryTable
+                        headings={
+                          navActived === HISTORY_NAV_VALUES.GOALS
+                            ? headings.whoWin
+                            : headings.matchScore
+                        }
+                        dataTable={dataTable}
+                        tableLoading={loading}
+                        isWhoWinTable={navActived === HISTORY_NAV_VALUES.GOALS}
+                        account={account}
+                      />
+                      <Pagination
+                        className="justify-center mt-10"
+                        currentPage={filter.page}
+                        totalCount={totalCount}
+                        pageSize={PAGE_LIMIT}
+                        onPageChange={handleChangePage}
+                      />
                     </>
                   )}
                 </div>

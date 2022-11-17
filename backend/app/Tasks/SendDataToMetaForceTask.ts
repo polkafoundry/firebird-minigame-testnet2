@@ -10,7 +10,7 @@ import Logger from 'App/Common/Logger'
 class SendDataToMetaForce {
     async sendData() {
         try {
-            const MAX_REQ_SEND_TO_MF = 1000
+            const MAX_REQ_SEND_TO_MF = Const.MAX_REQ_SEND_TO_MF
             let bettings = await BettingModel.query().where('is_calculated', true).where('is_sent_to_mf', false).limit(MAX_REQ_SEND_TO_MF);
             bettings = JSON.parse(JSON.stringify(bettings))
             if (!bettings.length) return
@@ -19,7 +19,7 @@ class SendDataToMetaForce {
             const timestamps = Array.from({ length: bettings.length }, (v, i) => {
                 return currentTime + i
             })
-
+            const startSend = Date.now()
             const res = await Promise.all(
                 bettings.map((betting, index) => this._sendToMetaForce({ betting, timestamp: timestamps[index] }))
             )
@@ -30,7 +30,7 @@ class SendDataToMetaForce {
             }
 
             Logger.info(
-                `Send ${bettings.length} req to MF and return ${data.success} success, ${data.error} error, error message: ${JSON.stringify(data.error_mess)}`
+                `[${Date.now() - startSend} ms] Send ${bettings.length} req to MF and return ${data.success} success, ${data.error} error, error message: ${JSON.stringify(data.error_mess)}`
             )
         } catch (error) {
             console.log('error SendDataToMetaForceTask: ', error.message)

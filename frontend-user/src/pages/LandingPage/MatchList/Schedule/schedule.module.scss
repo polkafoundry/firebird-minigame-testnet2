@@ -1,0 +1,78 @@
+.scheduleBg {
+  background-image: url("../../../../assets/images/schedule-bg-sm.png");
+  background-repeat: no-repeat;
+  background-position: top right;
+  background-size: cover;
+  height: 1100px;
+  @media (min-width: theme("screens.sm")) {
+    background-image: url("../../../../assets/images/schedule-bg.png");
+    height: 710px;
+    background-position: top left;
+  }
+  @media (min-width: theme("screens.lg")) {
+    height: 800px;
+  }
+  @media (min-width: theme("screens.xl")) {
+    height: 950px;
+  }
+}
+
+.schedule > div {
+  flex: 1;
+  @media (min-width: theme("screens.sm")) {
+    align-items: center;
+    text-align: center;
+  }
+}
+.schedule > div:first-child {
+  align-items: flex-start;
+  text-align: start;
+}
+.schedule > div:nth-child(6) {
+  justify-content: end;
+}
+
+.dotContainer {
+  @apply absolute overflow-hidden h-[500px] sm:h-full w-full flex items-center justify-start pl-[74px] mt-3 sm:pl-0 sm:mt-0;
+  writing-mode: vertical-lr;
+  @media (min-width: theme("screens.sm")) {
+    writing-mode: horizontal-tb;
+  }
+}
+.dot {
+  font-weight: 700;
+  font-size: 20px;
+  color: white;
+  opacity: 0.4;
+  user-select: none;
+  width: 100%;
+  text-align: left;
+  letter-spacing: 20px;
+  @media (min-width: theme("screens.sm")) {
+    letter-spacing: 26px;
+  }
+}
+
+.title,
+.titleActive {
+  @apply font-semibold font-tthoves;
+}
+
+.title {
+  @apply text-20/28;
+}
+
+.titleActive {
+  @apply text-20/28 text-main;
+
+  @media (min-width: theme("screens.sm")) {
+    @apply text-28/36;
+  }
+}
+
+.time {
+  @apply text-14/24 font-normal opacity-80 font-inter;
+  @media (min-width: theme("screens.sm")) {
+    @apply text-16/24;
+  }
+}

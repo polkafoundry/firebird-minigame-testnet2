@@ -1,4 +1,10 @@
+import Tippy from "@tippyjs/react";
 import clsx from "clsx";
+import {
+  LANDING_PAGE_URL,
+  SocialItemTypes,
+  socialsData,
+} from "../../../constants";
 
 const buyPkfExchanges = [
   {
@@ -22,7 +28,7 @@ const buyPkfExchanges = [
 const siteMaps = [
   {
     label: "Bird Nest",
-    url: "/bird-nest",
+    url: LANDING_PAGE_URL + "bird-nest",
   },
   {
     label: "Documentation",
@@ -30,11 +36,11 @@ const siteMaps = [
   },
   {
     label: "Community",
-    url: "/community",
+    url: LANDING_PAGE_URL + "community",
   },
   {
     label: "FAQ",
-    url: "/faq",
+    url: LANDING_PAGE_URL + "faq",
   },
 ];
 
@@ -77,21 +83,26 @@ const FooterDefaultLayout = () => {
               Follow us on Firebird official groups and channels so you won’t
               miss anything!
             </p>
-            {/* <div className="flex gap-3 mt-3">
-              {socialsData.map((item: SocialItemTypes, index: number) => (
-                // <Tippy key={index} content={item.label} placement="bottom">
-                <a
-                  key={index}
-                  href={item.url}
-                  target="_blank"
-                  rel="noreferrer"
-                  className={clsx({ "pointer-events-none": !item.username })}
-                >
-                  <img src={item.img} alt="" width={28} height={28} />
-                </a>
-                // </Tippy>
-              ))}
-            </div> */}
+            <div className="flex gap-3 mt-3">
+              {socialsData.map(
+                (item: SocialItemTypes, index: number) =>
+                  item?.username && (
+                    <Tippy key={index} content={item.label} placement="bottom">
+                      <a
+                        key={index}
+                        href={item.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className={clsx({
+                          "pointer-events-none": !item.username,
+                        })}
+                      >
+                        <img src={item.img} alt="" width={28} height={28} />
+                      </a>
+                    </Tippy>
+                  ),
+              )}
+            </div>
           </div>
 
           <div className="hidden md:flex mt-auto ml-auto">
@@ -119,6 +130,7 @@ const FooterDefaultLayout = () => {
                   <a
                     key={index + 100}
                     href={item.url}
+                    target={"_blank"}
                     rel="noreferrer"
                     className="w-full max-w-[120px] hover:underline"
                   >

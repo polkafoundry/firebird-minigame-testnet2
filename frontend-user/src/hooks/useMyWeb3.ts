@@ -1,7 +1,7 @@
 import { Web3Provider } from "@ethersproject/providers";
 import { useWeb3React } from "@web3-react/core";
 import { formatEther } from "ethers/lib/utils";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import useSWR from "swr";
 import { BIRD_CHAIN_ID } from "../constants/networks";
 import useBirdToken from "./useBirdToken";
@@ -38,13 +38,12 @@ export const useMyWeb3 = () => {
 
   // get Bird token
   useEffect(() => {
-    let balance: any = "0";
     const getBirdToken = async () => {
-      balance = account ? await getBirdBalance(account) : "0";
+      const bal = account ? await getBirdBalance(account) : "0";
       setState((preState: any) => ({
         ...preState,
         account: account,
-        birdBalance: balance,
+        birdBalance: bal,
       }));
     };
 
@@ -75,5 +74,13 @@ export const useMyWeb3 = () => {
     setState((preState: any) => ({ ...preState, isWrongChain: isWrong }));
   }, [chainId]);
 
-  return { ...state };
+  const updateBirdBalance = useCallback(async () => {
+    const balance = account ? await getBirdBalance(account) : "0";
+    setState((preState: any) => ({
+      ...preState,
+      birdBalance: balance,
+    }));
+  }, [account]);
+
+  return { ...state, updateBirdBalance };
 };

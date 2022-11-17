@@ -144,7 +144,7 @@ const HowToJoin = () => {
                 </li>
               </ul>
               <a
-                href={BASE_HREF + URLS.HOME + "#prediction-rule"}
+                href={BASE_HREF + URLS.HOME + "#match-list"}
                 target="_blank"
                 rel="noreferrer"
                 className="w-full btn-rounded btn-primary mt-auto"

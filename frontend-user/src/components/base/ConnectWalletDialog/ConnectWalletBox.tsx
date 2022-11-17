@@ -6,32 +6,38 @@ import styles from "./dialog.module.scss";
 
 type ConnectWalletBoxProps = {
   wallet?: WalletInfo;
-  handleProviderChosen?: (name: string, connector: AbstractConnector) => void;
+  handleProviderChosen?: (
+    name: string,
+    connector: AbstractConnector,
+    closeDialog: () => void,
+  ) => void;
   connectWalletLoading?: boolean;
   walletName?: (string | undefined)[];
+  closeDialog: () => void;
 };
 
 const ConnectWalletBox = (props: ConnectWalletBoxProps) => {
-  const { connectWalletLoading, handleProviderChosen, wallet } = props;
+  const { connectWalletLoading, handleProviderChosen, wallet, closeDialog } =
+    props;
 
   const handleWalletChange = () => {
     wallet &&
       handleProviderChosen &&
-      handleProviderChosen(wallet.name, wallet.connector as AbstractConnector);
+      handleProviderChosen(
+        wallet.name,
+        wallet.connector as AbstractConnector,
+        closeDialog,
+      );
   };
 
   if (!wallet) return <></>;
 
   const { name, icon } = wallet;
-  // const selectingWallet = walletName && walletName.indexOf(name) >= 0;
 
   return (
     <div
       className={clsx(
         "flex flex-col max-w-[108px] min-w-[96px] w-full gap-2 rounded bg-[#373737] items-center px-2 py-3 cursor-pointer justify-between",
-        // {
-        //   "border-[#5EFF8B] border-[1px]": selectingWallet,
-        // },
       )}
       onClick={() => {
         if (isMobile && wallet?.deepLink) {
@@ -42,7 +48,6 @@ const ConnectWalletBox = (props: ConnectWalletBoxProps) => {
       }}
     >
       {connectWalletLoading ? (
-        // <img src="/images/loading.svg" alt="" />
         <div className={styles.loading}>
           <div className={styles.rhombus}></div>
           <div className={styles.rhombus}></div>
