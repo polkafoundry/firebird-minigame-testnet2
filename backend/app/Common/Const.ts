@@ -77,8 +77,6 @@ module.exports = Object.freeze({
   REDIS_KEY_WITHDRAW_TOKEN_LAST_SUCCESS: 'epic_last_success_withdraw_token',
   REDIS_KEY_REFUND_NFT_LAST_SUCCESS: 'epic_last_success_refund_nft',
   REDIS_KEY_REFUND_TOKEN_LAST_SUCCESS: 'epic_last_success_refund_token',
-  SBIRD_CONTRACT_ADDERSS: process.env.SBIRD_CONTRACT_ADDERSS,
-  PRIVATE_KEY: process.env.PRIVATE_KEY,
   PROXY_LIST: process.env.PROXY_LIST ? JSON.parse(process.env.PROXY_LIST) : [],
   BET_TYPE: {
     OU_HT: 'ou_ht',
