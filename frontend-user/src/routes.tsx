@@ -2,6 +2,8 @@ import React from "react";
 import { Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { URLS } from "./constants";
+import FaqPage from "./pages/FaqPage";
+import IntroductionPage from "./pages/IntroductionPage";
 import LangdingPage from "./pages/LandingPage";
 import LeaderboardPage from "./pages/LeaderboardPage";
 import MyHistoryPage from "./pages/MyHistoryPage";
@@ -14,6 +16,8 @@ const routing = function createRouting() {
         <Route path={URLS.HOME} element={<LangdingPage />} />
         <Route path={URLS.HISTORY} element={<MyHistoryPage />} />
         <Route path={URLS.LEADERBOARD} element={<LeaderboardPage />} />
+        <Route path={URLS.FIREFLY_TESTNET} element={<IntroductionPage />} />
+        <Route path={URLS.FAQ} element={<FaqPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
       <ToastContainer />
