@@ -66,7 +66,7 @@ const Pagination = (props: PaginationProps) => {
       className={clsx(
         styles.paginationContainer,
         className,
-        "text-center text-xl select-none",
+        "text-center text-14/18 font-inter font-semibold select-none",
       )}
     >
       {/* Left navigation arrow */}

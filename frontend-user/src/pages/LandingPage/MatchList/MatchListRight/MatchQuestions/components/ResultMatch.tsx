@@ -86,7 +86,9 @@ const ResultMatch = (props: ResultMatchProps) => {
             Amount to claim
           </span>
           <span className="font-semibold text-16/20 font-tthoves mt-1">
-            {convertHexToStringNumber(questions?.total_claim) + " $BIRD"}
+            {(questionStatus === QUESTION_STATUS.CORRECT_ANSWER
+              ? convertHexToStringNumber(questions?.total_claim)
+              : 0) + " $BIRD"}
             {questionStatus === QUESTION_STATUS.CORRECT_ANSWER && isClaimed && (
               <span className="text-12/20 font-normal"> (Claimed)</span>
             )}

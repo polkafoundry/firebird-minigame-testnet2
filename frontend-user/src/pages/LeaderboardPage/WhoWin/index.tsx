@@ -12,13 +12,7 @@ import HeadingPrimary from "../../LandingPage/components/HeadingPrimary";
 import RewardBanner from "../RewardBanner";
 import styles from "./whoWin.module.scss";
 
-const headingTable = ["No", "Wallet address", "Prize", "Earned $BIRD"];
-const rankData = [
-  { no: 1, address: "0xc13***770c", prize: 700, earned: 18300 },
-  { no: 2, address: "0xc13***770c", prize: 700, earned: 18300 },
-  { no: 3, address: "0xc13***770c", prize: 700, earned: 18300 },
-  { no: 4, address: "0xc13***770c", prize: 700, earned: 18300 },
-];
+const headingTable = ["No", "Wallet address", "Reward", "Earned $BIRD"];
 
 const PAGE_LIMIT = 10;
 const WhoWin = () => {
@@ -122,7 +116,8 @@ const WhoWin = () => {
           <div className="relative min-h-[500px]">
             {loading && <DefaultLoading />}
 
-            {!loading && (!rankData || !rankData.length) ? (
+            {!loading &&
+            (!leaderboardData?.data || !leaderboardData?.data.length) ? (
               <div>Not found</div>
             ) : (
               <>

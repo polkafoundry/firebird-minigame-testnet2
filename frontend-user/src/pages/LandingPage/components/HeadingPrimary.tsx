@@ -31,18 +31,16 @@ const HeadingPrimary = (props: HeadingPrimaryProps) => {
       >
         {backroundTitle}
       </p>
-      <div className="flex items-center absolute bottom-0 xs:bottom-3 w-full">
-        <h5
-          className={clsx(
-            styles.headingPrimary,
-            titleColor,
-            textAlign,
-            "mr-[15px] w-full",
-          )}
-        >
-          {title}
-        </h5>
-      </div>
+      <h5
+        className={clsx(
+          styles.headingPrimary,
+          titleColor,
+          textAlign,
+          "mr-[15px]",
+        )}
+      >
+        {title}
+      </h5>
     </div>
   );
 };

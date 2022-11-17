@@ -17,11 +17,10 @@ const WinnerMatch = (props: MatchListRightProps) => {
     `/predict/predict-winner-in-match?match_id=${matchId}`,
     !!matchId,
   );
-
   const matchData = data?.data;
   const listWinner = matchData?.listWinner.slice(0, 6);
 
-  const isWinner = account === matchData?.finalWinner;
+  const isWinner = matchData?.finalWinner && account === matchData?.finalWinner;
 
   return (
     <div className="flex flex-col rounded-lg md:ml-6 bg-[#F2F2F2]">
