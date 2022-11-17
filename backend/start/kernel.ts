@@ -18,6 +18,9 @@ import { calcOuFtJob } from 'App/Jobs/CalcOuFtJob'
 import { calcOuHtJob } from 'App/Jobs/CalcOuHtJob'
 import { calcOddsHtJob } from 'App/Jobs/CalcOddsHtJob'
 import { calcOddsFtJob } from 'App/Jobs/CalcOddsFtJob'
+
+import { requestRandomPredict } from 'App/Jobs/RequestRandomPredict'
+
 const FetchMatchInfoInitTask = require('@ioc:App/Tasks/FetchMatchInfoTask')
 const FetchUserPredictTask = require('@ioc:App/Tasks/FetchUserPredictTask')
 const FetchUserBettingTask = require('@ioc:App/Tasks/FetchUserBettingTask')
@@ -53,7 +56,7 @@ Server.middleware.register([() => import('@ioc:Adonis/Core/BodyParser')])
 */
 Server.middleware.registerNamed({
   checkSignature: () => import('App/Middleware/CheckSignature'),
-  checkAuthSignature: () => import('App/Middleware/CheckAuthSignature')
+  checkAuthSignature: () => import('App/Middleware/CheckAuthSignature'),
 })
 
 //const Scheduler = require('@ioc:Adonis/Addons/Scheduler')
@@ -70,6 +73,6 @@ new Promise(() => {
   calcOuHtJob()
   calcOddsHtJob()
   calcOddsFtJob()
-
+  requestRandomPredict()
   return
 }).then(() => {})

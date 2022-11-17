@@ -69,6 +69,9 @@ export default class Match extends BaseModel {
   @column({ columnName: 'is_full_time' })
   public is_full_time: boolean
 
+  @column({ columnName: 'is_pick_predict_final_winners' })
+  public is_pick_predict_final_winners: boolean
+
   //bet statistics
   @column({ columnName: 'ou_ht_over' })
   public ou_ht_over: number

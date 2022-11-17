@@ -1,6 +1,5 @@
 "use strict";
 
-import ForbiddenException from 'App/Exceptions/ForbiddenException'
 import UnauthorizedException from 'App/Exceptions/UnauthorizedException';
 const Const = require('@ioc:App/Common/Const')
 import Web3 from 'web3'

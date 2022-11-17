@@ -8,12 +8,28 @@
 const hre = require("hardhat");
 
 async function main() {
-  const tokenAddress = "0x75B609AA12713b2fb7Ac141B2dD06d81cf4115E3";
-  const fundAddress = "0x1522E0De73B85D0b8DE2c67b4263F8Fa4A88abBB";
   const maxAmount = "1000000000000000000000";
 
+  const BirdTokenFactory = await ethers.getContractFactory("BirdToken");
+  const bird = await BirdTokenFactory.deploy();
+
+  let birdTokenContract = await bird.deployed();
+  console.log("BirdTokenContract contract deployed to: ", birdTokenContract.address);
+
+  // white list deployer
+  const whiteListDeployAddress = await birdTokenContract.setWhitelistAddress(process.env.DEPLOYER_ADDRESS);
+  console.log("White list deploy address: ", whiteListDeployAddress.hash);
+
+  // white list fund wallet
+  const whiteListFundAddress = await birdTokenContract.setWhitelistAddress(process.env.FUND_ADDRESS);
+  console.log("White list fund address: ", whiteListFundAddress.hash);
+
+  //send token to fund wallet
+  const transferToken = await birdTokenContract.transfer(process.env.FUND_ADDRESS, "100000000000000000000000000");
+  console.log("Transfer token to fund wallet: ", transferToken.hash);
+
   const ContractFactory = await hre.ethers.getContractFactory("SBirdBetting");
-  const Contract = await upgrades.deployProxy(ContractFactory, [tokenAddress, fundAddress], {
+  const Contract = await upgrades.deployProxy(ContractFactory, [birdTokenContract.address, process.env.FUND_ADDRESS], {
     initializer: "__SBirdBetting_init",
   });
 
@@ -24,14 +40,9 @@ async function main() {
   const setBetAmount = await bettingContract.setMaxBetAmount(maxAmount);
   console.log("set max bet amount", setBetAmount.hash);
 
-  // set max bet amount
-  // const setMatchInfo = await bettingContract.setMatchInfo(
-  //   1,
-  //   [1740, 500, 2190, 1980, 2250, 1940, 4470, 2110, 2940, 3860, 3500, 2250],
-  //   [0, 0, 0, 0, 1669219200, "QATAR", "ECUADOR", "Al Bayt Stadium", "WORLD CUP - ROUND 1", false, false],
-  //   1234
-  // );
-  // console.log("setMatchInfo", setMatchInfo.hash);
+  //set signer
+  const setSigner = await bettingContract.setSigner(process.env.SIGNER_ADDRESS);
+  console.log("set signer", setSigner.hash);
 }
 
 main()

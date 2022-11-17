@@ -110,15 +110,21 @@ export default class FetchPredictWinnerJob implements JobContract {
           const match = await MatchModel.query()
             .where('match_id', event.returnValues.matchID)
             .first()
-          await PredictWinner.query()
-            .where('match_id', event.returnValues.matchID)
-            .andWhere('req_id', event.returnValues.requestId)
-            .update({
-              predict_winner: event.returnValues.matchID,
-              final_winner: event.returnValues.winner,
-              randomness: event.returnValues.result,
-              rewards: Const.PREDICT_REWARD_BY_ROUND[match.round_name],
+          if (match) {
+            await PredictWinner.query()
+              .where('match_id', event.returnValues.matchID)
+              .andWhere('req_id', event.returnValues.requestId)
+              .update({
+                predict_winner: event.returnValues.matchID,
+                final_winner: event.returnValues.winner,
+                randomness: event.returnValues.result,
+                rewards: Const.PREDICT_REWARD_BY_ROUND[match.round_name],
+              })
+            await MatchModel.query().where('match_id', event.returnValues.matchID).update({
+              is_pick_predict_final_winners: true,
             })
+          }
+
           break
         default:
           console.log('FetchPredictWinner: event not supported', event_type)

@@ -111,7 +111,7 @@ const HowToJoin = () => {
                     } $BIRD`}</p>
                   ) : (
                     <a
-                      href={URLS.FAUCET_TESTNET}
+                      href={URLS.FIREFLY_TESTNET}
                       target={"_blank"}
                       rel="norefferer"
                       className="h-auto rounded-xl font-semibold underline font-tthoves"
@@ -133,7 +133,7 @@ const HowToJoin = () => {
                     <p className="m-0 font-semibold font-tthoves">{`${realTimeBalance} $${nativeCurrency}`}</p>
                   ) : (
                     <a
-                      href={URLS.FAUCET_TESTNET}
+                      href={URLS.FIREFLY_TESTNET}
                       target={"_blank"}
                       rel="norefferer"
                       className="h-auto rounded-xl font-semibold underline font-tthoves"

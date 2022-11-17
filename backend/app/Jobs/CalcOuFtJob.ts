@@ -48,15 +48,19 @@ export default class CalcOuFtJob implements JobContract {
   public key = 'CalcOuFtJob'
 
   public async handle() {
-    // const { data } = job
-    // Do somethign with you job data
-    const match = await MatchModel.query()
-      .where('is_calculated_ou_ft', false)
-      .where('is_full_time', true)
-      .first()
-    console.log('CalcOuFtJob: ', match)
-    if (!match) return
-
-    calcBettingJob({ matchId: match.match_id, betType: Const.BET_TYPE.OU_FT })
+    try {
+      // const { data } = job
+      // Do somethign with you job data
+      const match = await MatchModel.query()
+        .where('is_calculated_ou_ft', false)
+        .where('is_full_time', true)
+        .first()
+      if (!match) return
+      console.log('CalcOuFtJob: ', match)
+      calcBettingJob({ matchId: match.match_id, betType: Const.BET_TYPE.OU_FT })
+    } catch (error) {
+      console.log('error CalcOuFtJob: ', error.message)
+      throw new Error(error.message)
+    }
   }
 }

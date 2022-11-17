@@ -99,7 +99,7 @@ const DepositAmount = (props: DepositAmountProps) => {
         <p className="text-12/16 mt-2">
           Maximum is 1,000 BIRD/question.{" "}
           <a
-            href={URLS.FAUCET_TESTNET}
+            href={URLS.FIREFLY_TESTNET}
             target={"_blank"}
             rel="norefferer"
             className="text-[#0085FF] ml-5"
