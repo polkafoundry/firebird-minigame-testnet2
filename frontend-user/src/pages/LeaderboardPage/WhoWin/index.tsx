@@ -12,7 +12,7 @@ import HeadingPrimary from "../../LandingPage/components/HeadingPrimary";
 import RewardBanner from "../RewardBanner";
 import styles from "./whoWin.module.scss";
 
-const headingTable = ["No", "Wallet address", "Prize", "Earned $BIRD"];
+const headingTable = ["No", "Wallet address", "Reward", "Earned $BIRD"];
 
 const PAGE_LIMIT = 10;
 const WhoWin = () => {
