@@ -75,7 +75,8 @@ export default class RequestRandomPredictJob implements JobContract {
         .first()
       if (predictWinner) return
 
-      let wlAddress = []
+      const wlAddress: string[] = []
+
       const listWinner = await PredictModel.query()
         .where('match_id', match.match_id)
         .andWhere('match_predicted', true)
@@ -111,7 +112,7 @@ export default class RequestRandomPredictJob implements JobContract {
     try {
       const web3 = await HelperUtils.getWeb3Provider()
 
-      const privateKey = Buffer.from(process.env.RANDOM_OWNER_PK, 'hex')
+      const privateKey = Buffer.from(process.env.RANDOM_OWNER_PK || '', 'hex')
 
       let walletAddress = web3.eth.accounts.privateKeyToAccount(process.env.RANDOM_OWNER_PK).address
       const obj = {
