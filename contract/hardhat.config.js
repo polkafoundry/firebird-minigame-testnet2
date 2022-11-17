@@ -62,7 +62,7 @@ module.exports = {
       accounts: [process.env.DEPLOYER_PRIVATE_KEY],
     },
     firebird: {
-      url: "https://rpc.testnet-firebird.polkafoundry.com/",
+      url: "https://rpc.firefly.firebirdchain.com/",
       chainId: 9000,
       gasPrice: 20000000000,
       accounts: [process.env.DEPLOYER_PRIVATE_KEY],
