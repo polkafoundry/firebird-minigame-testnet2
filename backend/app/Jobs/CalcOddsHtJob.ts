@@ -54,9 +54,8 @@ export default class CalcOddsHtJob implements JobContract {
         .where('is_calculated_odds_ht', false)
         .where('is_half_time', true)
         .first()
-      console.log('CalcOddsHtJob: ', match)
       if (!match) return
-
+      console.log('CalcOddsHtJob: ', match)
       calcBettingJob({ matchId: match.match_id, betType: Const.BET_TYPE.ODDS_HT })
     } catch (error) {
       console.log('error CalcOddsHtJob: ', error.message)
