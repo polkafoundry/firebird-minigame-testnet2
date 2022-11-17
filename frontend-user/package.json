@@ -67,6 +67,7 @@
     ]
   },
   "devDependencies": {
+    "@types/aos": "^3.0.4",
     "eslint": "^8.26.0"
   },
   "husky": {
