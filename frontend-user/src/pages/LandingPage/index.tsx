@@ -30,7 +30,7 @@ const LangdingPage = () => {
         <CalculatedReward />
         <PredictionRule />
         <FAQ />
-        <BannerSocials />
+        {/* <BannerSocials />  */}
       </div>
     </LandingLayout>
   );

@@ -1,37 +1,60 @@
-import React from "react";
+import clsx from "clsx";
 
 const GameFiReward = () => {
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mt-5 font-inter">
-      <div className="flex bg-black text-white rounded-[4px]">
-        <div className="w-[70%] lg:w-[55%] pt-[44px] pl-[60px] pb-[30px] pr-[60px]">
-          <div className="text-32/40 font-semibold font-tthoves">
-            Exclusive incentives for GameFi.org’s members.
+    <div
+      className={clsx(
+        "mt-3 mx-3 p-5 flex flex-col text-white bg-black rounded-[4px]",
+        "md:mx-0 md:mt-9 sm:p-10 lg:p-[60px]",
+      )}
+    >
+      <div className="flex flex-col-reverse  2md:flex-row justify-center items-center">
+        <div className="flex flex-col justify-between items-start font-inter w-full 2md:w-fit 2md:max-w-[460px]">
+          <div>
+            <span
+              className="mt-5 text-28/36 font-semibold font-tthoves md:mt-0 md:text-36/48"
+              data-aos="fade-up"
+            >
+              Exclusive incentives for GameFi.org’s members.
+            </span>
+            <p
+              className="mt-3 text-14/24 md:text-18/32 md:mt-2"
+              data-aos="fade-up"
+              data-aos-delay="200"
+            >
+              Join the Phoenix Cup on Firebird, climb the leaderboard & have a
+              chain to gain additional bonuses.
+            </p>
           </div>
-          <p className="mt-3 text-18/32 text">
-            Join the Phoenix Cup on Firebird, climb the leaderboard & have a
-            chance to gain additional bonuses.
-          </p>
-          <div className="mt-3 flex justify-between items-center">
+          <div className="mt-3 flex w-full justify-between items-center">
             <span className="text-16/20 font-semibold opacity-70 font-tthoves">
               Pool Prize
             </span>
-            <span className="text-32/40 font-tthovesBold italic">$500</span>
+            <span
+              className="text-32/40 font-tthovesBold italic"
+              data-aos="flip-left"
+            >
+              $500
+            </span>
           </div>
-          <a
-            href="https://gamefi.org/"
-            target="_blank"
-            rel="noreferrer"
-            className="mt-3 w-[200px] p-2 flex-1 rounded-lg flex justify-center items-center bg-main"
-          >
-            Learn more
-          </a>
+          <div className="flex w-full mt-5 text-white text-14/20 font-tthoves">
+            <a
+              href="https://gamefi.org/"
+              target="_blank"
+              rel="noreferrer"
+              className="w-full text-center bg-main p-2.5 md:p-2 font-semibold rounded-lg"
+            >
+              Learn more
+            </a>
+          </div>
         </div>
-        <div className="w-[30%] lg:w-[45%]">
+
+        <div className="flex-1 mt-5 ml-0 w-full 2md:ml-5 lg:ml-10 2md:mt-0 ">
           <img
             src="./images/landing-page/gamefi.png"
             alt=""
             className="w-full"
+            data-aos="zoom-in"
           />
         </div>
       </div>

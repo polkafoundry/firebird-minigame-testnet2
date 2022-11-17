@@ -17,13 +17,13 @@ const TableMatchesReward = () => {
   const lastIndex = totalRewardTable.data.length - 1;
 
   return (
-    <div className="mt-5 overflow-x-auto sm:overflow-x-visible">
+    <div className="mt-3 md:mt-5">
       <div>
         <div
           className={clsx("flex font-semibold w-full", styles.totalRewardRow)}
         >
           {totalRewardTable.headings.map((heading) => (
-            <div key={heading} className="text-14/24">
+            <div key={heading} className="text-10/14 md:text-14/24">
               {heading}
             </div>
           ))}

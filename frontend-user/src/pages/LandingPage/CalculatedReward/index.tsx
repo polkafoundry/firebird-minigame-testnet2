@@ -24,20 +24,27 @@ const CalculatedReward = () => {
           <HeadingPrimary
             backroundTitle="Calculated"
             title="Valuable Rewards From Companions"
-            textAlign="text-left"
+            textAlign="text-center md:text-left"
           />
-          <p className="text-18/32">
+          <p
+            className={clsx(
+              "mt-[-27px] text-14/24 text-center",
+              "md:text-left md:text-18/32",
+            )}
+          >
             In addition to the Phoenix Cup, you can join the side events
             conducted by Firebird & our partners to earn extra prizes.
           </p>
         </div>
-        <div className="flex justify-center items-center px-4 py-2.5 bg-black text-white w-full 2md:w-fit">
-          <img src="/images/landing-page/predicted-winner.png" alt="" />
-          <div className="flex flex-col ml-2 font-tthoves">
-            <span className="text-16/20 font-semibold uppercase">
-              public testnet total rewards
-            </span>
-            <span className="text-48/60 font-tthovesBold italic">$6,820</span>
+        <div className="px-7 w-full md:px-0 2md:w-fit">
+          <div className="flex justify-center items-center px-4 py-2.5 mt-3 bg-black text-white w-full">
+            <img src="/images/landing-page/predicted-winner.png" alt="" />
+            <div className="flex flex-col ml-2 font-tthoves">
+              <span className="text-16/20 font-semibold uppercase">
+                public testnet total rewards
+              </span>
+              <span className="text-48/60 font-tthovesBold italic">$6,820</span>
+            </div>
           </div>
         </div>
       </div>
@@ -47,27 +54,28 @@ const CalculatedReward = () => {
   return (
     <div
       id="reward-distribution"
-      className="mt-[120px] px-5 main:px-20 max-w-screen-main w-full mx-auto"
+      className="mt-[60px] md:mt-[120px] sm:px-5 main:px-20 max-w-screen-main w-full mx-auto"
     >
       <div className="w-full mx-auto">
         {renderHeader()}
 
         <div
           className={clsx(
-            "mt-9 p-5 sm:p-10 lg:p-[60px] flex flex-col text-white bg-[#3A0013] rounded-[4px]",
+            "mt-5 flex flex-col text-white bg-[#3A0013] rounded-[4px]",
+            "2md:p-5 2md:mt-9 lg:p-[60px]",
           )}
         >
-          <div className="flex flex-col 2md:flex-row justify-center items-center">
+          <div className="flex flex-col-reverse 2md:flex-row justify-center items-center">
             <div className="flex flex-col justify-between items-start font-inter w-full 2md:w-fit 2md:max-w-[460px]">
-              <div>
+              <div className="flex flex-col w-full mt-10 md:mt-0 items-center md:items-start">
                 <span
-                  className="text-36/48 font-semibold font-tthoves"
+                  className="text-28/36 font-semibold font-tthoves md:text-36/48"
                   data-aos="fade-up"
                 >
                   Phoenix Cup
                 </span>
                 <p
-                  className="mt-2 text-18/32"
+                  className="mt-2 px-5 text-14/24 text-center md:text-left md:text-18/32 md:px-0"
                   data-aos="fade-up"
                   data-aos-delay="200"
                 >
@@ -76,36 +84,36 @@ const CalculatedReward = () => {
                 </p>
               </div>
 
-              <div className="flex flex-col xs:flex-row bg-[#4d192a] mt-5 lg:mt-[40px] w-full">
-                <div className="flex flex-col items-center justify-center py-6 px-8 border-b xs:border-b-0 xs:border-r border-[#714755]">
+              <div className="flex w-full bg-[#4d192a] mt-5 lg:mt-[40px]">
+                <div className="flex flex-col items-center justify-center py-6 px-[14px] md:px-8 border-r border-[#714755]">
                   <span className="text-12/18 font-bold font-tthoves opacity-80">
                     TOTAL REWARDS
                   </span>
                   <span
-                    className="text-36/48 font-tthovesBold italic"
+                    className="mt-0.5 text-36/40 font-tthovesBold italic md:text-36/48 md:mt-1"
                     data-aos="flip-left"
                   >
                     $5,320
                   </span>
                 </div>
                 <div className="w-full">
-                  <div className="flex items-center justify-between py-6 px-8 border-b border-[#714755]">
+                  <div className="flex items-center justify-between py-3 px-3 md:py-6 md:px-8 border-b border-[#714755]">
                     <div className="text-10/14 opacity-80">
                       For match score prediction winners
                     </div>
                     <div
-                      className="text-24/32 font-tthovesBold italic"
+                      className="text-20/28 font-tthovesBold italic md:text-24/32"
                       data-aos="flip-left"
                     >
                       $1,720
                     </div>
                   </div>
-                  <div className="flex items-center justify-between py-6 px-8">
+                  <div className="flex items-center justify-between py-3 px-3 md:py-6 md:px-8 border-b border-[#714755]">
                     <div className="text-10/14 opacity-80">
                       For who win & total goal prediction leaderboard
                     </div>
                     <div
-                      className="text-24/32 font-tthovesBold italic"
+                      className="text-20/28 font-tthovesBold italic md:text-24/32"
                       data-aos="flip-left"
                     >
                       $3,600
@@ -114,9 +122,9 @@ const CalculatedReward = () => {
                 </div>
               </div>
 
-              <div className="flex w-full mt-5 text-white text-14/20 font-tthoves">
+              <div className="grid grid-cols-1 gap-2 w-full mt-5 px-7 pb-6 text-white text-14/20 font-tthoves md:grid-cols-2 md:px-0 md:pb-0">
                 <button
-                  className="bg-main p-2 flex-1 rounded-lg flex justify-center items-center"
+                  className="bg-main p-2.5 md:p-2 font-semibold rounded-lg flex justify-center items-center"
                   onClick={handleToggleDetail}
                 >
                   {!isShowDetail ? "Show details" : "Hide details"}
@@ -126,13 +134,13 @@ const CalculatedReward = () => {
                     className={clsx("w-2.5 ml-1", isShowDetail && "rotate-180")}
                   />
                 </button>
-                <button className="bg-black p-2 flex-1 rounded-lg ml-2">
+                <button className="bg-black p-2.5 md:p-2 font-semibold rounded-lg row-[1] md:row-auto">
                   Learn more
                 </button>
               </div>
             </div>
 
-            <div className="flex-1 mt-5 ml-0 w-full 2md:ml-5 lg:ml-10 2md:mt-0 ">
+            <div className="flex-1 w-full 2md:mt-5 2md:ml-5 lg:ml-10">
               <img
                 src="./images/landing-page/monsterra-sponser.png"
                 alt=""
@@ -144,20 +152,20 @@ const CalculatedReward = () => {
 
           <div
             className={clsx(
-              "mt-5 px-5 sm:px-[45px] pt-[49px] pb-[30px] bg-black",
+              "px-5 pt-10 sm:px-[45px] md:mt-5 md:pt-[49px] pb-[30px] bg-black",
               !isShowDetail && "hidden",
             )}
           >
-            <div className="flex flex-col lg:flex-row lg:space-x-5 space-y-5 lg:space-y-0">
+            <div className="flex flex-col lg:flex-row lg:space-x-5 space-y-6 lg:space-y-0">
               <div className="flex-[3]">
-                <p className="text-center text-26/32 font-semibold uppercase">
+                <p className="text-center text-16/24 md:text-26/32 font-semibold uppercase">
                   Rewards for match score winners
                 </p>
                 <TableMatchesReward />
               </div>
 
               <div className="flex-[2]">
-                <p className="text-center text-26/32 font-semibold uppercase">
+                <p className="text-center text-16/24 md:text-26/32 font-semibold uppercase">
                   Final Rewards
                 </p>
                 <TableFinalRewards />
