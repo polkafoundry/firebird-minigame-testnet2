@@ -164,10 +164,17 @@ const CalculatedReward = () => {
           <div className="flex flex-col 2md:flex-row justify-center items-center">
             <div className="flex flex-col justify-between items-start font-inter w-full 2md:w-fit 2md:max-w-[460px] ">
               <div>
-                <span className="text-36/48 font-semibold font-tthoves">
+                <span
+                  className="text-36/48 font-semibold font-tthoves"
+                  data-aos="fade-up"
+                >
                   Phoenix Cup
                 </span>
-                <p className="mt-2 text-18/32">
+                <p
+                  className="mt-2 text-18/32"
+                  data-aos="fade-up"
+                  data-aos-delay="200"
+                >
                   All rewards will be airdropped to the winners after Phoenix
                   Cup events ends.
                 </p>
@@ -178,7 +185,10 @@ const CalculatedReward = () => {
                   <span className="text-12/18 font-bold font-tthoves opacity-80">
                     TOTAL REWARDS
                   </span>
-                  <span className="text-36/48 font-tthovesBold italic">
+                  <span
+                    className="text-36/48 font-tthovesBold italic"
+                    data-aos="flip-left"
+                  >
                     $5,320
                   </span>
                 </div>
@@ -187,7 +197,10 @@ const CalculatedReward = () => {
                     <div className="text-10/14 opacity-80">
                       For match score prediction winners
                     </div>
-                    <div className="text-24/32 font-tthovesBold italic">
+                    <div
+                      className="text-24/32 font-tthovesBold italic"
+                      data-aos="flip-left"
+                    >
                       $1,720
                     </div>
                   </div>
@@ -195,7 +208,10 @@ const CalculatedReward = () => {
                     <div className="text-10/14 opacity-80">
                       For who win & total goal prediction leaderboard
                     </div>
-                    <div className="text-24/32 font-tthovesBold italic">
+                    <div
+                      className="text-24/32 font-tthovesBold italic"
+                      data-aos="flip-left"
+                    >
                       $3,600
                     </div>
                   </div>
@@ -220,11 +236,12 @@ const CalculatedReward = () => {
               </div>
             </div>
 
-            <div className="flex-1 mt-5 ml-0 w-full 2md:ml-5 lg:ml-10  2md:mt-0 ">
+            <div className="flex-1 mt-5 ml-0 w-full 2md:ml-5 lg:ml-10 2md:mt-0 ">
               <img
                 src="./images/landing-page/monsterra-sponser.png"
                 alt=""
                 className="w-full"
+                data-aos="zoom-in"
               />
             </div>
           </div>

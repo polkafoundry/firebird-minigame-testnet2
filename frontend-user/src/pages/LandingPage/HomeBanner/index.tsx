@@ -9,7 +9,10 @@ const imgRonaldo = "/images/banner/ronaldo.png";
 
 const HomeBanner = () => {
   return (
-    <div className={clsx("w-full pt-20 h-screen relative", styles.homeBanner)}>
+    <div
+      id="banner"
+      className={clsx("w-full pt-20 h-screen relative", styles.homeBanner)}
+    >
       <div
         className={clsx(
           styles.bannerText,
@@ -45,26 +48,39 @@ const HomeBanner = () => {
           src={imgRonaldo}
           alt=""
           className={clsx(styles.imgRonaldo, "absolute")}
+          data-aos="fade-up"
+          data-aos-delay="350"
         />
         <img
           src={imgBenzema}
           alt=""
           className={clsx(styles.imgBenzema, "absolute")}
+          data-aos="fade-up"
+          data-aos-delay="300"
+          data-aos-anchor="#banner"
         />
         <img
           src={imgMessi}
           alt=""
           className={clsx(styles.imgMessi, "absolute")}
+          data-aos="fade-up"
+          data-aos-delay="200"
+          data-aos-anchor="#banner"
         />
         <img
           src={imgModric}
           alt=""
           className={clsx(styles.imgModric, "absolute")}
+          data-aos="fade-up"
+          data-aos-delay="200"
+          data-aos-anchor="#banner"
         />
         <img
           src={imgNeymar}
           alt=""
           className={clsx(styles.imgNeymar, "absolute")}
+          data-aos="fade-up"
+          data-aos-anchor="#banner"
         />
       </div>
     </div>
