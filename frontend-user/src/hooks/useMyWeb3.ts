@@ -39,11 +39,11 @@ export const useMyWeb3 = () => {
   // get Bird token
   useEffect(() => {
     const getBirdToken = async () => {
-      const balance = account ? await getBirdBalance(account) : "0";
+      const bal = account ? await getBirdBalance(account) : "0";
       setState((preState: any) => ({
         ...preState,
         account: account,
-        birdBalance: balance,
+        birdBalance: bal,
       }));
     };
 
