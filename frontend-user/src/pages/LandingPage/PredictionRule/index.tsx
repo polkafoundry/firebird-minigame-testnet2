@@ -36,7 +36,7 @@ const PredictionRule = () => {
       <HeadingPrimary title="Prediction Rule" />
       <div
         className={clsx(
-          "bg-white text-white -mt-2 md:mt-5 grid grid-rows-3 md:grid-cols-3",
+          "bg-white text-white -mt-2 md:mt-5 grid grid-rows-3 md:grid-cols-3 md:grid-rows-1",
           styles.predictRuleBg,
         )}
       >
