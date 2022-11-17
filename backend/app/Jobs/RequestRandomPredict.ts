@@ -26,7 +26,7 @@ const priority = 2
 const repeatEvery = 5 * 60 * 1000 // 1m
 /* The total number of attempts to try the job until it completes.*/
 const attempts = 1
-let inProgress = false
+
 export const requestRandomPredict = async () => {
   try {
     const jobKey = new RequestRandomPredictJob().key
@@ -53,11 +53,6 @@ export default class RequestRandomPredictJob implements JobContract {
 
   public async handle() {
     try {
-      console.log('xxxx')
-      if (inProgress) {
-        return
-      }
-      inProgress = true
       const match = await MatchModel.query()
         .where('is_calculated_odds_ft', true)
         .where('is_pick_predict_final_winners', false)
@@ -151,7 +146,6 @@ export default class RequestRandomPredictJob implements JobContract {
           console.log('errorxx', error)
         })
     } catch (error) {
-      //   inProgress = false
       console.log('errorr: ', error)
     }
   }
