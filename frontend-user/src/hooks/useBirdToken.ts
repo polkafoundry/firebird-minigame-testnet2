@@ -58,7 +58,6 @@ const useBirdToken = () => {
     }
     let balanceString = "0";
     try {
-      setLoadingApprove(true);
       const contract = getContract(
         BIRD_TOKEN_CONTRACT,
         BIRD_ABI,
@@ -71,7 +70,6 @@ const useBirdToken = () => {
       }
     } catch (error) {
       console.log("getBirdBalance", error);
-      setLoadingApprove(false);
     }
     return balanceString;
   };
@@ -87,7 +85,6 @@ const useBirdToken = () => {
     }
     let balanceString = "0";
     try {
-      setLoadingApprove(true);
       const contract = getContract(
         BIRD_TOKEN_CONTRACT,
         BIRD_ABI,
@@ -100,7 +97,6 @@ const useBirdToken = () => {
       }
     } catch (error) {
       console.log("getBirdAllowance", error);
-      setLoadingApprove(false);
     }
     return balanceString;
   };

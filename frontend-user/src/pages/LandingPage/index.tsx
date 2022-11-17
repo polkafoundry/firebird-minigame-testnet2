@@ -21,7 +21,7 @@ const LangdingPage = () => {
   return (
     <LandingLayout>
       <HomeBanner />
-      <div className="mt-[-150px] xs:mt-[-180px] md:mt-[-200px] lg:mt-[-220px] pt-20">
+      <div className="mt-[-150px] xs:mt-[-180px] md:mt-[-200px] lg:mt-[-240px] pt-20">
         <Schedule />
       </div>
 

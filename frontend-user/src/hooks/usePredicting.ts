@@ -45,7 +45,7 @@ const usePredicting = () => {
           return true;
         }
       } catch (error: any) {
-        console.log("ERR bettingOdds: ", error?.message);
+        console.log("ERR predicting: ", error?.message);
         toast.error("Fail to submit answer");
         setLoadingPredicting(false);
         return;
