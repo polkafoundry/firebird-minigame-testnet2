@@ -50,7 +50,6 @@ const HomeBanner = () => {
           className={clsx(styles.imgRonaldo, "absolute")}
           data-aos="fade-up"
           data-aos-delay="350"
-          data-aos-once
         />
         <img
           src={imgBenzema}
@@ -59,7 +58,6 @@ const HomeBanner = () => {
           data-aos="fade-up"
           data-aos-delay="300"
           data-aos-anchor="#banner"
-          data-aos-once
         />
         <img
           src={imgMessi}
@@ -68,7 +66,6 @@ const HomeBanner = () => {
           data-aos="fade-up"
           data-aos-delay="200"
           data-aos-anchor="#banner"
-          data-aos-once
         />
         <img
           src={imgModric}
@@ -77,7 +74,6 @@ const HomeBanner = () => {
           data-aos="fade-up"
           data-aos-delay="200"
           data-aos-anchor="#banner"
-          data-aos-once
         />
         <img
           src={imgNeymar}
@@ -85,7 +81,6 @@ const HomeBanner = () => {
           className={clsx(styles.imgNeymar, "absolute")}
           data-aos="fade-up"
           data-aos-anchor="#banner"
-          data-aos-once
         />
       </div>
     </div>

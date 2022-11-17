@@ -57,10 +57,17 @@ const PredictionRule = () => {
                         indexRuleRow !== 1 && "pt-10",
                       )}
                     >
-                      <span className="text-32/40 font-semibold">
+                      <span
+                        className="text-32/40 font-semibold"
+                        data-aos="fade-up"
+                      >
                         {rule.title}
                       </span>
-                      <p className="mt-3 text-18/32 font-normal">
+                      <p
+                        className="mt-3 text-18/32 font-normal"
+                        data-aos="fade-up"
+                        data-aos-delay="200"
+                      >
                         {rule.description}
                       </p>
                     </div>
