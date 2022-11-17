@@ -32,11 +32,11 @@ const predictionRules = [
 
 const PredictionRule = () => {
   return (
-    <div id="prediction-rule" className="mt-[120px]">
+    <div id="prediction-rule" className="mt-[60px] md:mt-[120px]">
       <HeadingPrimary title="Prediction Rule" />
       <div
         className={clsx(
-          "bg-white text-white mt-20 flex flex-col sm:flex-row",
+          "bg-white text-white -mt-2 md:mt-5 grid grid-rows-3 md:grid-cols-3",
           styles.predictRuleBg,
         )}
       >
@@ -44,7 +44,7 @@ const PredictionRule = () => {
           <div
             key={indexRuleRow}
             className={clsx(
-              "sm:grid sm:grid-rows-2 py-10 hover:-translate-y-8 transition",
+              "flex flex-col md:grid md:grid-rows-2 py-10 md:hover:-translate-y-8 transition",
             )}
           >
             {ruleRow.map((rule, indexRule) => {
@@ -53,18 +53,18 @@ const PredictionRule = () => {
                   {!rule.image ? (
                     <div
                       className={clsx(
-                        "px-[60px] flex flex-col justify-center",
-                        indexRuleRow !== 1 && "pt-10",
+                        "px-8 lg:px-[60px] flex flex-col justify-center",
+                        indexRuleRow !== 1 ? "pt-5 lg:pt-10" : "mt-5 md:mt-0",
                       )}
                     >
                       <span
-                        className="text-32/40 font-semibold"
+                        className="text-24/32 2md:text-32/40 font-semibold"
                         data-aos="fade-up"
                       >
                         {rule.title}
                       </span>
                       <p
-                        className="mt-3 text-18/32 font-normal"
+                        className="mt-2 pb-5 md:mt-3 text-14/24 2md:text-18/32 font-normal"
                         data-aos="fade-up"
                         data-aos-delay="200"
                       >
@@ -72,8 +72,13 @@ const PredictionRule = () => {
                       </p>
                     </div>
                   ) : (
-                    <div className="px-8">
-                      <img src={rule.image} />
+                    <div
+                      className={clsx(
+                        "px-8 md:mt-0",
+                        indexRuleRow === 1 && "md:pb-8",
+                      )}
+                    >
+                      <img src={rule.image} alt="" className="w-full" />
                     </div>
                   )}
                 </div>
@@ -84,51 +89,6 @@ const PredictionRule = () => {
       </div>
     </div>
   );
-  // return (
-  //   <div>
-  //     <HeadingPrimary title="Prediction Rule" />
-  //     <div
-  //       className={clsx(
-  //         "bg-white text-white mt-20 flex flex-col py-10",
-  //         styles.predictRuleBg,
-  //       )}
-  //     >
-  //       {predictionRules.map((ruleRow, indexRuleRow) => (
-  //         <div
-  //           key={indexRuleRow}
-  //           className={clsx("grid grid-cols-3", indexRuleRow === 1 && "mt-10")}
-  //         >
-  //           {ruleRow.map((rule, indexRule) => {
-  //             return (
-  //               <div key={indexRule}>
-  //                 {!rule.image ? (
-  //                   <div
-  //                     className={clsx(
-  //                       "px-[60px] flex flex-col justify-center",
-  //                       indexRuleRow !== 1 && "pt-10",
-  //                     )}
-  //                   >
-  //                     <span className="text-32/40 font-semibold">
-  //                       {rule.title}
-  //                     </span>
-  //                     <p className="mt-3 text-18/32 font-normal">
-  //                       {rule.description}
-  //                     </p>
-  //                   </div>
-  //                 ) : (
-  //                   <div className="px-8">
-  //                     <img src={rule.image} className="max-w-[416px] w-full" />
-  //                   </div>
-  //                 )}
-  //               </div>
-  //             );
-
-  //           })}
-  //         </div>
-  //       ))}
-  //     </div>
-  //   </div>
-  // );
 };
 
 export default PredictionRule;

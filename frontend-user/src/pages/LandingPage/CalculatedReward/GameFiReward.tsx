@@ -8,8 +8,8 @@ const GameFiReward = () => {
         "md:mx-0 md:mt-9 sm:p-10 lg:p-[60px]",
       )}
     >
-      <div className="flex flex-col-reverse  2md:flex-row justify-center items-center">
-        <div className="flex flex-col justify-between items-start font-inter w-full 2md:w-fit 2md:max-w-[460px]">
+      <div className="flex flex-col-reverse  md:flex-row justify-center items-center">
+        <div className="flex flex-col justify-between items-start font-inter w-full md:w-fit md:max-w-[460px]">
           <div>
             <span
               className="mt-5 text-28/36 font-semibold font-tthoves md:mt-0 md:text-36/48"
@@ -49,7 +49,7 @@ const GameFiReward = () => {
           </div>
         </div>
 
-        <div className="flex-1 mt-5 ml-0 w-full 2md:ml-5 lg:ml-10 2md:mt-0 ">
+        <div className="flex-1 mt-5 ml-0 w-full md:ml-5 lg:ml-10 md:mt-0 ">
           <img
             src="./images/landing-page/gamefi.png"
             alt=""
