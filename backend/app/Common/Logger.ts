@@ -19,7 +19,7 @@ export default winston.createLogger({
         new winston.transports.Console(),
         new winston.transports.File({
             level: 'info',
-            filename: path.join('mf_info.log')
+            filename: path.join(`mf_info_${process.env.NODE_ENV}.log`)
         })
     ],
 })
