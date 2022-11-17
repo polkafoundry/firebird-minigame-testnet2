@@ -78,7 +78,6 @@ const sendDataToMetaForceSchedule = () => {
     const job = new CronJob(
         '*/5 * * * * *',
         function () {
-            console.log('Send data to MetaForce schedule');
             new SendDataToMetaForce().sendData()
         }
     );
