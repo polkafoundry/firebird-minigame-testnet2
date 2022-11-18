@@ -69,67 +69,82 @@ Note: Testnet tokens are only accepted during the testnet period, not redeemable
 const FaqPage = () => {
   return (
     <LandingLayout>
-      <div className="max-w-screen-main w-full mx-auto pt-40 px-[200px] pb-[220px]">
-        <HeadingPrimary
-          title="Frequently Asked Questions"
-          backroundTitle="FAQ"
-        />
-        <div className={clsx("flex flex-col gap-3")}>
-          {faqs.map((item) => (
-            <Disclosure key={item.id}>
-              {({ open }) => (
-                <div
-                  className={clsx(
-                    "flex flex-col w-full cursor-pointer rounded-[20px] overflow-hidden transition-colors",
-                    open ? "bg-black text-white" : "bg-[#F2F2F2] text-black",
-                  )}
-                >
-                  <Disclosure.Button
+      <div className="w-full relative">
+        <div
+          className={clsx(
+            "max-w-screen-main w-full mx-auto pt-40 pb-[100px] px-5",
+            "xs:pb-[220px] xs:px-20 md:px-40",
+            "lg:px-[200px] ",
+          )}
+        >
+          <HeadingPrimary
+            title="Frequently Asked Questions"
+            backroundTitle="FAQ"
+          />
+          <div className={clsx("flex flex-col gap-3")}>
+            {faqs.map((item) => (
+              <Disclosure key={item.id}>
+                {({ open }) => (
+                  <div
                     className={clsx(
-                      "flex justify-between items-start gap-2 outline-none pt-6 px-8",
+                      "flex flex-col w-full cursor-pointer rounded-[20px] overflow-hidden transition-colors",
+                      open ? "bg-black text-white" : "bg-[#F2F2F2] text-black",
                     )}
                   >
-                    <span className="flex-1 block text-left text-24/32 font-tthoves font-semibold">
-                      {item.question}
-                    </span>
-                    <div className="mt-1 ml-2 w-5 h-5">
-                      <img
-                        src={
-                          open
-                            ? "./images/icon-minus.svg"
-                            : "./images/icon-plus.svg"
-                        }
-                        alt=""
-                      />
-                    </div>
-                  </Disclosure.Button>
-                  <Transition
-                    className="overflow-hidden"
-                    enter="transition transition-[max-height] duration-500 ease-in"
-                    enterFrom="transform max-h-0"
-                    enterTo="transform max-h-screen"
-                    leave="transition transition-[max-height] duration-500 ease-out"
-                    leaveFrom="transform max-h-screen"
-                    leaveTo="transform max-h-0"
-                  >
-                    <Disclosure.Panel className="whitespace-pre-line break-words">
-                      {({ close }) => (
-                        <span
-                          className="pl-8 pr-16 pt-3 block text-18/32 font-inter opacity-80"
-                          onClick={() => {
-                            close();
-                          }}
-                        >
-                          {item.answer}
-                        </span>
+                    <Disclosure.Button
+                      className={clsx(
+                        "flex justify-between items-start gap-2 outline-none pt-6 px-8",
                       )}
-                    </Disclosure.Panel>
-                  </Transition>
-                  <Disclosure.Button className="h-6"></Disclosure.Button>
-                </div>
-              )}
-            </Disclosure>
-          ))}
+                    >
+                      <span className="flex-1 block text-left text-24/32 font-tthoves font-semibold">
+                        {item.question}
+                      </span>
+                      <div className="mt-1 ml-2 w-5 h-5">
+                        <img
+                          src={
+                            open
+                              ? "./images/icon-minus.svg"
+                              : "./images/icon-plus.svg"
+                          }
+                          alt=""
+                        />
+                      </div>
+                    </Disclosure.Button>
+                    <Transition
+                      className="overflow-hidden"
+                      enter="transition transition-[max-height] duration-500 ease-in"
+                      enterFrom="transform max-h-0"
+                      enterTo="transform max-h-screen"
+                      leave="transition transition-[max-height] duration-500 ease-out"
+                      leaveFrom="transform max-h-screen"
+                      leaveTo="transform max-h-0"
+                    >
+                      <Disclosure.Panel className="whitespace-pre-line break-words">
+                        {({ close }) => (
+                          <span
+                            className="pl-8 pr-16 pt-3 block text-18/32 font-inter opacity-80"
+                            onClick={() => {
+                              close();
+                            }}
+                          >
+                            {item.answer}
+                          </span>
+                        )}
+                      </Disclosure.Panel>
+                    </Transition>
+                    <Disclosure.Button className="h-6"></Disclosure.Button>
+                  </div>
+                )}
+              </Disclosure>
+            ))}
+          </div>
+        </div>
+        <div className="absolute bottom-0 left-0">
+          <img
+            src="./images/history/footer.svg"
+            alt=""
+            className="max-w-[300px] xs:max-w-none"
+          />
         </div>
       </div>
     </LandingLayout>
