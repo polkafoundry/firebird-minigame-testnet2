@@ -5,7 +5,7 @@ const GameFiReward = () => {
     <div
       className={clsx(
         "mt-3 mx-3 p-5 flex flex-col text-white bg-black rounded-[4px]",
-        "md:mx-0 md:mt-9 sm:p-10 lg:p-[60px]",
+        "md:mx-0 md:mt-5 sm:p-10 lg:p-[60px]",
       )}
     >
       <div className="flex flex-col-reverse  md:flex-row justify-center items-center">

@@ -102,10 +102,6 @@ const PredictQuestion = (props: QuestionProps) => {
       return;
     }
 
-    if (needApprove) {
-      await approveBirdToken();
-    }
-
     const predictResult = await predicting(_matchID, _homeScore, _awayScore);
     if (!predictResult) return;
 
@@ -153,6 +149,7 @@ const PredictQuestion = (props: QuestionProps) => {
       }
       error={error}
       matchStatus={dataQuestion?.match_status}
+      isPredictQuestion
     >
       <div>
         <div className="flex items-center justify-between max-w-[660px] w-full mx-auto">
