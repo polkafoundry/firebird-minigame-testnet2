@@ -1,4 +1,5 @@
 export const LANDING_PAGE_URL = process.env.REACT_APP_BASE_URL;
+export const FAUCET_URL = process.env.REACT_APP_FAUCET_BASE_URL;
 export const API_BASE_LOGO_TEAM = process.env.REACT_APP_API_LOGO_TEAM;
 export const API_BASE_URL = process.env.REACT_APP_API_BASE_URL + "api/v1";
 
@@ -16,7 +17,7 @@ export const URLS = {
   HOME: "/",
   LEADERBOARD: "/leaderboard",
   HISTORY: "/history",
-  FIREFLY_TESTNET: "/introduction",
+  INTRODUCTION: "/introduction",
   FAQ: "/faq",
 };
 
@@ -96,20 +97,17 @@ export const rounds: Array<RoundTypes> = [
   {
     label: "GROUP STAGE - ROUND 1",
     prize: "$20",
-    value: 3,
-    // value: 1,
+    value: 1,
   },
   {
     label: "GROUP STAGE - ROUND 2",
     prize: "$20",
-    value: 15, // fake
-    // value: 2,
+    value: 2,
   },
   {
     label: "GROUP STAGE - ROUND 3",
     prize: "$20",
-    value: 1,
-    // value: 3,
+    value: 3,
   },
   {
     label: "PLAYOFFS ROUND OF 16",

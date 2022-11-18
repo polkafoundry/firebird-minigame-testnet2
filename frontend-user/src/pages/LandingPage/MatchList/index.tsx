@@ -1,3 +1,4 @@
+import { Dialog } from "@headlessui/react";
 import clsx from "clsx";
 import moment from "moment";
 import queryString from "query-string";
@@ -20,19 +21,23 @@ export type FilterTypes = {
   wallet_address: string;
 };
 
+const initFilter = {
+  is_completed_bet: "",
+  match_status: "",
+  page: 1,
+  size: 20,
+  wallet_address: "",
+  round_name: rounds[0].value,
+};
+
 const MatchList = () => {
   const { account, isWrongChain } = useMyWeb3();
 
   const [selectedMatchId, setSelectedMatchId] = useState<number | undefined>();
+  const [open, setOpen] = useState<boolean>(false);
+
   const [dataTable, setDataTable] = useState<any[]>([]);
-  const [filter, setFilter] = useState<FilterTypes>({
-    is_completed_bet: "",
-    match_status: "",
-    page: 1,
-    size: 20,
-    wallet_address: "",
-    round_name: rounds[0].value,
-  });
+  const [filter, setFilter] = useState<FilterTypes>(initFilter);
 
   const { data, loading } = useFetch<any>(
     "/match/get-list-match?" + queryString.stringify({ ...filter }),
@@ -92,6 +97,14 @@ const MatchList = () => {
 
   const handleSelectMatch = (id: number) => {
     setSelectedMatchId(id);
+
+    if (document.body.clientWidth < 960) {
+      setOpen(true);
+    }
+  };
+
+  const handleCloseDialog = () => {
+    setOpen(false);
   };
 
   return (
@@ -110,7 +123,7 @@ const MatchList = () => {
           <div
             className={clsx(
               styles.scrollLayout,
-              "w-full h-fit",
+              "w-full h-fit ",
               "md:w-[44%] md:sticky md:top-10",
             )}
           >
@@ -125,13 +138,40 @@ const MatchList = () => {
               handleChangeStatus={handleChangeStatus}
             />
           </div>
-          <div className={"w-full md:w-[56%]"}>
+          <div className={"w-full hidden md:block md:w-[56%] md:ml-6"}>
             <MatchListRight
               account={account}
               isWrongChain={isWrongChain}
               matchId={selectedMatchId}
             />
           </div>
+
+          <Dialog
+            open={open}
+            onClose={handleCloseDialog}
+            className="relative z-50"
+          >
+            <div className="fixed inset-0 flex items-center justify-center p-7">
+              <div className="fixed inset-0 bg-black/80" aria-hidden="true" />
+              <div className="fixed inset-0 overflow-y-auto">
+                <div className="flex min-h-full items-center justify-center p-4">
+                  <Dialog.Panel className="w-full h-auto relative m-auto bg-[#F2F2F2] rounded-[12px] overflow-x-auto">
+                    <MatchListRight
+                      account={account}
+                      isWrongChain={isWrongChain}
+                      matchId={selectedMatchId}
+                    />
+                    <img
+                      src="/images/icon-close.svg"
+                      alt=""
+                      className="absolute top-4 right-4 cursor-pointer w-6 h-6"
+                      onClick={handleCloseDialog}
+                    />
+                  </Dialog.Panel>
+                </div>
+              </div>
+            </div>
+          </Dialog>
         </div>
       </div>
     </div>

@@ -2,7 +2,7 @@ import clsx from "clsx";
 import moment from "moment";
 // import queryString from "query-string";
 import { useEffect, useState } from "react";
-import { BASE_HREF, rounds, URLS } from "../../../constants";
+import { rounds } from "../../../constants";
 import useFetch from "../../../hooks/useFetch";
 import { useMyWeb3 } from "../../../hooks/useMyWeb3";
 import { getImgSrc, groupArrayById } from "../../../utils";
@@ -13,12 +13,12 @@ import styles from "./matchScore.module.scss";
 import WinnerMatch from "./WinnerMatch";
 
 export type FilterTypes = {
-  is_completed_bet: string;
-  match_status: string;
-  page: number;
-  size: number;
+  // is_completed_bet: string;
+  // match_status: string;
+  // page: number;
+  // size: number;
   round_name: typeof rounds[keyof typeof rounds];
-  wallet_address: string;
+  // wallet_address: string;
 };
 
 const MatchScore = () => {
@@ -28,21 +28,20 @@ const MatchScore = () => {
 
   const [dataTable, setDataTable] = useState<any[]>([]);
   const [filter, setFilter] = useState<FilterTypes>({
-    is_completed_bet: "",
-    match_status: "",
-    page: 1,
-    size: 20,
-    wallet_address: "",
+    // is_completed_bet: "",
+    // match_status: "",
+    // page: 1,
+    // size: 20,
+    // wallet_address: "",
     round_name: rounds[0].value,
   });
 
   const { data, loading } = useFetch<any>(
-    "/predict/predict-winner-count-by-match",
-    // queryString.stringify({ ...filter }),
+    "/predict/predict-winner-count-by-match?round=" + filter.round_name,
   );
 
   useEffect(() => {
-    console.log("filter", filter);
+    // console.log("filter", filter);
     const rawData = data?.data?.map((item: any) => {
       return {
         ...item,
@@ -100,7 +99,7 @@ const MatchScore = () => {
   // };
 
   return (
-    <div>
+    <div className="mt-20">
       <HeadingPrimary
         backroundTitle="Match Score"
         title="Match Score Prediction Winners"
@@ -108,7 +107,7 @@ const MatchScore = () => {
       <RewardBanner
         reward="$6,820"
         winner="64 winners"
-        redirectUrl={BASE_HREF + URLS.HOME + "#reward-distribution"}
+        // redirectUrl={BASE_HREF + URLS.HOME + "#reward-distribution"}
       />
 
       <div
@@ -135,7 +134,12 @@ const MatchScore = () => {
             // handleChangeStatus={handleChangeStatus}
           />
         </div>
-        <div className={"w-full md:w-[50%]"}>
+        <div
+          className={clsx(
+            "w-full md:w-[50%] max-h-screen overflow-y-auto",
+            styles.scrollLayout,
+          )}
+        >
           <WinnerMatch
             matchId={selectedMatchId}
             reward={reward}

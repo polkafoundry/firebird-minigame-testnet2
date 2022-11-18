@@ -3,7 +3,6 @@ import { toast } from "react-toastify";
 import { QuestionProps } from "..";
 import { MATCH_STATUS, QUESTION_STATUS } from "../../../../../../constants";
 import useBettingContract from "../../../../../../hooks/useBettingContract";
-import useBirdToken from "../../../../../../hooks/useBirdToken";
 import usePost from "../../../../../../hooks/usePost";
 import usePredicting from "../../../../../../hooks/usePredicting";
 import InputScore from "../components/InputScore";
@@ -14,13 +13,11 @@ const PredictQuestion = (props: QuestionProps) => {
   const {
     dataQuestion: questionProp = {},
     title,
-    needApprove,
     account,
     error,
     predictPrize = "",
   } = props;
 
-  const { approveBirdToken, loadingApprove } = useBirdToken();
   const { loadingPredicting, predicting } = usePredicting();
   const { getPredictingUpdate } = useBettingContract();
 
@@ -102,10 +99,6 @@ const PredictQuestion = (props: QuestionProps) => {
       return;
     }
 
-    if (needApprove) {
-      await approveBirdToken();
-    }
-
     const predictResult = await predicting(_matchID, _homeScore, _awayScore);
     if (!predictResult) return;
 
@@ -138,7 +131,7 @@ const PredictQuestion = (props: QuestionProps) => {
       handleSubmit={handleSubmit}
       isSubmitted={isSubmitted}
       matchEnded={matchEnded}
-      loading={loadingApprove || loadingPredicting}
+      loading={loadingPredicting}
       predictBoxComponent={
         isSubmitted ? (
           <NotificationBox
@@ -153,6 +146,7 @@ const PredictQuestion = (props: QuestionProps) => {
       }
       error={error}
       matchStatus={dataQuestion?.match_status}
+      isPredictQuestion
     >
       <div>
         <div className="flex items-center justify-between max-w-[660px] w-full mx-auto">

@@ -71,7 +71,7 @@ const OddsQuestion = (props: QuestionProps) => {
       _betPlace: betPlaceString[optionWhoWin],
     };
     const { _amount, _betPlace, _betType, _matchID } = dataSubmit;
-    console.log("submit q2, q3", dataSubmit);
+    // console.log("submit q2, q3", dataSubmit);
 
     if (!_betPlace) {
       toast.warning("Please select one answer");

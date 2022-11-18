@@ -6,14 +6,19 @@ const HelperUtils = require('@ioc:App/Common/HelperUtils')
 import axios from 'axios'
 import BigNumber from 'bignumber.js'
 import Logger from 'App/Common/Logger'
+import RedisUtils from 'App/Common/RedisUtils'
 
 class SendDataToMetaForce {
     async sendData() {
+        let sending = true
         try {
+            const isSending = await RedisUtils.getRedisData(RedisUtils.getIsSendingMFKey())
+            if (isSending == 'true') return
+            await RedisUtils.setRedisData(RedisUtils.getIsSendingMFKey(), true)
             const MAX_REQ_SEND_TO_MF = Const.MAX_REQ_SEND_TO_MF
             let bettings = await BettingModel.query().where('is_calculated', true).where('is_sent_to_mf', false).limit(MAX_REQ_SEND_TO_MF);
             bettings = JSON.parse(JSON.stringify(bettings))
-            if (!bettings.length) return
+            if (!bettings.length) return sending = false
             const currentTime = Date.now()
 
             const timestamps = Array.from({ length: bettings.length }, (v, i) => {
@@ -32,8 +37,12 @@ class SendDataToMetaForce {
             Logger.info(
                 `[${Date.now() - startSend} ms] Send ${bettings.length} req to MF and return ${data.success} success, ${data.error} error, error message: ${JSON.stringify(data.error_mess)}`
             )
+            sending = false
         } catch (error) {
             console.log('error SendDataToMetaForceTask: ', error.message)
+            sending = false
+        } finally {
+            if (!sending) await RedisUtils.setRedisData(RedisUtils.getIsSendingMFKey(), false)
         }
     }
     private async _sendToMetaForce({ betting, timestamp }) {
@@ -74,7 +83,8 @@ class SendDataToMetaForce {
     }
 }
 
-const sendDataToMetaForceSchedule = () => {
+const sendDataToMetaForceSchedule = async () => {
+    await RedisUtils.setRedisData(RedisUtils.getIsSendingMFKey(), false)
     const job = new CronJob(
         '*/5 * * * * *',
         function () {

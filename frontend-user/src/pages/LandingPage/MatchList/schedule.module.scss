@@ -1,5 +1,7 @@
 .scrollLayout {
-  max-height: 90vh;
+  @media (min-width: theme("screens.md")) {
+    max-height: 90vh;
+  }
   overflow-y: auto;
   &::-webkit-scrollbar {
     width: 8px;

@@ -4,10 +4,9 @@ import { useState } from "react";
 import DefaultLoading from "../../../components/base/DefaultLoading";
 import Pagination from "../../../components/base/Pagination";
 // import InputSearch from "../../../components/base/InputSearch";
-import { BASE_HREF, URLS } from "../../../constants";
 import useFetch from "../../../hooks/useFetch";
 import { useMyWeb3 } from "../../../hooks/useMyWeb3";
-import { displayWalletAddress } from "../../../utils";
+import { displayWalletAddress, formatCurrency } from "../../../utils";
 import HeadingPrimary from "../../LandingPage/components/HeadingPrimary";
 import RewardBanner from "../RewardBanner";
 import styles from "./whoWin.module.scss";
@@ -58,7 +57,7 @@ const WhoWin = () => {
   const leaderboardData = data?.data;
 
   return (
-    <div className="mt-20">
+    <div className="">
       <HeadingPrimary
         backroundTitle="Leaderboard"
         title="Who win & Total Goals"
@@ -69,7 +68,7 @@ const WhoWin = () => {
       <RewardBanner
         reward="$3,600"
         winner="Top 30"
-        redirectUrl={BASE_HREF + URLS.HOME + "#reward-distribution"}
+        // redirectUrl={BASE_HREF + URLS.HOME + "#reward-distribution"}
         isLargeText={true}
       />
       <div className="mx-5 xs:mx-10 main:mx-[120px] px-5 xs:px-10 md:px-20 main:px-[180px] py-10 mt-10 font-inter bg-black text-white">
@@ -142,11 +141,7 @@ const WhoWin = () => {
                     </div>
                     <div>{displayWalletAddress(item?.userId)}</div>
                     <div>${item?.prize}</div>
-                    <div>
-                      {Math.floor(item?.sum_earned) === item?.sum_earned
-                        ? item?.sum_earned
-                        : Number(item?.sum_earned).toFixed(2)}
-                    </div>
+                    <div>{formatCurrency(item?.sum_earned)}</div>
                   </div>
                 ))}
               </>

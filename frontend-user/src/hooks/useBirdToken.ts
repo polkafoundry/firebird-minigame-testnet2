@@ -37,7 +37,7 @@ const useBirdToken = () => {
         setTransactionHash(transaction.hash);
         await transaction.wait(1);
 
-        console.log("approved", transaction.hash);
+        // console.log("approved", transaction.hash);
 
         setLoadingApprove(false);
       }

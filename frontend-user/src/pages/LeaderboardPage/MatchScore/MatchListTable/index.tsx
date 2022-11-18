@@ -86,7 +86,7 @@ const MatchListTable = (props: MatchListTableProps) => {
 
   return (
     <div className="bg-[#F2F2F2]">
-      <div className={clsx("title-background pr-8 bg-[cover] w-[320px]")}>
+      <div className={clsx("title-background pr-8 bg-[cover] w-[330px]")}>
         {rounds[groupStageIndex].label}
       </div>
       <div className="px-5 pt-3 pb-5">

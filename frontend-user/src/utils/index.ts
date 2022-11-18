@@ -9,6 +9,19 @@ export const displayWalletAddress = (address: string, digits = 6) => {
   )}`;
 };
 
+export const formatCurrency = (n: any, maxLengthOfDecimal = 2) => {
+  if (n === null || n === undefined) return "0";
+
+  const newNumber = Number(n);
+  const lengthOfDecimal =
+    Math.floor(newNumber) !== newNumber ? maxLengthOfDecimal : 0;
+
+  const re = "\\d(?=(\\d{3})+" + (lengthOfDecimal ? "\\." : "$") + ")";
+  return newNumber
+    .toFixed(Math.max(0, ~~lengthOfDecimal))
+    .replace(new RegExp(re, "g"), "$&,");
+};
+
 export async function checkMetaMaskIsUnlocked() {
   let unlocked;
   const provider = new ethers.providers.Web3Provider((window as any).ethereum);
@@ -54,4 +67,11 @@ export const getImgSrc = (iconNumber: string) =>
 export const convertHexToStringNumber = (hex: any, decimals = 18) => {
   if (hex === null || hex === undefined) return "0";
   return BigNumber.from(hex).div(BigNumber.from(10).pow(decimals)).toString();
+};
+
+export const convertHexToNumberFormat = (hex: any, decimals = 18) => {
+  if (hex === null || hex === undefined) return "0";
+  return formatCurrency(
+    BigNumber.from(hex).div(BigNumber.from(10).pow(decimals)).toString(),
+  );
 };

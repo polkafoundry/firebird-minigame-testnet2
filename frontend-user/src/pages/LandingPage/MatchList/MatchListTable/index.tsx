@@ -90,55 +90,60 @@ const MatchListTable = (props: MatchListTableProps) => {
     return `${startDate} - ${endDate}`;
   }, [dataTable]);
 
+  const renderFilter = () => (
+    <div className="flex flex-col lg:flex-row items-center justify-between">
+      <div className="font-normal text-14/24">(Time Zone: GMT+7)</div>
+      <div className="flex mt-2 lg:mt-0">
+        <div>
+          <span className="text-14/20 font-semibold">Predicted</span>
+          <DropDown
+            label="Predicted"
+            items={predictedOptions}
+            selectedValue={filter.is_completed_bet}
+            onChange={handleChangePredicted}
+            className="w-[110px] ml-2 text-14/24"
+            itemsClassName=""
+            bgColor="white"
+          />
+        </div>
+        <div className="ml-3">
+          <span className="text-14/20 font-semibold">Status</span>
+          <DropDown
+            label="Status"
+            items={statusOptions}
+            selectedValue={filter.match_status}
+            onChange={handleChangeStatus}
+            className="w-[110px] ml-2 text-14/24"
+            itemsClassName=""
+            bgColor="white"
+          />
+        </div>
+      </div>
+    </div>
+  );
+
   return (
-    <div className="">
+    <div>
       <div
         className={clsx(
-          "uppercase text-20/28 font-bold text-white px-[30px] py-1.5 w-fit",
-          styles.backgroundGroupStage,
+          "title-group-stage pr-8 bg-[cover] w-[310px] mx-auto md:w-[330px] lg:mx-0",
         )}
       >
         {rounds[groupStageIndex].label}
       </div>
-      <div className="px-5 pt-3 pb-5">
-        <div className="flex items-center justify-between ">
-          <div className="font-normal text-14/24">(Time Zone: GMT+7)</div>
-          <div className="flex">
-            <div>
-              <span className="text-14/20 font-semibold">Predicted</span>
-              <DropDown
-                label="Predicted"
-                items={predictedOptions}
-                selectedValue={filter.is_completed_bet}
-                onChange={handleChangePredicted}
-                className="w-[110px] ml-2 text-14/24"
-                itemsClassName=""
-                bgColor="white"
-              />
-            </div>
-            <div className="ml-3">
-              <span className="text-14/20 font-semibold">Status</span>
-              <DropDown
-                label="Status"
-                items={statusOptions}
-                selectedValue={filter.match_status}
-                onChange={handleChangeStatus}
-                className="w-[110px] ml-2 text-14/24"
-                itemsClassName=""
-                bgColor="white"
-              />
-            </div>
-          </div>
-        </div>
+      <div className="md:px-5 pt-3 pb-5">
+        {renderFilter()}
 
-        <div className="flex justify-between items-center bg-[#3A0013] text-white mt-1">
+        <div className="flex justify-between items-center bg-[#3A0013] text-white mt-5 lg:mt-1">
           <div
             className="h-12 w-12 cursor-pointer flex justify-center items-center select-none"
             onClick={previousGroup}
           >
             <img src="/images/icon-previous.svg" alt="" />
           </div>
-          <div className="text-20/28 font-bold uppercase">{priodDate}</div>
+          <div className="text-18/24 md:text-20/28 font-bold md:uppercase">
+            {priodDate}
+          </div>
           <div
             className="h-12 w-12 cursor-pointer flex justify-center items-center select-none"
             onClick={nextGroup}
@@ -176,7 +181,7 @@ const MatchListTable = (props: MatchListTableProps) => {
                   <div
                     key={match?.id}
                     className={clsx(
-                      "flex items-center cursor-pointer bg-white hover:bg-orange-300 transition-all duration-300 mb-0.5 last:mb-0",
+                      "text-14/24 flex items-center cursor-pointer bg-white hover:bg-orange-300 transition-all duration-300 mb-0.5 last:mb-0",
                       styles.tableRow,
                       selectedMatchId === match?.id ? "bg-amber-200" : "",
                     )}
