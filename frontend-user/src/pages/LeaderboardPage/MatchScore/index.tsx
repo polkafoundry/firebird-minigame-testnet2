@@ -2,7 +2,7 @@ import clsx from "clsx";
 import moment from "moment";
 // import queryString from "query-string";
 import { useEffect, useState } from "react";
-import { BASE_HREF, rounds, URLS } from "../../../constants";
+import { rounds } from "../../../constants";
 import useFetch from "../../../hooks/useFetch";
 import { useMyWeb3 } from "../../../hooks/useMyWeb3";
 import { getImgSrc, groupArrayById } from "../../../utils";

@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { BASE_HREF, quickGuide, URLS } from "../../../constants";
+import { BASE_HREF, FAUCET_URL, quickGuide, URLS } from "../../../constants";
 import { WalletContext } from "../../../context/WalletContext";
 import { useMyWeb3 } from "../../../hooks/useMyWeb3";
 import { displayWalletAddress, formatCurrency } from "../../../utils";
@@ -111,7 +111,7 @@ const HowToJoin = () => {
                     } $BIRD`}</p>
                   ) : (
                     <a
-                      href={URLS.FIREFLY_TESTNET}
+                      href={FAUCET_URL}
                       target={"_blank"}
                       rel="norefferer"
                       className="h-auto rounded-xl font-semibold underline font-tthoves"
@@ -133,7 +133,7 @@ const HowToJoin = () => {
                     <p className="m-0 font-semibold font-tthoves">{`${realTimeBalance} $${nativeCurrency}`}</p>
                   ) : (
                     <a
-                      href={URLS.FIREFLY_TESTNET}
+                      href={FAUCET_URL}
                       target={"_blank"}
                       rel="norefferer"
                       className="h-auto rounded-xl font-semibold underline font-tthoves"

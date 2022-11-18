@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { useContext } from "react";
-import { quickGuide, URLS } from "../../../../../constants";
+import { FAUCET_URL, quickGuide } from "../../../../../constants";
 import { WalletContext } from "../../../../../context/WalletContext";
 import { useMyWeb3 } from "../../../../../hooks/useMyWeb3";
 import usePredictConditions from "../../../../../hooks/usePredictConditions";
@@ -106,7 +106,7 @@ const MatchGuide = (props: MatchGuideProps) => {
           ) : (
             <div className="flex flex-col">
               <a
-                href={URLS.FAUCET_TOKEN}
+                href={FAUCET_URL}
                 target={"_blank"}
                 rel="norefferer"
                 className={clsx(
@@ -142,7 +142,7 @@ const MatchGuide = (props: MatchGuideProps) => {
           ) : (
             <div className="flex flex-col">
               <a
-                href={URLS.FAUCET_TOKEN}
+                href={FAUCET_URL}
                 target={"_blank"}
                 rel="norefferer"
                 className={clsx(

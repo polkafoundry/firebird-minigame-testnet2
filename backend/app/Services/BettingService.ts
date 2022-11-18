@@ -398,6 +398,7 @@ export default class BettingService {
           .joinRaw(`WHERE user_address = '${address}'`)
           .joinRaw(filterResultQuery)
           .joinRaw(claimResultQuery)
+          .select('b.id')
           .select('b.match_id')
           .select('b.bet_place')
           .select('b.bet_type')
@@ -412,7 +413,7 @@ export default class BettingService {
           .select('m.home_icon')
           .select('m.away_name')
           .select('m.away_icon')
-          .orderBy('match_id', 'ASC')
+          .orderBy('match_id', 'DESC')
           .paginate(page, limit),
       ])
 

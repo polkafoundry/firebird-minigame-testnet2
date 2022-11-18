@@ -49,13 +49,14 @@ export default class PredictWinnerService {
     }
   }
 
-  public async predictCountByMatch(): Promise<any> {
+  public async predictCountByMatch({ request }): Promise<any> {
+    const round = request.input('round') || 1
     try {
       let predictInMatch = await this.Database.from((subquery) => {
         subquery
           .from('matchs')
           .joinRaw(
-            `INNER JOIN predicts ON matchs.match_id = predicts.match_id AND predicts.result = true`
+            `INNER JOIN predicts ON matchs.match_id = predicts.match_id AND predicts.result = true AND round_name = ${round}`
           )
           .select('matchs.home_name')
           .select('matchs.away_name')
@@ -176,6 +177,7 @@ export default class PredictWinnerService {
           .select('m.home_icon')
           .select('m.away_name')
           .select('m.away_icon')
+          .select('p.id')
           .select('p.match_id')
           .select('p.home_score')
           .select('p.away_score')
@@ -184,7 +186,7 @@ export default class PredictWinnerService {
           .select('p.match_predicted')
           .select('pw.final_winner')
           .select('pw.rewards')
-          .orderBy('p.match_id', 'ASC')
+          .orderBy('p.match_id', 'DESC')
           .paginate(page, limit),
       ])
       return HelperUtils.responseSuccess({
