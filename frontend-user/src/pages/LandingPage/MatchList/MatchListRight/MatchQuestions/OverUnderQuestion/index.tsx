@@ -89,7 +89,7 @@ const OverUnderQuestion = (props: QuestionProps) => {
       _betPlace: betPlaceString[optionWhoWin],
     };
 
-    console.log("submit q4 q5", dataSubmit);
+    // console.log("submit q4 q5", dataSubmit);
 
     const { _amount, _betPlace, _betType, _matchID } = dataSubmit;
 

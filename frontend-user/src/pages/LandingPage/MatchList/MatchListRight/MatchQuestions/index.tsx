@@ -70,7 +70,7 @@ const MatchQuestions = (props: MatchQuestionProps) => {
       Math.floor(ratio) === ratio ? ratio + 1 : Math.round(ratio);
 
     const bindData = () => {
-      console.log("dataQuestion", dataQuestion);
+      // console.log("dataQuestion", dataQuestion);
 
       // get Name, Icon both of teams
       const homeTeamInfo = {
@@ -223,7 +223,7 @@ const MatchQuestions = (props: MatchQuestionProps) => {
         question4,
         question5,
       ];
-      console.log("newQuestions", newQuestions);
+      // console.log("newQuestions", newQuestions);
       setQuestions(newQuestions);
     };
     bindData();

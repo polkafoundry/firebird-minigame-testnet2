@@ -41,7 +41,7 @@ const MatchScore = () => {
   );
 
   useEffect(() => {
-    console.log("filter", filter);
+    // console.log("filter", filter);
     const rawData = data?.data?.map((item: any) => {
       return {
         ...item,
