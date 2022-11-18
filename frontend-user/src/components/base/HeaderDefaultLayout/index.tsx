@@ -16,7 +16,7 @@ type RouteTypes = {
 const routes: Array<RouteTypes> = [
   {
     label: "Firefly Testnet",
-    uri: URLS.FIREFLY_TESTNET,
+    uri: URLS.INTRODUCTION,
   },
   {
     label: "Phoenix Cup",

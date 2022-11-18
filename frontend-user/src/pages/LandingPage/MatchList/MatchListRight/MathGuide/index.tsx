@@ -7,13 +7,19 @@ import usePredictConditions from "../../../../../hooks/usePredictConditions";
 import { displayWalletAddress, formatCurrency } from "../../../../../utils";
 import { scrollToId } from "../../../../../utils/domElement";
 import { requestSupportNetwork } from "../../../../../utils/setupNetwork";
-import styles from "./matchGuide.module.scss";
 
 const iconCheck = "/images/icon-correct-answer.svg";
 const iconUnCheck = "/images/icon-wrong-answer.svg";
-const buttonStyles =
-  "w-[140px] bg-black text-white text-center py-2 text-14/20 rounded font-tthoves";
-const textError = "text-[#FF3E57] text-10/14";
+
+const classes = {
+  icon: "w-3 h-3 md:w-[14px] md:h-[14px] mr-2",
+  label: "text-14/24 md:text-16/24",
+  textError: "text-[#FF3E57] text-10/14 pr-2",
+  value: "text-14/20 font-semibold font-tthoves md:text-16/24",
+  button: "h-auto font-semibold text-12/16 md:text-14/20",
+  buttonStyles:
+    "w-[112px] bg-black text-white text-center py-2 text-14/20 rounded font-tthoves md:w-[140px] md:py-1.5",
+};
 
 type MatchGuideProps = {
   isDetailGuide?: boolean;
@@ -30,11 +36,134 @@ const MatchGuide = (props: MatchGuideProps) => {
     scrollToId("#prediction-rule");
   };
 
+  const renderConditionToJoin = () => {
+    return (
+      <ul className="flex flex-col gap-3 text-16/24">
+        <li className="flex justify-between">
+          <div className="flex items-baseline">
+            <img
+              className={classes.icon}
+              src={account ? iconCheck : iconUnCheck}
+              alt=""
+            />
+            <span className={classes.label}>Connet Wallet</span>
+          </div>
+          <p className={classes.value}>{displayWalletAddress(account)}</p>
+        </li>
+        <li className="flex justify-between">
+          <div className="flex items-baseline">
+            <img
+              className={classes.icon}
+              src={predictConditions.network ? iconCheck : iconUnCheck}
+              alt=""
+            />
+            <div className="flex flex-col">
+              <span className={classes.label}>Network</span>
+              {isDetailGuide && !predictConditions.network && (
+                <p className={classes.textError}>
+                  You must use Firefly testnet.
+                </p>
+              )}
+            </div>
+          </div>
+          {predictConditions.network ? (
+            <p className={classes.value}>Firefly Testnet</p>
+          ) : (
+            <div className="flex flex-col">
+              <button
+                className={clsx(
+                  classes.button,
+                  isDetailGuide && classes.buttonStyles,
+                )}
+                onClick={() => requestSupportNetwork()}
+              >
+                Switch Network
+              </button>
+            </div>
+          )}
+        </li>
+        <li className="flex justify-between">
+          <div className="flex items-baseline">
+            <img
+              className={classes.icon}
+              src={predictConditions.birdToken ? iconCheck : iconUnCheck}
+              alt=""
+            />
+            <div className="flex flex-col">
+              <span className={classes.label}>$BIRD to deposit</span>
+              {isDetailGuide && !predictConditions.birdToken && (
+                <p className={classes.textError}>
+                  $BIRD is our testnet token. You need to deposit $BIRD to
+                  anwser the questions.
+                </p>
+              )}
+            </div>
+          </div>
+          {predictConditions.birdToken ? (
+            <p className={classes.value}>{`${
+              formatCurrency(birdBalance) || 0
+            } $BIRD`}</p>
+          ) : (
+            <div className="flex flex-col">
+              <a
+                href={FAUCET_URL}
+                target={"_blank"}
+                rel="norefferer"
+                className={clsx(
+                  classes.button,
+                  isDetailGuide && classes.buttonStyles,
+                )}
+              >
+                Faucet $BIRD
+              </a>
+            </div>
+          )}
+        </li>
+        <li className="flex justify-between">
+          <div className="flex items-baseline">
+            <img
+              className={classes.icon}
+              src={predictConditions.gasFee ? iconCheck : iconUnCheck}
+              alt=""
+            />
+            <div className="flex flex-col">
+              <span className={classes.label}>Gas fee</span>
+              {isDetailGuide && !predictConditions.gasFee && (
+                <p className={classes.textError}>
+                  You need $PKF to pay for the gas fee.
+                </p>
+              )}
+            </div>
+          </div>
+          {predictConditions.gasFee ? (
+            <p
+              className={classes.value}
+            >{`${realTimeBalance} $${nativeCurrency}`}</p>
+          ) : (
+            <div className="flex flex-col">
+              <a
+                href={FAUCET_URL}
+                target={"_blank"}
+                rel="norefferer"
+                className={clsx(
+                  classes.button,
+                  isDetailGuide && classes.buttonStyles,
+                )}
+              >
+                Faucet $PKF
+              </a>
+            </div>
+          )}
+        </li>
+      </ul>
+    );
+  };
+
   return (
     <div className="flex flex-col my-5">
       <div className="flex flex-col">
-        <span className={styles.title}>Conditions to join</span>
-        <div className="py-3 px-8 font-inter">
+        <span className="title-background">Conditions to join</span>
+        <div className="py-3 px-3 md:px-8 font-inter">
           <div className="bg-white p-5">
             {!account && (
               <div className="h-[176px] flex justify-center items-center">
@@ -46,138 +175,15 @@ const MatchGuide = (props: MatchGuideProps) => {
                 </button>
               </div>
             )}
-            {account && (
-              <ul className="flex flex-col gap-3 text-16/24">
-                <li className="flex justify-between">
-                  <div className="flex items-center gap-2">
-                    <img
-                      className="w-[14px] h-[14px]"
-                      src={account ? iconCheck : iconUnCheck}
-                      alt=""
-                    />
-                    <span>Connet Wallet</span>
-                  </div>
-                  <p className="m-0 font-semibold font-tthoves">
-                    {displayWalletAddress(account)}
-                  </p>
-                </li>
-                <li className="flex justify-between">
-                  <div className="flex items-baseline gap-2">
-                    <img
-                      className="w-[14px] h-[14px]"
-                      src={predictConditions.network ? iconCheck : iconUnCheck}
-                      alt=""
-                    />
-                    <div className="flex flex-col">
-                      <span>Network</span>
-                      {isDetailGuide && !predictConditions.network && (
-                        <p className={textError}>
-                          You must use Firefly testnet.
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                  {predictConditions.network ? (
-                    <p className="m-0 font-semibold font-tthoves">
-                      Firefly Testnet
-                    </p>
-                  ) : (
-                    <div>
-                      <div
-                        className={clsx(
-                          "h-auto cursor-pointer font-semibold text-sm",
-                          isDetailGuide && buttonStyles,
-                        )}
-                        onClick={() => requestSupportNetwork()}
-                      >
-                        Switch Network
-                      </div>
-                    </div>
-                  )}
-                </li>
-                <li className="flex justify-between">
-                  <div className="flex items-baseline gap-2">
-                    <img
-                      className="w-[14px] h-[14px]"
-                      src={
-                        predictConditions.birdToken ? iconCheck : iconUnCheck
-                      }
-                      alt=""
-                    />
-                    <div className="flex flex-col">
-                      <span>$BIRD to deposit</span>
-                      {isDetailGuide && !predictConditions.birdToken && (
-                        <p className={textError}>
-                          $BIRD is our testnet token. You need to deposit $BIRD
-                          to anwser the questions.
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                  {predictConditions.birdToken ? (
-                    <p className="m-0 font-semibold font-tthoves">{`${
-                      formatCurrency(birdBalance) || 0
-                    } $BIRD`}</p>
-                  ) : (
-                    <div className="flex flex-col">
-                      <a
-                        href={FAUCET_URL}
-                        target={"_blank"}
-                        rel="norefferer"
-                        className={clsx(
-                          "h-auto cursor-pointer font-semibold text-sm",
-                          isDetailGuide && buttonStyles,
-                        )}
-                      >
-                        Faucet $BIRD
-                      </a>
-                    </div>
-                  )}
-                </li>
-                <li className="flex justify-between">
-                  <div className="flex items-baseline gap-2">
-                    <img
-                      className="w-[14px] h-[14px]"
-                      src={predictConditions.gasFee ? iconCheck : iconUnCheck}
-                      alt=""
-                    />
-                    <div className="flex flex-col">
-                      <span>Gas fee</span>
-                      {isDetailGuide && !predictConditions.gasFee && (
-                        <p className={textError}>
-                          You need $PKF to pay for the gas fee.
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                  {predictConditions.gasFee ? (
-                    <p className="m-0 font-semibold font-tthoves">{`${realTimeBalance} $${nativeCurrency}`}</p>
-                  ) : (
-                    <div className="flex flex-col">
-                      <a
-                        href={FAUCET_URL}
-                        target={"_blank"}
-                        rel="norefferer"
-                        className={clsx(
-                          "h-auto font-semibold text-sm",
-                          isDetailGuide && buttonStyles,
-                        )}
-                      >
-                        Faucet $PKF
-                      </a>
-                    </div>
-                  )}
-                </li>
-              </ul>
-            )}
+            {account && renderConditionToJoin()}
           </div>
         </div>
       </div>
 
       <div className="flex flex-col">
-        <span className={styles.title}>Quick guide</span>
+        <span className="title-background">Quick guide</span>
         <div className="py-3 px-8">
-          <div className="bg-white flex p-5">
+          <div className="bg-white flex flex-col xs:flex-row p-5">
             <div>
               <img src="./images/landing-page/world-cup-guide.png" alt="" />
             </div>

@@ -43,8 +43,26 @@
   }
 
   .title-background {
-    @apply text-20/28 font-tthoves font-bold text-white py-1.5 pl-[30px] uppercase min-w-[275px];
+    @apply text-16/20 font-tthoves font-bold text-white py-1.5 pl-[30px] uppercase min-w-[275px];
     background: url("./assets/images/bg-group-stage.svg") no-repeat;
     background-position: top left;
+  }
+
+  .title-group-stage {
+    @apply text-18/24 text-center font-tthoves font-bold text-white py-1.5 pl-[30px] uppercase min-w-[275px];
+    background: url("./assets/images/bg-group-stage-small.svg") no-repeat;
+    background-position: top left;
+  }
+
+  @media screen(md) {
+    .title-background {
+      @apply text-20/28;
+    }
+  }
+  @media screen(lg) {
+    .title-group-stage {
+      @apply text-20/28 text-left;
+      background-image: url("./assets/images/bg-group-stage.svg");
+    }
   }
 }

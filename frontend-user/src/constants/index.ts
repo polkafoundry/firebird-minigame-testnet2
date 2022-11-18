@@ -17,7 +17,7 @@ export const URLS = {
   HOME: "/",
   LEADERBOARD: "/leaderboard",
   HISTORY: "/history",
-  FIREFLY_TESTNET: "/introduction",
+  INTRODUCTION: "/introduction",
   FAQ: "/faq",
 };
 

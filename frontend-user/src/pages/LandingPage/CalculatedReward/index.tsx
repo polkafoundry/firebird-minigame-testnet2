@@ -179,6 +179,13 @@ const CalculatedReward = () => {
         </div>
 
         <GameFiReward />
+        <div className="mt-5 px-3 md:px-0">
+          <img
+            src="./images/landing-page/monsterra-sponser-big.png"
+            alt=""
+            className="w-full"
+          />
+        </div>
       </div>
     </div>
   );
