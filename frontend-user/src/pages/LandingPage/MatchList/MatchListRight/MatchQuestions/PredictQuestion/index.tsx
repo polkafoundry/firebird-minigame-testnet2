@@ -14,13 +14,12 @@ const PredictQuestion = (props: QuestionProps) => {
   const {
     dataQuestion: questionProp = {},
     title,
-    needApprove,
     account,
     error,
     predictPrize = "",
   } = props;
 
-  const { approveBirdToken, loadingApprove } = useBirdToken();
+  const { loadingApprove } = useBirdToken();
   const { loadingPredicting, predicting } = usePredicting();
   const { getPredictingUpdate } = useBettingContract();
 
