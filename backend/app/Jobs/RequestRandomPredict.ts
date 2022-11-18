@@ -35,7 +35,7 @@ export const requestRandomPredict = async () => {
       removeOnComplete: true,
       removeOnFail: true,
       repeat: {
-        every: 1000 * 60 * 1, // 1 minutes
+        every: 1000 * 60 * 5, // 5 minutes
         immediately: true,
       },
       attempts: attempts,
@@ -43,7 +43,6 @@ export const requestRandomPredict = async () => {
     await Bull.getByKey(jobKey).bull.add(jobKey, {}, options)
   } catch (e) {
     console.log('error: ', e.message)
-    console.error()
   } finally {
   }
 }
@@ -53,51 +52,55 @@ export default class RequestRandomPredictJob implements JobContract {
 
   public async handle() {
     try {
-      const match = await MatchModel.query()
+      const matchs = await MatchModel.query()
         .where('is_calculated_odds_ft', true)
         .where('is_pick_predict_final_winners', false)
-        .first()
-
-      if (!match) return
-      const predict = await PredictModel.query()
-        .where('match_id', match.match_id)
-        .andWhere('match_predicted', false)
-        .first()
-
-      if (predict) return
-      const predictWinner = await PredictWinnerModel.query()
-        .where('match_id', match.match_id)
-        .first()
-      if (predictWinner) return
-
-      const wlAddress: string[] = []
-
-      const listWinner = await PredictModel.query()
-        .where('match_id', match.match_id)
-        .andWhere('match_predicted', true)
-        .andWhere('result', true)
         .exec()
-      if (!listWinner || listWinner.length === 0) {
-        return
-      }
-      for (let i = 0; i < listWinner.length; i++) {
-        wlAddress.push(listWinner[i].user_address)
-      }
 
-      console.log(match.match_id, wlAddress)
+      if (!matchs) return
+      for (let k = 0; k < matchs.length; k++) {
+        let match = matchs[k]
+        const predict = await PredictModel.query()
+          .where('match_id', match.match_id)
+          .andWhere('match_predicted', false)
+          .first()
 
-      const randomWinnerContract = await HelperUtils.getPredictWinnerContractInstance()
-      const winnerInContract = await randomWinnerContract.methods.getWinnerInMatch(211).call()
-      if (winnerInContract.length === 0) {
-        const setWinnerList = await randomWinnerContract.methods
-          .setListWinnerInMatch(match.match_id, wlAddress)
-          .encodeABI()
-        await this.callTransaction(setWinnerList)
+        if (predict) continue
+        const predictWinner = await PredictWinnerModel.query()
+          .where('match_id', match.match_id)
+          .first()
+        if (predictWinner) continue
 
-        const pickWinner = await randomWinnerContract.methods
-          .getRandomNumber(match.match_id)
-          .encodeABI()
-        await this.callTransaction(pickWinner)
+        const wlAddress: string[] = []
+
+        const listWinner = await PredictModel.query()
+          .where('match_id', match.match_id)
+          .andWhere('match_predicted', true)
+          .andWhere('result', true)
+          .exec()
+        if (!listWinner || listWinner.length === 0) {
+          continue
+        }
+        for (let i = 0; i < listWinner.length; i++) {
+          wlAddress.push(listWinner[i].user_address)
+        }
+
+        const randomWinnerContract = await HelperUtils.getPredictWinnerContractInstance()
+        const winnerInContract = await randomWinnerContract.methods
+          .getWinnerInMatch(match.match_id)
+          .call()
+
+        if (winnerInContract.length === 0) {
+          const setWinnerList = await randomWinnerContract.methods
+            .setListWinnerInMatch(match.match_id, wlAddress)
+            .encodeABI()
+          await this.callTransaction(setWinnerList)
+
+          const pickWinner = await randomWinnerContract.methods
+            .getRandomNumber(match.match_id)
+            .encodeABI()
+          await this.callTransaction(pickWinner)
+        }
       }
     } catch (error) {
       console.log('err add white list', error)
@@ -117,15 +120,16 @@ export default class RequestRandomPredictJob implements JobContract {
         data: callData,
       }
 
-      const [gasPrice, nonce] = await Promise.all([
+      const [gasPrice, estimateGas, nonce] = await Promise.all([
         web3.eth.getGasPrice(),
+        web3.eth.estimateGas(obj),
         web3.eth.getTransactionCount(walletAddress, 'pending'),
       ])
 
       const txObject = {
         ...obj,
         nonce: nonce,
-        gas: 300000,
+        gas: estimateGas,
         gasPrice: '0x' + (Number(gasPrice) + 20 * Math.pow(10, 9)).toString(16),
         chainId: 9000,
       }
@@ -137,7 +141,7 @@ export default class RequestRandomPredictJob implements JobContract {
       await web3.eth
         .sendSignedTransaction(rawTx)
         .on('transactionHash', function (hash) {
-          console.log('xx', hash)
+          console.log(hash)
         })
         .on('receipt', function () {
           console.log('receipt')

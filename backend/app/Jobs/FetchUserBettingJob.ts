@@ -5,9 +5,11 @@ const HelperUtils = require('@ioc:App/Common/HelperUtils')
 
 const BetCountModel = require('@ioc:App/Models/BetCount')
 const BettingModel = require('@ioc:App/Models/Betting')
+const PredictModel = require('@ioc:App/Models/Predict')
 
 const USER_BETTING = 'UserBetting'
 const USER_CLAIM = 'UserClaim'
+const USER_PREDICT = 'UserPredicting'
 
 const STEP = parseInt(process.env.CRAWL_STEP || '5000', 10)
 
@@ -166,6 +168,62 @@ export default class FetchUserBettingInfoJob implements JobContract {
               .update({
                 has_claim: true,
               })
+          }
+          break
+        case USER_PREDICT:
+          const userPredict = await PredictModel.query()
+            .where('match_id', event.returnValues.matchID)
+            .andWhere('user_address', event.returnValues.user)
+            .first()
+          if (userPredict) {
+            await PredictModel.query()
+              .where('match_id', event.returnValues.matchID)
+              .andWhere('user_address', event.returnValues.user)
+              .update({
+                transaction_hash: event.transactionHash,
+                transaction_index: event.transactionIndex,
+                block_number: event.blockNumber,
+                dispatch_at: blockData.timestamp,
+                event_type: event_type,
+                user_address: event.returnValues.user,
+                match_id: event.returnValues.matchID,
+                home_score: event.returnValues.homeScore,
+                away_score: event.returnValues.awayScore,
+                predict_time: event.returnValues.time,
+              })
+          } else {
+            let predictData = new PredictModel()
+            predictData.transaction_hash = event.transactionHash
+            predictData.transaction_index = event.transactionIndex
+            predictData.block_number = event.blockNumber
+            predictData.dispatch_at = blockData.timestamp
+            predictData.event_type = event_type
+            predictData.user_address = event.returnValues.user
+            predictData.match_id = event.returnValues.matchID
+            predictData.home_score = event.returnValues.homeScore
+            predictData.away_score = event.returnValues.awayScore
+            predictData.predict_time = event.returnValues.time
+            await predictData.save()
+
+            let betss = await BetCountModel.query()
+              .where('match_id', event.returnValues.matchID)
+              .andWhere('user_address', event.returnValues.user)
+              .first()
+
+            if (betss) {
+              await BetCountModel.query()
+                .where('match_id', event.returnValues.matchID)
+                .andWhere('user_address', event.returnValues.user)
+                .update({
+                  bet_count: betss.bet_count + 1,
+                })
+            } else {
+              let betCountData = new BetCountModel()
+              betCountData.match_id = event.returnValues.matchID
+              betCountData.user_address = event.returnValues.user
+              betCountData.bet_count = 1
+              await betCountData.save()
+            }
           }
           break
         default:

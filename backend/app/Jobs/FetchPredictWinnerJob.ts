@@ -95,16 +95,22 @@ export default class FetchPredictWinnerJob implements JobContract {
       const blockData = await provider.eth.getBlock(event.blockNumber)
       switch (event_type) {
         case REQUEST_RANDOM_NUMBER:
-          let data = new PredictWinner()
-          data.transaction_hash = event.transactionHash
-          data.transaction_index = event.transactionIndex
-          data.block_number = event.blockNumber
-          data.dispatch_at = blockData.timestamp
-          data.event_type = event_type
-          data.match_id = event.returnValues.matchID
-          data.req_id = event.returnValues.requestId
+          const predictWinner = await PredictWinner.query()
+            .where('match_id', event.returnValues.matchID)
+            .first()
+          if (!predictWinner) {
+            let data = new PredictWinner()
+            data.transaction_hash = event.transactionHash
+            data.transaction_index = event.transactionIndex
+            data.block_number = event.blockNumber
+            data.dispatch_at = blockData.timestamp
+            data.event_type = event_type
+            data.match_id = event.returnValues.matchID
+            data.req_id = event.returnValues.requestId
 
-          await data.save()
+            await data.save()
+          }
+
           break
         case RECEIVE_RANDOM_NUMBER:
           const match = await MatchModel.query()
