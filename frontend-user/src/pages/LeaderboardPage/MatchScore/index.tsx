@@ -13,12 +13,12 @@ import styles from "./matchScore.module.scss";
 import WinnerMatch from "./WinnerMatch";
 
 export type FilterTypes = {
-  is_completed_bet: string;
-  match_status: string;
-  page: number;
-  size: number;
+  // is_completed_bet: string;
+  // match_status: string;
+  // page: number;
+  // size: number;
   round_name: typeof rounds[keyof typeof rounds];
-  wallet_address: string;
+  // wallet_address: string;
 };
 
 const MatchScore = () => {
@@ -28,17 +28,16 @@ const MatchScore = () => {
 
   const [dataTable, setDataTable] = useState<any[]>([]);
   const [filter, setFilter] = useState<FilterTypes>({
-    is_completed_bet: "",
-    match_status: "",
-    page: 1,
-    size: 20,
-    wallet_address: "",
+    // is_completed_bet: "",
+    // match_status: "",
+    // page: 1,
+    // size: 20,
+    // wallet_address: "",
     round_name: rounds[0].value,
   });
 
   const { data, loading } = useFetch<any>(
-    "/predict/predict-winner-count-by-match",
-    // queryString.stringify({ ...filter }),
+    "/predict/predict-winner-count-by-match?round=" + filter.round_name,
   );
 
   useEffect(() => {

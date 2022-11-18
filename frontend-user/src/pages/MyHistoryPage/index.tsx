@@ -141,6 +141,7 @@ const MyHistoryPage = () => {
   const handleChangeTab = (value: any) => {
     setNavActived(value);
     setStatistics(InitState.statistics);
+    setFilter(InitState.filter);
   };
 
   useEffect(() => {

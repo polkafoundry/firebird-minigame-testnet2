@@ -54,54 +54,60 @@ const MatchListRight = (props: MatchListRightProps) => {
       : "-";
 
   return (
-    <div className="flex flex-col rounded-lg md:ml-6">
+    <div className="flex flex-col rounded-lg">
       <div
         className={clsx(
-          "flex flex-col items-center justify-center text-center h-auto min-h-[280px] text-white rounded-t-[4px]",
+          "flex flex-col items-center justify-center text-center h-auto min-h-[260px] md:min-h-[280px] text-white rounded-t-[4px]",
           styles.backgroundStadium,
         )}
       >
         {matchData ? (
           <>
-            <span className="text-20/32 uppercase font-bold">{matchTime}</span>
-            <span className="text-16/24 mt-1">{matchData?.stadium}</span>
-            <div className="flex justify-between items-center w-full max-w-[660px] mt-5">
-              <div className="flex flex-col items-center gap-2 flex-1">
+            <span className="text-14/20 md:text-20/32 uppercase font-bold">
+              {matchTime}
+            </span>
+            <span className="text-14/24 md:text-16/24 mt-1">
+              {matchData?.stadium}
+            </span>
+            <div className="flex justify-between items-center w-full max-w-[660px] mt-7 md:mt-5">
+              <div className="flex flex-col items-center flex-1">
                 <img
                   src={getImgSrc(matchData.home_icon)}
-                  className="w-[60px] h-[60px] m-auto rounded-full"
+                  className="w-[40px] h-[40px] md:w-[60px] md:h-[60px] m-auto rounded-full"
                   alt=""
                 />
-                <span className="text-20/32 font-semibold capitalize">
+                <span className="text-16/20 md:text-20/32 font-semibold capitalize mt-1 md:mt-2">
                   {matchData.home_name.toLowerCase()}
                 </span>
               </div>
-              <div className="">
-                <div className="rounded-full bg-white text-black flex justify-center items-center w-[140px] h-[60px] mx-5">
-                  <span className="text-24/32 font-semibold">
+              <div>
+                <div className="rounded-full bg-white text-black flex justify-center items-center w-[90px] h-[40px] md:w-[140px] md:h-[60px] mx-5">
+                  <span className="text-18/24 md:text-24/32 font-semibold">
                     {getMatchScore(matchData?.ft_home_score)}
                   </span>
-                  <span className="text-24/32 font-semibold mx-2">:</span>
-                  <span className="text-24/32 font-semibold">
+                  <span className="text-18/24 md:text-24/32 font-semibold mx-2">
+                    :
+                  </span>
+                  <span className="text-18/24 md:text-24/32 font-semibold">
                     {getMatchScore(matchData?.ft_away_score)}
                   </span>
                 </div>
                 {[MATCH_STATUS.LIVE, MATCH_STATUS.FINISHED].includes(
                   matchData?.match_status,
                 ) && matchData?.is_half_time ? (
-                  <span className="mt-2.5 opacity-70 text-16/24">
+                  <span className="mt-2.5 opacity-70 text-12/18 md:text-16/24">
                     (1st half {matchData?.ht_home_score}-
                     {matchData?.ht_away_score})
                   </span>
                 ) : null}
               </div>
-              <div className="flex flex-col gap-2 flex-1">
+              <div className="flex flex-col flex-1">
                 <img
                   src={getImgSrc(matchData.away_icon)}
-                  className="w-[65px] h-[65px] m-auto rounded-full"
+                  className="w-[40px] h-[40px] md:w-[60px] md:h-[60px] m-auto rounded-full"
                   alt=""
                 />
-                <span className="text-20/32 font-semibold capitalize">
+                <span className="text-16/20 md:text-20/32 font-semibold capitalize mt-1 md:mt-2">
                   {matchData.away_name.toLowerCase()}
                 </span>
               </div>
@@ -134,7 +140,7 @@ const MatchListRight = (props: MatchListRightProps) => {
         {nav.map((item: any) => (
           <div
             className={clsx(
-              "flex justify-center items-center text-center text-14/20 font-bold",
+              "flex justify-center items-center text-center text-12/18 tracking-[1px] font-bold md:text-14/20 md:tracking-[2px]",
               selectedNav === item.value
                 ? "bg-[#3A0013] text-white"
                 : "bg-white opacity-50 text-black",

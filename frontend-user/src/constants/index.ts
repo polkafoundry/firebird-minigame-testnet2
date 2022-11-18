@@ -17,6 +17,7 @@ export const URLS = {
   LEADERBOARD: "/leaderboard",
   HISTORY: "/history",
   FIREFLY_TESTNET: "/introduction",
+  FAUCET_TOKEN: "https://faucet.firefly.firebirdchain.com/",
   FAQ: "/faq",
 };
 

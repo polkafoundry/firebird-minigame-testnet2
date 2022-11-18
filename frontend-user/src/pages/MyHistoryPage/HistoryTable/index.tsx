@@ -5,7 +5,6 @@ import MatchPredict from "../../../components/base/Table/MatchPredict";
 import { BET_PLACE, BET_TYPE } from "../../../constants";
 import {
   convertHexToNumberFormat,
-  convertHexToStringNumber,
   formatCurrency,
   getDateTime,
   getImgSrc,
@@ -88,9 +87,9 @@ const HistoryTable = (props: HistoryTableTypes) => {
       <div className="relative flex flex-col w-full min-h-[300px]">
         {tableLoading && <DefaultLoading />}
 
-        {dataTable.map((rowData, index) => (
+        {dataTable.map((rowData) => (
           <div
-            key={rowData.match_id + index}
+            key={rowData?.id}
             className={clsx(
               "flex items-center px-5 py-2 border-t hover:bg-yellow-200 font-inter text-14/24  min-w-fit",
               isWhoWinTable ? styles.whoWinRow : styles.matchScoreRow,
