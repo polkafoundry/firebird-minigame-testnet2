@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "node ace serve --watch",
+    "dev": "NODE_ENV=testing node ace serve --watch",
     "start-queue": "node ace bull:listen",
     "build": "node ace build --production && cp .env ./build/.env",
-    "start": "node build/server.ts",
+    "start": "npm run build && NODE_ENV=production node build/server.js",
     "lint": "eslint . --ext=.ts",
     "format": "prettier --write .",
     "migration-staging": "NODE_ENV=testing node ace migration:run",
