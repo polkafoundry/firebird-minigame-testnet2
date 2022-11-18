@@ -5,6 +5,7 @@ import { MATCH_STATUS, URLS } from "../../../../../../constants";
 type QuestionProps = {
   title: string;
   children: JSX.Element;
+  isPredictQuestion?: boolean;
   predictBoxComponent?: JSX.Element | undefined;
   handleSubmit: () => void;
   isSubmitted: boolean;
@@ -17,6 +18,7 @@ const Question = (props: QuestionProps) => {
   const {
     title,
     children,
+    isPredictQuestion = false,
     handleSubmit,
     isSubmitted,
     matchEnded,
@@ -29,6 +31,7 @@ const Question = (props: QuestionProps) => {
   const enableSubmit = predictBoxComponent
     ? ![MATCH_STATUS.FINISHED, MATCH_STATUS.LIVE].includes(matchStatus)
     : !matchEnded && !isSubmitted;
+
   return (
     <Disclosure defaultOpen>
       {({ open }) => (
@@ -51,7 +54,7 @@ const Question = (props: QuestionProps) => {
             {children}
             {error && (
               <div className="mt-3">
-                {error?.birdToken === false && (
+                {!isPredictQuestion && error?.birdToken === false && (
                   <p className="text-12/16 text-[#FF0021] text-center font-inter">
                     Not enough $BIRD to anwser the questions. Click{" "}
                     <a
