@@ -3,7 +3,7 @@ import queryString from "query-string";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import DropDown from "../../components/base/DropDown";
-import InputSearch from "../../components/base/InputSearch";
+// import InputSearch from "../../components/base/InputSearch";
 import Pagination from "../../components/base/Pagination";
 import DefaultLayout from "../../components/layout/DefaultLayout";
 import {
@@ -120,7 +120,7 @@ const MyHistoryPage = () => {
   );
 
   useEffect(() => {
-    setCurrentRank(leaderboardData?.data?.position);
+    setCurrentRank(account ? leaderboardData?.data?.position : 0);
   }, [leaderboardData]);
 
   const handleChangeResult = (value: any) => {
@@ -194,12 +194,12 @@ const MyHistoryPage = () => {
     return () => clearTimeout(timer);
   }, [filter, account, navActived]);
 
-  const handleSearch = (e: any) => {
-    setFilter((prevFilter: FilterTypes) => ({
-      ...prevFilter,
-      [e.target.name]: e.target.value,
-    }));
-  };
+  // const handleSearch = (e: any) => {
+  //   setFilter((prevFilter: FilterTypes) => ({
+  //     ...prevFilter,
+  //     [e.target.name]: e.target.value,
+  //   }));
+  // };
 
   const handleChangePage = (value: number) => {
     setFilter((prevFilter: FilterTypes) => ({
@@ -242,7 +242,7 @@ const MyHistoryPage = () => {
                 </div>
               )}
             </div>
-            <div className="sm:ml-4 flex items-center mt-2 lg:mt-0">
+            {/* <div className="sm:ml-4 flex items-center mt-2 lg:mt-0">
               <span className="text-14/20 font-semibold">Search</span>
               <InputSearch
                 className="rounded-md bg-white w-[272px] px-3 py-1.5 ml-2"
@@ -250,7 +250,7 @@ const MyHistoryPage = () => {
                 onChange={handleSearch}
                 placeholder="Search match"
               />
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

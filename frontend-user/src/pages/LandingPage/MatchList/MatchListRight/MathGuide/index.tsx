@@ -4,7 +4,7 @@ import { quickGuide, URLS } from "../../../../../constants";
 import { WalletContext } from "../../../../../context/WalletContext";
 import { useMyWeb3 } from "../../../../../hooks/useMyWeb3";
 import usePredictConditions from "../../../../../hooks/usePredictConditions";
-import { displayWalletAddress } from "../../../../../utils";
+import { displayWalletAddress, formatCurrency } from "../../../../../utils";
 import { scrollToId } from "../../../../../utils/domElement";
 import { requestSupportNetwork } from "../../../../../utils/setupNetwork";
 import styles from "./matchGuide.module.scss";
@@ -116,7 +116,7 @@ const MatchGuide = (props: MatchGuideProps) => {
                   </div>
                   {predictConditions.birdToken ? (
                     <p className="m-0 font-semibold font-tthoves">{`${
-                      birdBalance || 0
+                      formatCurrency(birdBalance) || 0
                     } $BIRD`}</p>
                   ) : (
                     <div className="flex flex-col">

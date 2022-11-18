@@ -4,7 +4,9 @@ import MatchName from "../../../components/base/Table/MatchName";
 import MatchPredict from "../../../components/base/Table/MatchPredict";
 import { BET_PLACE, BET_TYPE } from "../../../constants";
 import {
+  convertHexToNumberFormat,
   convertHexToStringNumber,
+  formatCurrency,
   getDateTime,
   getImgSrc,
 } from "../../../utils";
@@ -43,7 +45,7 @@ const HistoryTable = (props: HistoryTableTypes) => {
   };
 
   const getEarnedAmount = (result_num: any) =>
-    result_num > 0 ? convertHexToStringNumber(result_num) : "0";
+    result_num > 0 ? convertHexToNumberFormat(result_num) : "0";
 
   const getAnswerText = (rowData: any) => {
     const isCorrectAnswer = rowData.result === "win";
@@ -117,7 +119,10 @@ const HistoryTable = (props: HistoryTableTypes) => {
                 )}
                 <div>{rowData.final_winner === account ? "Yes" : "No"}</div>
                 <div>
-                  ${rowData.final_winner === account ? rowData.rewards : 0}
+                  $
+                  {rowData.final_winner === account
+                    ? formatCurrency(rowData.rewards)
+                    : 0}
                 </div>
               </>
             )}
@@ -138,9 +143,9 @@ const HistoryTable = (props: HistoryTableTypes) => {
                   {getAnswerText(rowData).toLowerCase()}
                 </div>
                 <MatchPredict isCorrect={rowData.result === "win"} />
-                <div>{convertHexToStringNumber(rowData.bet_amount)}</div>
+                <div>{convertHexToNumberFormat(rowData.bet_amount)}</div>
                 <div>{getEarnedAmount(rowData.result_num)}</div>
-                <div>{convertHexToStringNumber(rowData.total_claim)}</div>
+                <div>{convertHexToNumberFormat(rowData.total_claim)}</div>
                 <ClaimTokenRow
                   account={account}
                   data={rowData}

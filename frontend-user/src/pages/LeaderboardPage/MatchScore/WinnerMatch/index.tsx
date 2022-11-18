@@ -18,7 +18,7 @@ const WinnerMatch = (props: MatchListRightProps) => {
     !!matchId,
   );
   const matchData = data?.data;
-  const listWinner = matchData?.listWinner.slice(0, 6);
+  const listWinner = matchData?.listWinner;
 
   const isWinner = matchData?.finalWinner && account === matchData?.finalWinner;
 
@@ -79,7 +79,7 @@ const WinnerMatch = (props: MatchListRightProps) => {
         )}
       </div>
 
-      <div className="p-5">
+      <div className="p-5 ">
         {!matchId ? (
           <div className="text-16/24 font-semibold">
             Please Select Match First
