@@ -130,7 +130,11 @@ const MatchListRight = (props: MatchListRightProps) => {
           </>
         ) : (
           <>
-            <img src="/images/select-match.png" alt="" />
+            <img
+              src="/images/select-match.png"
+              alt=""
+              className="w-[120px] h-[120px] md:w-[100px] md:h-[100px]"
+            />
             <p className="mt-4 bold text-14/20">Please select a match.</p>
           </>
         )}

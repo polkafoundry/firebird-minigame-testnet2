@@ -123,7 +123,7 @@ const MatchList = () => {
           <div
             className={clsx(
               styles.scrollLayout,
-              "w-full h-fit",
+              "w-full h-fit ",
               "md:w-[44%] md:sticky md:top-10",
             )}
           >
@@ -155,7 +155,7 @@ const MatchList = () => {
               <div className="fixed inset-0 bg-black/80" aria-hidden="true" />
               <div className="fixed inset-0 overflow-y-auto">
                 <div className="flex min-h-full items-center justify-center p-4">
-                  <Dialog.Panel className="w-full h-auto relative m-auto bg-[#F2F2F2] rounded-[12px] overflow-scroll">
+                  <Dialog.Panel className="w-full h-auto relative m-auto bg-[#F2F2F2] rounded-[12px] overflow-x-auto">
                     <MatchListRight
                       account={account}
                       isWrongChain={isWrongChain}

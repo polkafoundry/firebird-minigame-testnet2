@@ -156,7 +156,7 @@ const MatchListTable = (props: MatchListTableProps) => {
           </div>
         </div>
 
-        <div className="overflow-scroll">
+        <div className="overflow-x-auto">
           <div
             className={clsx(
               "flex bg-[#3A0013] min-w-fit text-white",

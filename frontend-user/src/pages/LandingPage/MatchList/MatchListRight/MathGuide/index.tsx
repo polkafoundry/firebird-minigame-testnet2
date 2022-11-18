@@ -163,7 +163,7 @@ const MatchGuide = (props: MatchGuideProps) => {
     <div className="flex flex-col my-5">
       <div className="flex flex-col">
         <span className="title-background">Conditions to join</span>
-        <div className="py-3 px-3 md:px-8 font-inter">
+        <div className="p-3 md:px-8 font-inter">
           <div className="bg-white p-5">
             {!account && (
               <div className="h-[176px] flex justify-center items-center">
@@ -182,18 +182,24 @@ const MatchGuide = (props: MatchGuideProps) => {
 
       <div className="flex flex-col">
         <span className="title-background">Quick guide</span>
-        <div className="py-3 px-8">
+        <div className="p-3 md:px-8">
           <div className="bg-white flex flex-col xs:flex-row p-5">
             <div>
-              <img src="./images/landing-page/world-cup-guide.png" alt="" />
+              <img
+                src="./images/landing-page/world-cup-guide.png"
+                alt=""
+                className="w-full"
+              />
             </div>
-            <ul className="ml-3 flex flex-col gap-3 font-inter">
+            <ul className="mt-[26px] md:mt-0 ml-3 flex flex-col gap-3 font-inter">
               {quickGuide.map((item: string, index: number) => (
                 <li className="flex gap-2" key={item}>
                   <div className="w-6 h-6 text-14/20 rounded-full bg-[#3A0013] text-white text-center flex justify-center items-center">
                     {index + 1}
                   </div>
-                  <span className="text-16/24 flex-1 opacity-80">{item}</span>
+                  <span className="text-14/24 md:text-16/24 flex-1 opacity-80">
+                    {item}
+                  </span>
                 </li>
               ))}
             </ul>
@@ -201,9 +207,9 @@ const MatchGuide = (props: MatchGuideProps) => {
         </div>
       </div>
 
-      <div className="flex justify-center">
+      <div className="flex justify-center px-3 md:px-0">
         <button
-          className="w-1/2 py-4 rounded-full bg-main text-white justify-center font-semibold font-tthoves text-16/24"
+          className="w-full xs:w-[336px] py-4 rounded-full bg-main text-white justify-center font-semibold font-tthoves text-18/24"
           onClick={handleClickPredictionRule}
         >
           Prediction Rule
