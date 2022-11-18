@@ -55,7 +55,7 @@ const Question = (props: QuestionProps) => {
                   <p className="text-12/16 text-[#FF0021] text-center font-inter">
                     Not enough $BIRD to anwser the questions. Click{" "}
                     <a
-                      href={URLS.FAUCET_TESTNET}
+                      href={URLS.FIREFLY_TESTNET}
                       target={"_blank"}
                       rel="norefferer"
                       className="text-[#0085FF] underline cursor-pointer"
@@ -69,7 +69,7 @@ const Question = (props: QuestionProps) => {
                   <p className="text-12/16 text-[#FF0021] text-center font-inter">
                     Not enough PKF to pay for the gas fee. Click{" "}
                     <a
-                      href={URLS.FAUCET_TESTNET}
+                      href={URLS.FIREFLY_TESTNET}
                       target={"_blank"}
                       rel="norefferer"
                       className="text-[#0085FF] underline cursor-pointer"

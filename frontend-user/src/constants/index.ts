@@ -16,7 +16,8 @@ export const URLS = {
   HOME: "/",
   LEADERBOARD: "/leaderboard",
   HISTORY: "/history",
-  FAUCET_TESTNET: "https://faucet.firefly.firebirdchain.com/",
+  FIREFLY_TESTNET: "/introduction",
+  FAQ: "/faq",
 };
 
 // only accept number [0-9] and less than 2 digits

@@ -121,7 +121,7 @@ const MatchGuide = (props: MatchGuideProps) => {
                   ) : (
                     <div className="flex flex-col">
                       <a
-                        href={URLS.FAUCET_TESTNET}
+                        href={URLS.FIREFLY_TESTNET}
                         target={"_blank"}
                         rel="norefferer"
                         className={clsx(
@@ -155,7 +155,7 @@ const MatchGuide = (props: MatchGuideProps) => {
                   ) : (
                     <div className="flex flex-col">
                       <a
-                        href={URLS.FAUCET_TESTNET}
+                        href={URLS.FIREFLY_TESTNET}
                         target={"_blank"}
                         rel="norefferer"
                         className={clsx(

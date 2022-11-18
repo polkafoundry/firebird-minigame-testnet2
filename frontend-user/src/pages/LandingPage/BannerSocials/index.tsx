@@ -9,7 +9,7 @@ const BannerSocials = () => {
   return (
     <div
       className={clsx(
-        "mt-10 mb-[-84px] px-5 lg:px-[100px] text-white max-w-screen-main w-full mx-auto",
+        "mt-[120px] mb-[-84px] px-5 lg:px-[100px] text-white max-w-screen-main w-full mx-auto",
       )}
     >
       <div

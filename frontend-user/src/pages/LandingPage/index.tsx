@@ -3,11 +3,10 @@ import LandingLayout from "../../components/layout/LandingLayout";
 import { scrollToId } from "../../utils/domElement";
 import BannerSocials from "./BannerSocials";
 import CalculatedReward from "./CalculatedReward";
-import FAQ from "./FAQ";
-import PredictionRule from "./PredictionRule";
+import HomeBanner from "./HomeBanner";
 import MatchList from "./MatchList";
 import Schedule from "./MatchList/Schedule";
-import HomeBanner from "./HomeBanner";
+import PredictionRule from "./PredictionRule";
 
 const LangdingPage = () => {
   useEffect(() => {
@@ -29,7 +28,6 @@ const LangdingPage = () => {
         <MatchList />
         <CalculatedReward />
         <PredictionRule />
-        <FAQ />
         <BannerSocials />
       </div>
     </LandingLayout>

@@ -17,7 +17,7 @@ const TableFinalRewards = () => {
   const lastIndex = finalRewardTable.data.length - 1;
 
   return (
-    <div className="mt-5">
+    <div className="mt-3 md:mt-5 px-10">
       <div
         className={clsx(
           "flex justify-between font-semibold",
