@@ -277,8 +277,8 @@ const MatchQuestions = (props: MatchQuestionProps) => {
     );
 
   return (
-    <div className="w-full p-5">
-      <span className="text-16/24 font-inter">
+    <div className="w-full p-3 md:p-5">
+      <span className="text-14/24 md:text-16/24 font-inter">
         Select questions, predict the match & submit your answer.
       </span>
 

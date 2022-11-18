@@ -25,8 +25,8 @@ const ResultMatch = (props: ResultMatchProps) => {
   };
 
   return (
-    <div className="mt-3 px-16">
-      <div className="bg-[#F2F2F2] p-5 grid grid-cols-2 gap-y-5">
+    <div className="mt-3 px-3 xs:px-16">
+      <div className="bg-[#F2F2F2] p-5 grid grid-cols-1 xs:grid-cols-2 gap-y-5">
         <div className="flex flex-col">
           <span className="font-inter text-12/18 font-bold opacity-50 uppercase">
             Deposit Amount:
@@ -96,11 +96,11 @@ const ResultMatch = (props: ResultMatchProps) => {
         </div>
       </div>
 
-      <div className="mt-3 flex justify-center text-14/20 font-tthoves font-semibold text-white">
+      <div className="mt-3 flex flex-col xs:flex-row justify-center text-14/20 font-tthoves font-semibold text-white">
         {questionStatus === QUESTION_STATUS.CORRECT_ANSWER && (
           <button
             className={clsx(
-              "px-10 py-2 bg-main rounded-lg mr-2",
+              "w-full xs:w-auto text-center px-10 py-2 bg-main rounded-lg mr-2",
               isClaimed && "pointer-events-none opacity-50",
             )}
             onClick={handleClaimToken}
@@ -113,7 +113,7 @@ const ResultMatch = (props: ResultMatchProps) => {
           href="/history"
           target={"_blank"}
           rel="norefferer"
-          className="px-10 py-2 bg-black rounded-lg"
+          className="w-full xs:w-auto text-center px-10 py-2 bg-black rounded-lg"
         >
           My history
         </a>

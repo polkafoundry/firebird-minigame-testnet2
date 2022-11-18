@@ -35,11 +35,11 @@ const Question = (props: QuestionProps) => {
   return (
     <Disclosure defaultOpen>
       {({ open }) => (
-        <div className="mt-4 rounded-lg bg-white relative">
+        <div className="mt-2 md:mt-3 rounded-lg bg-white relative">
           {loading && <DefaultLoading />}
 
           <Disclosure.Button className="block w-full select-none cursor-pointer p-5">
-            <div className="text-16/20 font-tthoves font-semibold flex justify-between items-center text-left">
+            <div className="text-14/20 md:text-16/20 font-tthoves font-semibold flex justify-between items-center text-left">
               <span>{title}</span>
               <div className="ml-2 w-[14px]">
                 <img
@@ -87,7 +87,7 @@ const Question = (props: QuestionProps) => {
             {enableSubmit && (
               <div className="flex justify-center">
                 <button
-                  className="mt-3 p-2 w-[178px] rounded-lg bg-main text-white text-14/20 font-tthoves font-semibold"
+                  className="mt-3 p-2 w-full xs:w-[178px] rounded-lg bg-main text-white text-14/20 font-tthoves font-semibold"
                   onClick={handleSubmit}
                   disabled={loading}
                 >

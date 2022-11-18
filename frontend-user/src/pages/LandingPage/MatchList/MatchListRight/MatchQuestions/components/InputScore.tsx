@@ -57,7 +57,7 @@ const InputNumber = (props: InputNumberProps) => {
     <input
       type="text"
       className={clsx(
-        "w-12 h-12 p-2 text-18/24 font-semibold text-center outline-none rounded-lg",
+        "w-9 h-9 p-2 text-16/20 xs:w-12 xs:h-12 xs:text-18/24 font-semibold text-center outline-none rounded-lg",
         getInputStyle(),
         className,
       )}

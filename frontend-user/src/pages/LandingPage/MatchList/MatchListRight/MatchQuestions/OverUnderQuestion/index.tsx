@@ -131,14 +131,14 @@ const OverUnderQuestion = (props: QuestionProps) => {
       <div>
         <div
           className={clsx(
-            "flex items-start w-full space-x-2 overflow-x-auto",
+            "flex flex-col xs:flex-row items-start w-full space-y-1.5 xs:space-x-2 xs:space-y-0",
             "xs:justify-center",
             "md:px-4",
             "2md:min-w-[520px] 2md:px-16",
           )}
         >
           {dataQuestion?.options?.map((option: any, index: number) => (
-            <div key={option?.label} className="flex flex-col w-full">
+            <div key={option?.label} className="flex xs:flex-col w-full flex-1">
               <BorderBox
                 label={option?.label}
                 icon={option?.icon}
@@ -159,17 +159,19 @@ const OverUnderQuestion = (props: QuestionProps) => {
                 }
                 boxType={betPlaceString[index]}
               />
-              <span
-                className={clsx(
-                  "mt-2 text-16/24 font-inter text-center",
-                  getWinRateColor(index),
-                )}
-              >
-                {option?.winRate}
-              </span>
-              <span className="text-12/16 opacity-70 text-center">
-                {option?.description}
-              </span>
+              <div className="flex flex-row-reverse xs:flex-col items-baseline xs:items-center">
+                <span
+                  className={clsx(
+                    "mt-2 text-14/24 w-[30px] xs:w-auto xs:text-16/24 font-inter text-center",
+                    getWinRateColor(index),
+                  )}
+                >
+                  {option?.winRate}
+                </span>
+                <span className="w-[100px] xs:w-auto text-12/18 opacity-70 text-center">
+                  {option?.description}
+                </span>
+              </div>
             </div>
           ))}
         </div>

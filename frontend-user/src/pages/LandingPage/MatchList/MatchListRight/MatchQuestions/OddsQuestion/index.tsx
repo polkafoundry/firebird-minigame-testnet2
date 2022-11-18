@@ -127,14 +127,14 @@ const OddsQuestion = (props: QuestionProps) => {
       <div>
         <div
           className={clsx(
-            "flex items-center w-full space-x-2 overflow-x-auto",
+            "flex flex-col xs:flex-row items-center w-full space-y-1.5 xs:space-x-2 xs:space-y-0",
             "xs:justify-center",
             "md:px-4",
             "2md:min-w-[520px] 2md:px-16",
           )}
         >
           {dataQuestion?.options?.map((option: any, index: number) => (
-            <div key={index} className="flex flex-col w-full">
+            <div key={index} className="flex xs:flex-col w-full flex-1">
               <BorderBox
                 label={option?.label}
                 icon={option?.icon}
@@ -152,7 +152,7 @@ const OddsQuestion = (props: QuestionProps) => {
               />
               <div
                 className={clsx(
-                  "mt-2 text-16/24 font-inter text-center",
+                  "mt-2 text-14/24 w-[50px] xs:w-auto xs:text-16/24 font-inter text-right xs:text-center",
                   getWinRateColor(index),
                 )}
               >

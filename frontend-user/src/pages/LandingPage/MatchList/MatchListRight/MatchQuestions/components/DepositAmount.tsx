@@ -42,13 +42,13 @@ const DepositAmount = (props: DepositAmountProps) => {
   return (
     <>
       <div className="mt-3 bg-[#F2F2F2] px-3 py-5 rounded-lg font-inter">
-        <div className="flex justify-between max-w-[340px]">
+        <div className="flex flex-col xs:flex-row justify-between xs:max-w-[340px]">
           <span className="font-bold text-12/18">Deposit Amount:</span>
           <span className="text-12/16 opacity-70">
             Balance: <span className="font-bold">{birdBalance || 0} $BIRD</span>
           </span>
         </div>
-        <div className="flex items-start mt-2">
+        <div className="flex flex-col xs:flex-row items-start mt-1.5 xs:mt-2">
           <div className="flex items-center max-w-[340px] border p-1 bg-white rounded-lg">
             <input
               type="text"
@@ -68,7 +68,7 @@ const DepositAmount = (props: DepositAmountProps) => {
             </button>
           </div>
 
-          <ul className="text-12/16 pl-8 list-disc">
+          <ul className="mt-5 xs:mt-0 text-12/18 xs:pl-8 list-disc">
             {!depositAmount && (
               <li>Please enter the number of $BIRD you want to deposit.</li>
             )}
@@ -96,17 +96,17 @@ const DepositAmount = (props: DepositAmountProps) => {
             )}
           </ul>
         </div>
-        <p className="text-12/16 mt-2">
-          Maximum is 1,000 BIRD/question.{" "}
+        <div className="flex flex-col xs:flex-row">
+          <p className="text-12/18 mt-2">Maximum is 1,000 BIRD/question. </p>
           <a
             href={FAUCET_URL}
             target={"_blank"}
             rel="norefferer"
-            className="text-[#0085FF] ml-5"
+            className="text-[#0085FF] mt-1 xs:ml-5 xs:mt-0"
           >
             Don’t have BIRD token?
           </a>
-        </p>
+        </div>
       </div>
       {/* {errors?.length ? (
         <ul className="mt-10">

@@ -34,7 +34,7 @@ const BorderBox = (props: BorderBoxProps) => {
         )}
         <span
           className={clsx(
-            "text-16/20 font-tthoves font-semibold",
+            "text-14/20 xs:text-16/20 font-tthoves font-semibold",
             boxType !== "draw" && "capitalize",
           )}
         >

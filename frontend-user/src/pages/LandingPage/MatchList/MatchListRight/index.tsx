@@ -115,7 +115,7 @@ const MatchListRight = (props: MatchListRightProps) => {
 
             <div
               className={clsx(
-                "text-white text-14/20 px-5 py-1.5 rounded-md mt-5 font-semibold bg-[#3A0013]",
+                "text-white text-14/20 mx-3 px-5 py-1.5 rounded-md mt-5 font-semibold bg-[#3A0013]",
                 isEnded ? "bg-[#3A0013]" : "bg-[#257632]",
               )}
             >

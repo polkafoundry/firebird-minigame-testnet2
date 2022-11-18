@@ -117,8 +117,10 @@ const PredictQuestion = (props: QuestionProps) => {
   const renderMatchNameDetail = (home_name: string, home_icon: string) => {
     return (
       <div className="flex flex-col items-center justify-center flex-1">
-        {home_icon && <img src={home_icon} className="w-12 h-12" alt="" />}
-        <span className="mt-2 text-16/20 font-tthoves font-semibold capitalize text-center">
+        {home_icon && (
+          <img src={home_icon} className="w-10 h-10 md:w-12 md:h-12" alt="" />
+        )}
+        <span className="text-14/20 mt-1 xs:mt-2 xs:text-16/20 font-tthoves font-semibold capitalize text-center">
           {home_name && home_name.toLowerCase()}
         </span>
       </div>
