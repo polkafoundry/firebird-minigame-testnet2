@@ -24,7 +24,7 @@ export default class MetaForceService {
         const arrPrize = Object.keys(Const.PRIZE).map(item => +item).sort(function (a, b) { return a - b });
         const currentTime = new Date()
         const token = HelperUtils.getMFToken(`${currentTime.getTime()}${Const.MF_KEY.TENANT_ID}${Const.MF_KEY.SECRET_KEY}`)
-        const res = await axios.get(`${Const.MF_ENDPOINT}/firebird/query/dev/dashboard/${currentTime.getTime()}?startTime=${startTime}&endTime=${endTime}&event=${Const.MF_KEY.EVENT_NAME}&tenantId=${Const.MF_KEY.TENANT_ID}&sumBy=earned&limit=${limit}&offset=${offset}&search=${search}` + (wallet_address ? `&currentUserId=${wallet_address}` : ''), {
+        const res = await axios.get(`${Const.MF_ENDPOINT}/firebird/query/${Const.MF_KEY.TENANT_ID}/dashboard/${currentTime.getTime()}?startTime=${startTime}&endTime=${endTime}&event=${Const.MF_KEY.EVENT_NAME}&tenantId=${Const.MF_KEY.TENANT_ID}&sumBy=earned&limit=${limit}&offset=${offset}&search=${search}` + (wallet_address ? `&currentUserId=${wallet_address}` : ''), {
             headers: {
                 "Authorization": `Bearer ${token}`
             }
