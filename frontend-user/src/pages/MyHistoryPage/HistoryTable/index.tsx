@@ -5,7 +5,6 @@ import MatchPredict from "../../../components/base/Table/MatchPredict";
 import { BET_PLACE, BET_TYPE } from "../../../constants";
 import {
   convertHexToNumberFormat,
-  convertHexToStringNumber,
   formatCurrency,
   getDateTime,
   getImgSrc,

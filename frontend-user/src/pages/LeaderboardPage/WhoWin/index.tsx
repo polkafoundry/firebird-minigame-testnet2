@@ -4,7 +4,6 @@ import { useState } from "react";
 import DefaultLoading from "../../../components/base/DefaultLoading";
 import Pagination from "../../../components/base/Pagination";
 // import InputSearch from "../../../components/base/InputSearch";
-import { BASE_HREF, URLS } from "../../../constants";
 import useFetch from "../../../hooks/useFetch";
 import { useMyWeb3 } from "../../../hooks/useMyWeb3";
 import { displayWalletAddress, formatCurrency } from "../../../utils";
