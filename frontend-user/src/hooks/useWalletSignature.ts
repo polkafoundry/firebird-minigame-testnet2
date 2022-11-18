@@ -17,7 +17,7 @@ const useWalletSignature = () => {
         );
         const signer = provider.getSigner();
         const signature = await signer.signMessage(rawMessage);
-        console.log("sign", signature);
+        // console.log("sign", signature);
       }
     } catch (err: any) {
       console.log("useWalletSignature", err);
