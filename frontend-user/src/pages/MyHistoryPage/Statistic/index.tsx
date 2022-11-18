@@ -1,16 +1,17 @@
 import { HISTORY_NAV_VALUES } from "../../../constants";
+import { formatCurrency } from "../../../utils";
 
 const boxStyles = {
-  title: "font-inter text-14/24",
-  number: "font-tthoves text-32/40 font-semibold",
-  box: "flex flex-col text-white bg-[#3A0013] rounded-lg min-h-[84px] justify-center items-center",
+  title: "font-inter font-bold text-12/18 uppercase",
+  number: "font-tthovesBold italic text-32/40",
+  box: "flex flex-col text-black min-h-[84px] justify-center items-center border-b border-r border-black",
 };
 
 const Statistics = (props: any) => {
   const { data, navActived, currentRank } = props;
 
   return (
-    <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 justify-center items-center gap-4 mt-4 md:mt-6">
+    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 justify-center items-center border-t border-l border-black mt-4 md:mt-6">
       <div className={boxStyles.box}>
         <span className={boxStyles.title}>Prediction times</span>
         <span className={boxStyles.number}>{data?.prediction_times || 0}</span>
@@ -27,7 +28,9 @@ const Statistics = (props: any) => {
         <>
           <div className={boxStyles.box}>
             <span className={boxStyles.title}>Total $BIRD earned</span>
-            <span className={boxStyles.number}>{data?.earned || 0}</span>
+            <span className={boxStyles.number}>
+              {formatCurrency(data?.earned) || 0}
+            </span>
           </div>
           <div className={boxStyles.box}>
             <span className={boxStyles.title}>Current rank</span>

@@ -1,0 +1,22 @@
+.background {
+  background: linear-gradient(
+    85.67deg,
+    #de2779 4.5%,
+    #b839d0 57.94%,
+    #92a9fa 96.94%
+  );
+  border-radius: 32px;
+}
+
+.banner {
+  background: url(/assets/images/countdown/bg-countdown-banner.png) no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.textStroke {
+  color: white;
+  -webkit-text-fill-color: black;
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: white;
+}

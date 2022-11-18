@@ -6,8 +6,8 @@ const LeaderboardPage = () => {
   return (
     <DefaultLayout>
       <div className="flex flex-col mx-auto max-w-screen-main mb-10 pt-[140px]">
-        <MatchScore />
         <WhoWin />
+        <MatchScore />
       </div>
     </DefaultLayout>
   );

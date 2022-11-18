@@ -3,7 +3,7 @@ import clsx from "clsx";
 type RewardBannerProps = {
   reward: string;
   winner: string;
-  redirectUrl: string;
+  // redirectUrl: string;
   className?: string;
   isLargeText?: boolean;
 };
@@ -12,7 +12,7 @@ const RewardBanner = (props: RewardBannerProps) => {
   const {
     reward,
     winner,
-    redirectUrl,
+    // redirectUrl,
     className = "",
     isLargeText = false,
   } = props;
@@ -44,14 +44,14 @@ const RewardBanner = (props: RewardBannerProps) => {
           </span>
         </div>
       </div>
-      <a
+      {/* <a
         href={redirectUrl}
         target="_blank"
         rel="noreferrer"
         className="mt-3 btn-rounded btn-black w-[240px]"
       >
         More Detail
-      </a>
+      </a> */}
     </div>
   );
 };

@@ -100,7 +100,7 @@ const MatchScore = () => {
   // };
 
   return (
-    <div>
+    <div className="mt-20">
       <HeadingPrimary
         backroundTitle="Match Score"
         title="Match Score Prediction Winners"
@@ -108,7 +108,7 @@ const MatchScore = () => {
       <RewardBanner
         reward="$6,820"
         winner="64 winners"
-        redirectUrl={BASE_HREF + URLS.HOME + "#reward-distribution"}
+        // redirectUrl={BASE_HREF + URLS.HOME + "#reward-distribution"}
       />
 
       <div
@@ -135,7 +135,12 @@ const MatchScore = () => {
             // handleChangeStatus={handleChangeStatus}
           />
         </div>
-        <div className={"w-full md:w-[50%]"}>
+        <div
+          className={clsx(
+            "w-full md:w-[50%] max-h-screen overflow-y-auto",
+            styles.scrollLayout,
+          )}
+        >
           <WinnerMatch
             matchId={selectedMatchId}
             reward={reward}

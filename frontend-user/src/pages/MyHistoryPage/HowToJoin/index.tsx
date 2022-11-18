@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { BASE_HREF, quickGuide, URLS } from "../../../constants";
 import { WalletContext } from "../../../context/WalletContext";
 import { useMyWeb3 } from "../../../hooks/useMyWeb3";
-import { displayWalletAddress } from "../../../utils";
+import { displayWalletAddress, formatCurrency } from "../../../utils";
 import { requestSupportNetwork } from "../../../utils/setupNetwork";
 import HeadingPrimary from "../../LandingPage/components/HeadingPrimary";
 
@@ -107,7 +107,7 @@ const HowToJoin = () => {
                   </div>
                   {predictConditions.birdToken ? (
                     <p className="m-0 font-semibold font-tthoves">{`${
-                      birdBalance || 0
+                      formatCurrency(birdBalance) || 0
                     } $BIRD`}</p>
                   ) : (
                     <a
