@@ -398,6 +398,7 @@ export default class BettingService {
           .joinRaw(`WHERE user_address = '${address}'`)
           .joinRaw(filterResultQuery)
           .joinRaw(claimResultQuery)
+          .select('b.id')
           .select('b.match_id')
           .select('b.bet_place')
           .select('b.bet_type')

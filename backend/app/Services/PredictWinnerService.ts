@@ -177,6 +177,7 @@ export default class PredictWinnerService {
           .select('m.home_icon')
           .select('m.away_name')
           .select('m.away_icon')
+          .select('p.id')
           .select('p.match_id')
           .select('p.home_score')
           .select('p.away_score')
