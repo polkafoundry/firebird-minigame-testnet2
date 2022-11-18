@@ -1,4 +1,5 @@
 export const LANDING_PAGE_URL = process.env.REACT_APP_BASE_URL;
+export const FAUCET_URL = process.env.REACT_APP_FAUCET_BASE_URL;
 export const API_BASE_LOGO_TEAM = process.env.REACT_APP_API_LOGO_TEAM;
 export const API_BASE_URL = process.env.REACT_APP_API_BASE_URL + "api/v1";
 

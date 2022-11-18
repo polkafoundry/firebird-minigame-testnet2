@@ -1,6 +1,6 @@
 import { Disclosure } from "@headlessui/react";
 import DefaultLoading from "../../../../../../components/base/DefaultLoading";
-import { MATCH_STATUS, URLS } from "../../../../../../constants";
+import { FAUCET_URL, MATCH_STATUS } from "../../../../../../constants";
 
 type QuestionProps = {
   title: string;
@@ -55,7 +55,7 @@ const Question = (props: QuestionProps) => {
                   <p className="text-12/16 text-[#FF0021] text-center font-inter">
                     Not enough $BIRD to anwser the questions. Click{" "}
                     <a
-                      href={URLS.FIREFLY_TESTNET}
+                      href={FAUCET_URL}
                       target={"_blank"}
                       rel="norefferer"
                       className="text-[#0085FF] underline cursor-pointer"
@@ -69,7 +69,7 @@ const Question = (props: QuestionProps) => {
                   <p className="text-12/16 text-[#FF0021] text-center font-inter">
                     Not enough PKF to pay for the gas fee. Click{" "}
                     <a
-                      href={URLS.FIREFLY_TESTNET}
+                      href={FAUCET_URL}
                       target={"_blank"}
                       rel="norefferer"
                       className="text-[#0085FF] underline cursor-pointer"

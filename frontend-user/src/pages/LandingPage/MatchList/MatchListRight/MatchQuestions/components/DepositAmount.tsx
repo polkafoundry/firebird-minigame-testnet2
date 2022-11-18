@@ -1,7 +1,7 @@
 import {
+  FAUCET_URL,
   MAX_DEPOSIT_AMOUNT,
   NUMBER_PATTERN,
-  URLS,
 } from "../../../../../../constants";
 
 type DepositAmountProps = {
@@ -99,7 +99,7 @@ const DepositAmount = (props: DepositAmountProps) => {
         <p className="text-12/16 mt-2">
           Maximum is 1,000 BIRD/question.{" "}
           <a
-            href={URLS.FIREFLY_TESTNET}
+            href={FAUCET_URL}
             target={"_blank"}
             rel="norefferer"
             className="text-[#0085FF] ml-5"
