@@ -110,13 +110,13 @@ const HeaderDefaultLayout = () => {
             alt=""
             className="ml-2 hidden 2md:block"
           />
-          <div className="ml-10 md:ml-[60px] gap-5 lg:gap-10 hidden md:flex md:items-center">
+          <div className="ml-5 md:ml-10 lg:ml-[60px] gap-5 lg:gap-10 hidden md:flex md:items-center">
             {routes.map((item: RouteTypes, index: number) => (
               <a
                 key={index}
                 href={item.uri}
                 className={clsx(
-                  "font-inter text-16/24",
+                  "font-inter text-14/24 lg:text-16/24",
                   location.pathname === item.uri
                     ? "text-main font-semibold"
                     : "hover:text-red-500",
@@ -154,7 +154,7 @@ const HeaderDefaultLayout = () => {
             onClick={openConnectModal}
           >
             {connectedAccount ? (
-              <div className="flex text-sm h-full">
+              <div className="flex text-12/20 lg:text-sm h-full">
                 <div className="px-[10px] flex items-center font-semibold">
                   {!isWrongChain && (
                     <img
