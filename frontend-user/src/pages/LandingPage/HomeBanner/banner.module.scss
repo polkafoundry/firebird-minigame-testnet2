@@ -1,6 +1,10 @@
 .homeBanner {
-  background: url(/assets/images/bg-banner.png) 0 0 no-repeat;
+  background: url(/assets/images/bg-banner-xs.png) center center no-repeat;
   background-size: cover;
+  @media (min-width: theme("screens.sm")) {
+    background: url(/assets/images/bg-banner.png) center center no-repeat;
+    background-size: cover;
+  }
 }
 .imgBenzema {
   width: 36%;
@@ -26,17 +30,33 @@
   width: 24%;
   right: 1%;
   bottom: 31%;
+  @media (max-width: theme("screens.xl")) {
+    bottom: 28%;
+  }
+  @media (max-width: theme("screens.lg")) {
+    bottom: 24%;
+  }
+  @media (max-width: theme("screens.md")) {
+    bottom: 20%;
+  }
 }
 
-.reward {
+.rewardPosition {
   position: absolute;
   left: 0;
   bottom: 14%;
   width: 55%;
   height: 20%;
-  background: url(/assets/images/bg-banner-reward.svg) 0 0 no-repeat;
-  background-size: cover;
   padding-left: 8%;
+}
+.rewardBg {
+  background: url(/assets/images/bg-banner-reward-xs.svg) center center
+    no-repeat;
+  background-size: cover;
+  @media (min-width: theme("screens.sm")) {
+    background: url(/assets/images/bg-banner-reward.svg) center center no-repeat;
+    background-size: cover;
+  }
 }
 .bannerText {
   position: absolute;
