@@ -20,7 +20,6 @@ const ConnectWalletDialog = (props: ConnectWalletDialogTypes) => {
   const {
     open,
     closeDialog,
-    walletName,
     handleProviderChosen,
     connectWalletLoading,
     connectedAccount,

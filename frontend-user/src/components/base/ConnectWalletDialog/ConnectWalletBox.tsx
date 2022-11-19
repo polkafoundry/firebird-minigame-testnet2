@@ -1,6 +1,6 @@
 import { AbstractConnector } from "@web3-react/abstract-connector";
 import clsx from "clsx";
-import { isMobile } from "react-device-detect";
+// import { isMobile } from "react-device-detect";
 import { WalletInfo } from "../../../constants/connectors";
 import styles from "./dialog.module.scss";
 
