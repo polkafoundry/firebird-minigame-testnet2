@@ -24,9 +24,14 @@ const HomeBanner = () => {
           <p className="mt-1 text-20/28 md:mt-6 md:text-28/36">
             A community incentive campaign
           </p>
-          <button className="mt-3 mx-auto px-[53px] btn-rounded bg-main text-white md:mx-0 md:mt-[54px]">
+          <a
+            href="https://medium.com/firebirdchain/firebird-public-testnet-phoenix-cup-how-to-win-rewards-worth-6-820-2ba7f7146780"
+            target={"_blank"}
+            rel="noreferrer"
+            className="w-fit mt-3 mx-auto px-[53px] btn-rounded bg-main text-white md:mx-0 md:mt-[54px]"
+          >
             Learn more
-          </button>
+          </a>
         </div>
       </div>
     </div>

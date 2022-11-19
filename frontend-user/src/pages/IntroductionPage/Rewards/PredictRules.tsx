@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { quickGuide } from "../../../constants";
+import { BASE_HREF, quickGuide, URLS } from "../../../constants";
 import styles from "./rewards.module.scss";
 
 const PredictRules = () => {
@@ -20,10 +20,18 @@ const PredictRules = () => {
           of Qatar World Cup 2022 to earn attractive rewards
         </p>
         <div className="flex flex-col justify-center items-center  mt-5 md:flex-row md:mt-8">
-          <button className="btn-rounded w-[255px] bg-main">Play Now</button>
-          <button className="mt-2 btn-rounded w-[255px] border border-main md:mt-0 md:ml-4">
+          <a
+            href={BASE_HREF + URLS.PHOENIX_CUP + "#match-list"}
+            className="btn-rounded w-[255px] bg-main"
+          >
+            Play Now
+          </a>
+          <a
+            href={BASE_HREF + URLS.PHOENIX_CUP + "#prediction-rule"}
+            className="mt-2 btn-rounded w-[255px] border border-main md:mt-0 md:ml-4"
+          >
             Prediction Rule
-          </button>
+          </a>
         </div>
       </div>
       <div className="z-20 mt-10 flex flex-col font-inter md:mt-[60px] md:flex-row md:justify-between">
@@ -54,7 +62,7 @@ const PredictRules = () => {
                 rewards for the champions
               </span>
               <span className="mt-2 text-56/60 font-tthovesBold md:text-64/48">
-                $5,320
+                $6,820
               </span>
             </div>
             <div className="flex-1 flex flex-col border-t border-white/20 md:border-t-0 md:border-l">

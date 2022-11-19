@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import { useState } from "react";
+import { URLS } from "../../../constants";
 import HeadingPrimary from "../components/HeadingPrimary";
 import GameFiReward from "./GameFiReward";
 import TableFinalRewards from "./TableFinalRewards";
@@ -145,12 +146,14 @@ const CalculatedReward = () => {
             </div>
 
             <div className="flex-1 w-full md:mt-5 md:ml-5 lg:ml-10">
-              <img
-                src="./images/landing-page/monsterra-sponser.png"
-                alt=""
-                className="w-full"
-                data-aos="zoom-in"
-              />
+              <a href={URLS.MONSTERRA} target="_blank" rel="noreferrer">
+                <img
+                  src="./images/landing-page/monsterra-sponser.png"
+                  alt=""
+                  className="w-full"
+                  data-aos="zoom-in"
+                />
+              </a>
             </div>
           </div>
 
@@ -180,11 +183,13 @@ const CalculatedReward = () => {
 
         <GameFiReward />
         <div className="mt-5 px-3 md:px-0">
-          <img
-            src="./images/landing-page/monsterra-sponser-big.png"
-            alt=""
-            className="w-full"
-          />
+          <a href={URLS.MONSTERRA} target="_blank" rel="noreferrer">
+            <img
+              src="./images/landing-page/monsterra-sponser-big.png"
+              alt=""
+              className="w-full"
+            />
+          </a>
         </div>
       </div>
     </div>

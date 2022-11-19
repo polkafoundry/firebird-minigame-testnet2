@@ -38,9 +38,13 @@ const Rewards = () => {
               $6,820
             </div>
           </div>
-          <button className="btn-rounded bg-black text-white px-8 mt-5 md:mt-0 md:ml-[54px]">
+          <a
+            href="https://medium.com/firebirdchain/firebird-public-testnet-phoenix-cup-guideline-fba75cdcaa89"
+            target={"_blank"}
+            className="btn-rounded bg-black text-white px-8 mt-5 md:mt-0 md:ml-[54px]"
+          >
             View Details
-          </button>
+          </a>
         </div>
       </div>
       <PredictRules />

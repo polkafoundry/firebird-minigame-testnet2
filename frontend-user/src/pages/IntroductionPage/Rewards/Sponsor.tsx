@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import { URLS } from "../../../constants";
 
 type LayoutSponsorProps = {
   children: any;
@@ -103,14 +104,9 @@ const Sponsor = () => {
             </span>
           </div>
         </div>
-        <a
-          href="https://gamefi.org/"
-          target="_blank"
-          rel="noreferrer"
-          className="mt-3 text-16/20 font-tthovesBold italic md:mt-8"
-        >
+        <div className="mt-3 text-16/20 font-tthovesBold italic md:mt-8 cursor-pointer">
           COMING SOON
-        </a>
+        </div>
       </LayourSponsor>
       <LayourSponsor
         title="GameFi Party pool"
@@ -133,7 +129,7 @@ const Sponsor = () => {
           </span>
         </div>
         <a
-          href="https://gamefi.org/"
+          href={URLS.GAMEFI_POOL}
           target="_blank"
           rel="noreferrer"
           className="mt-3 btn-rounded w-full text-14/20 text-center bg-main font-semibold md:mt-8"

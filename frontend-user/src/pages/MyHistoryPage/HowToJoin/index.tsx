@@ -144,7 +144,7 @@ const HowToJoin = () => {
                 </li>
               </ul>
               <a
-                href={BASE_HREF + URLS.HOME + "#match-list"}
+                href={BASE_HREF + URLS.PHOENIX_CUP + "#match-list"}
                 target="_blank"
                 rel="noreferrer"
                 className="w-full btn-rounded btn-primary mt-auto"
@@ -169,7 +169,7 @@ const HowToJoin = () => {
                 ))}
               </ul>
               <a
-                href={BASE_HREF + URLS.HOME + "#prediction-rule"}
+                href={BASE_HREF + URLS.PHOENIX_CUP + "#prediction-rule"}
                 target="_blank"
                 rel="noreferrer"
                 className="w-full btn-rounded btn-black mt-auto"
@@ -188,11 +188,11 @@ const HowToJoin = () => {
                 All rewards will be airdropped to the winners after Phoenix Cup
                 events ends.
                 <p className="m-0 font-semibold">
-                  Total rewards for Phoenix Cup: $5,320
+                  Total rewards for Phoenix Cup: $6,820
                 </p>
               </div>
               <a
-                href={BASE_HREF + URLS.HOME + "#reward-distribution"}
+                href={BASE_HREF + URLS.PHOENIX_CUP + "#reward-distribution"}
                 target="_blank"
                 rel="noreferrer"
                 className="w-full btn-rounded btn-black mt-auto"

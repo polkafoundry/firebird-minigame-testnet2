@@ -19,6 +19,8 @@ export const URLS = {
   HISTORY: "/history",
   PHOENIX_CUP: "/phoenixcup",
   FAQ: "/faq",
+  GAMEFI_POOL: "https://gamefi.org/party/63679886-1868-41fe-bfc7-a9bc8f40bd46",
+  MONSTERRA: "https://monsterra.io/",
 };
 
 // only accept number [0-9] and less than 2 digits
