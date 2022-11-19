@@ -5,8 +5,8 @@ import { URLS } from "../../../constants";
 import { WalletContext } from "../../../context/WalletContext";
 import { useMyWeb3 } from "../../../hooks/useMyWeb3";
 import { displayWalletAddress } from "../../../utils";
-import { requestSupportNetwork } from "../../../utils/setupNetwork";
-import styles from "./header.module.scss";
+// import { requestSupportNetwork } from "../../../utils/setupNetwork";
+// import styles from "./header.module.scss";
 
 type RouteTypes = {
   label: string;
