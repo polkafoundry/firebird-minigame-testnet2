@@ -121,7 +121,13 @@ const MyHistoryPage = () => {
   );
 
   useEffect(() => {
-    setCurrentRank(account ? leaderboardData?.data?.position : 0);
+    setCurrentRank(
+      account &&
+        leaderboardData?.data?.data &&
+        leaderboardData?.data?.data?.length
+        ? leaderboardData?.data?.position
+        : 0,
+    );
   }, [leaderboardData]);
 
   const handleChangeResult = (value: any) => {
