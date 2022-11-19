@@ -3,6 +3,7 @@ import queryString from "query-string";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import DropDown from "../../components/base/DropDown";
+import NotFound from "../../components/base/NotFound";
 // import InputSearch from "../../components/base/InputSearch";
 import Pagination from "../../components/base/Pagination";
 import DefaultLayout from "../../components/layout/DefaultLayout";
@@ -301,12 +302,8 @@ const MyHistoryPage = () => {
                 <div className="bg-[#F2F2F2] px-5 pt-2 pb-10">
                   {dataTable?.length === 0 && !loading ? (
                     <div className="flex flex-col items-center w-full pt-14 pb-4 px-10">
-                      <img
-                        src="./images/icon-not-found.svg"
-                        alt=""
-                        className="w-[125px] h-[125px]"
-                      />
-                      <p>You haven’t predicted any matches</p>
+                      <NotFound title="You haven’t predicted any matches" />
+
                       <a
                         href={BASE_HREF + URLS.HOME + "#match-list"}
                         className="min-w-[255px] w-[30%] mt-10 btn-rounded btn-primary"

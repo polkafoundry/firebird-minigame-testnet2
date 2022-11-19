@@ -1,7 +1,9 @@
 import clsx from "clsx";
 import { useEffect, useMemo, useState } from "react";
 import { FilterTypes } from "..";
+import DefaultLoading from "../../../../components/base/DefaultLoading";
 import DropDown from "../../../../components/base/DropDown";
+import NotFound from "../../../../components/base/NotFound";
 import MatchName from "../../../../components/base/Table/MatchName";
 import MatchPredict from "../../../../components/base/Table/MatchPredict";
 import MatchStatus from "../../../../components/base/Table/MatchStatus";
@@ -169,46 +171,54 @@ const MatchListTable = (props: MatchListTableProps) => {
               </div>
             ))}
           </div>
-          {loading ? (
-            <div>Loading ...</div>
-          ) : (
-            dataTable?.map((matchInfo: any, index: number) => (
-              <div key={index} className="min-w-fit">
-                <div className="text-12/18 font-bold px-5 py-[11px] uppercase opacity-80">
-                  {matchInfo?.date}
-                </div>
-                {matchInfo?.matches?.map((match: any) => (
-                  <div
-                    key={match?.id}
-                    className={clsx(
-                      "text-14/24 flex items-center cursor-pointer bg-white hover:bg-orange-300 transition-all duration-300 mb-0.5 last:mb-0",
-                      styles.tableRow,
-                      selectedMatchId === match?.id ? "bg-amber-200" : "",
-                    )}
-                    onClick={() => handleSelectMatch(match?.id)}
-                  >
-                    <div className="flex items-center text-14/24">
-                      {getMatchTime(match?.start_time * 1000)}
+          <div className="relative min-h-[300px]">
+            {loading && <DefaultLoading />}
+
+            {!loading && (!dataTable || !dataTable?.length) ? (
+              <div className="flex flex-col justify-center items-center h-[300px]">
+                <NotFound title="Upcoming matches will be updated soon." />
+              </div>
+            ) : (
+              <>
+                {dataTable?.map((matchInfo: any, index: number) => (
+                  <div key={index} className="min-w-fit">
+                    <div className="text-12/18 font-bold px-5 py-[11px] uppercase opacity-80">
+                      {matchInfo?.date}
                     </div>
-                    <MatchName
-                      team1={match?.homeTeam}
-                      team2={match?.awayTeam}
-                    />
-                    <div className="text-14/24">
-                      {match?.match_status === MATCH_STATUS.UPCOMING
-                        ? "-:-"
-                        : `${match?.ft_home_score}:${match?.ft_away_score}`}
-                    </div>
-                    <MatchStatus status={match?.match_status} />
-                    <MatchPredict
-                      isCorrect={match?.is_completed_bet}
-                      isDisplayText={false}
-                    />
+                    {matchInfo?.matches?.map((match: any) => (
+                      <div
+                        key={match?.id}
+                        className={clsx(
+                          "text-14/24 flex items-center cursor-pointer bg-white hover:bg-orange-300 transition-all duration-300 mb-0.5 last:mb-0",
+                          styles.tableRow,
+                          selectedMatchId === match?.id ? "bg-amber-200" : "",
+                        )}
+                        onClick={() => handleSelectMatch(match?.id)}
+                      >
+                        <div className="flex items-center text-14/24">
+                          {getMatchTime(match?.start_time * 1000)}
+                        </div>
+                        <MatchName
+                          team1={match?.homeTeam}
+                          team2={match?.awayTeam}
+                        />
+                        <div className="text-14/24">
+                          {match?.match_status === MATCH_STATUS.UPCOMING
+                            ? "-:-"
+                            : `${match?.ft_home_score}:${match?.ft_away_score}`}
+                        </div>
+                        <MatchStatus status={match?.match_status} />
+                        <MatchPredict
+                          isCorrect={match?.is_completed_bet}
+                          isDisplayText={false}
+                        />
+                      </div>
+                    ))}
                   </div>
                 ))}
-              </div>
-            ))
-          )}
+              </>
+            )}
+          </div>
         </div>
       </div>
     </div>

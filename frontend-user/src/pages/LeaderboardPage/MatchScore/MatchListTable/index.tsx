@@ -2,6 +2,7 @@ import clsx from "clsx";
 import { useEffect, useMemo, useState } from "react";
 import { FilterTypes } from "..";
 import DefaultLoading from "../../../../components/base/DefaultLoading";
+import NotFound from "../../../../components/base/NotFound";
 // import DropDown from "../../../../components/base/DropDown";
 import MatchName from "../../../../components/base/Table/MatchName";
 import { rounds } from "../../../../constants";
@@ -141,7 +142,6 @@ const MatchListTable = (props: MatchListTableProps) => {
         </div>
 
         <div className="overflow-x-auto relative">
-          {loading && <DefaultLoading />}
           <div
             className={clsx(
               "flex bg-[#3A0013] min-w-fit text-white px-5 py-3 text-12/18 uppercase font-inter font-bold",
@@ -154,44 +154,59 @@ const MatchListTable = (props: MatchListTableProps) => {
               </div>
             ))}
           </div>
-          {dataTable?.map((matchInfo: any, index: number) => (
-            <div key={index} className="">
-              <div className="text-12/18 font-bold px-5 py-[11px] uppercase opacity-80">
-                {matchInfo?.date}
-              </div>
-              {matchInfo?.matches?.map((match: any) => (
-                <div
-                  key={match?.match_id}
-                  className={clsx(
-                    "flex items-center cursor-pointer hover:bg-orange-300 transition-all duration-300 mb-0.5 last:mb-0 px-5 py-2 min-w-fit text-14/24 ",
-                    styles.tableRow,
-                    selectedMatchId === match?.match_id
-                      ? "bg-amber-200"
-                      : "bg-white",
-                  )}
-                  onClick={() =>
-                    handleSelectMatch(
-                      match?.match_id,
-                      rounds[groupStageIndex].prize,
-                    )
-                  }
-                >
-                  <div className="flex items-center">
-                    {getMatchTime(match?.start_time * 1000)}
-                  </div>
-                  <MatchName team1={match?.homeTeam} team2={match?.awayTeam} />
+          <div className="relative min-h-[300px]">
+            {loading && <DefaultLoading />}
 
-                  <div>{match?.total + " address"}</div>
-                  <div>{rounds[groupStageIndex].prize}</div>
-                  <div>
-                    {match.final_winner
-                      ? displayWalletAddress(match.final_winner)
-                      : "No winner"}
+            {!loading && (!dataTable || !dataTable?.length) ? (
+              <div className="flex flex-col justify-center items-center h-[300px]">
+                <NotFound title="Upcoming matches will be updated soon." />
+              </div>
+            ) : (
+              <>
+                {dataTable?.map((matchInfo: any, index: number) => (
+                  <div key={index}>
+                    <div className="text-12/18 font-bold px-5 py-[11px] uppercase opacity-80">
+                      {matchInfo?.date}
+                    </div>
+                    {matchInfo?.matches?.map((match: any) => (
+                      <div
+                        key={match?.match_id}
+                        className={clsx(
+                          "flex items-center cursor-pointer hover:bg-orange-300 transition-all duration-300 mb-0.5 last:mb-0 px-5 py-2 min-w-fit text-14/24 ",
+                          styles.tableRow,
+                          selectedMatchId === match?.match_id
+                            ? "bg-amber-200"
+                            : "bg-white",
+                        )}
+                        onClick={() =>
+                          handleSelectMatch(
+                            match?.match_id,
+                            rounds[groupStageIndex].prize,
+                          )
+                        }
+                      >
+                        <div className="flex items-center">
+                          {getMatchTime(match?.start_time * 1000)}
+                        </div>
+                        <MatchName
+                          team1={match?.homeTeam}
+                          team2={match?.awayTeam}
+                        />
+
+                        <div>{match?.total + " address"}</div>
+                        <div>{rounds[groupStageIndex].prize}</div>
+                        <div>
+                          {match.final_winner
+                            ? displayWalletAddress(match.final_winner)
+                            : "No winner"}
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                </div>
-              ))}
-            </div>
-          ))}
+                ))}
+              </>
+            )}
+          </div>
         </div>
       </div>
     </div>

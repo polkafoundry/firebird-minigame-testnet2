@@ -2,6 +2,7 @@ import clsx from "clsx";
 import queryString from "query-string";
 import { useState } from "react";
 import DefaultLoading from "../../../components/base/DefaultLoading";
+import NotFound from "../../../components/base/NotFound";
 import Pagination from "../../../components/base/Pagination";
 // import InputSearch from "../../../components/base/InputSearch";
 import useFetch from "../../../hooks/useFetch";
@@ -71,25 +72,36 @@ const WhoWin = () => {
         // redirectUrl={BASE_HREF + URLS.HOME + "#reward-distribution"}
         isLargeText={true}
       />
-      <div className="mx-5 xs:mx-10 main:mx-[120px] px-5 xs:px-10 md:px-20 main:px-[180px] py-10 mt-10 font-inter bg-black text-white">
-        <div className="flex justify-between items-center">
-          <div className="flex items-baseline">
-            {account ? (
-              <>
-                <span className="uppercase text-12/18 font-inter font-bold opacity-70">
-                  Your current rank:
-                </span>
-                <span className="font-semibold font-tthoves text-4/20 ml-2">
-                  #{data?.data?.position}
-                </span>
-              </>
-            ) : (
-              <div className="uppercase text-14/20 font-semibold">
-                Please connect wallet to see your rank
-              </div>
-            )}
-          </div>
-          {/* <InputSearch
+      <div className="mx-5 xs:mx-10 main:mx-[120px] px-5 xs:px-10 md:px-20 main:px-[180px] py-10 mt-10 font-inter bg-black text-white min-h-[350px]">
+        <div className="relative ">
+          {!loading &&
+          (!leaderboardData?.data || !leaderboardData?.data?.length) ? (
+            <div className="flex flex-col justify-center items-center h-[300px]">
+              <NotFound
+                title="Upcoming matches will be updated soon."
+                darkMode
+              />
+            </div>
+          ) : (
+            <>
+              <div className="flex justify-between items-center">
+                <div className="flex items-baseline">
+                  {account ? (
+                    <>
+                      <span className="uppercase text-12/18 font-inter font-bold opacity-70">
+                        Your current rank:
+                      </span>
+                      <span className="font-semibold font-tthoves text-4/20 ml-2">
+                        #{data?.data?.position}
+                      </span>
+                    </>
+                  ) : (
+                    <div className="uppercase text-14/20 font-semibold">
+                      Please connect wallet to see your rank
+                    </div>
+                  )}
+                </div>
+                {/* <InputSearch
             className="rounded-md bg-[#292929] text-white w-[35%] max-w-[320px] px-3 py-1.5 ml-2"
             value={searchWallet}
             placeholder="Search wallet"
@@ -97,65 +109,65 @@ const WhoWin = () => {
             isDarkMode={true}
             onClear={handleClearSearch}
           /> */}
-        </div>
-        <div className="mt-3">
-          <div
-            className={clsx(
-              "flex items-center bg-[#1C1D21] px-[30px] py-3 text-12/18 font-bold uppercase rounded-t-[4px]",
-              styles.tableRow,
-            )}
-          >
-            {headingTable.map((heading) => (
-              <div key={heading} className="opacity-70">
-                {heading}
               </div>
-            ))}
-          </div>
-
-          <div className="relative min-h-[500px]">
-            {loading && <DefaultLoading />}
-
-            {!loading &&
-            (!leaderboardData?.data || !leaderboardData?.data.length) ? (
-              <div>Not found</div>
-            ) : (
-              <>
-                {leaderboardData?.data.map((item: any) => (
-                  <div
-                    key={item?.position}
-                    className={clsx(
-                      "flex px-[30px] py-[10px] border-t-2 border-black bg-[#33363D] text-14/24 font-inter",
-                      styles.tableRow,
-                      [1, 2, 3].includes(item?.position) &&
-                        styles.backgroundImage,
-                    )}
-                  >
-                    <div
-                      className={clsx(
-                        [1, 2, 3].includes(item?.position) &&
-                          "uppercase font-semibold",
-                      )}
-                    >
-                      {[0, 1, 2, 3].includes(item?.position) && "Top "}
-                      {item?.position}
+              <div className="mt-3">
+                <div
+                  className={clsx(
+                    "flex items-center bg-[#1C1D21] px-[30px] py-3 text-12/18 font-bold uppercase rounded-t-[4px]",
+                    styles.tableRow,
+                  )}
+                >
+                  {headingTable.map((heading) => (
+                    <div key={heading} className="opacity-70">
+                      {heading}
                     </div>
-                    <div>{displayWalletAddress(item?.userId)}</div>
-                    <div>${item?.prize}</div>
-                    <div>{formatCurrency(item?.sum_earned)}</div>
-                  </div>
-                ))}
-              </>
-            )}
-          </div>
-          {!loading && (
-            <Pagination
-              className="justify-center mt-3"
-              currentPage={filter?.page}
-              totalCount={leaderboardData?.total_item}
-              pageSize={PAGE_LIMIT}
-              onPageChange={handleChangePage}
-              isDarkMode
-            />
+                  ))}
+                </div>
+
+                <div className="relative flex min-h-[300px]">
+                  {loading && <DefaultLoading />}
+
+                  {!loading && (
+                    <>
+                      {leaderboardData?.data.map((item: any) => (
+                        <div
+                          key={item?.position}
+                          className={clsx(
+                            "flex px-[30px] py-[10px] border-t-2 border-black bg-[#33363D] text-14/24 font-inter",
+                            styles.tableRow,
+                            [1, 2, 3].includes(item?.position) &&
+                              styles.backgroundImage,
+                          )}
+                        >
+                          <div
+                            className={clsx(
+                              [1, 2, 3].includes(item?.position) &&
+                                "uppercase font-semibold",
+                            )}
+                          >
+                            {[0, 1, 2, 3].includes(item?.position) && "Top "}
+                            {item?.position}
+                          </div>
+                          <div>{displayWalletAddress(item?.userId)}</div>
+                          <div>${item?.prize}</div>
+                          <div>{formatCurrency(item?.sum_earned)}</div>
+                        </div>
+                      ))}
+                    </>
+                  )}
+                </div>
+                {!loading && (
+                  <Pagination
+                    className="justify-center mt-3"
+                    currentPage={filter?.page}
+                    totalCount={leaderboardData?.total_item}
+                    pageSize={PAGE_LIMIT}
+                    onPageChange={handleChangePage}
+                    isDarkMode
+                  />
+                )}
+              </div>
+            </>
           )}
         </div>
       </div>
