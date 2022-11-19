@@ -311,7 +311,7 @@ const MyHistoryPage = () => {
                       <NotFound title="You haven’t predicted any matches" />
 
                       <a
-                        href={BASE_HREF + URLS.PHOENIX_CUP + "#match-list"}
+                        href={BASE_HREF + URLS.HOME + "#match-list"}
                         className="min-w-[255px] w-[30%] mt-10 btn-rounded btn-primary"
                       >
                         Predict Now

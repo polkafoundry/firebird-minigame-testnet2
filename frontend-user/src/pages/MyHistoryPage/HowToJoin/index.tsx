@@ -144,7 +144,7 @@ const HowToJoin = () => {
                 </li>
               </ul>
               <a
-                href={BASE_HREF + URLS.PHOENIX_CUP + "#match-list"}
+                href={BASE_HREF + URLS.HOME + "#match-list"}
                 target="_blank"
                 rel="noreferrer"
                 className="w-full btn-rounded btn-primary mt-auto"
@@ -169,7 +169,7 @@ const HowToJoin = () => {
                 ))}
               </ul>
               <a
-                href={BASE_HREF + URLS.PHOENIX_CUP + "#prediction-rule"}
+                href={BASE_HREF + URLS.HOME + "#prediction-rule"}
                 target="_blank"
                 rel="noreferrer"
                 className="w-full btn-rounded btn-black mt-auto"
@@ -192,7 +192,7 @@ const HowToJoin = () => {
                 </p>
               </div>
               <a
-                href={BASE_HREF + URLS.PHOENIX_CUP + "#reward-distribution"}
+                href={BASE_HREF + URLS.HOME + "#reward-distribution"}
                 target="_blank"
                 rel="noreferrer"
                 className="w-full btn-rounded btn-black mt-auto"

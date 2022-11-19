@@ -107,7 +107,7 @@ const MatchScore = () => {
       <RewardBanner
         reward="$6,820"
         winner="64 winners"
-        // redirectUrl={BASE_HREF + URLS.PHOENIX_CUP + "#reward-distribution"}
+        // redirectUrl={BASE_HREF + URLS.HOME + "#reward-distribution"}
       />
 
       <div

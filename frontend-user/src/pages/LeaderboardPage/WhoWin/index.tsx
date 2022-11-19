@@ -69,7 +69,7 @@ const WhoWin = () => {
       <RewardBanner
         reward="$3,600"
         winner="Top 30"
-        // redirectUrl={BASE_HREF + URLS.PHOENIX_CUP + "#reward-distribution"}
+        // redirectUrl={BASE_HREF + URLS.HOME + "#reward-distribution"}
         isLargeText={true}
       />
       <div className="mx-5 xs:mx-10 main:mx-[120px] px-5 xs:px-10 md:px-20 main:px-[180px] py-10 mt-10 font-inter bg-black text-white min-h-[350px]">

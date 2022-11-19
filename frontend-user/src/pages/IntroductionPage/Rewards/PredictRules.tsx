@@ -21,13 +21,13 @@ const PredictRules = () => {
         </p>
         <div className="flex flex-col justify-center items-center  mt-5 md:flex-row md:mt-8">
           <a
-            href={BASE_HREF + URLS.PHOENIX_CUP + "#match-list"}
+            href={BASE_HREF + URLS.HOME + "#match-list"}
             className="btn-rounded w-[255px] bg-main"
           >
             Play Now
           </a>
           <a
-            href={BASE_HREF + URLS.PHOENIX_CUP + "#prediction-rule"}
+            href={BASE_HREF + URLS.HOME + "#prediction-rule"}
             className="mt-2 btn-rounded w-[255px] border border-main md:mt-0 md:ml-4"
           >
             Prediction Rule
