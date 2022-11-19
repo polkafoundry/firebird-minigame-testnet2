@@ -13,10 +13,10 @@ const routing = function createRouting() {
   return (
     <>
       <Routes>
-        <Route path={URLS.HOME} element={<LangdingPage />} />
+        <Route path={URLS.HOME} element={<IntroductionPage />} />
+        <Route path={URLS.PHOENIX_CUP} element={<LangdingPage />} />
         <Route path={URLS.HISTORY} element={<MyHistoryPage />} />
         <Route path={URLS.LEADERBOARD} element={<LeaderboardPage />} />
-        <Route path={URLS.INTRODUCTION} element={<IntroductionPage />} />
         <Route path={URLS.FAQ} element={<FaqPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>

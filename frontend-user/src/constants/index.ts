@@ -17,7 +17,7 @@ export const URLS = {
   HOME: "/",
   LEADERBOARD: "/leaderboard",
   HISTORY: "/history",
-  INTRODUCTION: "/introduction",
+  PHOENIX_CUP: "/phoenixcup",
   FAQ: "/faq",
 };
 

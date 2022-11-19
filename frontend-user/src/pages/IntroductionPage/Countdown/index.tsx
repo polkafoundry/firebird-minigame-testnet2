@@ -35,7 +35,9 @@ const ColonField = () => (
 );
 
 const Countdown = () => {
-  const { day, hour, minute, second } = useCountDown(new Date("11/20/2022"));
+  const { day, hour, minute, second } = useCountDown(
+    new Date(Date.UTC(2022, 11, 18, 0, 0, 0)),
+  );
 
   return (
     <div
