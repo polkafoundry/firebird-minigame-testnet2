@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import { useContext, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { URLS } from "../../../constants";
+import { SocialItemTypes, socialsData, URLS } from "../../../constants";
 import { WalletContext } from "../../../context/WalletContext";
 import { useMyWeb3 } from "../../../hooks/useMyWeb3";
 import { displayWalletAddress } from "../../../utils";
@@ -81,13 +81,20 @@ const HeaderDefaultLayout = () => {
         <p className="mt-auto text-main text-center font-semibold uppercase tracking-widest">
           Community
         </p>
-        {/* <div className="flex gap-3 mt-4 w-full justify-center">
-          {socialsData.map((item: SocialItemTypes, index: number) => (
-            <a href={item.url} className={clsx("w-10 h-10")} key={index + 1000}>
-              <img src={item.img} alt="" />
-            </a>
-          ))}
-        </div> */}
+        <div className="flex gap-3 mt-4 w-full justify-center">
+          {socialsData.map(
+            (item: SocialItemTypes, index: number) =>
+              item.username && (
+                <a
+                  href={item.url}
+                  className={clsx("w-10 h-10")}
+                  key={index + 1000}
+                >
+                  <img src={item.img} alt="" className="w-full" />
+                </a>
+              ),
+          )}
+        </div>
       </div>
     );
   };
