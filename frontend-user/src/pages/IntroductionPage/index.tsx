@@ -10,7 +10,7 @@ const IntroductionPage = () => {
     <LandingLayout>
       <HomeBanner />
       <div className="flex bg-[#F7F7F8]">
-        <div className="flex flex-col w-full max-w-screen-main mx-auto px-20">
+        <div className="flex flex-col w-full max-w-screen-main mx-auto px-5 md:px-10 lg:px-20">
           <Countdown />
           <ExploreFirebird />
 
