@@ -57,7 +57,7 @@ const useClaimToken = (data?: any, isCorrect?: boolean) => {
         }
       } catch (error: any) {
         console.log("ERR claiming: ", error);
-        toast.error(error?.message || "Fail to Claim token");
+        toast.error("Fail to Claim token");
         setLoadingClaim(false);
       }
     },

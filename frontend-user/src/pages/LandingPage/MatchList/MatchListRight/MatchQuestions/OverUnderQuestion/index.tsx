@@ -7,6 +7,7 @@ import { MATCH_STATUS, QUESTION_STATUS } from "../../../../../../constants";
 import useBetting from "../../../../../../hooks/useBetting";
 import useBettingContract from "../../../../../../hooks/useBettingContract";
 import useBirdToken from "../../../../../../hooks/useBirdToken";
+import useClaimToken from "../../../../../../hooks/useClaimToken";
 import BorderBox from "../components/BorderBox";
 import DepositAmount from "../components/DepositAmount";
 import Question from "../components/Question";
@@ -38,6 +39,10 @@ const OverUnderQuestion = (props: QuestionProps) => {
   const { approveBirdToken, loadingApprove } = useBirdToken();
   const { betting, loadingBetting } = useBetting();
   const { getBettingUpdate } = useBettingContract();
+  const { isClaimed, loadingClaim, handleClaimToken } = useClaimToken(
+    dataQuestion,
+    dataQuestion?.questionStatus === QUESTION_STATUS.CORRECT_ANSWER,
+  );
 
   useEffect(() => {
     if (!questionProp) return;
@@ -134,7 +139,7 @@ const OverUnderQuestion = (props: QuestionProps) => {
       handleSubmit={handleSubmit}
       isSubmitted={isSubmitted}
       matchEnded={matchEnded}
-      loading={loadingApprove || loadingBetting}
+      loading={loadingApprove || loadingBetting || loadingClaim}
       error={error}
     >
       <div>
@@ -203,6 +208,9 @@ const OverUnderQuestion = (props: QuestionProps) => {
           <ResultMatch
             questions={dataQuestion}
             questionStatus={questionStatus}
+            isClaimed={isClaimed}
+            loadingClaim={loadingClaim}
+            handleClaimToken={handleClaimToken}
           />
         )}
       </div>
