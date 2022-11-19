@@ -80,7 +80,21 @@ const OverUnderQuestion = (props: QuestionProps) => {
   const isEnableClick = (isDisableClick: any) =>
     !isSubmitted && !isDisableClick && !notHasBettingResult;
 
+  const isValidated = () => {
+    if (!depositAmount) {
+      toast.warning("Deposit amount is not valid");
+      return;
+    }
+    if (!optionWhoWin) {
+      toast.warning("Please select one answer");
+      return;
+    }
+    return true;
+  };
+
   const handleSubmit = async () => {
+    if (!isValidated()) return;
+
     const dataSubmit = {
       _matchID: dataQuestion?.match_id,
       _amount: BigNumber.from(depositAmount)
@@ -90,14 +104,7 @@ const OverUnderQuestion = (props: QuestionProps) => {
       _betPlace: betPlaceString[optionWhoWin],
     };
 
-    // console.log("submit q4 q5", dataSubmit);
-
     const { _amount, _betPlace, _betType, _matchID } = dataSubmit;
-
-    if (!_betPlace) {
-      toast.warning("Please select one answer");
-      return;
-    }
 
     if (needApprove) {
       await approveBirdToken();

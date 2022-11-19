@@ -62,7 +62,21 @@ const OddsQuestion = (props: QuestionProps) => {
     dataQuestion?.bet_place,
   );
 
+  const isValidated = () => {
+    if (!depositAmount) {
+      toast.warning("Deposit amount is not valid");
+      return;
+    }
+    if (!optionWhoWin) {
+      toast.warning("Please select one answer");
+      return;
+    }
+    return true;
+  };
+
   const handleSubmit = async () => {
+    if (!isValidated()) return;
+
     const dataSubmit = {
       _matchID: dataQuestion?.match_id,
       _amount: BigNumber.from(depositAmount)
@@ -73,11 +87,6 @@ const OddsQuestion = (props: QuestionProps) => {
     };
     const { _amount, _betPlace, _betType, _matchID } = dataSubmit;
     // console.log("submit q2, q3", dataSubmit);
-
-    if (!_betPlace) {
-      toast.warning("Please select one answer");
-      return;
-    }
 
     if (needApprove) {
       await approveBirdToken();
