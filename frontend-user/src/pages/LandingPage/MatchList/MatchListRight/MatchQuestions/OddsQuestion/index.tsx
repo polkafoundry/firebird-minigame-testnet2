@@ -7,6 +7,7 @@ import { MATCH_STATUS, QUESTION_STATUS } from "../../../../../../constants";
 import useBetting from "../../../../../../hooks/useBetting";
 import useBettingContract from "../../../../../../hooks/useBettingContract";
 import useBirdToken from "../../../../../../hooks/useBirdToken";
+import useClaimToken from "../../../../../../hooks/useClaimToken";
 import BorderBox from "../components/BorderBox";
 import DepositAmount from "../components/DepositAmount";
 import Question from "../components/Question";
@@ -28,6 +29,7 @@ const OddsQuestion = (props: QuestionProps) => {
     error,
     birdBalance = "0",
     updateBirdBalance,
+    setRecheckApprove,
   } = props;
   const [optionWhoWin, setOptionWhoWin] = useState<number>(0);
   const [depositAmount, setDepositAmount] = useState<string>("");
@@ -36,6 +38,10 @@ const OddsQuestion = (props: QuestionProps) => {
   const { approveBirdToken, loadingApprove } = useBirdToken();
   const { betting, loadingBetting } = useBetting();
   const { getBettingUpdate } = useBettingContract();
+  const { isClaimed, loadingClaim, handleClaimToken } = useClaimToken(
+    dataQuestion,
+    dataQuestion?.questionStatus === QUESTION_STATUS.CORRECT_ANSWER,
+  );
 
   useEffect(() => {
     if (!questionProp) return;
@@ -61,7 +67,21 @@ const OddsQuestion = (props: QuestionProps) => {
     dataQuestion?.bet_place,
   );
 
+  const isValidated = () => {
+    if (!depositAmount) {
+      toast.warning("Deposit amount is not valid");
+      return;
+    }
+    if (isNaN(optionWhoWin)) {
+      toast.warning("Please select one answer");
+      return;
+    }
+    return true;
+  };
+
   const handleSubmit = async () => {
+    if (!isValidated()) return;
+
     const dataSubmit = {
       _matchID: dataQuestion?.match_id,
       _amount: BigNumber.from(depositAmount)
@@ -73,13 +93,9 @@ const OddsQuestion = (props: QuestionProps) => {
     const { _amount, _betPlace, _betType, _matchID } = dataSubmit;
     // console.log("submit q2, q3", dataSubmit);
 
-    if (!_betPlace) {
-      toast.warning("Please select one answer");
-      return;
-    }
-
     if (needApprove) {
       await approveBirdToken();
+      setRecheckApprove && setRecheckApprove((prev) => !prev);
     }
 
     const bettingResult = await betting(_matchID, _amount, _betType, _betPlace);
@@ -121,7 +137,7 @@ const OddsQuestion = (props: QuestionProps) => {
       handleSubmit={handleSubmit}
       isSubmitted={isSubmitted}
       matchEnded={matchEnded}
-      loading={loadingApprove || loadingBetting}
+      loading={loadingApprove || loadingBetting || loadingClaim}
       error={error}
     >
       <div>
@@ -180,6 +196,9 @@ const OddsQuestion = (props: QuestionProps) => {
           <ResultMatch
             questions={dataQuestion}
             questionStatus={questionStatus}
+            isClaimed={isClaimed}
+            loadingClaim={loadingClaim}
+            handleClaimToken={handleClaimToken}
           />
         )}
       </div>

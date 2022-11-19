@@ -7,6 +7,7 @@ import { MATCH_STATUS, QUESTION_STATUS } from "../../../../../../constants";
 import useBetting from "../../../../../../hooks/useBetting";
 import useBettingContract from "../../../../../../hooks/useBettingContract";
 import useBirdToken from "../../../../../../hooks/useBirdToken";
+import useClaimToken from "../../../../../../hooks/useClaimToken";
 import BorderBox from "../components/BorderBox";
 import DepositAmount from "../components/DepositAmount";
 import Question from "../components/Question";
@@ -28,6 +29,7 @@ const OverUnderQuestion = (props: QuestionProps) => {
     error,
     birdBalance = "0",
     updateBirdBalance,
+    setRecheckApprove,
   } = props;
 
   const [optionWhoWin, setOptionWhoWin] = useState<number>(0);
@@ -37,6 +39,10 @@ const OverUnderQuestion = (props: QuestionProps) => {
   const { approveBirdToken, loadingApprove } = useBirdToken();
   const { betting, loadingBetting } = useBetting();
   const { getBettingUpdate } = useBettingContract();
+  const { isClaimed, loadingClaim, handleClaimToken } = useClaimToken(
+    dataQuestion,
+    dataQuestion?.questionStatus === QUESTION_STATUS.CORRECT_ANSWER,
+  );
 
   useEffect(() => {
     if (!questionProp) return;
@@ -79,7 +85,21 @@ const OverUnderQuestion = (props: QuestionProps) => {
   const isEnableClick = (isDisableClick: any) =>
     !isSubmitted && !isDisableClick && !notHasBettingResult;
 
+  const isValidated = () => {
+    if (!depositAmount) {
+      toast.warning("Deposit amount is not valid");
+      return;
+    }
+    if (isNaN(optionWhoWin)) {
+      toast.warning("Please select one answer");
+      return;
+    }
+    return true;
+  };
+
   const handleSubmit = async () => {
+    if (!isValidated()) return;
+
     const dataSubmit = {
       _matchID: dataQuestion?.match_id,
       _amount: BigNumber.from(depositAmount)
@@ -89,17 +109,11 @@ const OverUnderQuestion = (props: QuestionProps) => {
       _betPlace: betPlaceString[optionWhoWin],
     };
 
-    // console.log("submit q4 q5", dataSubmit);
-
     const { _amount, _betPlace, _betType, _matchID } = dataSubmit;
-
-    if (!_betPlace) {
-      toast.warning("Please select one answer");
-      return;
-    }
 
     if (needApprove) {
       await approveBirdToken();
+      setRecheckApprove && setRecheckApprove((prev) => !prev);
     }
 
     const bettingResult = await betting(_matchID, _amount, _betType, _betPlace);
@@ -125,7 +139,7 @@ const OverUnderQuestion = (props: QuestionProps) => {
       handleSubmit={handleSubmit}
       isSubmitted={isSubmitted}
       matchEnded={matchEnded}
-      loading={loadingApprove || loadingBetting}
+      loading={loadingApprove || loadingBetting || loadingClaim}
       error={error}
     >
       <div>
@@ -194,6 +208,9 @@ const OverUnderQuestion = (props: QuestionProps) => {
           <ResultMatch
             questions={dataQuestion}
             questionStatus={questionStatus}
+            isClaimed={isClaimed}
+            loadingClaim={loadingClaim}
+            handleClaimToken={handleClaimToken}
           />
         )}
       </div>

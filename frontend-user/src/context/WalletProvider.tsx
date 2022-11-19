@@ -15,8 +15,6 @@ const WalletProvider = (props: any) => {
     handleProviderChosen,
     connectWalletLoading,
     currentConnector,
-    walletName,
-    setWalletName,
     handleConnectorDisconnect,
     connectedAccount,
     tryActivate,
@@ -54,8 +52,6 @@ const WalletProvider = (props: any) => {
         handleProviderChosen,
         connectWalletLoading,
         currentConnector,
-        walletName,
-        setWalletName,
         logout,
         connectedAccount,
       }}
@@ -65,7 +61,6 @@ const WalletProvider = (props: any) => {
       <ConnectWalletDialog
         open={showModal}
         closeDialog={closeModal}
-        walletName={walletName}
         handleProviderChosen={handleProviderChosen}
         connectWalletLoading={connectWalletLoading}
         connectedAccount={connectedAccount}

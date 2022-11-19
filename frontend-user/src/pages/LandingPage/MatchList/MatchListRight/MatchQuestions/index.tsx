@@ -1,5 +1,11 @@
 import { BigNumber } from "ethers";
-import { useContext, useEffect, useState } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import {
   BET_TYPE,
   MATCH_RESULT,
@@ -27,6 +33,7 @@ export type QuestionProps = {
   predictPrize?: string;
   birdBalance?: string;
   updateBirdBalance?: any;
+  setRecheckApprove?: Dispatch<SetStateAction<boolean>>;
 };
 
 type MatchQuestionProps = {
@@ -41,6 +48,7 @@ const predictPrize = "$20";
 const MatchQuestions = (props: MatchQuestionProps) => {
   const { dataQuestion, account, isWrongChain } = props;
   const [needApprove, setNeedApprove] = useState<boolean>(false);
+  const [recheckApprove, setRecheckApprove] = useState<boolean>(false);
 
   const { updateBirdBalance, birdBalance } = useMyWeb3();
   const { getBirdAllowance } = useBirdToken();
@@ -57,7 +65,7 @@ const MatchQuestions = (props: MatchQuestionProps) => {
       setNeedApprove(need);
     };
     getBalanceAllow();
-  }, [account]);
+  }, [account, recheckApprove]);
 
   const [questions, setQuestions] = useState<any>([]);
 
@@ -293,6 +301,7 @@ const MatchQuestions = (props: MatchQuestionProps) => {
       <OddsQuestion
         dataQuestion={questions[1]}
         needApprove={needApprove}
+        setRecheckApprove={setRecheckApprove}
         betType={BET_TYPE.ODD_EVEN_HALF_TIME}
         title="2. Who will win the 1st half?"
         error={predictConditions}
@@ -302,6 +311,7 @@ const MatchQuestions = (props: MatchQuestionProps) => {
       <OddsQuestion
         dataQuestion={questions[2]}
         needApprove={needApprove}
+        setRecheckApprove={setRecheckApprove}
         betType={BET_TYPE.ODD_EVEN_FULL_TIME}
         title="3. Who will win the full match?"
         error={predictConditions}
@@ -311,6 +321,7 @@ const MatchQuestions = (props: MatchQuestionProps) => {
       <OverUnderQuestion
         dataQuestion={questions[3]}
         needApprove={needApprove}
+        setRecheckApprove={setRecheckApprove}
         betType={BET_TYPE.OVER_UNDER_HALF_TIME}
         title="4. Will the 1st half total goals be higher or lower than the total goals below?"
         error={predictConditions}
@@ -320,6 +331,7 @@ const MatchQuestions = (props: MatchQuestionProps) => {
       <OverUnderQuestion
         dataQuestion={questions[4]}
         needApprove={needApprove}
+        setRecheckApprove={setRecheckApprove}
         betType={BET_TYPE.OVER_UNDER_FULL_TIME}
         title="5. Will the full match total goals be higher or lower than the total goals below?"
         error={predictConditions}

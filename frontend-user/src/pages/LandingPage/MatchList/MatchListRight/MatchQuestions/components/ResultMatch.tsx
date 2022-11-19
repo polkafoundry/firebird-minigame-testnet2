@@ -1,19 +1,22 @@
 import clsx from "clsx";
 import { QUESTION_STATUS } from "../../../../../../constants";
-import useClaimToken from "../../../../../../hooks/useClaimToken";
 import { convertHexToStringNumber } from "../../../../../../utils";
 
 type ResultMatchProps = {
   questions: any;
   questionStatus?: any;
+  isClaimed?: boolean;
+  loadingClaim?: boolean;
+  handleClaimToken?: any;
 };
 const ResultMatch = (props: ResultMatchProps) => {
-  const { questions, questionStatus } = props;
-
-  const { isClaimed, loadingClaim, handleClaimToken } = useClaimToken(
+  const {
     questions,
-    questionStatus === QUESTION_STATUS.CORRECT_ANSWER,
-  );
+    questionStatus,
+    isClaimed,
+    loadingClaim,
+    handleClaimToken,
+  } = props;
 
   const displayEarnedAmount = () => {
     const amount = questions?.result_num;
@@ -106,7 +109,7 @@ const ResultMatch = (props: ResultMatchProps) => {
             onClick={handleClaimToken}
             disabled={loadingClaim}
           >
-            {loadingClaim ? "Loading" : "Claim token"}
+            Claim token
           </button>
         )}
         <a

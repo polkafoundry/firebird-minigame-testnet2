@@ -102,7 +102,8 @@ export const rounds: Array<RoundTypes> = [
   {
     label: "GROUP STAGE - ROUND 2",
     prize: "$20",
-    value: 2,
+    value: 15,
+    // value: 2,
   },
   {
     label: "GROUP STAGE - ROUND 3",

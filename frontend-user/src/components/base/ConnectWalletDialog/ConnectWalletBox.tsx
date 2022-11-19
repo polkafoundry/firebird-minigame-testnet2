@@ -1,6 +1,6 @@
 import { AbstractConnector } from "@web3-react/abstract-connector";
 import clsx from "clsx";
-import { isMobile } from "react-device-detect";
+// import { isMobile } from "react-device-detect";
 import { WalletInfo } from "../../../constants/connectors";
 import styles from "./dialog.module.scss";
 
@@ -12,7 +12,6 @@ type ConnectWalletBoxProps = {
     closeDialog: () => void,
   ) => void;
   connectWalletLoading?: boolean;
-  walletName?: (string | undefined)[];
   closeDialog: () => void;
 };
 
@@ -40,10 +39,10 @@ const ConnectWalletBox = (props: ConnectWalletBoxProps) => {
         "flex flex-col max-w-[108px] min-w-[96px] w-full gap-2 rounded bg-[#373737] items-center px-2 py-3 cursor-pointer justify-between",
       )}
       onClick={() => {
-        if (isMobile && wallet?.deepLink) {
-          window.open(wallet.deepLink);
-          return;
-        }
+        // if (isMobile && wallet?.deepLink) {
+        //   window.open(wallet.deepLink);
+        //   return;
+        // }
         handleWalletChange();
       }}
     >

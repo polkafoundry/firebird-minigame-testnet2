@@ -1,3 +1,4 @@
+import { isMobile } from "react-device-detect";
 import {
   BIRD_CHAIN_ID,
   BIRD_CHAIN_NAME,
@@ -19,7 +20,8 @@ export const requestSupportNetwork = async () => {
       });
     } catch (err: any) {
       // This error code indicates that the chain has not been added to MetaMask
-      if (err.code === 4902) {
+      const errorCode = isMobile ? err.data?.originalError?.code : err?.code;
+      if (errorCode === 4902) {
         await provider.request({
           method: "wallet_addEthereumChain",
           params: [
