@@ -139,9 +139,13 @@ const CalculatedReward = () => {
                     className={clsx("w-2.5 ml-1", isShowDetail && "rotate-180")}
                   />
                 </button>
-                <button className="bg-black p-2.5 md:p-2 font-semibold rounded-lg row-[1] sm:row-auto">
+                <a
+                  href="https://medium.com/firebirdchain/firebird-public-testnet-phoenix-cup-how-to-win-rewards-worth-6-820-2ba7f7146780"
+                  target={"_blank"}
+                  className="bg-black p-2.5 md:p-2 font-semibold rounded-lg row-[1] sm:row-auto flex justify-center"
+                >
                   Learn more
-                </button>
+                </a>
               </div>
             </div>
 
