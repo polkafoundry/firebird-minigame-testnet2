@@ -5,8 +5,9 @@ import Bull from '@ioc:Rocketseat/Bull'
 
 const USER_BETTING = 'UserBetting'
 const USER_CLAIM = 'UserClaim'
+const USER_PREDICT = 'UserPredicting'
 
-let ARRAY_EVENTS = [USER_BETTING, USER_CLAIM]
+let ARRAY_EVENTS = [USER_BETTING, USER_CLAIM, USER_PREDICT]
 
 const initTask = async () => {
   if (!BETTING_START_BLOCK) {
