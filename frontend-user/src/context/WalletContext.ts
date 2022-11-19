@@ -10,7 +10,6 @@ export type WalletContextType = {
   connectWalletLoading?: boolean;
   currentConnector?: AbstractConnector | undefined;
   walletName?: (string | undefined)[];
-  setWalletName?: Dispatch<SetStateAction<(string | undefined)[]>>;
   handleConnectorDisconnect?: () => void;
   logout?: () => void;
   showModal?: boolean;

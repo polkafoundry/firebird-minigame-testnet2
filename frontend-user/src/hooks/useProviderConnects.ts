@@ -7,13 +7,17 @@ import { BIRD_CHAIN_ID } from "../constants/networks";
 import { requestSupportNetwork } from "./../utils/setupNetwork";
 
 const useProviderConnects = () => {
-  const [walletName, setWalletName] = useState<(undefined | string)[]>([]);
   const [currentConnector, setCurrentConnector] = useState<
     undefined | AbstractConnector
   >(undefined);
   const [connectLoading, setConnectLoading] = useState(false);
 
-  const { activate, account: connectedAccount, deactivate } = useWeb3React();
+  const {
+    activate,
+    account: connectedAccount,
+    deactivate,
+    connector,
+  } = useWeb3React();
 
   // store connectedAccount
   useEffect(() => {
@@ -22,31 +26,33 @@ const useProviderConnects = () => {
     localStorage.setItem("walletconnect", connectedAccount);
   }, [connectedAccount]);
 
-  const tryActivate = async (connector: AbstractConnector) => {
-    try {
-      if (connectLoading || !connector || !walletName) return;
+  const tryActivate = useCallback(
+    async (connector: AbstractConnector) => {
+      try {
+        if (connectLoading || !connector) return;
 
-      await activate(new InjectedConnector(connector), undefined, true).catch(
-        async (error: any) => {
-          if (error instanceof UnsupportedChainIdError) {
-            console.log("Error when activate: ", error.message);
-            setCurrentConnector(undefined);
-            setWalletName([]);
-            localStorage.removeItem("walletconnect");
+        await activate(new InjectedConnector(connector), undefined, true).catch(
+          async (error: any) => {
+            if (error instanceof UnsupportedChainIdError) {
+              console.log("Error when activate: ", error.message);
+              setCurrentConnector(undefined);
+              localStorage.removeItem("walletconnect");
 
-            toast.error(
-              `App network doesn't match. Please change network in wallet or change app network.`,
-            );
-          } else {
-            console.log("ERROR when try to activate: ", error.message);
-            toast.error(error.message);
-          }
-        },
-      );
-    } catch (error: any) {
-      setCurrentConnector(undefined);
-    }
-  };
+              toast.error(
+                `App network doesn't match. Please change network in wallet or change app network.`,
+              );
+            } else {
+              console.log("ERROR when try to activate: ", error.message);
+              toast.error(error.message);
+            }
+          },
+        );
+      } catch (error: any) {
+        setCurrentConnector(undefined);
+      }
+    },
+    [connector],
+  );
 
   const handleProviderChosen = async (
     name: string,
@@ -72,13 +78,11 @@ const useProviderConnects = () => {
     setConnectLoading(false);
     handleCloseModal();
     setCurrentConnector(connector);
-    walletName.indexOf(name) < 0 && setWalletName([...walletName, name]);
   };
 
   const handleConnectorDisconnect = useCallback(() => {
     localStorage.removeItem("walletconnect");
     deactivate();
-    setWalletName([]);
     setCurrentConnector(undefined);
     setConnectLoading(false);
   }, []);
@@ -87,8 +91,6 @@ const useProviderConnects = () => {
     tryActivate,
     connectedAccount,
     handleProviderChosen,
-    setWalletName,
-    walletName,
     connectWalletLoading: connectLoading,
     currentConnector,
     handleConnectorDisconnect,
