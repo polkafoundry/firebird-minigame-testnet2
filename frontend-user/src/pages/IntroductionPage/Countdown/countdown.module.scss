@@ -1,11 +1,15 @@
 .background {
   background: linear-gradient(
-    85.67deg,
-    #de2779 4.5%,
-    #b839d0 57.94%,
-    #92a9fa 96.94%
+    135.07deg,
+    #ff79ff 26.68%,
+    #793c74 44.7%,
+    #180f0e 64.51%
   );
-  border-radius: 32px;
+  border-radius: 20px;
+  @media (min-width: theme("screens.2md")) {
+    background: linear-gradient(75.87deg, #ff79ff 1.67%, #180f0e 45.96%);
+    border-radius: 32px;
+  }
 }
 
 .banner {

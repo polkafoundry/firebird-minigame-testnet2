@@ -41,24 +41,31 @@ const Countdown = () => {
     <div
       className={clsx(
         styles.background,
-        "grid lg:mt-20 lg:grid-cols-2 lg:gap-[47px] lg:px-[48px] lg:py-[60px]",
+        "flex flex-col px-3 pt-5 pb-8 mt-5 relative overflow-hidden",
+        "xs:px-10 xs:py-10",
+        "md:mt-10 md:px-[48px] md:py-[60px]",
+        "2md:flex-row lg:mt-20",
       )}
     >
+      <div className="hidden 2md:block 2md:absolute top-[-300px] right-[-350px] w-[800px] h-[800px] z-[9]">
+        <img src="./images/introduction/countdown-blur.svg" alt="" />
+      </div>
       <div
         className={clsx(
-          "flex flex-col w-full py-10 lg:py-[72px] rounded-[32px] text-white justify-center items-center relative",
+          "z-10 w-full 2md:w-1/2 flex flex-col py-10  rounded-[32px] text-white justify-center items-center relative",
+          "xs:py-16 md:py-[72px] 2md:min-w-[550px]",
           styles.banner,
         )}
       >
         <span
           className={clsx(
             "text-18/32 font-tthovesBold tracking-[3px] uppercase",
-            "lg:text-22/32",
+            "2md:text-22/32",
           )}
         >
           20 Nov ~ 18 Dec, 2022
         </span>
-        <span className={clsx("text-14/32", "lg:text-18/32")}>
+        <span className={clsx("text-14/32", "2md:text-18/32")}>
           The testnet ends in
         </span>
         <div className="flex space-x-1.5 mt-5">
@@ -71,18 +78,18 @@ const Countdown = () => {
           <TimeField label="SECONDS" value={second} />
         </div>
       </div>
-      <div className="mt-4 text-white">
-        <div className="text-40/52 font-tthoves font-semibold">
+      <div className="z-10 flex-1 mt-4 text-white 2md:ml-5 lg:ml-[47px]">
+        <div className="text-32/40 text-center font-tthoves font-semibold md:text-40/52 2md:text-left 2md:max-w-[320px]">
           The testnet is open for everyone
         </div>
-        <p className="text-18/32 font-inter xs:pt-4">
+        <p className="pt-2 text-center text-14/24 font-inter md:pt-4 md:text-18/32 2md:text-left">
           To ensure a <strong>successful mainnet launch</strong> following the
           success of
-          <strong>Firebird private testnet</strong>, we would like to invite the
-          community to join us in our{" "}
+          <strong> Firebird private testnet</strong>, we would like to invite
+          the community to join us in our{" "}
           <strong>1st public testnet campaign.</strong>
         </p>
-        <button className="btn-rounded bg-main xs:px-[43px] xs:mt-[48px]">
+        <button className="w-full mx-auto btn-rounded bg-main mt-5 px-[43px] xs:w-auto 2md:mx-0 2md:mt-[48px]">
           Private Testnet Report
         </button>
       </div>
