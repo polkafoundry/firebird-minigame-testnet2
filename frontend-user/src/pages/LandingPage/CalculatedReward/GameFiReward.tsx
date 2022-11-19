@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import { URLS } from "../../../constants";
 
 const GameFiReward = () => {
   return (
@@ -39,7 +40,7 @@ const GameFiReward = () => {
           </div>
           <div className="flex w-full mt-5 text-white text-14/20 font-tthoves">
             <a
-              href="https://gamefi.org/"
+              href={URLS.GAMEFI_POOL}
               target="_blank"
               rel="noreferrer"
               className="w-full text-center bg-main p-2.5 md:p-2 font-semibold rounded-lg"

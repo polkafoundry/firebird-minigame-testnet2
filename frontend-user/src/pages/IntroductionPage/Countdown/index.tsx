@@ -91,9 +91,13 @@ const Countdown = () => {
           the community to join us in our{" "}
           <strong>1st public testnet campaign.</strong>
         </p>
-        <button className="w-full mx-auto btn-rounded bg-main mt-5 px-[43px] xs:w-auto 2md:mx-0 2md:mt-[48px]">
+        <a
+          href="https://lnkd.in/gQvFMwct"
+          target={"_blank"}
+          className="w-full md:w-fit mx-auto btn-rounded bg-main mt-5 px-[43px] xs:w-auto 2md:mx-0 2md:mt-[48px]"
+        >
           Private Testnet Report
-        </button>
+        </a>
       </div>
     </div>
   );
