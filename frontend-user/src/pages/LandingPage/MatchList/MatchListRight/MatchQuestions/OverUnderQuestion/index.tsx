@@ -90,7 +90,7 @@ const OverUnderQuestion = (props: QuestionProps) => {
       toast.warning("Deposit amount is not valid");
       return;
     }
-    if (!optionWhoWin) {
+    if (isNaN(optionWhoWin)) {
       toast.warning("Please select one answer");
       return;
     }
