@@ -24,7 +24,7 @@ const dataExplore: Array<ExploreTypes> = [
   {
     img: "/images/introduction/birdswap.png",
     title: "BirdSwap",
-    url: "/#",
+    url: "https://swap.firefly.firebirdchain.com/",
     detail: "Quickly and conveniently swap tokens.",
   },
   {
