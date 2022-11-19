@@ -96,10 +96,9 @@ const HeaderDefaultLayout = () => {
     <div className="w-full bg-black absolute h-20 flex justify-center z-20">
       <nav
         className={clsx(
-          "w-full h-full flex items-center justify-between max-w-screen-main text-white",
-          "main:px-20",
+          "w-full h-full flex items-center justify-between max-w-screen-main px-5 text-white",
+          "main:px-[100px]",
           "lg:px-10",
-          "pl-5 pr-6",
         )}
       >
         <div className="flex">
@@ -109,26 +108,27 @@ const HeaderDefaultLayout = () => {
           <img
             src="/images/landing-page/banner-text.png"
             alt=""
-            className="ml-2 hidden lg:block"
+            className="ml-2 hidden 2md:block"
           />
+          <div className="ml-10 md:ml-[60px] gap-5 lg:gap-10 hidden md:flex md:items-center">
+            {routes.map((item: RouteTypes, index: number) => (
+              <a
+                key={index}
+                href={item.uri}
+                className={clsx(
+                  "font-inter text-16/24",
+                  location.pathname === item.uri
+                    ? "text-main font-semibold"
+                    : "hover:text-red-500",
+                )}
+              >
+                {item.label}
+              </a>
+            ))}
+          </div>
         </div>
-        <div className={clsx("gap-5 hidden", "md:flex md:items-center")}>
-          {routes.map((item: RouteTypes, index: number) => (
-            <a
-              key={index}
-              href={item.uri}
-              className={clsx(
-                "font-inter text-16/24",
-                location.pathname === item.uri
-                  ? "text-main font-semibold"
-                  : "hover:text-red-500",
-              )}
-            >
-              {item.label}
-            </a>
-          ))}
-
-          {connectedAccount && (
+        <div className="hidden md:flex md:items-center">
+          {/* {connectedAccount && (
             <button
               className={clsx(
                 "ml-5 lg:ml-10 px-4 py-1.5 flex rounded-lg text-14/20 text-white font-tthoves items-center",
@@ -144,15 +144,25 @@ const HeaderDefaultLayout = () => {
                 {!isWrongChain ? "FireflyTestnet" : "Switch chain"}
               </span>
             </button>
-          )}
+          )} */}
 
           <button
-            className="bg-main p-0.5 h-9 min-w-[177px] rounded-lg text-14/20 font-tthoves"
+            className={clsx(
+              "bg-main p-0.5 h-9 rounded-lg text-14/20 font-tthoves",
+              !connectedAccount && "min-w-[177px]",
+            )}
             onClick={openConnectModal}
           >
             {connectedAccount ? (
               <div className="flex text-sm h-full">
                 <div className="px-[10px] flex items-center font-semibold">
+                  {!isWrongChain && (
+                    <img
+                      src="./images/firebird-testnet.svg"
+                      alt=""
+                      className="mr-1.5"
+                    />
+                  )}
                   {`${isWrongChain ? 0 : realTimeBalance} ${nativeCurrency}`}
                 </div>
                 <div className="flex bg-black items-center rounded-md px-2">
