@@ -61,8 +61,7 @@ const Sponsor = () => {
     <div className="mt-5 md:mt-6 grid gap-5 sm:grid-cols-2 md:gap-8">
       <LayourSponsor
         title="Monsterra"
-        description="Join the Phoenix Cup on Firebird, climb the leaderboard & have a
-                chain to gain additional bonuses."
+        description="Exclusive events sponsored by Monsterra."
         images={{
           xs: "./images/introduction/monsterra-xs.png",
           normal: "./images/introduction/monsterra.png",

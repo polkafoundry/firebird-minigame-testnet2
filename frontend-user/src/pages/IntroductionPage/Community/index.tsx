@@ -15,12 +15,14 @@ const Community = () => {
       >
         <div
           className={clsx(
-            "flex flex-col-reverse max-w-[480px] items-center text-center mx-auto",
+            "flex flex-col-reverse max-w-[440px] w-full items-center text-center mx-auto",
             "lg:flex-col lg:items-start lg:text-left lg:mx-0",
           )}
         >
           <p className="text-3xl xs:text-5xl md:text-[44px] md:leading-[54px] font-semibold">
-            Find your place in the Firebird Community
+            Need support?
+            <br />
+            Or have suggestion?
           </p>
           <div
             className="relative block sm:hidden lg:block md:mt-10"
@@ -32,7 +34,9 @@ const Community = () => {
 
         <div className="flex flex-col pt-3">
           <p className="text-sm xs:text-22px md:text-lg text-center md:text-left">
-            {`Need more information about Firebird? Follow us on official groups and channels not to miss out on anything!`}
+            We'd love hear from you. <br /> Send us comments, suggestions,
+            messages or anything about your experience in regards with our
+            public testnet campaign.
           </p>
 
           <div
@@ -53,8 +57,8 @@ const Community = () => {
                 )}
                 key={index + 2000}
               >
-                <div className="relative w-10 h-10">
-                  <img src={item.img} alt="" />
+                <div className="relative">
+                  <img src={item.img} alt="" className="w-10 h-10" />
                 </div>
                 <div className="flex flex-col w-full">
                   <span className="text-sm md:text-base">{item.label}</span>
