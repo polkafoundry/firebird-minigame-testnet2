@@ -28,6 +28,7 @@ const OddsQuestion = (props: QuestionProps) => {
     error,
     birdBalance = "0",
     updateBirdBalance,
+    setRecheckApprove,
   } = props;
   const [optionWhoWin, setOptionWhoWin] = useState<number>(0);
   const [depositAmount, setDepositAmount] = useState<string>("");
@@ -80,6 +81,7 @@ const OddsQuestion = (props: QuestionProps) => {
 
     if (needApprove) {
       await approveBirdToken();
+      setRecheckApprove && setRecheckApprove((prev) => !prev);
     }
 
     const bettingResult = await betting(_matchID, _amount, _betType, _betPlace);
