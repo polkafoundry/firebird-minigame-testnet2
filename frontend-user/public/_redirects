@@ -1,5 +1,5 @@
 /*  /index.html  200
-from = "https://staging--firebird-worldcup.netlify.app/*"
+from = "/*"
 to = "https://phoenixcup.firebirdchain.com/introduction"
 status = 301
 force = true
