@@ -15,9 +15,7 @@ const IntroductionPage = () => {
           <Countdown />
           <Rewards />
           <ExploreFirebird />
-
           <ComingNext />
-
           <Community />
         </div>
       </div>
