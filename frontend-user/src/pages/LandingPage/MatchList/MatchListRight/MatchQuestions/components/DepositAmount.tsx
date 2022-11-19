@@ -49,11 +49,11 @@ const DepositAmount = (props: DepositAmountProps) => {
           </span>
         </div>
         <div className="flex flex-col xs:flex-row items-start mt-1.5 xs:mt-2">
-          <div>
-            <div className="flex items-center max-w-[340px] border p-1 bg-white rounded-lg">
+          <div style={{ maxWidth: "-webkit-fill-available" }}>
+            <div className="flex items-center xs:max-w-[340px] border p-1 bg-white rounded-lg">
               <input
                 type="text"
-                className="flex-1 outline-none text-14-24 pl-2.5 min-w-0"
+                className="flex-1 outline-none text-14/24 pl-2.5 min-w-0"
                 value={depositAmount}
                 onChange={onChange}
                 placeholder="Enter"
