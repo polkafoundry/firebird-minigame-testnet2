@@ -4,6 +4,7 @@ import Community from "./Community";
 import Countdown from "./Countdown";
 import ExploreFirebird from "./ExploreFirebird";
 import HomeBanner from "./IntroBanner";
+import Rewards from "./Rewards";
 
 const IntroductionPage = () => {
   return (
@@ -12,10 +13,9 @@ const IntroductionPage = () => {
       <div className="flex bg-[#F7F7F8]">
         <div className="flex flex-col w-full max-w-screen-main mx-auto px-5 md:px-10 lg:px-20">
           <Countdown />
+          <Rewards />
           <ExploreFirebird />
-
           <ComingNext />
-
           <Community />
         </div>
       </div>

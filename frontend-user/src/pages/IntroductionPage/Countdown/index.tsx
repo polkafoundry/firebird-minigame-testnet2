@@ -10,7 +10,7 @@ const TimeField = ({ value, label }: TimeFieldProps) => {
       <div className="flex flex-col items-center">
         <span
           className={clsx(
-            "text-[64px] leading-[80px] font-normal font-oswald w-[64px]",
+            "text-[50px] leading-[50px] font-normal font-oswald w-[50px]",
             "xs:text-[100px] xs:leading-[100px] xs:w-[100px]",
           )}
         >
@@ -25,7 +25,7 @@ const TimeField = ({ value, label }: TimeFieldProps) => {
 const ColonField = () => (
   <span
     className={clsx(
-      "text-[60px] leading-[60px] pt-2",
+      "text-[50px] leading-[50px] pt-0 xs:pt-2",
       "xs:text-[80px] xs:leading-[80px]",
       styles.textStroke,
     )}
