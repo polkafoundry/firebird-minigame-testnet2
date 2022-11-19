@@ -124,7 +124,7 @@ const WhoWin = () => {
                   ))}
                 </div>
 
-                <div className="relative flex min-h-[300px]">
+                <div className="relative min-h-[300px]">
                   {loading && <DefaultLoading />}
 
                   {!loading && (
