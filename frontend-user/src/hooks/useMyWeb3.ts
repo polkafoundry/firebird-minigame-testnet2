@@ -48,7 +48,7 @@ export const useMyWeb3 = () => {
     };
 
     getBirdToken();
-  }, [account]);
+  }, [account, chainId]);
 
   // auto refetch balance
   useEffect(() => {
