@@ -141,7 +141,11 @@ const HistoryTable = (props: HistoryTableTypes) => {
                 <div className="capitalize">
                   {getAnswerText(rowData).toLowerCase()}
                 </div>
-                <MatchPredict isCorrect={rowData.result === "win"} />
+                {rowData.is_calculated ? (
+                  <MatchPredict isCorrect={rowData.result === "win"} />
+                ) : (
+                  <div className="font-tthoves font-semibold">Waiting...</div>
+                )}
                 <div>{convertHexToNumberFormat(rowData.bet_amount)}</div>
                 <div>{getEarnedAmount(rowData.result_num)}</div>
                 <div>{convertHexToNumberFormat(rowData.total_claim)}</div>

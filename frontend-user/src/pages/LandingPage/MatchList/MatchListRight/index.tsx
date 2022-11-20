@@ -36,7 +36,7 @@ const MatchListRight = (props: MatchListRightProps) => {
         ? 1
         : 2,
     );
-  }, [account, matchId]);
+  }, [account, matchId, predictConditions.gasFee, predictConditions.birdToken]);
 
   const fetchMatchDetailUrl = `/match/detail/${matchId}?wallet_address=${account}`;
   const { data } = useFetch<any>(fetchMatchDetailUrl, !!matchId, true);

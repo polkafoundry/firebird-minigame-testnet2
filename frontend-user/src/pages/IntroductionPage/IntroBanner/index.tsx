@@ -11,7 +11,7 @@ const HomeBanner = () => {
     >
       <div className="max-w-screen-main w-full mx-auto relative pt-[100px] md:pt-0 flex">
         <div
-          className="absolute w-[900px] sm:w-[1000px] md:w-[1300px] top-[200px] right-[-300px] md:top-[-350px] md:right-[-500px] man:right-[-560px] z-[9]"
+          className="absolute w-[800px] xs:w-[900px] sm:w-[1000px] md:w-[1300px] top-[150px] xs:top-[100px] right-[-300px] md:top-[-350px] md:right-[-500px] man:right-[-560px] z-[9]"
           data-aos="fade-up"
           data-aos-delay="350"
         >
