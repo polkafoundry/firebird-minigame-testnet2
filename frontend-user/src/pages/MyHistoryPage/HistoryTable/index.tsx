@@ -47,22 +47,21 @@ const HistoryTable = (props: HistoryTableTypes) => {
     result_num > 0 ? convertHexToNumberFormat(result_num) : "0";
 
   const getAnswerText = (rowData: any) => {
-    const isCorrectAnswer = rowData.result === "win";
     switch (rowData.bet_place) {
       case BET_PLACE.HOME: {
-        return isCorrectAnswer ? rowData.home_name : rowData.away_name;
+        return rowData.home_name;
       }
       case BET_PLACE.DRAW: {
         return "Draw";
       }
       case BET_PLACE.AWAY: {
-        return isCorrectAnswer ? rowData.away_name : rowData.home_name;
+        return rowData.away_name;
       }
       case BET_PLACE.UNDER: {
-        return isCorrectAnswer ? "Higher" : "Lower";
+        return "Lower";
       }
       case BET_PLACE.OVER: {
-        return isCorrectAnswer ? "Lower" : "Higher";
+        return "Higher";
       }
       default: {
         return "N/A";
