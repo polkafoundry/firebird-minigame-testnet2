@@ -11,6 +11,7 @@ import {
   MATCH_RESULT,
   MATCH_STATUS,
   QUESTION_STATUS,
+  rounds,
 } from "../../../../../constants";
 import { WalletContext } from "../../../../../context/WalletContext";
 import useBirdToken from "../../../../../hooks/useBirdToken";
@@ -42,11 +43,13 @@ type MatchQuestionProps = {
   isWrongChain: boolean;
 };
 
-// TODO: pairing with api
-const predictPrize = "$20";
-
 const MatchQuestions = (props: MatchQuestionProps) => {
   const { dataQuestion, account, isWrongChain } = props;
+  // TODO: pairing with api
+  const predictPrize =
+    rounds.find((round) => round.value === Number(dataQuestion?.round_name))
+      ?.prize || "N/A";
+
   const [needApprove, setNeedApprove] = useState<boolean>(false);
   const [recheckApprove, setRecheckApprove] = useState<boolean>(false);
 

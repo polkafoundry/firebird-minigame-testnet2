@@ -42,7 +42,6 @@ const PredictQuestion = (props: QuestionProps) => {
     return !!account && matchEnded && dataQuestion?.match_id;
   }, [account, matchEnded, dataQuestion]);
 
-  // TODO: missing state QUESTION_STATUS.PREDICTED
   const questionStatus = useMemo(() => {
     if (!matchEnded) return dataQuestion?.questionStatus;
 
