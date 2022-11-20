@@ -180,7 +180,7 @@ const MatchQuestions = (props: MatchQuestionProps) => {
             label: "Lower",
             winRate: dataQuestion?.ou_ht_under,
             description:
-              "< " + lowerScore(dataQuestion?.ou_ht_ratio) + " goals scored",
+              "≤ " + lowerScore(dataQuestion?.ou_ht_ratio) + " goals scored",
           },
           {
             label: `${dataQuestion?.ou_ht_ratio || 0} goals`,
@@ -209,7 +209,7 @@ const MatchQuestions = (props: MatchQuestionProps) => {
             label: "Lower",
             winRate: dataQuestion?.ou_ft_under,
             description:
-              "< " + lowerScore(dataQuestion?.ou_ft_ratio) + " goals scored",
+              "≤ " + lowerScore(dataQuestion?.ou_ft_ratio) + " goals scored",
           },
           {
             label: `${dataQuestion?.ou_ft_ratio || 0} goals`,
