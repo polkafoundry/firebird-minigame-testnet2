@@ -29,7 +29,7 @@ Note: Testnet tokens are only accepted during the testnet period, not redeemable
   {
     id: 4,
     question: "What is the deposit range?",
-    answer: "0 < deposit range < 1000 $BIRD",
+    answer: "0 < deposit range ≤ 1000 $BIRD",
   },
   {
     id: 5,

@@ -180,7 +180,7 @@ const MatchQuestions = (props: MatchQuestionProps) => {
             label: "Lower",
             winRate: dataQuestion?.ou_ht_under,
             description:
-              "≤ " + lowerScore(dataQuestion?.ou_ht_ratio) + " goals scored",
+              "< " + lowerScore(dataQuestion?.ou_ht_ratio) + " goals scored",
           },
           {
             label: `${dataQuestion?.ou_ht_ratio || 0} goals`,
@@ -190,7 +190,7 @@ const MatchQuestions = (props: MatchQuestionProps) => {
             label: "Higher",
             winRate: dataQuestion?.ou_ht_over,
             description:
-              "> " + upperScore(dataQuestion?.ou_ht_ratio) + " goals scored",
+              "≥ " + upperScore(dataQuestion?.ou_ht_ratio) + " goals scored",
           },
         ],
         optionSelected: getOptionIndexByBetPlace(question4?.bet_place),
@@ -209,7 +209,7 @@ const MatchQuestions = (props: MatchQuestionProps) => {
             label: "Lower",
             winRate: dataQuestion?.ou_ft_under,
             description:
-              "≤ " + lowerScore(dataQuestion?.ou_ft_ratio) + " goals scored",
+              "< " + lowerScore(dataQuestion?.ou_ft_ratio) + " goals scored",
           },
           {
             label: `${dataQuestion?.ou_ft_ratio || 0} goals`,
@@ -219,7 +219,7 @@ const MatchQuestions = (props: MatchQuestionProps) => {
             label: "Higher",
             winRate: dataQuestion?.ou_ft_over,
             description:
-              "> " + upperScore(dataQuestion?.ou_ft_ratio) + " goals scored",
+              "≥ " + upperScore(dataQuestion?.ou_ft_ratio) + " goals scored",
           },
         ],
         optionSelected: getOptionIndexByBetPlace(question5?.bet_place),
