@@ -1,12 +1,12 @@
+import { fetcher } from "./useFetch";
 import { useWeb3React } from "@web3-react/core";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
 import BETTING_ABI from "../abi/SBirdBetting.json";
 import { API_BASE_URL, BETTING_CONTRACT } from "../constants";
 import { BIRD_CHAIN_ID } from "../constants/networks";
-import { getContract, getNonce } from "../utils/contract";
+import { getContract } from "../utils/contract";
 import useBettingContract from "./useBettingContract";
-import { fetcher } from "./useFetch";
 
 const useClaimToken = (data?: any, isCorrect?: boolean) => {
   const { library, account } = useWeb3React();
@@ -50,8 +50,6 @@ const useClaimToken = (data?: any, isCorrect?: boolean) => {
             _signMessage,
           );
           setTransactionHash(transaction?.hash);
-          const nonce = await getNonce(library, account);
-          transaction.nonce = nonce;
           await transaction.wait(1);
           setLoadingClaim(false);
 
