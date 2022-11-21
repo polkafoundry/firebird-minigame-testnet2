@@ -26,6 +26,14 @@ const ResultMatch = (props: ResultMatchProps) => {
 
     return convertHexToStringNumber(amount) + " $BIRD";
   };
+  const displayTotalClaim = () => {
+    const total_claim = questions?.total_claim;
+    if (!total_claim) return "Updating...";
+
+    if (questionStatus !== QUESTION_STATUS.CORRECT_ANSWER) return "0 $BIRD";
+
+    return convertHexToStringNumber(total_claim) + " $BIRD";
+  };
 
   return (
     <div className="mt-3 px-3 xs:px-16">
@@ -89,9 +97,7 @@ const ResultMatch = (props: ResultMatchProps) => {
             Amount to claim
           </span>
           <span className="font-semibold text-16/20 font-tthoves mt-1">
-            {(questionStatus === QUESTION_STATUS.CORRECT_ANSWER
-              ? convertHexToStringNumber(questions?.total_claim)
-              : 0) + " $BIRD"}
+            {displayTotalClaim()}
             {questionStatus === QUESTION_STATUS.CORRECT_ANSWER && isClaimed && (
               <span className="text-12/20 font-normal"> (Claimed)</span>
             )}
