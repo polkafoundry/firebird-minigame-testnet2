@@ -198,6 +198,7 @@ const OddsQuestion = (props: QuestionProps) => {
             isClaimed={isClaimed}
             loadingClaim={loadingClaim}
             handleClaimToken={handleClaimToken}
+            updateBirdBalance={updateBirdBalance}
           />
         )}
       </div>

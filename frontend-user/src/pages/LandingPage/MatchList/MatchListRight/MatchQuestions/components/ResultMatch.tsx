@@ -8,6 +8,7 @@ type ResultMatchProps = {
   isClaimed?: boolean;
   loadingClaim?: boolean;
   handleClaimToken?: any;
+  updateBirdBalance?: any;
 };
 const ResultMatch = (props: ResultMatchProps) => {
   const {
@@ -16,6 +17,7 @@ const ResultMatch = (props: ResultMatchProps) => {
     isClaimed,
     loadingClaim,
     handleClaimToken,
+    updateBirdBalance,
   } = props;
 
   const displayEarnedAmount = () => {
@@ -33,6 +35,11 @@ const ResultMatch = (props: ResultMatchProps) => {
     if (questionStatus !== QUESTION_STATUS.CORRECT_ANSWER) return "0 $BIRD";
 
     return convertHexToStringNumber(total_claim) + " $BIRD";
+  };
+
+  const onClaim = () => {
+    handleClaimToken();
+    updateBirdBalance();
   };
 
   return (
@@ -112,7 +119,7 @@ const ResultMatch = (props: ResultMatchProps) => {
               "w-full xs:w-auto text-center px-10 py-2 bg-main rounded-lg mr-2",
               isClaimed && "pointer-events-none opacity-50",
             )}
-            onClick={handleClaimToken}
+            onClick={onClaim}
             disabled={loadingClaim}
           >
             Claim token
