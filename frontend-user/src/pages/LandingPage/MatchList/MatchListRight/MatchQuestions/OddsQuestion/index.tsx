@@ -45,6 +45,7 @@ const OddsQuestion = (props: QuestionProps) => {
 
   useEffect(() => {
     if (!questionProp) return;
+    setDepositAmount("0");
     setDataQuestion(questionProp);
   }, [questionProp]);
 
