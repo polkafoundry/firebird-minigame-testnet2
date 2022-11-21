@@ -62,14 +62,12 @@ const OddsQuestion = (props: QuestionProps) => {
     () => dataQuestion?.match_status === MATCH_STATUS.FINISHED,
     [dataQuestion?.match_status],
   );
-  const finalResultIndex = getFinalResultIndex(
-    dataQuestion?.result,
-    dataQuestion?.bet_place,
-  );
+
+  const finalResultIndex = getFinalResultIndex(dataQuestion);
 
   const isValidated = () => {
-    if (!depositAmount) {
-      toast.warning("Deposit amount is not valid");
+    if (!depositAmount || +depositAmount <= 0) {
+      toast.warning("Deposit amount must be greater than 0");
       return;
     }
     if (isNaN(optionWhoWin)) {
