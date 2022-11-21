@@ -1,10 +1,10 @@
 .tableRow {
   & > div:first-child {
-    min-width: 69px;
+    min-width: 50px;
     flex: 1;
   }
   & > div:nth-child(2) {
-    min-width: 210px;
+    min-width: 180px;
     flex: 3;
   }
   & > div:nth-child(3) {
@@ -13,12 +13,12 @@
     text-align: center;
   }
   & > div:nth-child(4) {
-    min-width: 90px;
+    min-width: 70px;
     flex: 1;
     text-align: center;
   }
   & > div:last-child {
-    min-width: 110px;
+    min-width: 100px;
     flex: 1;
     display: flex;
     justify-content: center;

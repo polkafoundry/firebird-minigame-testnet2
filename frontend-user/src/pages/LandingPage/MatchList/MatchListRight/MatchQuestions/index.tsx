@@ -117,6 +117,15 @@ const MatchQuestions = (props: MatchQuestionProps) => {
 
       const bettingsData = dataQuestion?.bettings || [];
 
+      const resultData = {
+        ft_away_score: dataQuestion?.ft_away_score,
+        ft_home_score: dataQuestion?.ft_home_score,
+        ht_away_score: dataQuestion?.ht_away_score,
+        ht_home_score: dataQuestion?.ht_home_score,
+        is_full_time: dataQuestion?.is_full_time,
+        is_half_time: dataQuestion?.is_half_time,
+      };
+
       // QUESTION 2
       let question2 = bettingsData.find(
         (betting: any) => betting.bet_type === BET_TYPE.ODD_EVEN_HALF_TIME,
@@ -125,6 +134,7 @@ const MatchQuestions = (props: MatchQuestionProps) => {
       question2 = {
         ...question2,
         ...matchStatus,
+        ...resultData,
         options: [
           {
             label: homeTeamInfo.home_name,
@@ -151,6 +161,7 @@ const MatchQuestions = (props: MatchQuestionProps) => {
       question3 = {
         ...question3,
         ...matchStatus,
+        ...resultData,
         options: [
           {
             label: homeTeamInfo.home_name,
@@ -175,12 +186,13 @@ const MatchQuestions = (props: MatchQuestionProps) => {
       question4 = {
         ...question4,
         ...matchStatus,
+        ...resultData,
         options: [
           {
             label: "Lower",
             winRate: dataQuestion?.ou_ht_under,
             description:
-              "< " + lowerScore(dataQuestion?.ou_ht_ratio) + " goals scored",
+              "≤ " + lowerScore(dataQuestion?.ou_ht_ratio) + " goals scored",
           },
           {
             label: `${dataQuestion?.ou_ht_ratio || 0} goals`,
@@ -204,12 +216,13 @@ const MatchQuestions = (props: MatchQuestionProps) => {
       question5 = {
         ...question5,
         ...matchStatus,
+        ...resultData,
         options: [
           {
             label: "Lower",
             winRate: dataQuestion?.ou_ft_under,
             description:
-              "< " + lowerScore(dataQuestion?.ou_ft_ratio) + " goals scored",
+              "≤ " + lowerScore(dataQuestion?.ou_ft_ratio) + " goals scored",
           },
           {
             label: `${dataQuestion?.ou_ft_ratio || 0} goals`,

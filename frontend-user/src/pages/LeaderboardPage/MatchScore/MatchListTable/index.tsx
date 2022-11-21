@@ -86,12 +86,16 @@ const MatchListTable = (props: MatchListTableProps) => {
   }, [dataTable]);
 
   return (
-    <div className="bg-[#F2F2F2]">
-      <div className={clsx("title-background pr-8 bg-[cover] w-[330px]")}>
+    <div className="bg-[#F2F2F2] md:mr-1">
+      <div
+        className={clsx(
+          "title-group-stage pr-8 bg-[cover] w-[310px] mx-auto md:w-[330px] lg:mx-0",
+        )}
+      >
         {rounds[groupStageIndex].label}
       </div>
-      <div className="px-5 pt-3 pb-5">
-        <div className="flex items-center justify-between ">
+      <div className="md:px-5 pt-3 pb-5">
+        <div className="flex flex-col lg:flex-row items-center justify-between">
           <div className="font-normal text-14/24">(Time Zone: GMT+7)</div>
           {/* <div className="flex">
             <div>
@@ -121,14 +125,16 @@ const MatchListTable = (props: MatchListTableProps) => {
           </div> */}
         </div>
 
-        <div className="flex justify-between items-center bg-[#3A0013] text-white mt-1">
+        <div className="flex justify-between items-center bg-[#3A0013] text-white mt-5 lg:mt-1">
           <div
             className="h-12 w-12 cursor-pointer flex justify-center items-center select-none"
             onClick={previousGroup}
           >
             <img src="/images/icon-previous.svg" alt="" />
           </div>
-          <div className="text-20/28 font-bold uppercase">{priodDate}</div>
+          <div className="text-18/24 md:text-20/28 font-bold md:uppercase">
+            {priodDate}
+          </div>
           <div
             className="h-12 w-12 cursor-pointer flex justify-center items-center select-none"
             onClick={nextGroup}
@@ -144,7 +150,7 @@ const MatchListTable = (props: MatchListTableProps) => {
         <div className="overflow-x-auto relative">
           <div
             className={clsx(
-              "flex bg-[#3A0013] min-w-fit text-white px-5 py-3 text-12/18 uppercase font-inter font-bold",
+              "flex bg-[#3A0013] min-w-fit text-white px-5 py-3 text-10/14 md:text-12/18 uppercase font-inter font-bold",
               styles.tableRow,
             )}
           >
@@ -172,7 +178,7 @@ const MatchListTable = (props: MatchListTableProps) => {
                       <div
                         key={match?.match_id}
                         className={clsx(
-                          "flex items-center cursor-pointer hover:bg-orange-300 transition-all duration-300 mb-0.5 last:mb-0 px-5 py-2 min-w-fit text-14/24 ",
+                          "flex items-center cursor-pointer hover:bg-orange-300 transition-all duration-300 mb-0.5 last:mb-0 px-5 py-2 min-w-fit text-14/24",
                           styles.tableRow,
                           selectedMatchId === match?.match_id
                             ? "bg-amber-200"

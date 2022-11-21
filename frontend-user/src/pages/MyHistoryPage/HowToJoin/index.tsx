@@ -41,10 +41,10 @@ const HowToJoin = () => {
   }, [isWrongChain, realTimeBalance, nativeCurrency, account]);
 
   return (
-    <div className="flex flex-col mt-20 w-full">
+    <div className="flex flex-col mt-[60px] md:mt-[120px] w-full">
       <HeadingPrimary backroundTitle="Join" title="how to join" />
 
-      <div className="grid grid-cols-1 xs:grid-cols-2 2md:grid-cols-3 gap-1 mt-8">
+      <div className="grid grid-cols-1 xs:grid-cols-2 2md:grid-cols-3 gap-1 mt-[-11px]">
         <div className="flex flex-col rounded-bl-lg bg-[#F2F2F2]">
           <span className="title-background">Conditions to join</span>
           <div className="mt-3 px-5 pb-10 h-full">
@@ -157,7 +157,7 @@ const HowToJoin = () => {
         <div className="flex flex-col bg-[#F2F2F2]">
           <span className="title-background">Quick guide</span>
           <div className="mt-3 px-5 pb-10 h-full">
-            <div className="bg-white h-full flex flex-col p-5">
+            <div className="bg-white h-full flex flex-col py-3 px-5 md:py-5">
               <ul className="flex flex-col gap-3 text-14/24 font-inter mb-9">
                 {quickGuide.map((item: string, index: number) => (
                   <li className="flex gap-2" key={item}>

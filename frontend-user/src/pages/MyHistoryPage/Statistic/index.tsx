@@ -2,9 +2,9 @@ import { HISTORY_NAV_VALUES } from "../../../constants";
 import { formatCurrency } from "../../../utils";
 
 const boxStyles = {
-  title: "font-inter font-bold text-12/18 uppercase",
-  number: "font-tthovesBold italic text-32/40",
-  box: "flex flex-col text-black min-h-[84px] justify-center items-center border-b border-r border-black",
+  title: "font-inter font-bold text-12/18 tracking-[1px] uppercase",
+  number: "font-tthovesBold italic text-32/40 mt-1",
+  box: "flex flex-col text-black py-3 justify-center items-center border-b border-r border-black",
 };
 
 const Statistics = (props: any) => {

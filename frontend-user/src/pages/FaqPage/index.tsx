@@ -93,10 +93,10 @@ const FaqPage = () => {
                   >
                     <Disclosure.Button
                       className={clsx(
-                        "flex justify-between items-start gap-2 outline-none pt-6 px-8",
+                        "flex justify-between items-start gap-2 outline-none pt-5 px-5 md:pt-6 md:px-8",
                       )}
                     >
-                      <span className="flex-1 block text-left text-24/32 font-tthoves font-semibold">
+                      <span className="flex-1 block text-left text-20/28 md:text-24/32 font-tthoves font-semibold">
                         {item.question}
                       </span>
                       <div className="mt-1 ml-2 w-5 h-5">
@@ -122,7 +122,7 @@ const FaqPage = () => {
                       <Disclosure.Panel className="whitespace-pre-line break-words">
                         {({ close }) => (
                           <span
-                            className="pl-8 pr-16 pt-3 block text-18/32 font-inter opacity-80"
+                            className="px-5 md:pl-8 md:pr-16 pt-2 md:pt-3 block text-14/24 md:text-18/32 font-inter opacity-80"
                             onClick={() => {
                               close();
                             }}
@@ -132,7 +132,7 @@ const FaqPage = () => {
                         )}
                       </Disclosure.Panel>
                     </Transition>
-                    <Disclosure.Button className="h-6"></Disclosure.Button>
+                    <Disclosure.Button className="h-5 md:h-6"></Disclosure.Button>
                   </div>
                 )}
               </Disclosure>

@@ -8,9 +8,9 @@ const Community = () => {
       <div
         className={clsx(
           styles.bgCommunity,
-          "flex flex-col w-full text-white rounded-[20px] pb-10 pt-[60px] px-5",
+          "flex flex-col w-full text-white rounded-[28px] pb-10 pt-[60px] px-5",
           "xs:px-[60px] xs:bg-center",
-          "lg:gap-5 lg:flex-row md:pl-20 md:pr-[60px] md:pt-16 md:pb-11",
+          "md:pt-16 md:pb-11 md:rounded-[32px] lg:gap-5 lg:flex-row md:pl-20 md:pr-[60px]",
         )}
       >
         <div

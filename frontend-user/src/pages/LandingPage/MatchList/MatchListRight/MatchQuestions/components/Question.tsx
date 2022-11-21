@@ -31,6 +31,9 @@ const Question = (props: QuestionProps) => {
   const enableSubmit = predictBoxComponent
     ? ![MATCH_STATUS.FINISHED, MATCH_STATUS.LIVE].includes(matchStatus)
     : !matchEnded && !isSubmitted;
+  const shouldCheckError = isPredictQuestion
+    ? !matchEnded
+    : !matchEnded && !isSubmitted;
 
   return (
     <Disclosure defaultOpen>
@@ -54,21 +57,24 @@ const Question = (props: QuestionProps) => {
             {children}
             {error && (
               <div className="mt-3">
-                {!isPredictQuestion && error?.birdToken === false && (
-                  <p className="text-12/16 text-[#FF0021] text-center font-inter">
-                    Not enough $BIRD to anwser the questions. Click{" "}
-                    <a
-                      href={FAUCET_URL}
-                      target={"_blank"}
-                      rel="norefferer"
-                      className="text-[#0085FF] underline cursor-pointer"
-                    >
-                      here
-                    </a>{" "}
-                    to faucet.
-                  </p>
-                )}
-                {error?.gasFee === false && (
+                {shouldCheckError &&
+                  !isPredictQuestion &&
+                  !isSubmitted &&
+                  error?.birdToken === false && (
+                    <p className="text-12/16 text-[#FF0021] text-center font-inter">
+                      Not enough $BIRD to anwser the questions. Click{" "}
+                      <a
+                        href={FAUCET_URL}
+                        target={"_blank"}
+                        rel="norefferer"
+                        className="text-[#0085FF] underline cursor-pointer"
+                      >
+                        here
+                      </a>{" "}
+                      to faucet.
+                    </p>
+                  )}
+                {shouldCheckError && error?.gasFee === false && (
                   <p className="text-12/16 text-[#FF0021] text-center font-inter">
                     Not enough PKF to pay for the gas fee. Click{" "}
                     <a

@@ -70,7 +70,7 @@ const HistoryTable = (props: HistoryTableTypes) => {
   };
 
   return (
-    <div className="mt-3 bg-white w-full overflow-x-auto">
+    <div className="bg-white w-full overflow-x-auto">
       <div
         id="match-score"
         className={clsx(

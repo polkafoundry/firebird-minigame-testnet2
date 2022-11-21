@@ -26,6 +26,7 @@ const CalculatedReward = () => {
             backroundTitle="Calculated"
             title="Valuable Rewards From Companions"
             textAlign="text-center md:text-left"
+            backroundTitleAlign="items-center md:items-start"
           />
           <p
             className={clsx(

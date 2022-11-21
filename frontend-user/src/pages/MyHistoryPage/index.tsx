@@ -218,10 +218,10 @@ const MyHistoryPage = () => {
 
   const renderFilter = () => {
     return (
-      <div className="flex items-center mt-10 bg-[#F2F2F2]">
+      <div className="flex items-center mt-5 bg-[#F2F2F2]">
         <div className="flex flex-col sm:flex-row w-full justify-between items-start">
           <div className="title-background">Prediction List</div>
-          <div className="flex flex-col items-start ml-5 sm:items-end lg:flex-row mt-4 pr-5">
+          <div className="flex flex-col items-start ml-5 sm:items-end lg:flex-row mt-2 sm:mt-4 pr-5">
             <div className="flex">
               <div>
                 <span className="text-14/20 font-semibold">Predicted</span>
@@ -278,13 +278,13 @@ const MyHistoryPage = () => {
               title="prediction history"
             />
 
-            <div className="flex flex-col mt-6">
+            <div className="flex flex-col mt-[-14px] md:mt-[-4px]">
               <div className="flex border-[#F2F2F2] border-b-[1px] space-x-14 font-tthoves">
                 {nav.map((item: NavItemTypes) => (
                   <div
                     key={item.value}
                     className={clsx(
-                      "cursor-pointer py-2 font-semibold",
+                      "cursor-pointer py-2 font-semibold text-16/20",
                       navActived === item.value
                         ? "border-b-2 border-main text-main opacity-100 pointer-events-none"
                         : "opacity-50",

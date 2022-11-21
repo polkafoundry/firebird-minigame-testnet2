@@ -46,6 +46,7 @@ const OverUnderQuestion = (props: QuestionProps) => {
 
   useEffect(() => {
     if (!questionProp) return;
+    setDepositAmount("0");
     setDataQuestion(questionProp);
   }, [questionProp]);
 
@@ -63,10 +64,7 @@ const OverUnderQuestion = (props: QuestionProps) => {
     () => dataQuestion?.match_status === MATCH_STATUS.FINISHED,
     [dataQuestion?.match_status],
   );
-  const finalResultIndex = getFinalResultIndex(
-    dataQuestion?.result,
-    dataQuestion?.bet_place,
-  );
+  const finalResultIndex = getFinalResultIndex(dataQuestion);
 
   const handleChangeOptionWhoWin = (option: number) => {
     setOptionWhoWin(option);
@@ -86,8 +84,8 @@ const OverUnderQuestion = (props: QuestionProps) => {
     !isSubmitted && !isDisableClick && !notHasBettingResult;
 
   const isValidated = () => {
-    if (!depositAmount) {
-      toast.warning("Deposit amount is not valid");
+    if (!depositAmount || +depositAmount <= 0) {
+      toast.warning("Deposit amount must be greater than 0");
       return;
     }
     if (isNaN(optionWhoWin)) {
@@ -211,6 +209,7 @@ const OverUnderQuestion = (props: QuestionProps) => {
             isClaimed={isClaimed}
             loadingClaim={loadingClaim}
             handleClaimToken={handleClaimToken}
+            updateBirdBalance={updateBirdBalance}
           />
         )}
       </div>
