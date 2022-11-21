@@ -62,10 +62,8 @@ const OddsQuestion = (props: QuestionProps) => {
     () => dataQuestion?.match_status === MATCH_STATUS.FINISHED,
     [dataQuestion?.match_status],
   );
-  const finalResultIndex = getFinalResultIndex(
-    dataQuestion?.result,
-    dataQuestion?.bet_place,
-  );
+
+  const finalResultIndex = getFinalResultIndex(dataQuestion);
 
   const isValidated = () => {
     if (!depositAmount || +depositAmount <= 0) {
