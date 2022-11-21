@@ -52,26 +52,36 @@ const getIndexOfTeamWinner = (home_score: number, away_score: number) =>
   home_score > away_score ? 0 : home_score === away_score ? 1 : 2;
 
 export const getFinalResultIndex = (dataQuestion: any) => {
-  switch (dataQuestion?.bet_type) {
-    case BET_TYPE.ODD_EVEN_HALF_TIME:
-      return getIndexOfTeamWinner(
-        dataQuestion?.ht_home_score,
-        dataQuestion?.ht_away_score,
-      );
-    case BET_TYPE.ODD_EVEN_FULL_TIME:
-      return getIndexOfTeamWinner(
-        dataQuestion?.ft_home_score,
-        dataQuestion?.ft_away_score,
-      );
-    case BET_TYPE.OVER_UNDER_HALF_TIME:
-      return dataQuestion?.ht_home_score + dataQuestion?.ht_away_score <
-        +dataQuestion?.ou_statistics
-        ? 0
-        : 2;
-    case BET_TYPE.OVER_UNDER_FULL_TIME:
-      return dataQuestion?.ft_home_score + dataQuestion?.ft_away_score <
-        +dataQuestion?.ou_statistics
-        ? 0
-        : 2;
+  if (dataQuestion?.is_half_time) {
+    switch (dataQuestion?.bet_type) {
+      case BET_TYPE.ODD_EVEN_HALF_TIME:
+        return getIndexOfTeamWinner(
+          dataQuestion?.ht_home_score,
+          dataQuestion?.ht_away_score,
+        );
+
+      case BET_TYPE.OVER_UNDER_HALF_TIME:
+        return dataQuestion?.ht_home_score + dataQuestion?.ht_away_score <
+          +dataQuestion?.ou_statistics
+          ? 0
+          : 2;
+    }
   }
+
+  if (dataQuestion?.is_full_time) {
+    switch (dataQuestion?.bet_type) {
+      case BET_TYPE.ODD_EVEN_FULL_TIME:
+        return getIndexOfTeamWinner(
+          dataQuestion?.ft_home_score,
+          dataQuestion?.ft_away_score,
+        );
+
+      case BET_TYPE.OVER_UNDER_FULL_TIME:
+        return dataQuestion?.ft_home_score + dataQuestion?.ft_away_score <
+          +dataQuestion?.ou_statistics
+          ? 0
+          : 2;
+    }
+  }
+  return -1;
 };
