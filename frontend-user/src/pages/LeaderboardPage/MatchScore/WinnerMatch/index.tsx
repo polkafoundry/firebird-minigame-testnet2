@@ -81,7 +81,7 @@ const WinnerMatch = (props: MatchListRightProps) => {
 
       <div className="md:p-5">
         {!matchId ? (
-          <div className="p-5 md:p-0 text-16/24 font-semibold">
+          <div className="p-5 md:p-0 text-16/24 font-semibold text-center">
             Please Select Match First
           </div>
         ) : (
