@@ -1,6 +1,8 @@
 import clsx from "clsx";
+import { useEffect, useMemo, useState } from "react";
 import DefaultLoading from "../../../../components/base/DefaultLoading";
 import useFetch from "../../../../hooks/useFetch";
+import useWinner from "../../../../hooks/useWinner";
 import { displayWalletAddress } from "../../../../utils";
 import styles from "./winnerMatch.module.scss";
 
@@ -17,10 +19,27 @@ const WinnerMatch = (props: MatchListRightProps) => {
     `/predict/predict-winner-in-match?match_id=${matchId}`,
     !!matchId,
   );
-  const matchData = data?.data;
-  const listWinner = matchData?.listWinner;
+  const [finalWinnerAddress, setFinalWinnerAddress] = useState<string>("");
 
-  const isWinner = matchData?.finalWinner && account === matchData?.finalWinner;
+  const { getWinnerByMatchId, loading: loadingFinalWinner } = useWinner();
+
+  useEffect(() => {
+    if (!matchId) return;
+    const getWinner = async () => {
+      const winnerAddress = await getWinnerByMatchId(matchId);
+
+      setFinalWinnerAddress(winnerAddress);
+    };
+    getWinner();
+  }, [matchId]);
+
+  const matchData = useMemo(() => data?.data, [data]);
+  const listWinner = useMemo(() => matchData?.listWinner, [matchData]);
+
+  const isWinner = useMemo(
+    () => finalWinnerAddress && account === finalWinnerAddress,
+    [account, finalWinnerAddress],
+  );
 
   return (
     <div className="flex flex-col rounded-lg bg-[#F2F2F2] min-h-full">
@@ -30,7 +49,7 @@ const WinnerMatch = (props: MatchListRightProps) => {
           styles.backgroundStadium,
         )}
       >
-        {matchData ? (
+        {matchId ? (
           <>
             <div className="flex flex-col xs:flex-row text-center md:text-left items-center">
               <img
@@ -42,9 +61,11 @@ const WinnerMatch = (props: MatchListRightProps) => {
                 <span className="text-14/20 tracking-[2px] uppercase font-bold font-inter opacity-70">
                   {reward} rewards winner is
                 </span>
-                <span className="text-24/32 md:mt-1 font-tthoves font-semibold">
-                  {matchData?.finalWinner
-                    ? displayWalletAddress(matchData?.finalWinner)
+                <span className="text-24/32 mt-1 font-tthoves font-semibold">
+                  {loadingFinalWinner
+                    ? "Updating ..."
+                    : finalWinnerAddress
+                    ? displayWalletAddress(finalWinnerAddress)
                     : "No winner"}
                 </span>
               </div>
@@ -60,7 +81,7 @@ const WinnerMatch = (props: MatchListRightProps) => {
                 ? "Unfortunately, you did not win this match reward."
                 : "Congratulations! You have won " + reward + "."}
             </div>
-            {matchData?.finalWinner && (
+            {matchData?.tx && (
               <a
                 href={"https://firefly.birdscan.io/tx/" + matchData?.tx}
                 target="_blank"
