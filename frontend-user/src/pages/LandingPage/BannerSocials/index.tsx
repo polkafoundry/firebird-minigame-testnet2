@@ -35,7 +35,7 @@ const BannerSocials = () => {
           >
             Be in World Cup trend with our latest news!
           </p>
-          <div className="mt-7 flex flex-wrap justify-center space-x-3">
+          <div className="mt-7 flex flex-wrap justify-center gap-x-3">
             {bannerSocials.map((item: SocialItemTypes) => (
               <a
                 href={item.url}
