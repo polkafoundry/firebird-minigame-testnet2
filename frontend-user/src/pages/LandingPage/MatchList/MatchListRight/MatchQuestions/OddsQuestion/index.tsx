@@ -68,8 +68,8 @@ const OddsQuestion = (props: QuestionProps) => {
   );
 
   const isValidated = () => {
-    if (!depositAmount) {
-      toast.warning("Deposit amount is not valid");
+    if (!depositAmount || +depositAmount <= 0) {
+      toast.warning("Deposit amount must be greater than 0");
       return;
     }
     if (isNaN(optionWhoWin)) {
