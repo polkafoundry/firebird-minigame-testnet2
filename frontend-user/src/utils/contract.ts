@@ -34,3 +34,9 @@ export function getContract(
     getProviderOrSigner(library, account) as any,
   );
 }
+
+export async function getNonce(library: Web3Provider, account: string) {
+  const signer = getSigner(library, account);
+  const nonce = await signer.getTransactionCount("latest");
+  return nonce;
+}

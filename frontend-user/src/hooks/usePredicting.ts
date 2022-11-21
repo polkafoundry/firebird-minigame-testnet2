@@ -1,9 +1,9 @@
-import { useCallback, useState } from "react";
 import { useWeb3React } from "@web3-react/core";
-import { getContract } from "../utils/contract";
-import { BETTING_CONTRACT } from "../constants";
-import BETTING_ABI from "../abi/SBirdBetting.json";
+import { useCallback, useState } from "react";
 import { toast } from "react-toastify";
+import BETTING_ABI from "../abi/SBirdBetting.json";
+import { BETTING_CONTRACT } from "../constants";
+import { getContract, getNonce } from "../utils/contract";
 
 const usePredicting = () => {
   const { library, account } = useWeb3React();
@@ -38,6 +38,8 @@ const usePredicting = () => {
             _awayScore,
           );
           setTransactionHash(transaction?.hash);
+          const nonce = await getNonce(library, account);
+          transaction.nonce = nonce;
           await transaction.wait(1);
           setLoadingPredicting(false);
 

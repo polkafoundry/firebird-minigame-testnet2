@@ -3,7 +3,7 @@ import { useCallback, useState } from "react";
 import { toast } from "react-toastify";
 import BETTING_ABI from "../abi/SBirdBetting.json";
 import { BETTING_CONTRACT } from "../constants";
-import { getContract } from "../utils/contract";
+import { getContract, getNonce } from "../utils/contract";
 
 const useBetting = () => {
   const { library, account } = useWeb3React();
@@ -40,6 +40,8 @@ const useBetting = () => {
             _betPlace,
           );
           setTransactionHash(transaction?.hash);
+          const nonce = await getNonce(library, account);
+          transaction.nonce = nonce;
           await transaction.wait(1);
           setLoadingBetting(false);
 
