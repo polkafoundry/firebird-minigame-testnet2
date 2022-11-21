@@ -5,6 +5,7 @@ export const API_BASE_URL = process.env.REACT_APP_API_BASE_URL + "api/v1";
 
 export const BETTING_CONTRACT = process.env.REACT_APP_BETTING_CONTRACT;
 export const BIRD_TOKEN_CONTRACT = process.env.REACT_APP_BIRD_TOKEN_CONTRACT;
+export const PICK_WINNER_CONTRACT = process.env.REACT_APP_PICK_WINNER_CONTRACT;
 
 export const MAX_DEPOSIT_AMOUNT = 1000;
 
