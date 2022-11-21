@@ -166,7 +166,7 @@ const WhoWin = () => {
                   <Pagination
                     className="justify-center mt-[22px] md:mt-3"
                     currentPage={filter?.page}
-                    totalCount={leaderboardData?.total_item}
+                    totalCount={10 * PAGE_LIMIT}
                     pageSize={PAGE_LIMIT}
                     onPageChange={handleChangePage}
                     isDarkMode
