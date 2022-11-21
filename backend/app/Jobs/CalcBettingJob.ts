@@ -372,26 +372,28 @@ export default class CalcBettingJob implements JobContract {
   }
 
   private async _updatePredictStatus(match, predicts) {
-    for (let i = 0; i < predicts.length; i++) {
-      if (
-        match.ft_home_score == predicts[i].home_score &&
-        match.ft_away_score == predicts[i].away_score
-      ) {
-        await PredictModel.query()
-          .where('match_id', predicts[i].match_id)
-          .where('user_address', predicts[i].user_address)
-          .update({
-            result: true,
-            match_predicted: true,
-          })
-      } else {
-        await PredictModel.query()
-          .where('match_id', predicts[i].match_id)
-          .where('user_address', predicts[i].user_address)
-          .update({
-            result: false,
-            match_predicted: true,
-          })
+    if (match.is_full_time === true) {
+      for (let i = 0; i < predicts.length; i++) {
+        if (
+          match.ft_home_score == predicts[i].home_score &&
+          match.ft_away_score == predicts[i].away_score
+        ) {
+          await PredictModel.query()
+            .where('match_id', predicts[i].match_id)
+            .where('user_address', predicts[i].user_address)
+            .update({
+              result: true,
+              match_predicted: true,
+            })
+        } else {
+          await PredictModel.query()
+            .where('match_id', predicts[i].match_id)
+            .where('user_address', predicts[i].user_address)
+            .update({
+              result: false,
+              match_predicted: true,
+            })
+        }
       }
     }
   }
