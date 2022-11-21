@@ -37,7 +37,8 @@ export default class MetaForceService {
                     ...item,
                     prize: top ? Const.PRIZE[top] : 0
                 }
-            })
+            }),
+            total_item: undefined
         }
     }
 }
