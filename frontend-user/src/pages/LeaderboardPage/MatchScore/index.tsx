@@ -1,3 +1,4 @@
+import { Dialog } from "@headlessui/react";
 import clsx from "clsx";
 import moment from "moment";
 // import queryString from "query-string";
@@ -23,7 +24,9 @@ export type FilterTypes = {
 
 const MatchScore = () => {
   const [selectedMatchId, setSelectedMatchId] = useState<number | undefined>();
+  const [open, setOpen] = useState<boolean>(false);
   const [reward, setReward] = useState<string>("");
+
   const { account } = useMyWeb3();
 
   const [dataTable, setDataTable] = useState<any[]>([]);
@@ -82,6 +85,13 @@ const MatchScore = () => {
   const handleSelectMatch = (id: number, reward: string) => {
     setSelectedMatchId(id);
     setReward(reward);
+    if (document.body.clientWidth < 960) {
+      setOpen(true);
+    }
+  };
+
+  const handleCloseDialog = () => {
+    setOpen(false);
   };
 
   // const handleChangePredicted = (value: any) => {
@@ -99,16 +109,18 @@ const MatchScore = () => {
   // };
 
   return (
-    <div className="mt-20">
+    <div className="mt-[42px] md:mt-20">
       <HeadingPrimary
         backroundTitle="Match Score"
         title="Match Score Prediction Winners"
       />
-      <RewardBanner
-        reward="$6,820"
-        winner="64 winners"
-        // redirectUrl={BASE_HREF + URLS.HOME + "#reward-distribution"}
-      />
+      <div className="mt-[-19px] md:mt-[-29px]">
+        <RewardBanner
+          reward="$6,820"
+          winner="64 winners"
+          // redirectUrl={BASE_HREF + URLS.HOME + "#reward-distribution"}
+        />
+      </div>
 
       <div
         className={clsx(
@@ -136,7 +148,7 @@ const MatchScore = () => {
         </div>
         <div
           className={clsx(
-            "w-full md:w-[50%] max-h-screen overflow-y-auto",
+            "hidden md:block w-full md:w-[50%] max-h-screen overflow-y-auto",
             styles.scrollLayout,
           )}
         >
@@ -146,6 +158,33 @@ const MatchScore = () => {
             account={account}
           />
         </div>
+
+        <Dialog
+          open={open}
+          onClose={handleCloseDialog}
+          className="relative z-50"
+        >
+          <div className="fixed inset-0 flex items-center justify-center p-7">
+            <div className="fixed inset-0 bg-black/80" aria-hidden="true" />
+            <div className="fixed inset-0 overflow-y-auto">
+              <div className="flex min-h-full items-center justify-center p-4">
+                <Dialog.Panel className="w-full h-auto relative m-auto bg-[#F2F2F2] rounded-[12px]">
+                  <WinnerMatch
+                    matchId={selectedMatchId}
+                    reward={reward}
+                    account={account}
+                  />
+                  <img
+                    src="/images/icon-close.svg"
+                    alt=""
+                    className="absolute top-4 right-4 cursor-pointer w-6 h-6"
+                    onClick={handleCloseDialog}
+                  />
+                </Dialog.Panel>
+              </div>
+            </div>
+          </div>
+        </Dialog>
       </div>
     </div>
   );

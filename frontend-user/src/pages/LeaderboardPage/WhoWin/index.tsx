@@ -63,7 +63,7 @@ const WhoWin = () => {
         backroundTitle="Leaderboard"
         title="Who win & Total Goals"
       />
-      <p className="text-18/32 font-inter text-center mb-3">
+      <p className="text-16/28 md:text-18/32 font-inter text-center mt-[-19px] md:mt-[-29px] mb-3">
         Check out your place on LEADERBOARD
       </p>
       <RewardBanner
@@ -72,7 +72,12 @@ const WhoWin = () => {
         // redirectUrl={BASE_HREF + URLS.HOME + "#reward-distribution"}
         isLargeText={true}
       />
-      <div className="mx-5 xs:mx-10 main:mx-[120px] px-5 xs:px-10 md:px-20 main:px-[180px] py-10 mt-10 font-inter bg-black text-white min-h-[350px]">
+      <div
+        className={clsx(
+          "mx-5 py-5 mt-8 md:mt-10 font-inter bg-black text-white min-h-[350px]",
+          "xs:p-10 xs:mx-10 md:px-20 main:px-[180px] main:mx-[120px]",
+        )}
+      >
         <div className="relative ">
           {!loading &&
           (!leaderboardData?.data || !leaderboardData?.data?.length) ? (
@@ -85,13 +90,13 @@ const WhoWin = () => {
           ) : (
             <>
               <div className="flex justify-between items-center">
-                <div className="flex items-baseline">
+                <div className="flex items-baseline w-full justify-center md:justify-start">
                   {account ? (
                     <>
                       <span className="uppercase text-12/18 font-inter font-bold opacity-70">
                         Your current rank:
                       </span>
-                      <span className="font-semibold font-tthoves text-4/20 ml-2">
+                      <span className="font-semibold font-tthoves text-14/20 ml-2">
                         #{data?.data?.position}
                       </span>
                     </>
@@ -113,7 +118,8 @@ const WhoWin = () => {
               <div className="mt-3">
                 <div
                   className={clsx(
-                    "flex items-center bg-[#1C1D21] px-[30px] py-3 text-12/18 font-bold uppercase rounded-t-[4px]",
+                    "flex items-center bg-[#1C1D21] px-3 py-3 text-10/14 font-bold uppercase rounded-t-[4px]",
+                    "md:px-[30px] md:text-12/18",
                     styles.tableRow,
                   )}
                 >
@@ -133,7 +139,7 @@ const WhoWin = () => {
                         <div
                           key={item?.position}
                           className={clsx(
-                            "flex px-[30px] py-[10px] border-t-2 border-black bg-[#33363D] text-14/24 font-inter",
+                            "flex border-t-2 px-3 py-2.5 border-black bg-[#33363D] text-14/20 font-inter md:px-[30px]",
                             styles.tableRow,
                             [1, 2, 3].includes(item?.position) &&
                               styles.backgroundImage,
@@ -142,15 +148,15 @@ const WhoWin = () => {
                           <div
                             className={clsx(
                               [1, 2, 3].includes(item?.position) &&
-                                "uppercase font-semibold",
+                                "uppercase font-bold",
                             )}
                           >
-                            {[0, 1, 2, 3].includes(item?.position) && "Top "}
+                            {[1, 2, 3].includes(item?.position) && "Top "}
                             {item?.position}
                           </div>
                           <div>{displayWalletAddress(item?.userId)}</div>
                           <div>${item?.prize}</div>
-                          <div>{formatCurrency(item?.sum_earned)}</div>
+                          <div>${formatCurrency(item?.sum_earned)}</div>
                         </div>
                       ))}
                     </>
@@ -158,7 +164,7 @@ const WhoWin = () => {
                 </div>
                 {!loading && (
                   <Pagination
-                    className="justify-center mt-3"
+                    className="justify-center mt-[22px] md:mt-3"
                     currentPage={filter?.page}
                     totalCount={leaderboardData?.total_item}
                     pageSize={PAGE_LIMIT}

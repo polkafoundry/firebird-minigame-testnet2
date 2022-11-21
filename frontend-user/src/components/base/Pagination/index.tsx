@@ -34,7 +34,7 @@ const Pagination = (props: PaginationProps) => {
 
   const arrowStyles = `bg-${
     isDarkMode ? "main" : "[#3A0013]"
-  } w-10 h-10 rounded-md flex justify-center items-center`;
+  } w-7 h-7 md:w-10 md:h-10 rounded-md flex justify-center items-center`;
   const itemStyles = {
     unActiveStyle: `cursor-pointer text-${
       isDarkMode ? "white" : "black"
@@ -44,6 +44,7 @@ const Pagination = (props: PaginationProps) => {
   const dotStyles = `text-${
     isDarkMode ? "white" : "black"
   } opacity-60 cursor-default`;
+  const iconStyle = "w-1";
 
   const lastPage =
     (paginationRange && paginationRange[paginationRange.length - 1]) || 1;
@@ -79,7 +80,7 @@ const Pagination = (props: PaginationProps) => {
         onClick={onPrevious}
       >
         <div className={arrowStyles}>
-          <img src={iconArrow} alt="" />
+          <img src={iconArrow} alt="" className={iconStyle} />
         </div>
       </li>
       {paginationRange?.map((pageNumber: any, i: number) => {
@@ -122,7 +123,7 @@ const Pagination = (props: PaginationProps) => {
         onClick={onNext}
       >
         <div className={clsx(arrowStyles, "rotate-180")}>
-          <img src={iconArrow} alt="" />
+          <img src={iconArrow} alt="" className={iconStyle} />
         </div>
       </li>
     </ul>

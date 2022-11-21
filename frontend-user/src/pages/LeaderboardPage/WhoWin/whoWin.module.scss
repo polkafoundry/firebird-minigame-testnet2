@@ -9,7 +9,11 @@
 
 .backgroundImage {
   background-image: url("/assets/images/bg-top-leaderboard.svg");
+  background-position: top left -30px;
+  @media (min-width: theme("screens.xs")) {
+    background-position: top left;
+  }
+
   background-repeat: no-repeat;
-  background-position: top left;
   background-size: contain;
 }
