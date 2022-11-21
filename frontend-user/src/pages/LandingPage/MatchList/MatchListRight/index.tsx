@@ -28,13 +28,7 @@ const MatchListRight = (props: MatchListRightProps) => {
 
   useEffect(() => {
     setSelectedNav(
-      account &&
-        !isWrongChain &&
-        matchId &&
-        predictConditions.gasFee &&
-        predictConditions.birdToken
-        ? 1
-        : 2,
+      account && !isWrongChain && matchId && predictConditions.gasFee ? 1 : 2,
     );
   }, [account, matchId, predictConditions.gasFee, predictConditions.birdToken]);
 
