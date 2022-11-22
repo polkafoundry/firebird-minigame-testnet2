@@ -23,7 +23,7 @@ const Const = require('@ioc:App/Common/Const')
 */
 
 export default class FetchPredictWinnerJob implements JobContract {
-  public key = 'FetchPredictWinnerJob'
+  public key = 'FetchPredictWinnerNewJob'
 
   public async handle(job) {
     const { data } = job
@@ -117,15 +117,12 @@ export default class FetchPredictWinnerJob implements JobContract {
             .where('match_id', event.returnValues.matchID)
             .first()
           if (match) {
-            await PredictWinner.query()
-              .where('match_id', event.returnValues.matchID)
-              .andWhere('req_id', event.returnValues.requestId)
-              .update({
-                predict_winner: event.returnValues.matchID,
-                final_winner: event.returnValues.winner,
-                randomness: event.returnValues.result,
-                rewards: Const.PREDICT_REWARD_BY_ROUND[match.round_name],
-              })
+            await PredictWinner.query().where('match_id', event.returnValues.matchID).update({
+              predict_winner: event.returnValues.matchID,
+              final_winner: event.returnValues.winner,
+              randomness: event.returnValues.result,
+              rewards: Const.PREDICT_REWARD_BY_ROUND[match.round_name],
+            })
             await MatchModel.query().where('match_id', event.returnValues.matchID).update({
               is_pick_predict_final_winners: true,
             })
