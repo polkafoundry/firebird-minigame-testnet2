@@ -21,7 +21,6 @@ export const getOptionColorFromIndex = (
     ) &&
     question.optionSelected === undefined
   ) {
-    console.log("vao");
     return notIsAnswerStyles;
   }
 
