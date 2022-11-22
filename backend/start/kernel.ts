@@ -23,7 +23,7 @@ import { requestRandomPredict } from 'App/Jobs/RequestRandomPredict'
 
 const FetchMatchInfoInitTask = require('@ioc:App/Tasks/FetchMatchInfoTask')
 const FetchUserBettingTask = require('@ioc:App/Tasks/FetchUserBettingTask')
-const FetchPredictWinnerInitTask = require('@ioc:App/Tasks/FetchPredictWinnerTask')
+// const FetchPredictWinnerInitTask = require('@ioc:App/Tasks/FetchPredictWinnerTask')
 const FetchPickWinnerInitTask = require('@ioc:App/Tasks/FetchPickWinnerTask')
 
 /*
