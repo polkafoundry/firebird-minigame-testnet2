@@ -12,7 +12,7 @@
 import Server from '@ioc:Adonis/Core/Server'
 
 // import { fetchUpcomingMatchJob } from 'App/Jobs/FetchUpcomingMatchJob'
-import { fetchLiveMatchJob } from 'App/Jobs/FetchLiveMatchJob'
+// import { fetchLiveMatchJob } from 'App/Jobs/FetchLiveMatchJob'
 
 import { calcOuFtJob } from 'App/Jobs/CalcOuFtJob'
 import { calcOuHtJob } from 'App/Jobs/CalcOuHtJob'
@@ -62,7 +62,7 @@ Server.middleware.registerNamed({
 new Promise(() => {
   // Scheduler.run();
   // fetchUpcomingMatchJob({})
-  fetchLiveMatchJob()
+  // fetchLiveMatchJob()
   FetchMatchInfoInitTask.initTask()
   FetchUserBettingTask.initTask()
   FetchPredictWinnerInitTask.initTask()
@@ -72,4 +72,4 @@ new Promise(() => {
   calcOddsFtJob()
   requestRandomPredict()
   return
-}).then(() => {})
+}).then(() => { })
