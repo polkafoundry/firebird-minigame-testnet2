@@ -1,7 +1,7 @@
 const jobs = [
   'App/Jobs/FetchMatchInfoJob',
   'App/Jobs/FetchUserBettingJob',
-  'App/Jobs/FetchPredictWinnerJob',
+  'App/Jobs/FetchPredictPickWinnerJob',
   'App/Jobs/FetchUpcomingMatchJob',
   'App/Jobs/UpdateMatchJob',
   'App/Jobs/FetchLiveMatchJob',

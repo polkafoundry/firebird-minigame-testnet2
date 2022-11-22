@@ -1,4 +1,4 @@
-import Job from '../Jobs/FetchPredictWinnerJob'
+import Job from '../Jobs/FetchPredictPickWinnerJob'
 
 const PREDICT_WINNER_START_BLOCK = process.env.PREDICT_WINNER_START_BLOCK
 import Bull from '@ioc:Rocketseat/Bull'

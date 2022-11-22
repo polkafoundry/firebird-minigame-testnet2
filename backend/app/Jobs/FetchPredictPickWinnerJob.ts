@@ -1,6 +1,6 @@
 import { JobContract } from '@ioc:Rocketseat/Bull'
 import Logger from '@ioc:Adonis/Core/Logger'
-const RedisPredictWinnerUtils = require('@ioc:App/Common/RedisPredictWinnerUtils')
+const RedisPredictPickWinnerUtils = require('@ioc:App/Common/RedisPredictPickWinnerUtils')
 const HelperUtils = require('@ioc:App/Common/HelperUtils')
 const PredictWinner = require('@ioc:App/Models/PredictWinner')
 
@@ -22,8 +22,8 @@ const Const = require('@ioc:App/Common/Const')
 | https://docs.bullmq.io/
 */
 
-export default class FetchPredictWinnerJob implements JobContract {
-  public key = 'FetchPredictWinnerNewJob'
+export default class FetchPredictPickWinnerJob implements JobContract {
+  public key = 'FetchPredictPickWinnerJob'
 
   public async handle(job) {
     const { data } = job
@@ -31,8 +31,10 @@ export default class FetchPredictWinnerJob implements JobContract {
     let from = data.from
     let to = data.to
 
-    if (await RedisPredictWinnerUtils.existRedisPredictWinnerNewBlockNumber(eventType)) {
-      let redisData = await RedisPredictWinnerUtils.getRedisPredictWinnerNewBlockNumber(eventType)
+    if (await RedisPredictPickWinnerUtils.existRedisPredictPickWinnerBlockNumber(eventType)) {
+      let redisData = await RedisPredictPickWinnerUtils.getRedisPredictPickWinnerBlockNumber(
+        eventType
+      )
       redisData = JSON.parse(redisData)
       if (redisData && redisData.current) {
         from = redisData.current
@@ -75,7 +77,7 @@ export default class FetchPredictWinnerJob implements JobContract {
         return
       }
 
-      await RedisPredictWinnerUtils.setRedisPredictWinnerNewBlockNumber({
+      await RedisPredictPickWinnerUtils.setRedisPredictPickWinnerBlockNumber({
         current: to,
         event_type: eventType,
       })
