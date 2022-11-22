@@ -34,7 +34,6 @@ export type QuestionProps = {
   predictPrize?: string;
   birdBalance?: string;
   updateBirdBalance?: any;
-  isFullTimeQuestion?: boolean;
   setRecheckApprove?: Dispatch<SetStateAction<boolean>>;
 };
 
@@ -334,7 +333,6 @@ const MatchQuestions = (props: MatchQuestionProps) => {
         error={predictConditions}
         birdBalance={birdBalance}
         updateBirdBalance={updateBirdBalance}
-        isFullTimeQuestion
       />
       <OverUnderQuestion
         dataQuestion={questions[3]}
@@ -355,7 +353,6 @@ const MatchQuestions = (props: MatchQuestionProps) => {
         error={predictConditions}
         birdBalance={birdBalance}
         updateBirdBalance={updateBirdBalance}
-        isFullTimeQuestion
       />
     </div>
   );

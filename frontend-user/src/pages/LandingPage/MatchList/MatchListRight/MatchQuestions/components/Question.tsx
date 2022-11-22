@@ -9,7 +9,7 @@ type QuestionProps = {
   predictBoxComponent?: JSX.Element | undefined;
   handleSubmit: () => void;
   isSubmitted: boolean;
-  matchEnded?: boolean;
+  matchLiveOrEnded?: boolean;
   loading?: boolean;
   error?: any;
   matchStatus?: string;
@@ -21,7 +21,7 @@ const Question = (props: QuestionProps) => {
     isPredictQuestion = false,
     handleSubmit,
     isSubmitted,
-    matchEnded,
+    matchLiveOrEnded,
     loading,
     predictBoxComponent,
     error,
@@ -30,10 +30,11 @@ const Question = (props: QuestionProps) => {
 
   const enableSubmit = predictBoxComponent
     ? ![MATCH_STATUS.FINISHED, MATCH_STATUS.LIVE].includes(matchStatus)
-    : !matchEnded && !isSubmitted;
+    : !matchLiveOrEnded && !isSubmitted;
+
   const shouldCheckError = isPredictQuestion
-    ? !matchEnded
-    : !matchEnded && !isSubmitted;
+    ? !matchLiveOrEnded
+    : !matchLiveOrEnded && !isSubmitted;
 
   return (
     <Disclosure defaultOpen>

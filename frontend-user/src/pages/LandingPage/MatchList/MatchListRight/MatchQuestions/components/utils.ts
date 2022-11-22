@@ -1,4 +1,4 @@
-import { BET_PLACE, BET_TYPE } from "../../../../../../constants";
+import { BET_PLACE, BET_TYPE, MATCH_STATUS } from "../../../../../../constants";
 
 export const getOptionColorFromIndex = (
   question: any,
@@ -15,7 +15,12 @@ export const getOptionColorFromIndex = (
   const selectedStyles = "bg-[#3A001333] border-[#3a0013] border-2";
   const notIsAnswerStyles = "opacity-50 bg-[#EDEDED]";
 
-  if (question?.match_status === "finished" && !question?.result)
+  if (
+    [MATCH_STATUS.FINISHED, MATCH_STATUS.LIVE].includes(
+      question?.match_status,
+    ) &&
+    !question?.result
+  )
     return notIsAnswerStyles;
 
   if (isSubmitted) {
