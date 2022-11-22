@@ -38,6 +38,14 @@ const PredictQuestion = (props: QuestionProps) => {
     [dataQuestion?.match_status],
   );
 
+  const matchLiveOrEnded = useMemo(
+    () =>
+      [MATCH_STATUS.FINISHED, MATCH_STATUS.LIVE].includes(
+        dataQuestion?.match_status,
+      ),
+    [dataQuestion?.match_status],
+  );
+
   const shouldLoadPredictInfo = useMemo(() => {
     return !!account && matchEnded && dataQuestion?.match_id;
   }, [account, matchEnded, dataQuestion]);
@@ -131,7 +139,7 @@ const PredictQuestion = (props: QuestionProps) => {
       title={title}
       handleSubmit={handleSubmit}
       isSubmitted={isSubmitted}
-      matchEnded={matchEnded}
+      matchLiveOrEnded={matchLiveOrEnded}
       loading={loadingPredicting}
       predictBoxComponent={
         isSubmitted ? (

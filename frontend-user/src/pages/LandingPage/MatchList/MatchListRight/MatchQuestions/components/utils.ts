@@ -1,5 +1,4 @@
-import { useMemo } from "react";
-import { BET_PLACE, BET_TYPE } from "../../../../../../constants";
+import { BET_PLACE, BET_TYPE, MATCH_STATUS } from "../../../../../../constants";
 
 export const getOptionColorFromIndex = (
   question: any,
@@ -16,7 +15,16 @@ export const getOptionColorFromIndex = (
   const selectedStyles = "bg-[#3A001333] border-[#3a0013] border-2";
   const notIsAnswerStyles = "opacity-50 bg-[#EDEDED]";
 
-  if (question?.match_status === "finished" && !question?.result)
+  if (
+    [MATCH_STATUS.FINISHED, MATCH_STATUS.LIVE].includes(
+      question?.match_status,
+    ) &&
+    question.optionSelected === undefined
+  ) {
+    return notIsAnswerStyles;
+  }
+
+  if (MATCH_STATUS.FINISHED === question?.match_status && !question?.result)
     return notIsAnswerStyles;
 
   if (isSubmitted) {
@@ -86,13 +94,3 @@ export const getFinalResultIndex = (dataQuestion: any) => {
   }
   return -1;
 };
-
-export const checkIsMatchCalculated = (
-  isFullTimeQuestion: boolean,
-  is_full_time: boolean,
-  is_half_time: boolean,
-) =>
-  useMemo(
-    () => (isFullTimeQuestion ? is_full_time : is_half_time),
-    [is_full_time, is_half_time],
-  );

@@ -148,8 +148,7 @@ const MatchScore = () => {
         </div>
         <div
           className={clsx(
-            "hidden md:block w-full md:w-[50%] max-h-screen overflow-y-auto",
-            styles.scrollLayout,
+            "hidden md:block w-full md:w-[50%] max-h-screen overflow-hidden",
           )}
         >
           <WinnerMatch
