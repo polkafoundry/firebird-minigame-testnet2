@@ -3,7 +3,7 @@ import { BigNumber } from "ethers";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
 import { QuestionProps } from "..";
-import { MATCH_STATUS, QUESTION_STATUS } from "../../../../../../constants";
+import { QUESTION_STATUS } from "../../../../../../constants";
 import useBetting from "../../../../../../hooks/useBetting";
 import useBettingContract from "../../../../../../hooks/useBettingContract";
 import useBirdToken from "../../../../../../hooks/useBirdToken";
@@ -13,6 +13,7 @@ import DepositAmount from "../components/DepositAmount";
 import Question from "../components/Question";
 import ResultMatch from "../components/ResultMatch";
 import {
+  checkIsMatchCalculated,
   getFinalResultIndex,
   getOptionColorFromIndex,
   getOptionIndexByBetPlace,
@@ -30,6 +31,7 @@ const OddsQuestion = (props: QuestionProps) => {
     birdBalance = "0",
     updateBirdBalance,
     setRecheckApprove,
+    isFullTimeQuestion = false,
   } = props;
   const [optionWhoWin, setOptionWhoWin] = useState<number>(0);
   const [depositAmount, setDepositAmount] = useState<string>("");
@@ -59,9 +61,10 @@ const OddsQuestion = (props: QuestionProps) => {
     [dataQuestion?.questionStatus],
   );
   const isSubmitted = questionStatus !== QUESTION_STATUS.NOT_PREDICTED;
-  const matchEnded = useMemo(
-    () => dataQuestion?.match_status === MATCH_STATUS.FINISHED,
-    [dataQuestion?.match_status],
+  const matchEnded = checkIsMatchCalculated(
+    isFullTimeQuestion,
+    dataQuestion?.is_full_time,
+    dataQuestion?.is_half_time,
   );
 
   const finalResultIndex = getFinalResultIndex(dataQuestion);
@@ -129,6 +132,7 @@ const OddsQuestion = (props: QuestionProps) => {
       return "opacity-50";
   };
   const isEnableBetting = !isSubmitted && !notHasBettingResult;
+  console.log("dataQuestion :>> ", dataQuestion);
 
   return (
     <Question

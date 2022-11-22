@@ -48,7 +48,7 @@ const DepositAmount = (props: DepositAmountProps) => {
             Balance: <span className="font-bold">{birdBalance || 0} $BIRD</span>
           </span>
         </div>
-        <div className="flex flex-col xs:flex-row items-start mt-1.5 xs:mt-2">
+        <div className="flex flex-col xs:flex-row md:flex-col 2md:flex-row items-start mt-1.5 xs:mt-2">
           <div style={{ maxWidth: "-webkit-fill-available" }}>
             <div className="flex items-center xs:max-w-[340px] border p-1 bg-white rounded-lg">
               <input
