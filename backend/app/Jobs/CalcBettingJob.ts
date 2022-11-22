@@ -189,7 +189,7 @@ export default class CalcBettingJob implements JobContract {
             total_claim:
               ouFTBets[i]?.bet_place === 'over'
                 ? new BigNumber(amount).multipliedBy(new BigNumber(match.ou_ft_over)).toFixed()
-                : -amount,
+                : 0,
             is_calculated: true,
           })
       } else {

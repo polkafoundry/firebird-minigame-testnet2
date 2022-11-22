@@ -84,6 +84,7 @@ export default class PredictWinnerService {
         .select('predict_winners.final_winner')
         .select('predict_winners.rewards')
         .count('* as total')
+        .orderBy('result.match_id', 'DESC')
 
       return HelperUtils.responseSuccess(predictInMatch)
     } catch (error) {
