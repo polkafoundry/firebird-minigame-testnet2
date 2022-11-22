@@ -99,6 +99,7 @@ const walletData = async () => {
   var address = [];
   var private_key = [];
   for (let i = 0; i < xlData.length; i++) {
+    if (!xlData[i].address || !xlData[i].private_key) break;
     address.push(xlData[i].address);
     private_key.push(xlData[i].private_key);
   }
