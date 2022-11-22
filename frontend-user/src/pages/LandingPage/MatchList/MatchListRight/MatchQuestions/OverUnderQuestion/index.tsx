@@ -13,7 +13,6 @@ import DepositAmount from "../components/DepositAmount";
 import Question from "../components/Question";
 import ResultMatch from "../components/ResultMatch";
 import {
-  checkIsMatchCalculated,
   getFinalResultIndex,
   getOptionColorFromIndex,
   getOptionIndexByBetPlace,
@@ -62,10 +61,16 @@ const OverUnderQuestion = (props: QuestionProps) => {
     [dataQuestion?.questionStatus],
   );
   const isSubmitted = questionStatus !== QUESTION_STATUS.NOT_PREDICTED;
-  const matchEnded = checkIsMatchCalculated(
-    isFullTimeQuestion,
-    dataQuestion?.is_full_time,
-    dataQuestion?.is_half_time,
+  const matchEnded = useMemo(
+    () =>
+      isFullTimeQuestion
+        ? dataQuestion?.is_full_time
+        : dataQuestion?.is_half_time,
+    [
+      isFullTimeQuestion,
+      dataQuestion?.is_full_time,
+      dataQuestion?.is_half_time,
+    ],
   );
   const finalResultIndex = getFinalResultIndex(dataQuestion);
 
