@@ -31,8 +31,8 @@ export default class FetchPredictWinnerJob implements JobContract {
     let from = data.from
     let to = data.to
 
-    if (await RedisPredictWinnerUtils.existRedisPredictWinnerBlockNumber(eventType)) {
-      let redisData = await RedisPredictWinnerUtils.getRedisPredictWinnerBlockNumber(eventType)
+    if (await RedisPredictWinnerUtils.existRedisPredictWinnerNewBlockNumber(eventType)) {
+      let redisData = await RedisPredictWinnerUtils.getRedisPredictWinnerNewBlockNumber(eventType)
       redisData = JSON.parse(redisData)
       if (redisData && redisData.current) {
         from = redisData.current
@@ -75,7 +75,7 @@ export default class FetchPredictWinnerJob implements JobContract {
         return
       }
 
-      await RedisPredictWinnerUtils.setRedisPredictWinnerBlockNumber({
+      await RedisPredictWinnerUtils.setRedisPredictWinnerNewBlockNumber({
         current: to,
         event_type: eventType,
       })

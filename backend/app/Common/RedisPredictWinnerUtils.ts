@@ -1,163 +1,166 @@
 import Redis from '@ioc:Adonis/Addons/Redis'
 
 /*
-  PredictWinner top collections
+  PredictWinnerNew top collections
  */
-const getRedisKeyPredictWinnerTopCollections = () => {
-  return `predict_winner_top_collections`
+const getRedisKeyPredictWinnerNewTopCollections = () => {
+  return `predict_winner_new_top_collections`
 }
 
-const getRedisPredictWinnerTopCollections = async () => {
-  return await Redis.get(getRedisKeyPredictWinnerTopCollections())
+const getRedisPredictWinnerNewTopCollections = async () => {
+  return await Redis.get(getRedisKeyPredictWinnerNewTopCollections())
 }
 
-const setRedisPredictWinnerTopCollections = async (data) => {
+const setRedisPredictWinnerNewTopCollections = async (data) => {
   if (!data || data.length < 1) {
     return
   }
 
-  await Redis.set(getRedisKeyPredictWinnerTopCollections(), JSON.stringify(data))
+  await Redis.set(getRedisKeyPredictWinnerNewTopCollections(), JSON.stringify(data))
 }
 
-const existRedisPredictWinnerTopCollections = async () => {
-  return await Redis.exists(getRedisKeyPredictWinnerTopCollections())
+const existRedisPredictWinnerNewTopCollections = async () => {
+  return await Redis.exists(getRedisKeyPredictWinnerNewTopCollections())
 }
 
-const deleteRedisPredictWinnerTopCollections = () => {
-  let redisKey = getRedisKeyPredictWinnerTopCollections()
+const deleteRedisPredictWinnerNewTopCollections = () => {
+  let redisKey = getRedisKeyPredictWinnerNewTopCollections()
   Redis.del(redisKey)
 }
 
 /*
-  PredictWinner collections
+  PredictWinnerNew collections
  */
-const getRedisKeyPredictWinnerSupportCollections = () => {
-  return `predict_winner_support_collections`
+const getRedisKeyPredictWinnerNewSupportCollections = () => {
+  return `predict_winner_new_support_collections`
 }
 
-const getRedisPredictWinnerSupportCollections = async () => {
-  return await Redis.get(getRedisKeyPredictWinnerSupportCollections())
+const getRedisPredictWinnerNewSupportCollections = async () => {
+  return await Redis.get(getRedisKeyPredictWinnerNewSupportCollections())
 }
 
-const setRedisPredictWinnerSupportCollections = async (data) => {
+const setRedisPredictWinnerNewSupportCollections = async (data) => {
   if (!data || data.length < 1) {
     return
   }
 
-  await Redis.set(getRedisKeyPredictWinnerSupportCollections(), JSON.stringify(data))
+  await Redis.set(getRedisKeyPredictWinnerNewSupportCollections(), JSON.stringify(data))
 }
 
-const existRedisPredictWinnerSupportCollections = async () => {
-  return await Redis.exists(getRedisKeyPredictWinnerSupportCollections())
+const existRedisPredictWinnerNewSupportCollections = async () => {
+  return await Redis.exists(getRedisKeyPredictWinnerNewSupportCollections())
 }
 
-const deleteRedisPredictWinnerSupportCollections = () => {
-  let redisKey = getRedisKeyPredictWinnerSupportCollections()
+const deleteRedisPredictWinnerNewSupportCollections = () => {
+  let redisKey = getRedisKeyPredictWinnerNewSupportCollections()
   Redis.del(redisKey)
 }
 
 /*
-  PredictWinner collection detail
+  PredictWinnerNew collection detail
  */
-const getRedisKeyPredictWinnerCollectionDetail = (id) => {
-  return `predict_winner_collection_detail_${id}`
+const getRedisKeyPredictWinnerNewCollectionDetail = (id) => {
+  return `predict_winner_new_collection_detail_${id}`
 }
 
-const getRedisPredictWinnerCollectionDetail = async (id) => {
-  return await Redis.get(getRedisKeyPredictWinnerCollectionDetail(id))
+const getRedisPredictWinnerNewCollectionDetail = async (id) => {
+  return await Redis.get(getRedisKeyPredictWinnerNewCollectionDetail(id))
 }
 
-const setRedisPredictWinnerCollectionDetail = async (id, data) => {
+const setRedisPredictWinnerNewCollectionDetail = async (id, data) => {
   if (!id) {
     return
   }
 
-  await Redis.set(getRedisKeyPredictWinnerCollectionDetail(id), JSON.stringify(data))
+  await Redis.set(getRedisKeyPredictWinnerNewCollectionDetail(id), JSON.stringify(data))
 }
 
-const existRedisPredictWinnerCollectionDetail = async (id) => {
-  return await Redis.exists(getRedisKeyPredictWinnerCollectionDetail(id))
+const existRedisPredictWinnerNewCollectionDetail = async (id) => {
+  return await Redis.exists(getRedisKeyPredictWinnerNewCollectionDetail(id))
 }
 
-const deleteRedisPredictWinnerCollectionDetail = (id) => {
-  let redisKey = getRedisKeyPredictWinnerCollectionDetail(id)
+const deleteRedisPredictWinnerNewCollectionDetail = (id) => {
+  let redisKey = getRedisKeyPredictWinnerNewCollectionDetail(id)
   Redis.del(redisKey)
 }
 
 /*
-  PredictWinner block number
+  PredictWinnerNew block number
  */
-const getRedisKeyPredictWinnerBlockNumber = (event_type) => {
-  return `predict_winner_block_number_${event_type}`
+const getRedisKeyPredictWinnerNewBlockNumber = (event_type) => {
+  return `predict_winner_new_block_number_${event_type}`
 }
 
-const getRedisPredictWinnerBlockNumber = async (event_type) => {
-  return await Redis.get(getRedisKeyPredictWinnerBlockNumber(event_type))
+const getRedisPredictWinnerNewBlockNumber = async (event_type) => {
+  return await Redis.get(getRedisKeyPredictWinnerNewBlockNumber(event_type))
 }
 
-const setRedisPredictWinnerBlockNumber = async (data) => {
-  return await Redis.set(getRedisKeyPredictWinnerBlockNumber(data.event_type), JSON.stringify(data))
+const setRedisPredictWinnerNewBlockNumber = async (data) => {
+  return await Redis.set(
+    getRedisKeyPredictWinnerNewBlockNumber(data.event_type),
+    JSON.stringify(data)
+  )
 }
 
-const existRedisPredictWinnerBlockNumber = async (event_type) => {
-  return await Redis.exists(getRedisKeyPredictWinnerBlockNumber(event_type))
+const existRedisPredictWinnerNewBlockNumber = async (event_type) => {
+  return await Redis.exists(getRedisKeyPredictWinnerNewBlockNumber(event_type))
 }
 
 /*
   NFT slug
 */
-const getRedisKeyPredictWinnerSlug = (token_address) => {
-  return `predict_winner_slug_${token_address}`
+const getRedisKeyPredictWinnerNewSlug = (token_address) => {
+  return `predict_winner_new_slug_${token_address}`
 }
 
-const getRedisPredictWinnerSlug = async (token_address) => {
-  return await Redis.get(getRedisKeyPredictWinnerSlug(token_address))
+const getRedisPredictWinnerNewSlug = async (token_address) => {
+  return await Redis.get(getRedisKeyPredictWinnerNewSlug(token_address))
 }
 
-const setRedisPredictWinnerSlug = async (token_address, slug) => {
+const setRedisPredictWinnerNewSlug = async (token_address, slug) => {
   if (!token_address) {
     return
   }
 
-  await Redis.set(getRedisKeyPredictWinnerSlug(token_address), JSON.stringify(slug))
+  await Redis.set(getRedisKeyPredictWinnerNewSlug(token_address), JSON.stringify(slug))
 }
 
-const existRedisPredictWinnerSlug = async (token_address) => {
-  return await Redis.exists(getRedisKeyPredictWinnerSlug(token_address))
+const existRedisPredictWinnerNewSlug = async (token_address) => {
+  return await Redis.exists(getRedisKeyPredictWinnerNewSlug(token_address))
 }
 
-const deleteRedisPredictWinnerSlug = (token_address) => {
-  let redisKey = getRedisKeyPredictWinnerSlug(token_address)
+const deleteRedisPredictWinnerNewSlug = (token_address) => {
+  let redisKey = getRedisKeyPredictWinnerNewSlug(token_address)
   Redis.del(redisKey)
 }
 
 module.exports = {
   // collections
-  getRedisPredictWinnerTopCollections,
-  setRedisPredictWinnerTopCollections,
-  existRedisPredictWinnerTopCollections,
-  deleteRedisPredictWinnerTopCollections,
+  getRedisPredictWinnerNewTopCollections,
+  setRedisPredictWinnerNewTopCollections,
+  existRedisPredictWinnerNewTopCollections,
+  deleteRedisPredictWinnerNewTopCollections,
 
-  getRedisPredictWinnerSupportCollections,
-  setRedisPredictWinnerSupportCollections,
-  existRedisPredictWinnerSupportCollections,
-  deleteRedisPredictWinnerSupportCollections,
+  getRedisPredictWinnerNewSupportCollections,
+  setRedisPredictWinnerNewSupportCollections,
+  existRedisPredictWinnerNewSupportCollections,
+  deleteRedisPredictWinnerNewSupportCollections,
 
   // collection
-  getRedisPredictWinnerCollectionDetail,
-  setRedisPredictWinnerCollectionDetail,
-  existRedisPredictWinnerCollectionDetail,
-  deleteRedisPredictWinnerCollectionDetail,
+  getRedisPredictWinnerNewCollectionDetail,
+  setRedisPredictWinnerNewCollectionDetail,
+  existRedisPredictWinnerNewCollectionDetail,
+  deleteRedisPredictWinnerNewCollectionDetail,
 
   // marketplace block number
-  getRedisPredictWinnerBlockNumber,
-  setRedisPredictWinnerBlockNumber,
-  existRedisPredictWinnerBlockNumber,
+  getRedisPredictWinnerNewBlockNumber,
+  setRedisPredictWinnerNewBlockNumber,
+  existRedisPredictWinnerNewBlockNumber,
 
   // marketplace slug
-  getRedisKeyPredictWinnerSlug,
-  getRedisPredictWinnerSlug,
-  setRedisPredictWinnerSlug,
-  existRedisPredictWinnerSlug,
-  deleteRedisPredictWinnerSlug,
+  getRedisKeyPredictWinnerNewSlug,
+  getRedisPredictWinnerNewSlug,
+  setRedisPredictWinnerNewSlug,
+  existRedisPredictWinnerNewSlug,
+  deleteRedisPredictWinnerNewSlug,
 }
