@@ -1,7 +1,7 @@
 const jobs = [
   'App/Jobs/FetchMatchInfoJob',
   'App/Jobs/FetchUserBettingJob',
-  'App/Jobs/FetchPredictWinnerJob',
+  // 'App/Jobs/FetchPredictWinnerJob',
   'App/Jobs/FetchUpcomingMatchJob',
   'App/Jobs/UpdateMatchJob',
   'App/Jobs/FetchLiveMatchJob',
@@ -11,6 +11,7 @@ const jobs = [
   'App/Jobs/CalcOddsHtJob',
   'App/Jobs/CalcOddsFtJob',
   'App/Jobs/RequestRandomPredict',
+  'App/Jobs/FetchPickWinner',
 ]
 
 export default jobs
