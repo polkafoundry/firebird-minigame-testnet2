@@ -23,7 +23,7 @@ import { requestRandomPredict } from 'App/Jobs/RequestRandomPredict'
 
 const FetchMatchInfoInitTask = require('@ioc:App/Tasks/FetchMatchInfoTask')
 const FetchUserBettingTask = require('@ioc:App/Tasks/FetchUserBettingTask')
-const FetchPredictPickWinnerInitTask = require('@ioc:App/Tasks/FetchPredictPickWinnerTask')
+const FetchPredictWinnerInitTask = require('@ioc:App/Tasks/FetchPredictWinnerTask')
 
 /*
 |--------------------------------------------------------------------------
@@ -65,7 +65,7 @@ new Promise(() => {
   fetchLiveMatchJob()
   FetchMatchInfoInitTask.initTask()
   FetchUserBettingTask.initTask()
-  FetchPredictPickWinnerInitTask.initTask()
+  FetchPredictWinnerInitTask.initTask()
   calcOuFtJob()
   calcOuHtJob()
   calcOddsHtJob()

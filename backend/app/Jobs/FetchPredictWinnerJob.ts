@@ -1,6 +1,6 @@
 import { JobContract } from '@ioc:Rocketseat/Bull'
 import Logger from '@ioc:Adonis/Core/Logger'
-const RedisPredictPickWinnerUtils = require('@ioc:App/Common/RedisPredictPickWinnerUtils')
+const RedisPredictWinnerUtils = require('@ioc:App/Common/RedisPredictWinnerUtils')
 const HelperUtils = require('@ioc:App/Common/HelperUtils')
 const PredictWinner = require('@ioc:App/Models/PredictWinner')
 
@@ -22,8 +22,8 @@ const Const = require('@ioc:App/Common/Const')
 | https://docs.bullmq.io/
 */
 
-export default class FetchPredictPickWinnerJob implements JobContract {
-  public key = 'FetchPredictPickWinnerJob'
+export default class FetchPredictWinnerJob implements JobContract {
+  public key = 'FetchPredictWinnerJob'
 
   public async handle(job) {
     const { data } = job
@@ -31,10 +31,8 @@ export default class FetchPredictPickWinnerJob implements JobContract {
     let from = data.from
     let to = data.to
 
-    if (await RedisPredictPickWinnerUtils.existRedisPredictPickWinnerBlockNumber(eventType)) {
-      let redisData = await RedisPredictPickWinnerUtils.getRedisPredictPickWinnerBlockNumber(
-        eventType
-      )
+    if (await RedisPredictWinnerUtils.existRedisPredictWinnerBlockNumber(eventType)) {
+      let redisData = await RedisPredictWinnerUtils.getRedisPredictWinnerBlockNumber(eventType)
       redisData = JSON.parse(redisData)
       if (redisData && redisData.current) {
         from = redisData.current
@@ -77,7 +75,7 @@ export default class FetchPredictPickWinnerJob implements JobContract {
         return
       }
 
-      await RedisPredictPickWinnerUtils.setRedisPredictPickWinnerBlockNumber({
+      await RedisPredictWinnerUtils.setRedisPredictWinnerBlockNumber({
         current: to,
         event_type: eventType,
       })
@@ -119,12 +117,15 @@ export default class FetchPredictPickWinnerJob implements JobContract {
             .where('match_id', event.returnValues.matchID)
             .first()
           if (match) {
-            await PredictWinner.query().where('match_id', event.returnValues.matchID).update({
-              predict_winner: event.returnValues.matchID,
-              final_winner: event.returnValues.winner,
-              randomness: event.returnValues.result,
-              rewards: Const.PREDICT_REWARD_BY_ROUND[match.round_name],
-            })
+            await PredictWinner.query()
+              .where('match_id', event.returnValues.matchID)
+              .andWhere('req_id', event.returnValues.requestId)
+              .update({
+                predict_winner: event.returnValues.matchID,
+                final_winner: event.returnValues.winner,
+                randomness: event.returnValues.result,
+                rewards: Const.PREDICT_REWARD_BY_ROUND[match.round_name],
+              })
             await MatchModel.query().where('match_id', event.returnValues.matchID).update({
               is_pick_predict_final_winners: true,
             })
