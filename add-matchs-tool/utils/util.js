@@ -76,7 +76,7 @@ const callTransaction = async (web3, callData, private_key, from, to, nonce, val
     // console.log({ raw_tx })
     // web3.eth.sendSignedTransaction(raw_tx).on("receipt", console.log);
     await web3.eth.sendSignedTransaction(raw_tx, (err, txHash) => {
-      console.log("txHash:", txHash);
+      // console.log("txHash:", txHash);
       return;
     });
   } catch (error) {
