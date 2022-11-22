@@ -3,7 +3,7 @@ import { BigNumber } from "ethers";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
 import { QuestionProps } from "..";
-import { MATCH_STATUS, QUESTION_STATUS } from "../../../../../../constants";
+import { QUESTION_STATUS } from "../../../../../../constants";
 import useBetting from "../../../../../../hooks/useBetting";
 import useBettingContract from "../../../../../../hooks/useBettingContract";
 import useBirdToken from "../../../../../../hooks/useBirdToken";
