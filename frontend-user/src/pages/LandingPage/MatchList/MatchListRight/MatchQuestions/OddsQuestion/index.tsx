@@ -3,7 +3,7 @@ import { BigNumber } from "ethers";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
 import { QuestionProps } from "..";
-import { QUESTION_STATUS } from "../../../../../../constants";
+import { MATCH_STATUS, QUESTION_STATUS } from "../../../../../../constants";
 import useBetting from "../../../../../../hooks/useBetting";
 import useBettingContract from "../../../../../../hooks/useBettingContract";
 import useBirdToken from "../../../../../../hooks/useBirdToken";
@@ -13,7 +13,6 @@ import DepositAmount from "../components/DepositAmount";
 import Question from "../components/Question";
 import ResultMatch from "../components/ResultMatch";
 import {
-  checkIsMatchCalculated,
   getFinalResultIndex,
   getOptionColorFromIndex,
   getOptionIndexByBetPlace,
@@ -31,7 +30,6 @@ const OddsQuestion = (props: QuestionProps) => {
     birdBalance = "0",
     updateBirdBalance,
     setRecheckApprove,
-    isFullTimeQuestion = false,
   } = props;
   const [optionWhoWin, setOptionWhoWin] = useState<number>(0);
   const [depositAmount, setDepositAmount] = useState<string>("");
@@ -61,10 +59,12 @@ const OddsQuestion = (props: QuestionProps) => {
     [dataQuestion?.questionStatus],
   );
   const isSubmitted = questionStatus !== QUESTION_STATUS.NOT_PREDICTED;
-  const matchEnded = checkIsMatchCalculated(
-    isFullTimeQuestion,
-    dataQuestion?.is_full_time,
-    dataQuestion?.is_half_time,
+  const matchLiveOrEnded = useMemo(
+    () =>
+      [MATCH_STATUS.FINISHED, MATCH_STATUS.LIVE].includes(
+        dataQuestion?.match_status,
+      ),
+    [dataQuestion?.match_status],
   );
 
   const finalResultIndex = getFinalResultIndex(dataQuestion);
@@ -128,18 +128,22 @@ const OddsQuestion = (props: QuestionProps) => {
     dataQuestion?.match_status === "finished" && !dataQuestion?.result;
 
   const getWinRateColor = (index?: number) => {
-    if ((isSubmitted && finalResultIndex !== index) || notHasBettingResult)
+    if (
+      (isSubmitted && finalResultIndex !== index) ||
+      notHasBettingResult ||
+      matchLiveOrEnded
+    )
       return "opacity-50";
   };
-  const isEnableBetting = !isSubmitted && !notHasBettingResult;
-  console.log("dataQuestion :>> ", dataQuestion);
+  const isEnableBetting =
+    !matchLiveOrEnded && !isSubmitted && !notHasBettingResult;
 
   return (
     <Question
       title={title}
       handleSubmit={handleSubmit}
       isSubmitted={isSubmitted}
-      matchEnded={matchEnded}
+      matchLiveOrEnded={matchLiveOrEnded}
       loading={loadingApprove || loadingBetting || loadingClaim}
       error={error}
     >
@@ -181,7 +185,7 @@ const OddsQuestion = (props: QuestionProps) => {
           ))}
         </div>
 
-        {!isSubmitted && !matchEnded && (
+        {!isSubmitted && !matchLiveOrEnded && (
           <DepositAmount
             birdBalance={birdBalance}
             depositAmount={depositAmount}
