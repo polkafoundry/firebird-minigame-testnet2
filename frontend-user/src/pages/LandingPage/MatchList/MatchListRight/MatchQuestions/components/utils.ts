@@ -19,8 +19,13 @@ export const getOptionColorFromIndex = (
     [MATCH_STATUS.FINISHED, MATCH_STATUS.LIVE].includes(
       question?.match_status,
     ) &&
-    !question?.result
-  )
+    question.optionSelected === undefined
+  ) {
+    console.log("vao");
+    return notIsAnswerStyles;
+  }
+
+  if (MATCH_STATUS.FINISHED === question?.match_status && !question?.result)
     return notIsAnswerStyles;
 
   if (isSubmitted) {
