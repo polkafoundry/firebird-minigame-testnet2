@@ -23,7 +23,7 @@ const WinnerMatch = (props: MatchListRightProps) => {
   const isWinner = matchData?.finalWinner && account === matchData?.finalWinner;
 
   return (
-    <div className="flex flex-col rounded-lg bg-[#F2F2F2] min-h-full">
+    <div className="flex flex-col rounded-lg bg-[#F2F2F2] h-full">
       <div
         className={clsx(
           "flex flex-col items-center justify-center text-center h-auto min-h-[280px] text-white",
@@ -79,7 +79,7 @@ const WinnerMatch = (props: MatchListRightProps) => {
         )}
       </div>
 
-      <div className="md:p-5">
+      <div className={clsx("md:p-5 max-h-full", styles.scrollLayout)}>
         {!matchId ? (
           <div className="p-5 md:p-0 text-16/24 font-semibold text-center">
             Please Select Match First
@@ -97,11 +97,11 @@ const WinnerMatch = (props: MatchListRightProps) => {
             {!loading && (!listWinner || !listWinner.length) ? (
               <div>Not found</div>
             ) : (
-              <>
+              <div className="">
                 {listWinner?.map((item: any, index: number) => (
                   <div
                     key={item.id}
-                    className="flex items-center text-14/24 font-inter px-5 py-3 md:min-h-[65px] bg-white border-b-2 border-[#F2F2F2]"
+                    className="flex items-center text-14/24 font-inter px-5 py-2 bg-white border-b-2 border-[#F2F2F2]"
                   >
                     <div className="w-[20%]">{index + 1}</div>
                     <div className="flex-1 text-right xs:text-left">
@@ -110,7 +110,7 @@ const WinnerMatch = (props: MatchListRightProps) => {
                     </div>
                   </div>
                 ))}
-              </>
+              </div>
             )}
           </div>
         )}
