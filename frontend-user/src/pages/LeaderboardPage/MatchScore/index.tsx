@@ -162,7 +162,7 @@ const MatchScore = () => {
         <Dialog
           open={open}
           onClose={handleCloseDialog}
-          className="relative z-50"
+          className="relative z-50 md:hidden"
         >
           <div className="fixed inset-0 flex items-center justify-center p-7">
             <div className="fixed inset-0 bg-black/80" aria-hidden="true" />

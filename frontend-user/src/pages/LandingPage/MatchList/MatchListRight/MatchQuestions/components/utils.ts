@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { BET_PLACE, BET_TYPE } from "../../../../../../constants";
 
 export const getOptionColorFromIndex = (
@@ -85,3 +86,13 @@ export const getFinalResultIndex = (dataQuestion: any) => {
   }
   return -1;
 };
+
+export const checkIsMatchCalculated = (
+  isFullTimeQuestion: boolean,
+  is_full_time: boolean,
+  is_half_time: boolean,
+) =>
+  useMemo(
+    () => (isFullTimeQuestion ? is_full_time : is_half_time),
+    [is_full_time, is_half_time],
+  );
