@@ -1,9 +1,10 @@
-import { useCallback, useState } from "react";
 import { useWeb3React } from "@web3-react/core";
-import { getContract } from "../utils/contract";
-import { BETTING_CONTRACT } from "../constants";
-import BETTING_ABI from "../abi/SBirdBetting.json";
+import { useCallback, useState } from "react";
 import { toast } from "react-toastify";
+import BETTING_ABI from "../abi/SBirdBetting.json";
+import { BETTING_CONTRACT } from "../constants";
+import { getContract } from "../utils/contract";
+import { getErrorMessage } from "../utils/getErrorMessage";
 
 const usePredicting = () => {
   const { library, account } = useWeb3React();
@@ -46,7 +47,7 @@ const usePredicting = () => {
         }
       } catch (error: any) {
         console.log("ERR predicting: ", error?.message);
-        toast.error("Fail to submit answer");
+        toast.error(getErrorMessage(error, "Fail to Submit answer"));
         setLoadingPredicting(false);
         return;
       }
