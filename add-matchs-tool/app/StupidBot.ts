@@ -1,3 +1,5 @@
+import { faucetBird, faucetPkf } from "../utils/util";
+
 const { INC_GAS_PRICE, BIRD_FAUCET_TOKEN, BIRD_FAUCET_SYMBOL } = require("../config");
 const Transaction = require("ethereumjs-tx");
 const getWeb3 = require("../utils/web3");
@@ -16,7 +18,7 @@ const { callTransaction, randomBet, randomScore } = require("../utils/util");
 const BigNumber = require("bignumber.js");
 
 const axios = require("axios");
-
+const fs = require("fs");
 let web3 = getWeb3();
 let walletAddress;
 let betContract = new web3.eth.Contract(sBirdAbi, BETTING_CONTRACT_ADDRESS);
@@ -28,7 +30,7 @@ const MATCH_ID = 7;
 
 const StupidBot = async () => {
   // await faucet();
-  // await balance();
+  await balance();
   // await transferTokenIfNeeded();
   // await approve();
   // await predict(MATCH_ID);
@@ -45,14 +47,26 @@ const balance = async () => {
   try {
     const totalWallets = wlData.adds.length;
     const adds = wlData.adds;
+    let textLog = "";
 
+    // check PKF
     for (let i = 0; i < totalWallets; i++) {
-      let res = await birdContract.methods.balanceOf(adds[i]).call();
-      if (!res) {
-        console.log("index", i);
-      } else {
+      // let bal = await web3.eth.getBalance(adds[i]);
+      let bal = await birdContract.methods.balanceOf(adds[i]).call();
+      console.log("walletIndex: ", i, "bird: ", bal);
+      if (bal === "0") {
+        textLog += `${adds[i]}\n`;
+        // await faucetPkf(adds[i]);
       }
     }
+
+    //check wallet faucet failure
+    fs.writeFile("../add-matchs-tool/data/wallet0.txt", textLog, (err) => {
+      if (err) {
+        console.log("error write file", err);
+      }
+      // file written successfully
+    });
   } catch (e) {
     console.log("error: ", e.message);
   }
@@ -64,24 +78,12 @@ const faucet = async () => {
     const totalWallets = wlData.adds.length;
 
     for (let i = 0; i < totalWallets; i++) {
-      if (totalWallets === wlData.prik.length) {
-        let body = {
-          address: wlData.adds[i],
-          token: BIRD_FAUCET_TOKEN,
-          symbol: BIRD_FAUCET_SYMBOL,
-          // token: PKF_FAUCET_TOKEN,
-          // symbol: PKF_FAUCET_SYMBOL,
-        };
-        let res = await axios({
-          method: "POST",
-          data: body,
-          url: FAUCET_END_POINT,
-        });
-        if (res.status == 200) {
-          console.log(res?.data);
-        } else {
-          console.log("false index", i);
-        }
+      const res = await faucetBird(wlData.adds[i]);
+
+      if (res.status == 200) {
+        console.log(res?.data);
+      } else {
+        console.log("false index", i);
       }
     }
   } catch (e) {

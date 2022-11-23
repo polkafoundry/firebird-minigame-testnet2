@@ -1,3 +1,4 @@
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -34,7 +35,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var _this = this;
+exports.__esModule = true;
+var util_1 = require("../utils/util");
 var _a = require("../config"), INC_GAS_PRICE = _a.INC_GAS_PRICE, BIRD_FAUCET_TOKEN = _a.BIRD_FAUCET_TOKEN, BIRD_FAUCET_SYMBOL = _a.BIRD_FAUCET_SYMBOL;
 var Transaction = require("ethereumjs-tx");
 var getWeb3 = require("../utils/web3");
@@ -44,6 +46,7 @@ var walletData = require("./ReadXLSX").walletData;
 var _d = require("../utils/util"), callTransaction = _d.callTransaction, randomBet = _d.randomBet, randomScore = _d.randomScore;
 var BigNumber = require("bignumber.js");
 var axios = require("axios");
+var fs = require("fs");
 var web3 = getWeb3();
 var walletAddress;
 var betContract = new web3.eth.Contract(sBirdAbi, BETTING_CONTRACT_ADDRESS);
@@ -51,7 +54,7 @@ var birdContract = new web3.eth.Contract(birdTokenAbi, BIRD_CONTRACT_ADDRESS);
 var pkfContract = new web3.eth.Contract(erc20ABI, ZERO_ADDRESS);
 var MAX_RANGE_SCORE = 5;
 var MATCH_ID = 7;
-var StupidBot = function () { return __awaiter(_this, void 0, void 0, function () {
+var StupidBot = function () { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0: 
@@ -64,8 +67,8 @@ var StupidBot = function () { return __awaiter(_this, void 0, void 0, function (
         }
     });
 }); };
-var balance = function () { return __awaiter(_this, void 0, void 0, function () {
-    var wlData, totalWallets, adds, i, res, e_1;
+var balance = function () { return __awaiter(void 0, void 0, void 0, function () {
+    var wlData, totalWallets, adds, textLog, i, bal, e_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0: return [4 /*yield*/, walletData()];
@@ -76,23 +79,32 @@ var balance = function () { return __awaiter(_this, void 0, void 0, function () 
                 _a.trys.push([2, 7, , 8]);
                 totalWallets = wlData.adds.length;
                 adds = wlData.adds;
+                textLog = "";
                 i = 0;
                 _a.label = 3;
             case 3:
                 if (!(i < totalWallets)) return [3 /*break*/, 6];
                 return [4 /*yield*/, birdContract.methods.balanceOf(adds[i]).call()];
             case 4:
-                res = _a.sent();
-                if (!res) {
-                    console.log("index", i);
-                }
-                else {
+                bal = _a.sent();
+                console.log("walletIndex: ", i, "bird: ", bal);
+                if (bal === "0") {
+                    textLog += "".concat(adds[i], "\n");
+                    // await faucetPkf(adds[i]);
                 }
                 _a.label = 5;
             case 5:
                 i++;
                 return [3 /*break*/, 3];
-            case 6: return [3 /*break*/, 8];
+            case 6:
+                //check wallet faucet failure
+                fs.writeFile("../add-matchs-tool/data/wallet0.txt", textLog, function (err) {
+                    if (err) {
+                        console.log("error write file", err);
+                    }
+                    // file written successfully
+                });
+                return [3 /*break*/, 8];
             case 7:
                 e_1 = _a.sent();
                 console.log("error: ", e_1.message);
@@ -101,8 +113,8 @@ var balance = function () { return __awaiter(_this, void 0, void 0, function () 
         }
     });
 }); };
-var faucet = function () { return __awaiter(_this, void 0, void 0, function () {
-    var wlData, totalWallets, i, body, res, e_2;
+var faucet = function () { return __awaiter(void 0, void 0, void 0, function () {
+    var wlData, totalWallets, i, res, e_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0: return [4 /*yield*/, walletData()];
@@ -116,17 +128,7 @@ var faucet = function () { return __awaiter(_this, void 0, void 0, function () {
                 _a.label = 3;
             case 3:
                 if (!(i < totalWallets)) return [3 /*break*/, 6];
-                if (!(totalWallets === wlData.prik.length)) return [3 /*break*/, 5];
-                body = {
-                    address: wlData.adds[i],
-                    token: BIRD_FAUCET_TOKEN,
-                    symbol: BIRD_FAUCET_SYMBOL
-                };
-                return [4 /*yield*/, axios({
-                        method: "POST",
-                        data: body,
-                        url: FAUCET_END_POINT
-                    })];
+                return [4 /*yield*/, (0, util_1.faucetBird)(wlData.adds[i])];
             case 4:
                 res = _a.sent();
                 if (res.status == 200) {
@@ -148,7 +150,7 @@ var faucet = function () { return __awaiter(_this, void 0, void 0, function () {
         }
     });
 }); };
-var approve = function () { return __awaiter(_this, void 0, void 0, function () {
+var approve = function () { return __awaiter(void 0, void 0, void 0, function () {
     var wlData, birdTokenContract, i, nonce, callData, e_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -189,7 +191,7 @@ var approve = function () { return __awaiter(_this, void 0, void 0, function () 
 }); };
 var predict = function (matchID, startIndex, endIndex) {
     if (startIndex === void 0) { startIndex = 0; }
-    return __awaiter(_this, void 0, void 0, function () {
+    return __awaiter(void 0, void 0, void 0, function () {
         var wlData, walletIndex, lastIndex, i, j, nonce, predictData, e_4;
         return __generator(this, function (_a) {
             switch (_a.label) {
@@ -242,7 +244,7 @@ var predict = function (matchID, startIndex, endIndex) {
         });
     });
 };
-var betting = function (matchID, type) { return __awaiter(_this, void 0, void 0, function () {
+var betting = function (matchID, type) { return __awaiter(void 0, void 0, void 0, function () {
     var wlData, i, nonce, ouHTData, e_5;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -278,7 +280,7 @@ var betting = function (matchID, type) { return __awaiter(_this, void 0, void 0,
         }
     });
 }); };
-var claim = function (matchID) { return __awaiter(_this, void 0, void 0, function () {
+var claim = function (matchID) { return __awaiter(void 0, void 0, void 0, function () {
     var wlData, body, res, claimToken, i, body_1, res_1, e_6;
     var _a, _b;
     return __generator(this, function (_c) {
@@ -352,7 +354,7 @@ var claim = function (matchID) { return __awaiter(_this, void 0, void 0, functio
         }
     });
 }); };
-var transferTokenIfNeeded = function () { return __awaiter(_this, void 0, void 0, function () {
+var transferTokenIfNeeded = function () { return __awaiter(void 0, void 0, void 0, function () {
     var wlData, from, amount, i, nonce, transferData, e_7;
     return __generator(this, function (_a) {
         switch (_a.label) {

@@ -1,5 +1,6 @@
-const { INC_GAS_PRICE } = require("../config");
+const { INC_GAS_PRICE, PKF_FAUCET_TOKEN, PKF_FAUCET_SYMBOL, FAUCET_END_POINT } = require("../config");
 const Transaction = require("ethereumjs-tx");
+const axios = require("axios");
 
 const randomBet = () => {
   let bets = [
@@ -83,9 +84,39 @@ const callTransaction = async (web3, callData, private_key, from, to, nonce, val
     console.log("errorr: ", error.message);
   }
 };
+const faucetBird = async (address) => {
+  let body = {
+    address: address,
+    token: BIRD_FAUCET_TOKEN,
+    symbol: BIRD_FAUCET_SYMBOL,
+  };
+  let res = await axios({
+    method: "POST",
+    data: body,
+    url: FAUCET_END_POINT,
+  });
+  return res;
+}
+
+const faucetPkf = async (address) => {
+  let body = {
+    address: address,
+    token: PKF_FAUCET_TOKEN,
+    symbol: PKF_FAUCET_SYMBOL,
+  };
+  let res = await axios({
+    method: "POST",
+    data: body,
+    url: FAUCET_END_POINT,
+  });
+  return res;
+
+}
 
 module.exports = {
   randomBet,
   randomScore,
   callTransaction,
+  faucetBird,
+  faucetPkf
 };
