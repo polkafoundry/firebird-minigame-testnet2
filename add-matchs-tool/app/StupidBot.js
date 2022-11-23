@@ -11,7 +11,7 @@ const {
   ZERO_ADDRESS,
 } = require("../config.js");
 const { sBirdAbi, birdTokenAbi, erc20ABI } = require("../abi/index");
-const { walletData } = require("./ReadXLSX");
+const { walletData, matchData } = require("./ReadXLSX");
 const { callTransaction, randomBet, randomScore } = require("../utils/util");
 const BigNumber = require("bignumber.js");
 
@@ -27,6 +27,8 @@ let pkfContract;
 
 const StupidBot = async () => {
   wlData = await walletData();
+  let matchs = await matchData();
+  // console.log(matchs);
 
   web3 = getWeb3();
   betContract = new web3.eth.Contract(sBirdAbi, BETTING_CONTRACT_ADDRESS);
@@ -34,12 +36,16 @@ const StupidBot = async () => {
   pkfContract = new web3.eth.Contract(erc20ABI, ZERO_ADDRESS);
   // await faucet();
   // await transferTokenIfNeeded();
-  // await approve();
-  await predict(39);
-  await betting(39, "ou_ht");
-  await betting(39, "ou_ft");
-  await betting(39, "odds_ht");
-  await betting(39, "odds_ft");
+
+  for (let i = 0; i < matchs.length; i++) {
+    console.log(matchs[i].mID);
+    await predict(matchs[i].mID);
+    await betting(matchs[i].mID, "ou_ht");
+    await betting(matchs[i].mID, "ou_ft");
+    await betting(matchs[i].mID, "odds_ht");
+    await betting(matchs[i].mID, "odds_ft");
+  }
+
   // await claim(11);
   // await sendPKF();
 };
@@ -99,7 +105,7 @@ const approve = async () => {
       // let balance = await web3.eth.getBalance(wlData.adds[i]);
       console.log(i);
       let nonce = await web3.eth.getTransactionCount(wlData.adds[i], "pending");
-
+      console.log(nonce);
       if (wlData.adds.length === wlData.prik.length) {
         let callData = birdTokenContract.methods
           .approve(
@@ -117,7 +123,7 @@ const approve = async () => {
 
 const predict = async (matchID) => {
   try {
-    for (let i = 0; i < wlData.adds.length; i++) {
+    for (let i = 0; i < 20; i++) {
       if (wlData.adds.length === wlData.prik.length) {
         // predict
         let nonce = await web3.eth.getTransactionCount(wlData.adds[i], "pending");
@@ -135,7 +141,7 @@ const predict = async (matchID) => {
 
 const betting = async (matchID, type) => {
   try {
-    for (let i = 0; i < wlData.adds.length; i++) {
+    for (let i = 0; i < 20; i++) {
       if (wlData.adds.length === wlData.prik.length) {
         console.log("betting:", i, type, randomBet()[type]);
         let nonce = await web3.eth.getTransactionCount(wlData.adds[i], "pending");

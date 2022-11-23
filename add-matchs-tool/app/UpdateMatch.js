@@ -24,28 +24,13 @@ const updateMatch = async (matchID) => {
     const mData = await matchData();
     // console.log("xxx", mData[1]);
 
-    for (let i = 0; i < mData.length; i++) {
-      if (mData[i].mID === matchID) {
-        console.log(mData[i].mInf);
-      }
-    }
-    return;
-    let newInfo = [
-      0,
-      0,
-      0,
-      0,
-      1667743200,
-      "ASTON VILLA",
-      "2361",
-      "MANCHESTER UNITED",
-      "2356",
-      "Villa Park",
-      "15",
-      ,
-      1,
-      1,
-    ];
+    // for (let i = 0; i < mData.length; i++) {
+    //   if (mData[i].mID === matchID) {
+    //     console.log(mData[i].mInf);
+    //   }
+    // }
+    // return;
+    let newInfo = [0, 0, 0, 0, 1668578400, "SHIJA KUNGFU", "5448", "MEIZHOU", "20772", "Al-Thumama Stadium", "3", 0, 0];
 
     web3 = getWeb3();
     // Get wallet address
@@ -98,4 +83,4 @@ const callTransaction = async (callData) => {
   }
 };
 
-updateMatch(2);
+updateMatch(42);
