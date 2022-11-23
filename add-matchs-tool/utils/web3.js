@@ -8,7 +8,7 @@ const netWorkToProvider = {
   polygon: "https://rpc-mainnet.maticvigil.com/",
   bsc_testnet: "https://data-seed-prebsc-1-s1.binance.org:8545/",
   polygon_testnet: "https://matic-mumbai.chainstacklabs.com/",
-  fire_bird_testnet: "https://rpc.testnet-firebird.polkafoundry.com/",
+  fire_bird_testnet: "https://rpc.firefly.firebirdchain.com/",
 };
 
 module.exports = () => {

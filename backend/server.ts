@@ -26,4 +26,7 @@ new Ignitor(__dirname)
 
     const recalcBettingTask = require('@ioc:App/Tasks/RecalcBettingTask')
     recalcBettingTask()
+
+    const fetLiveMatchTask = require('@ioc:App/Tasks/FetLiveMatchTask')
+    fetLiveMatchTask()
   })

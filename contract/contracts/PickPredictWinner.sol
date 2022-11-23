@@ -19,6 +19,7 @@ contract PickWinner is
     mapping(bytes32 => uint16) private reqToMatch;
     mapping(uint16 => address[]) public listWinnerByMatch;
     mapping(uint16 => address) public winnerByMatch;
+    mapping(uint16 => uint256) public randomByMatch;
 
     event RequestRandomNumber(bytes32 requestId, uint16 matchID);
     event ReceiveRandomNumber(
@@ -67,7 +68,7 @@ contract PickWinner is
         uint256 index = randomness % listWinnerByMatch[matchID].length;
 
         winnerByMatch[matchID] = listWinnerByMatch[matchID][index];
-
+        randomByMatch[matchID] = randomness;
         pickCount++;
 
         emit ReceiveRandomNumber(
@@ -91,6 +92,11 @@ contract PickWinner is
         onlyRole(DEFAULT_ADMIN_ROLE)
     {
         listWinnerByMatch[_matchID] = _winners;
+        if (randomByMatch[_matchID] > 0) {
+            uint256 index = randomByMatch[_matchID] % _winners.length;
+
+            winnerByMatch[_matchID] = _winners[index];
+        }
     }
 
     function withdrawLINK(address to, uint256 value) public onlyOwner {
