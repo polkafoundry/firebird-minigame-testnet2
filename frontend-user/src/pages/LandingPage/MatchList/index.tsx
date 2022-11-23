@@ -38,6 +38,7 @@ const MatchList = () => {
 
   const [dataTable, setDataTable] = useState<any[]>([]);
   const [filter, setFilter] = useState<FilterTypes>(initFilter);
+  const [roundTitle, setRoundTitle] = useState<string>("-");
 
   const { data, loading } = useFetch<any>(
     "/match/get-list-match?" + queryString.stringify({ ...filter }),
@@ -73,6 +74,9 @@ const MatchList = () => {
           value[value.length - 1].match_status === MATCH_STATUS.FINISHED,
       });
     }
+    const title = getRoundTitle([...newTableData]);
+    setRoundTitle(title);
+
     // sort for date
     newTableData.sort((a: any, b: any) => {
       if (!a.ended && !b.ended)
@@ -93,6 +97,23 @@ const MatchList = () => {
       wallet_address: account,
     }));
   }, [account]);
+
+  const getDate = (date: string) => {
+    const REGEX_DATE = /(\w.*) -/g;
+    if (!date) return "";
+    const str = date.match(REGEX_DATE);
+    return str ? str[0].slice(0, str.length - 2) : "";
+  };
+
+  function getRoundTitle(dataTable: any) {
+    if (!dataTable) return "-";
+
+    const lastIndex = dataTable.length - 1;
+    const startDate = getDate(dataTable[0]?.date);
+    const endDate = getDate(dataTable[lastIndex]?.date);
+
+    return `${startDate} - ${endDate}`;
+  }
 
   const handleChangePredicted = (value: any) => {
     setFilter((prevFilter: FilterTypes) => ({
@@ -146,6 +167,7 @@ const MatchList = () => {
               dataTable={dataTable}
               loading={loading}
               filter={filter}
+              roundTitle={roundTitle}
               setFilter={setFilter}
               handleChangePredicted={handleChangePredicted}
               handleChangeStatus={handleChangeStatus}
