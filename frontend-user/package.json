@@ -18,6 +18,7 @@
     "@web3-react/injected-connector": "^6.0.7",
     "aos": "^2.3.4",
     "clsx": "^1.2.1",
+    "crypto-js": "^4.1.1",
     "dotenv": "^16.0.3",
     "eslint-config-prettier": "^8.5.0",
     "ethers": "^5.7.2",

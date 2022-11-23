@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import BETTING_ABI from "../abi/SBirdBetting.json";
 import { BETTING_CONTRACT } from "../constants";
 import { getContract } from "../utils/contract";
+import { decryptData, encryptData } from "../utils/encryptData";
 import { getErrorMessage } from "../utils/getErrorMessage";
 
 const usePredicting = () => {
@@ -43,12 +44,39 @@ const usePredicting = () => {
           setLoadingPredicting(false);
 
           toast.success("Submit answer successful");
+
+          // logging success data to api
+          const dataLogging = encryptData({
+            status: "success",
+            type: "predict",
+            user_address: account || "",
+            match_id: _matchId,
+            home_score: +(_homeScore || ""),
+            away_score: +(_awayScore || ""),
+          });
+
+          console.log("loggingSuccess:", decryptData(dataLogging));
           return true;
         }
       } catch (error: any) {
         console.log("ERR predicting: ", error?.message);
         toast.error(getErrorMessage(error, "Fail to Submit answer"));
         setLoadingPredicting(false);
+
+        // logging error data to api
+        if (!error.message?.includes("user rejected transaction")) {
+          const dataLogging = encryptData({
+            status: "error",
+            type: "predict",
+            user_address: account || "",
+            match_id: _matchId,
+            home_score: +(_homeScore || ""),
+            away_score: +(_awayScore || ""),
+            errorText: "ERR predicting: " + error?.message,
+          });
+
+          console.log("loggingError:", decryptData(dataLogging));
+        }
         return;
       }
     },

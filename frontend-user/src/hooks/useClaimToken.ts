@@ -5,6 +5,7 @@ import BETTING_ABI from "../abi/SBirdBetting.json";
 import { API_BASE_URL, BETTING_CONTRACT } from "../constants";
 import { BIRD_CHAIN_ID } from "../constants/networks";
 import { getContract } from "../utils/contract";
+import { decryptData, encryptData } from "../utils/encryptData";
 import { getErrorMessage } from "../utils/getErrorMessage";
 import useBettingContract from "./useBettingContract";
 import { fetcher } from "./useFetch";
@@ -55,12 +56,38 @@ const useClaimToken = (data?: any, isCorrect?: boolean) => {
           setLoadingClaim(false);
 
           toast.success("Claim token successful");
+
+          // logging success data to api
+          const dataLogging = encryptData({
+            status: "success",
+            type: "claim",
+            user_address: account || "",
+            match_id: _matchId,
+            bet_type: _betType,
+            amount: _amount,
+          });
+
+          console.log("loggingSuccess:", decryptData(dataLogging));
         }
       } catch (error: any) {
         console.log("ERR claiming: ", error);
         toast.error(getErrorMessage(error, "Fail to Claim token"));
-
         setLoadingClaim(false);
+
+        // logging error data to api
+        if (!error.message?.includes("user rejected transaction")) {
+          const dataLogging = encryptData({
+            status: "error",
+            type: "claim",
+            user_address: account || "",
+            match_id: _matchId,
+            bet_type: _betType,
+            amount: _amount,
+            errorText: "ERR claim: " + error?.message,
+          });
+
+          console.log("loggingError:", decryptData(dataLogging));
+        }
       }
     },
     [library, account],
