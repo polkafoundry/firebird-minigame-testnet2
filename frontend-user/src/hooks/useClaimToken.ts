@@ -1,4 +1,3 @@
-import { fetcher } from "./useFetch";
 import { useWeb3React } from "@web3-react/core";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
@@ -6,7 +5,9 @@ import BETTING_ABI from "../abi/SBirdBetting.json";
 import { API_BASE_URL, BETTING_CONTRACT } from "../constants";
 import { BIRD_CHAIN_ID } from "../constants/networks";
 import { getContract } from "../utils/contract";
+import { getErrorMessage } from "../utils/getErrorMessage";
 import useBettingContract from "./useBettingContract";
+import { fetcher } from "./useFetch";
 
 const useClaimToken = (data?: any, isCorrect?: boolean) => {
   const { library, account } = useWeb3React();
@@ -57,7 +58,8 @@ const useClaimToken = (data?: any, isCorrect?: boolean) => {
         }
       } catch (error: any) {
         console.log("ERR claiming: ", error);
-        toast.error("Fail to Claim token");
+        toast.error(getErrorMessage(error, "Fail to Claim token"));
+
         setLoadingClaim(false);
       }
     },

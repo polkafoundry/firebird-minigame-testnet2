@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import BETTING_ABI from "../abi/SBirdBetting.json";
 import { BETTING_CONTRACT } from "../constants";
 import { getContract } from "../utils/contract";
+import { getErrorMessage } from "../utils/getErrorMessage";
 
 const useBetting = () => {
   const { library, account } = useWeb3React();
@@ -49,7 +50,7 @@ const useBetting = () => {
         return;
       } catch (error: any) {
         console.log("ERR betting: ", error?.message);
-        toast.error("Fail to submit answer");
+        toast.error(getErrorMessage(error, "Fail to Submit answer"));
         setLoadingBetting(false);
         return;
       }
