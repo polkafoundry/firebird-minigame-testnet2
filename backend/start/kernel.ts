@@ -56,6 +56,7 @@ Server.middleware.register([() => import('@ioc:Adonis/Core/BodyParser')])
 Server.middleware.registerNamed({
   checkSignature: () => import('App/Middleware/CheckSignature'),
   checkAuthSignature: () => import('App/Middleware/CheckAuthSignature'),
+  checkAuthWallet: () => import('App/Middleware/CheckAuthWallet'),
 })
 
 //const Scheduler = require('@ioc:Adonis/Addons/Scheduler')
