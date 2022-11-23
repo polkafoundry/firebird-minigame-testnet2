@@ -53,6 +53,10 @@ Route.group(() => {
   Route.post('/user/log-error', 'UserLogsController.saveLogs')
 }).prefix('/api/v1')
 
-Route.group(() => {})
+Route.group(() => {
+  Route.get('/dashboard', 'AdminsController.getDashboardData')
+}).prefix('/api/v1/admin').middleware('checkAuthWallet')
+
+Route.group(() => { })
   .prefix('/api/v1')
   .middleware('checkSignature')
