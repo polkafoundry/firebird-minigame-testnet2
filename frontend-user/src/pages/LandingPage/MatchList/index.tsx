@@ -3,7 +3,7 @@ import clsx from "clsx";
 import moment from "moment";
 import queryString from "query-string";
 import { useEffect, useState } from "react";
-import { rounds } from "../../../constants";
+import { MATCH_STATUS, rounds } from "../../../constants";
 import useFetch from "../../../hooks/useFetch";
 import { useMyWeb3 } from "../../../hooks/useMyWeb3";
 import { getImgSrc, groupArrayById } from "../../../utils";
@@ -67,8 +67,21 @@ const MatchList = () => {
       newTableData.push({
         date: key,
         matches: value,
+        ended:
+          value &&
+          Array.isArray(value) &&
+          value[value.length - 1].match_status === MATCH_STATUS.FINISHED,
       });
     }
+    // sort for date
+    newTableData.sort((a: any, b: any) => {
+      if (!a.ended && !b.ended)
+        return new Date(b.date).valueOf() - new Date(a.date).valueOf();
+      if (a.ended && b.ended)
+        return new Date(a.date).valueOf() - new Date(b.date).valueOf();
+      return a === b ? 0 : a ? -1 : 1;
+    });
+
     setDataTable(newTableData);
   }, [data]);
 
