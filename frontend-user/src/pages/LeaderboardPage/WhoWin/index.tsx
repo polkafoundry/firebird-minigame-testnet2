@@ -162,7 +162,7 @@ const WhoWin = () => {
                           </div>
                           <div>{displayWalletAddress(item?.userId)}</div>
                           <div>${item?.prize}</div>
-                          <div>${formatCurrency(item?.sum_earned)}</div>
+                          <div>{formatCurrency(item?.sum_earned)}</div>
                         </div>
                       ))}
                     </>
