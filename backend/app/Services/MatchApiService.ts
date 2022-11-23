@@ -41,7 +41,7 @@ export default class MatchService {
                     return resolve(res.data)
                 } catch (error) {
                     console.log('error get data from api: ', error.message)
-                    if (count++ >= 5) return reject(error.message)
+                    if (count++ >= 10) return reject(error.message)
                 }
             }
         })
