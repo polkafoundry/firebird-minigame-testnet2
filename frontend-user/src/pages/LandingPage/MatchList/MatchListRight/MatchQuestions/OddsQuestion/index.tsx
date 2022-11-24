@@ -38,7 +38,7 @@ const OddsQuestion = (props: QuestionProps) => {
 
   const { approveBirdToken, loadingApprove } = useBirdToken();
   const { betting, loadingBetting } = useBetting();
-  const { loadingBetting: loadingBettingContract, getBettingUpdate } =
+  const { loadingBetting: loadingBettingContract, getUserBetting } =
     useBettingContract();
 
   const { loadingClaim, handleClaimToken } = useClaimToken(
@@ -47,7 +47,7 @@ const OddsQuestion = (props: QuestionProps) => {
   );
 
   async function getUserBettingInMatch() {
-    const res = await getBettingUpdate(dataQuestion?.match_id, betType);
+    const res = await getUserBetting(dataQuestion?.match_id, betType);
 
     setDataQuestion((prev: any) => ({
       ...prev,
@@ -123,7 +123,7 @@ const OddsQuestion = (props: QuestionProps) => {
     if (!bettingResult) return;
 
     // update result
-    const res = await getBettingUpdate(_matchID, _betType);
+    const res = await getUserBetting(_matchID, _betType);
     if (!res) return;
     const newDataQuestion = {
       ...dataQuestion,
@@ -228,7 +228,6 @@ const OddsQuestion = (props: QuestionProps) => {
           <ResultMatch
             questions={dataQuestion}
             questionStatus={questionStatus}
-            isClaimed={dataQuestion?.isClaimed}
             loadingClaim={loadingClaim}
             handleClaimToken={handleClaimToken}
             updateBirdBalance={updateBirdBalance}

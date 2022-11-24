@@ -44,8 +44,12 @@ const useBettingContract = () => {
     [library, account],
   );
 
-  const getBettingUpdate = useCallback(
+  const getUserBetting = useCallback(
     async (_matchId: string | undefined, _betType: string | undefined) => {
+      if (!_matchId || !_betType) {
+        return false;
+      }
+
       if (!BETTING_CONTRACT || !account) {
         toast.error("Fail to load contract or account is not connected");
         return false;
@@ -110,7 +114,7 @@ const useBettingContract = () => {
 
   return {
     checkClaimed,
-    getBettingUpdate,
+    getUserBetting,
     getPredictingUpdate,
     loadingBetting,
   };

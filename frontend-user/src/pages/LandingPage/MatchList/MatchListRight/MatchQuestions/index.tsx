@@ -19,7 +19,6 @@ import { useMyWeb3 } from "../../../../../hooks/useMyWeb3";
 import usePredictConditions from "../../../../../hooks/usePredictConditions";
 import { getImgSrc } from "../../../../../utils";
 import { requestSupportNetwork } from "../../../../../utils/setupNetwork";
-import { getOptionIndexByBetPlace } from "./components/utils";
 import OddsQuestion from "./OddsQuestion";
 import OverUnderQuestion from "./OverUnderQuestion";
 import PredictQuestion from "./PredictQuestion";
@@ -203,7 +202,6 @@ const MatchQuestions = (props: MatchQuestionProps) => {
               "≥ " + upperScore(dataQuestion?.ou_ht_ratio) + " goals scored",
           },
         ],
-        optionSelected: getOptionIndexByBetPlace(question4?.bet_place),
         match_id: dataQuestion?.match_id,
         questionStatus: getQuestionStatus(question4),
       };
@@ -233,7 +231,6 @@ const MatchQuestions = (props: MatchQuestionProps) => {
               "≥ " + upperScore(dataQuestion?.ou_ft_ratio) + " goals scored",
           },
         ],
-        optionSelected: getOptionIndexByBetPlace(question5?.bet_place),
         match_id: dataQuestion?.match_id,
         questionStatus: getQuestionStatus(question5),
       };
