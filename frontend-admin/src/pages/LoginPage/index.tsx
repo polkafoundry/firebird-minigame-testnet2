@@ -47,7 +47,7 @@ const LoginPage = () => {
               </p>
               {!response?.data && (
                 <p className="text-red-400 font-semibold">
-                  You have not permissions to view this page
+                  You do not have permission to view this
                 </p>
               )}
             </div>
