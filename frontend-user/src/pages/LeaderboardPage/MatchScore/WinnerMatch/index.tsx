@@ -99,7 +99,7 @@ const WinnerMatch = (props: MatchListRightProps) => {
             </div>
             {!loading && (!listWinner || !listWinner.length) ? (
               <div className="flex flex-col justify-center items-center h-[300px]">
-                <NotFound title="Don't have winner in this match." />
+                <NotFound title="No one (wallet) predicted the correct score for this match." />
               </div>
             ) : (
               <div className="">
