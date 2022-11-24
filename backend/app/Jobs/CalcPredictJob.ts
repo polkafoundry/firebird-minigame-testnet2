@@ -16,7 +16,10 @@ export default class CalcPredictJob implements JobContract {
         return
       }
 
-      let predict = await PredictModel.query().where('match_predicted', false).first()
+      let predict = await PredictModel.query()
+        .where('match_predicted', false)
+        .where('match_id', match.match_id)
+        .first()
       if (!predict) {
         return
       }
