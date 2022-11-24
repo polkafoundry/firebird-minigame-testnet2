@@ -1,4 +1,10 @@
-import { BET_PLACE, BET_TYPE, MATCH_STATUS } from "../../../../../../constants";
+import {
+  BET_PLACE,
+  BET_TYPE,
+  MATCH_RESULT,
+  MATCH_STATUS,
+  QUESTION_STATUS,
+} from "../../../../../../constants";
 
 export const getOptionColorFromIndex = (
   question: any,
@@ -93,4 +99,19 @@ export const getFinalResultIndex = (dataQuestion: any) => {
     }
   }
   return -1;
+};
+
+export const getQuestionStatus = (question: any) => {
+  if (!question) return QUESTION_STATUS.NOT_PREDICTED;
+
+  switch (question.result) {
+    case MATCH_RESULT.LOSE:
+    case MATCH_RESULT.DRAW:
+      return QUESTION_STATUS.WRONG_ANSWER;
+    case MATCH_RESULT.WIN:
+      return QUESTION_STATUS.CORRECT_ANSWER;
+
+    default:
+      return QUESTION_STATUS.PREDICTED;
+  }
 };

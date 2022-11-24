@@ -6,19 +6,14 @@ import {
   useEffect,
   useState,
 } from "react";
-import {
-  BET_TYPE,
-  MATCH_RESULT,
-  MATCH_STATUS,
-  QUESTION_STATUS,
-  rounds,
-} from "../../../../../constants";
+import { BET_TYPE, MATCH_STATUS, rounds } from "../../../../../constants";
 import { WalletContext } from "../../../../../context/WalletContext";
 import useBirdToken from "../../../../../hooks/useBirdToken";
 import { useMyWeb3 } from "../../../../../hooks/useMyWeb3";
 import usePredictConditions from "../../../../../hooks/usePredictConditions";
 import { getImgSrc } from "../../../../../utils";
 import { requestSupportNetwork } from "../../../../../utils/setupNetwork";
+import { getQuestionStatus } from "./components/utils";
 import OddsQuestion from "./OddsQuestion";
 import OverUnderQuestion from "./OverUnderQuestion";
 import PredictQuestion from "./PredictQuestion";
@@ -105,13 +100,6 @@ const MatchQuestions = (props: MatchQuestionProps) => {
         match_id: dataQuestion?.match_id,
         ft_home_score: dataQuestion?.ft_home_score,
         ft_away_score: dataQuestion?.ft_away_score,
-        questionStatus:
-          predictsData.length === 0 ||
-          dataQuestion?.start_time * 1000 > new Date().getTime()
-            ? predictsData[0]?.home_score && predictsData[0]?.away_score
-              ? QUESTION_STATUS.PREDICTED
-              : QUESTION_STATUS.NOT_PREDICTED
-            : getQuestionStatus(predictsData[0]),
       };
 
       const bettingsData = dataQuestion?.bettings || [];
@@ -247,21 +235,6 @@ const MatchQuestions = (props: MatchQuestionProps) => {
     };
     bindData();
   }, [dataQuestion]);
-
-  const getQuestionStatus = (question: any) => {
-    if (!question) return QUESTION_STATUS.NOT_PREDICTED;
-
-    switch (question.result) {
-      case MATCH_RESULT.LOSE:
-      case MATCH_RESULT.DRAW:
-        return QUESTION_STATUS.WRONG_ANSWER;
-      case MATCH_RESULT.WIN:
-        return QUESTION_STATUS.CORRECT_ANSWER;
-
-      default:
-        return QUESTION_STATUS.PREDICTED;
-    }
-  };
 
   //render Empty Question
   if (!account || !dataQuestion || dataQuestion.length === 0 || isWrongChain)
