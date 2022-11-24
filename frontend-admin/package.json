@@ -1,53 +1,39 @@
 {
-  "name": "frontend-user",
+  "name": "frontend-admin",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
     "@ethersproject/contracts": "^5.7.0",
     "@ethersproject/providers": "^5.7.2",
-    "@headlessui/react": "^1.7.3",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^13.0.0",
     "@testing-library/user-event": "^13.2.1",
-    "@tippyjs/react": "^4.2.6",
-    "@types/jest": "^29.2.0",
-    "@types/node": "^18.11.5",
-    "@types/react": "^18.0.22",
-    "@types/react-dom": "^18.0.7",
+    "@types/jest": "^27.0.1",
+    "@types/node": "^16.7.13",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
     "@web3-react/core": "^6.1.9",
     "@web3-react/injected-connector": "^6.0.7",
-    "aos": "^2.3.4",
     "clsx": "^1.2.1",
-    "crypto-js": "^4.1.1",
     "dotenv": "^16.0.3",
     "eslint-config-prettier": "^8.5.0",
     "ethers": "^5.7.2",
-    "husky": "^8.0.1",
     "lint-staged": "^13.0.3",
-    "moment": "^2.29.4",
     "postcss-preset-env": "^7.8.2",
     "prettier": "^2.7.1",
-    "query-string": "^7.1.1",
     "react": "^18.2.0",
-    "react-device-detect": "^2.2.2",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.4.2",
+    "react-router-dom": "^6.4.3",
     "react-scripts": "5.0.1",
-    "react-toastify": "^9.0.8",
-    "react-unity-webgl": "^9.2.1",
-    "sass": "^1.55.0",
-    "swr": "^1.3.0",
     "tailwindcss": "^3.2.1",
-    "typescript": "^4.8.4",
+    "typescript": "^4.4.2",
     "web-vitals": "^2.1.0"
   },
   "scripts": {
-    "format": "prettier --write \"src/**/*.ts\"",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "lint": "eslint \"src/**/*.ts\" --fix"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
@@ -68,19 +54,8 @@
     ]
   },
   "devDependencies": {
-    "@types/aos": "^3.0.4",
-    "eslint": "^8.26.0"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "*.{ts,tsx}": [
-      "yarn run lint",
-      "yarn run format",
-      "git add ."
-    ]
+    "autoprefixer": "^10.4.13",
+    "postcss": "^8.4.19",
+    "tailwindcss": "^3.2.4"
   }
 }
