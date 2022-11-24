@@ -4,11 +4,15 @@ function capitalizeFirstLetter(str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
+// const isMetamaskUnLoaded = (errorCode: any) => errorCode === -32603;
+const isUserRejectTransaction = (errorMessage: any) =>
+  errorMessage.includes("user rejected transaction");
+
 export const getErrorMessage = (
   err: any,
   defaultMessage = DEFAULT_ERROR_MESSAGE,
 ) => {
-  if (err.message?.includes("user rejected transaction")) {
+  if (isUserRejectTransaction(err.message)) {
     return "MetaMask Tx Signature: User denied transaction signature";
   }
 

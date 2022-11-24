@@ -82,7 +82,7 @@ const MatchListTable = (props: MatchListTableProps) => {
     const startDate = getDate(dataTable[0]?.date);
     const endDate = getDate(dataTable[lastIndex]?.date);
 
-    return `${startDate} - ${endDate}`;
+    return `${endDate} - ${startDate}`;
   }, [dataTable]);
 
   return (

@@ -4,7 +4,9 @@ import { toast } from "react-toastify";
 import BETTING_ABI from "../abi/SBirdBetting.json";
 import { API_BASE_URL, BETTING_CONTRACT } from "../constants";
 import { BIRD_CHAIN_ID } from "../constants/networks";
+import { sendDataLogging } from "../requests/getMyHistory";
 import { getContract } from "../utils/contract";
+import { encryptData } from "../utils/encryptData";
 import { getErrorMessage } from "../utils/getErrorMessage";
 import useBettingContract from "./useBettingContract";
 import { fetcher } from "./useFetch";
@@ -35,6 +37,8 @@ const useClaimToken = (data?: any, isCorrect?: boolean) => {
       }
 
       setLoadingClaim(true);
+      let dataLogging;
+
       try {
         const contract = getContract(
           BETTING_CONTRACT,
@@ -42,7 +46,6 @@ const useClaimToken = (data?: any, isCorrect?: boolean) => {
           library,
           account,
         );
-
         if (contract) {
           const transaction = await contract.tokenClaim(
             _matchId,
@@ -55,13 +58,36 @@ const useClaimToken = (data?: any, isCorrect?: boolean) => {
           setLoadingClaim(false);
 
           toast.success("Claim token successful");
+
+          // logging success data to api
+          dataLogging = encryptData({
+            status: "success",
+            type: "claim",
+            user_address: account || "",
+            match_id: _matchId,
+            bet_type: _betType,
+            amount: _amount,
+          });
         }
       } catch (error: any) {
         console.log("ERR claiming: ", error);
         toast.error(getErrorMessage(error, "Fail to Claim token"));
-
         setLoadingClaim(false);
+
+        // logging error data to api
+        dataLogging = encryptData({
+          status: "error",
+          type: "claim",
+          user_address: account || "",
+          match_id: _matchId,
+          bet_type: _betType,
+          amount: _amount,
+          errorText: "ERR claim: " + error?.message,
+        });
       }
+
+      // send data logging to backend
+      sendDataLogging(dataLogging);
     },
     [library, account],
   );
