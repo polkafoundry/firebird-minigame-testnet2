@@ -1,7 +1,7 @@
 import { API_BASE_URL } from "../constants";
 import { fetcher } from "../hooks/useFetch";
 
-export const getMyHistory = async (uri: string, queryParams: any) => {
+export const sendPostRequest = async (uri: string, queryParams: any) => {
   try {
     const res = fetcher(`${API_BASE_URL}${uri}`, {
       method: "POST",
@@ -12,7 +12,7 @@ export const getMyHistory = async (uri: string, queryParams: any) => {
     });
     return res;
   } catch (err: any) {
-    console.log("ERR getMyHistory: ", err);
+    console.log("ERR sendPostRequest: ", err);
     return;
   }
 };
