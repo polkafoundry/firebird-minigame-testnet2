@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import BETTING_ABI from "../abi/SBirdBetting.json";
 import { API_BASE_URL, BETTING_CONTRACT } from "../constants";
 import { BIRD_CHAIN_ID } from "../constants/networks";
-import { sendPostRequest } from "../requests/getMyHistory";
+import { sendDataLogging } from "../requests/getMyHistory";
 import { getContract } from "../utils/contract";
 import { encryptData } from "../utils/encryptData";
 import { getErrorMessage } from "../utils/getErrorMessage";
@@ -87,9 +87,7 @@ const useClaimToken = (data?: any, isCorrect?: boolean) => {
       }
 
       // send data logging to backend
-      sendPostRequest("/user/log-error", {
-        log_hash: dataLogging,
-      });
+      sendDataLogging(dataLogging);
     },
     [library, account],
   );

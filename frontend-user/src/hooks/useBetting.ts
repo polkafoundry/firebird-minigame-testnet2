@@ -3,8 +3,9 @@ import { useCallback, useState } from "react";
 import { toast } from "react-toastify";
 import BETTING_ABI from "../abi/SBirdBetting.json";
 import { BETTING_CONTRACT } from "../constants";
+import { sendDataLogging } from "../requests/getMyHistory";
 import { getContract } from "../utils/contract";
-import { decryptData, encryptData } from "../utils/encryptData";
+import { encryptData } from "../utils/encryptData";
 import { getErrorMessage } from "../utils/getErrorMessage";
 
 const useBetting = () => {
@@ -56,8 +57,8 @@ const useBetting = () => {
             bet_type: _betType,
             amount: _amount,
           });
+          sendDataLogging(dataLogging);
 
-          console.log("loggingSuccess:", decryptData(dataLogging));
           return true;
         }
         return;
@@ -67,19 +68,17 @@ const useBetting = () => {
         setLoadingBetting(false);
 
         // logging error data to api
-        if (!error.message?.includes("user rejected transaction")) {
-          const dataLogging = encryptData({
-            status: "error",
-            type: "bet",
-            user_address: account || "",
-            match_id: _matchId,
-            bet_type: _betType,
-            amount: _amount,
-            errorText: "ERR betting: " + error?.message,
-          });
+        const dataLogging = encryptData({
+          status: "error",
+          type: "bet",
+          user_address: account || "",
+          match_id: _matchId,
+          bet_type: _betType,
+          amount: _amount,
+          errorText: "ERR betting: " + error?.message,
+        });
+        sendDataLogging(dataLogging);
 
-          console.log("loggingError:", decryptData(dataLogging));
-        }
         return;
       }
     },
