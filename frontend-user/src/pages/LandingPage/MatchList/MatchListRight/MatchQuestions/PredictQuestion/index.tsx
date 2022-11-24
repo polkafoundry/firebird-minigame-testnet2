@@ -1,3 +1,4 @@
+import { BigNumber } from "ethers";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
 import { QuestionProps } from "..";
@@ -8,6 +9,7 @@ import usePredicting from "../../../../../../hooks/usePredicting";
 import InputScore from "../components/InputScore";
 import NotificationBox from "../components/NotificationBox";
 import Question from "../components/Question";
+import { getQuestionStatus } from "../components/utils";
 
 const PredictQuestion = (props: QuestionProps) => {
   const {
@@ -19,20 +21,44 @@ const PredictQuestion = (props: QuestionProps) => {
   } = props;
 
   const { loadingPredicting, predicting } = usePredicting();
-  const { getPredictingUpdate } = useBettingContract();
+  const { loadingBetting: loadingBettingContract, getUserPredicting } =
+    useBettingContract();
 
   const [predictInfo, setPredictInfo] = useState<any>();
   const [inputTeam1, setInputTeam1] = useState<string>("");
   const [inputTeam2, setInputTeam2] = useState<string>("");
   const [dataQuestion, setDataQuestion] = useState<any>();
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
 
   useEffect(() => {
     if (!questionProp) return;
     setDataQuestion(questionProp);
   }, [questionProp]);
 
-  const isSubmitted =
-    dataQuestion?.questionStatus !== QUESTION_STATUS.NOT_PREDICTED;
+  async function getUserPredictingInMatch() {
+    const res = await getUserPredicting(dataQuestion?.match_id);
+    const _isSummitted = +BigNumber.from(res?.time || "0").toString() > 0;
+
+    setDataQuestion((prev: any) => ({
+      ...prev,
+      questionStatus: _isSummitted
+        ? dataQuestion?.match_status !== MATCH_STATUS.FINISHED
+          ? QUESTION_STATUS.PREDICTED
+          : getQuestionStatus(dataQuestion)
+        : QUESTION_STATUS.NOT_PREDICTED,
+
+      home_score: res?.homeScore?.toString() || "",
+      away_score: res?.awayScore?.toString() || "",
+    }));
+    setIsSubmitted(_isSummitted);
+    setInputTeam1(_isSummitted ? res?.homeScore?.toString() : "");
+    setInputTeam2(_isSummitted ? res?.awayScore?.toString() : "");
+  }
+
+  useEffect(() => {
+    getUserPredictingInMatch();
+  }, [dataQuestion?.match_id]);
+
   const matchEnded = useMemo(
     () => dataQuestion?.match_status === MATCH_STATUS.FINISHED,
     [dataQuestion?.match_status],
@@ -79,12 +105,6 @@ const PredictQuestion = (props: QuestionProps) => {
     }
   }, [response]);
 
-  // default score
-  useEffect(() => {
-    setInputTeam1(dataQuestion?.home_score || "");
-    setInputTeam2(dataQuestion?.away_score || "");
-  }, [dataQuestion]);
-
   const handleChangeInputTeam1 = (value: string) => {
     setInputTeam1(value);
   };
@@ -110,7 +130,7 @@ const PredictQuestion = (props: QuestionProps) => {
     if (!predictResult) return;
 
     // update result
-    const res = await getPredictingUpdate(_matchID);
+    const res = await getUserPredicting(_matchID);
     if (!res) return;
     const newDataQuestion = {
       ...dataQuestion,
@@ -119,6 +139,7 @@ const PredictQuestion = (props: QuestionProps) => {
       away_score: _awayScore,
     };
     setDataQuestion(newDataQuestion);
+    setIsSubmitted(+BigNumber.from(res?.time || "0").toString() > 0);
   };
 
   const renderMatchNameDetail = (home_name: string, home_icon: string) => {
@@ -140,7 +161,7 @@ const PredictQuestion = (props: QuestionProps) => {
       handleSubmit={handleSubmit}
       isSubmitted={isSubmitted}
       matchLiveOrEnded={matchLiveOrEnded}
-      loading={loadingPredicting}
+      loading={loadingBettingContract || loadingPredicting}
       predictBoxComponent={
         isSubmitted ? (
           <NotificationBox
