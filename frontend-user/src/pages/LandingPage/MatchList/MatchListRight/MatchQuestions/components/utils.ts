@@ -19,7 +19,7 @@ export const getOptionColorFromIndex = (
     [MATCH_STATUS.FINISHED, MATCH_STATUS.LIVE].includes(
       question?.match_status,
     ) &&
-    question.optionSelected === undefined
+    question?.optionSelected === undefined
   ) {
     return notIsAnswerStyles;
   }
@@ -28,7 +28,7 @@ export const getOptionColorFromIndex = (
     return notIsAnswerStyles;
 
   if (isSubmitted) {
-    if (question.optionSelected === index) {
+    if (question?.optionSelected === index) {
       if (question?.result === "win") {
         return correctStyles;
       } else {

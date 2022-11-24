@@ -32,6 +32,7 @@ const useBettingContract = () => {
             _matchId,
             _betType,
           );
+          setLoadingBetting(false);
           return res?.isClaimed;
         }
       } catch (error: any) {
@@ -65,6 +66,7 @@ const useBettingContract = () => {
             _matchId,
             _betType,
           );
+          setLoadingBetting(false);
           return res;
         }
       } catch (error: any) {
@@ -94,6 +96,7 @@ const useBettingContract = () => {
 
         if (contract) {
           const res = await contract.userPredictByMatch(account, _matchId);
+          setLoadingBetting(false);
           return res;
         }
       } catch (error: any) {

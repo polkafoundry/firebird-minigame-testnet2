@@ -148,7 +148,6 @@ const MatchQuestions = (props: MatchQuestionProps) => {
             winRate: dataQuestion?.odds_ht_away,
           },
         ],
-        optionSelected: getOptionIndexByBetPlace(question2?.bet_place),
         match_id: dataQuestion?.match_id,
         questionStatus: getQuestionStatus(question2),
       };
@@ -175,7 +174,6 @@ const MatchQuestions = (props: MatchQuestionProps) => {
             winRate: dataQuestion?.odds_ft_away,
           },
         ],
-        optionSelected: getOptionIndexByBetPlace(question3?.bet_place),
         match_id: dataQuestion?.match_id,
         questionStatus: getQuestionStatus(question3),
       };
