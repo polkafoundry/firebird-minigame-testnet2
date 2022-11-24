@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import useProviderConnects from "../hooks/useProviderConnects";
 import { checkMetaMaskIsUnlocked } from "../utils";
 import { WalletContext } from "./WalletContext";
@@ -10,6 +10,8 @@ const WalletProvider = (props: any) => {
     connectedAccount,
     tryActivate,
   } = useProviderConnects();
+
+  const [isAuth, setIsAuth] = useState<boolean>(false);
 
   // auto activate accoung from localStorage
   useEffect(() => {
@@ -36,6 +38,8 @@ const WalletProvider = (props: any) => {
         logout,
         tryActivate,
         connectedAccount,
+        isAuth,
+        setIsAuth,
       }}
     >
       {props.children}

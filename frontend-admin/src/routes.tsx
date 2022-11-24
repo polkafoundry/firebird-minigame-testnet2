@@ -9,7 +9,7 @@ const routing = function createRouting() {
     <Routes>
       <Route path={"/login"} element={<LoginPage />} />
       <Route element={<PrivateRoutes />}>
-        <Route path={"/"} element={<LangdingPage />} />
+        <Route path={"/dashboard"} element={<LangdingPage />} />
         <Route path="*" element={<LangdingPage />} />
       </Route>
     </Routes>
