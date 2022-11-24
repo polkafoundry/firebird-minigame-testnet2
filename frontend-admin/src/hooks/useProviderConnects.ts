@@ -1,9 +1,11 @@
+import { useNavigate } from "react-router";
 import { UnsupportedChainIdError, useWeb3React } from "@web3-react/core";
 import { InjectedConnector } from "@web3-react/injected-connector";
 import { useCallback, useEffect, useState } from "react";
 import { SUPPORTED_WALLETS } from "../constants/connectors";
 
 const useProviderConnects = () => {
+  const navigate = useNavigate();
   const [connectLoading, setConnectLoading] = useState(false);
 
   const {
@@ -24,8 +26,6 @@ const useProviderConnects = () => {
     const metamaskConnector = SUPPORTED_WALLETS.METAMASK.connector;
     try {
       if (connectLoading || !metamaskConnector) return;
-      console.log("activating");
-
       await activate(
         new InjectedConnector(metamaskConnector),
         undefined,
@@ -47,6 +47,7 @@ const useProviderConnects = () => {
     localStorage.removeItem("walletconnect");
     deactivate();
     setConnectLoading(false);
+    navigate("/login");
   }, []);
 
   return {

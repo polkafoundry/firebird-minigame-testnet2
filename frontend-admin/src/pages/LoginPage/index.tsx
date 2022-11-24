@@ -23,7 +23,7 @@ const LoginPage = () => {
       setIsAuth && setIsAuth(true);
       navigate("/dashboard");
     }
-  }, [connectedAccount, response]);
+  }, [response]);
 
   const handleUserLogin = async () => {
     setLoading(true);
@@ -33,10 +33,6 @@ const LoginPage = () => {
       console.log("tryActivate ERR:", error);
     }
     setLoading(false);
-  };
-
-  const handleUserLogout = () => {
-    logout && logout();
   };
 
   return (
@@ -61,7 +57,7 @@ const LoginPage = () => {
         </div>
         {connectedAccount ? (
           <button
-            onClick={handleUserLogout}
+            onClick={logout}
             className="h-14 text-white mt-10 flex justify-center items-center w-full bg-red-500 rounded-xl uppercase font-semibold"
           >
             Disconnect
