@@ -9,7 +9,6 @@ import usePredicting from "../../../../../../hooks/usePredicting";
 import InputScore from "../components/InputScore";
 import NotificationBox from "../components/NotificationBox";
 import Question from "../components/Question";
-import { getQuestionStatus } from "../components/utils";
 
 const PredictQuestion = (props: QuestionProps) => {
   const {
@@ -35,6 +34,12 @@ const PredictQuestion = (props: QuestionProps) => {
     setDataQuestion(questionProp);
   }, [questionProp]);
 
+  const isAnswerCorrect = (res: any) =>
+    dataQuestion?.ft_home_score === res?.homeScore &&
+    dataQuestion?.ft_away_score === res?.awayScore
+      ? QUESTION_STATUS.CORRECT_ANSWER
+      : QUESTION_STATUS.WRONG_ANSWER;
+
   async function getUserPredictingInMatch() {
     const res = await getUserPredicting(dataQuestion?.match_id);
     const _isSummitted = +BigNumber.from(res?.time || "0").toString() > 0;
@@ -44,7 +49,7 @@ const PredictQuestion = (props: QuestionProps) => {
       questionStatus: _isSummitted
         ? dataQuestion?.match_status !== MATCH_STATUS.FINISHED
           ? QUESTION_STATUS.PREDICTED
-          : getQuestionStatus(dataQuestion)
+          : isAnswerCorrect(res)
         : QUESTION_STATUS.NOT_PREDICTED,
 
       home_score: res?.homeScore?.toString() || "",
