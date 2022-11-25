@@ -1,4 +1,10 @@
-import { BET_PLACE, BET_TYPE, MATCH_STATUS } from "../../../../../../constants";
+import {
+  BET_PLACE,
+  BET_TYPE,
+  MATCH_RESULT,
+  MATCH_STATUS,
+  QUESTION_STATUS,
+} from "../../../../../../constants";
 
 export const getOptionColorFromIndex = (
   question: any,
@@ -19,7 +25,7 @@ export const getOptionColorFromIndex = (
     [MATCH_STATUS.FINISHED, MATCH_STATUS.LIVE].includes(
       question?.match_status,
     ) &&
-    question.optionSelected === undefined
+    question?.optionSelected === undefined
   ) {
     return notIsAnswerStyles;
   }
@@ -28,7 +34,7 @@ export const getOptionColorFromIndex = (
     return notIsAnswerStyles;
 
   if (isSubmitted) {
-    if (question.optionSelected === index) {
+    if (question?.optionSelected === index) {
       if (question?.result === "win") {
         return correctStyles;
       } else {
@@ -93,4 +99,19 @@ export const getFinalResultIndex = (dataQuestion: any) => {
     }
   }
   return -1;
+};
+
+export const getQuestionStatus = (question: any) => {
+  if (!question) return QUESTION_STATUS.NOT_PREDICTED;
+
+  switch (question.result) {
+    case MATCH_RESULT.LOSE:
+    case MATCH_RESULT.DRAW:
+      return QUESTION_STATUS.WRONG_ANSWER;
+    case MATCH_RESULT.WIN:
+      return QUESTION_STATUS.CORRECT_ANSWER;
+
+    default:
+      return QUESTION_STATUS.PREDICTED;
+  }
 };

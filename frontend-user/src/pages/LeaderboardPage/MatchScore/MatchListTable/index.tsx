@@ -199,7 +199,7 @@ const MatchListTable = (props: MatchListTableProps) => {
                           team2={match?.awayTeam}
                         />
 
-                        <div>{match?.total + " address"}</div>
+                        <div>{(match?.total || 0) + " address"}</div>
                         <div>{rounds[groupStageIndex].prize}</div>
                         <div>
                           {match.final_winner
