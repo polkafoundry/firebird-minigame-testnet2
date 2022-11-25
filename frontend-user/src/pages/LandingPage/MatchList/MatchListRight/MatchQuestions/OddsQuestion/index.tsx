@@ -41,22 +41,18 @@ const OddsQuestion = (props: QuestionProps) => {
   const { loadingBetting: loadingBettingContract, getUserBetting } =
     useBettingContract();
 
-  const { loadingClaim, handleClaimToken } = useClaimToken(
+  const { isClaimSuccess, loadingClaim, handleClaimToken } = useClaimToken(
     dataQuestion,
     dataQuestion?.questionStatus === QUESTION_STATUS.CORRECT_ANSWER,
   );
 
-  async function getUserBettingInMatch() {
-    const res = await getUserBetting(dataQuestion?.match_id, betType);
-
+  // update Claim Token button
+  useEffect(() => {
     setDataQuestion((prev: any) => ({
       ...prev,
-      optionSelected: getOptionIndexByBetPlace(res?.place || ""),
-      bet_amount: res?.amount,
-      isClaimed: res?.isClaimed,
+      isClaimed: isClaimSuccess,
     }));
-    setIsSubmitted(!!res?.place);
-  }
+  }, [isClaimSuccess]);
 
   useEffect(() => {
     getUserBettingInMatch();
@@ -72,6 +68,18 @@ const OddsQuestion = (props: QuestionProps) => {
     if (!dataQuestion) return;
     setOptionWhoWin(dataQuestion?.optionSelected);
   }, [dataQuestion]);
+
+  async function getUserBettingInMatch() {
+    const res = await getUserBetting(dataQuestion?.match_id, betType);
+
+    setDataQuestion((prev: any) => ({
+      ...prev,
+      optionSelected: getOptionIndexByBetPlace(res?.place || ""),
+      bet_amount: res?.amount,
+      isClaimed: res?.isClaimed,
+    }));
+    setIsSubmitted(!!res?.place);
+  }
 
   const questionStatus = useMemo(
     () => dataQuestion?.questionStatus,
