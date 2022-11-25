@@ -9,7 +9,7 @@ const LandingPage = () => {
   const { connectedAccount } = useContext(WalletContext);
 
   const { data: response, loading } = useFetch<any>(
-    "/dashboard?startTime=1661252949&endTime=1669050000",
+    "/dashboard",
     !!connectedAccount,
     false,
     connectedAccount,
@@ -50,7 +50,7 @@ const LandingPage = () => {
 
   return (
     <div className="flex w-full h-full min-h-screen">
-      <div className="flex flex-col w-full max-w-screen-main mx-auto">
+      <div className="flex flex-col w-full max-w-screen-main mx-auto pb-20">
         <Header />
 
         <MainContent statistics={statistics} />
