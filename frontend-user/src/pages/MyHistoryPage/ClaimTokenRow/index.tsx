@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+import useBettingContract from "../../../hooks/useBettingContract";
 import useClaimToken from "../../../hooks/useClaimToken";
 
 type ClaimTokenRowProps = {
@@ -9,10 +11,30 @@ type ClaimTokenRowProps = {
 const ClaimTokenRow = (props: ClaimTokenRowProps) => {
   const { data, isCorrect } = props;
 
-  const { isClaimed, loadingClaim, handleClaimToken } = useClaimToken(
+  const { isClaimSuccess, loadingClaim, handleClaimToken } = useClaimToken(
     data,
     isCorrect,
   );
+
+  const [isClaimed, setIsClaimed] = useState<boolean>(false);
+
+  const { checkClaimed } = useBettingContract();
+
+  // update Claim Button
+  useEffect(() => {
+    if (isClaimSuccess) {
+      setIsClaimed(true);
+    }
+  }, [isClaimSuccess]);
+
+  useEffect(() => {
+    const checkUserClaimed = async () => {
+      const claimed = await checkClaimed(data?.match_id, data?.bet_type);
+      setIsClaimed(claimed);
+    };
+
+    checkUserClaimed();
+  }, [data]);
 
   return (
     <div>
