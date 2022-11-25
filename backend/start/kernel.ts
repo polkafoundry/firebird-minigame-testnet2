@@ -19,12 +19,12 @@ import { calcOuHtJob } from 'App/Jobs/CalcOuHtJob'
 import { calcOddsHtJob } from 'App/Jobs/CalcOddsHtJob'
 import { calcOddsFtJob } from 'App/Jobs/CalcOddsFtJob'
 
-import { requestRandomPredict } from 'App/Jobs/RequestRandomPredict'
+// import { requestRandomPredict } from 'App/Jobs/RequestRandomPredict'
 
 const FetchMatchInfoInitTask = require('@ioc:App/Tasks/FetchMatchInfoTask')
 const FetchUserBettingTask = require('@ioc:App/Tasks/FetchUserBettingTask')
 const CalcPredictInitTask = require('@ioc:App/Tasks/CalcPredictTask')
-const FetchPickWinnerInitTask = require('@ioc:App/Tasks/FetchPickWinnerTask')
+// const FetchPickWinnerInitTask = require('@ioc:App/Tasks/FetchPickWinnerTask')
 
 /*
 |--------------------------------------------------------------------------
@@ -68,11 +68,11 @@ new Promise(() => {
   FetchMatchInfoInitTask.initTask()
   FetchUserBettingTask.initTask()
   CalcPredictInitTask.initTask()
-  FetchPickWinnerInitTask.initTask()
+  // FetchPickWinnerInitTask.initTask()
   calcOuFtJob()
   calcOuHtJob()
   calcOddsHtJob()
   calcOddsFtJob()
-  requestRandomPredict()
+  // requestRandomPredict()
   return
-}).then(() => { })
+}).then(() => {})

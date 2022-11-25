@@ -74,6 +74,7 @@ export default class PredictWinnerService {
         .select('rewards')
         .where('matchs.round_name', round)
         .where('matchs.is_full_time', true)
+        .where('matchs.is_pick_predict_final_winners', true)
         .orderBy('match_id', 'DESC')
 
       return HelperUtils.responseSuccess(predictInMatch)
