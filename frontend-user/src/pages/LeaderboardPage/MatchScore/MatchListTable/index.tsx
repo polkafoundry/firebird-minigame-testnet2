@@ -50,7 +50,7 @@ const MatchListTable = (props: MatchListTableProps) => {
     // handleChangeStatus,
   } = props;
 
-  const [groupStageIndex, setGroupStageIndex] = useState<number>(0);
+  const [groupStageIndex, setGroupStageIndex] = useState<number>(1);
 
   useEffect(() => {
     setFilter((prevState: FilterTypes) => ({
