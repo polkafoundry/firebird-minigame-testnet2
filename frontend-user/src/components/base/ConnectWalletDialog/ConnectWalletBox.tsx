@@ -53,7 +53,7 @@ const ConnectWalletBox = (props: ConnectWalletBoxProps) => {
           <div className={styles.rhombus}></div>
         </div>
       ) : (
-        <img src={icon} alt="" />
+        <img src={icon} alt="" className="w-10" />
       )}
       <p className="text-white text-center text-sm">{name}</p>
     </div>
