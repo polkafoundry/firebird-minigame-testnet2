@@ -24,9 +24,7 @@ const Schedule = () => {
   });
 
   scheduleActivatingIndex =
-    scheduleActivatingIndex < rounds[4].value
-      ? scheduleActivatingIndex
-      : rounds[4].value;
+    scheduleActivatingIndex < 4 ? scheduleActivatingIndex : 4;
 
   return (
     <div
