@@ -191,7 +191,9 @@ const MyHistoryPage = () => {
         };
 
         setStatistics(newStatistics);
-        setTotalCount(resData?.bettings?.meta?.total);
+        setTotalCount(
+          resData?.bettings?.meta?.total || resData?.predicts?.meta?.total,
+        );
         setDataTable(resData?.bettings?.data || resData?.predicts?.data);
       } catch (error: any) {
         toast.error(error?.message || "Fail to load history");
