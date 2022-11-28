@@ -2,13 +2,8 @@ import { AbstractConnector } from "@web3-react/abstract-connector";
 import { createContext, Dispatch, SetStateAction } from "react";
 
 export type WalletContextType = {
-  handleProviderChosen?: (
-    name: string,
-    connector: AbstractConnector,
-    handleCloseModal: () => void,
-  ) => void;
+  handleProviderChosen?: (connector: AbstractConnector) => void;
   connectWalletLoading?: boolean;
-  currentConnector?: AbstractConnector | undefined;
   walletName?: (string | undefined)[];
   handleConnectorDisconnect?: () => void;
   logout?: () => void;
