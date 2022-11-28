@@ -4,10 +4,10 @@ const BETTING_START_BLOCK = process.env.BETTING_START_BLOCK
 import Bull from '@ioc:Rocketseat/Bull'
 
 const USER_BETTING = 'UserBetting'
-const USER_CLAIM = 'UserClaim'
+// const USER_CLAIM = 'UserClaim'
 const USER_PREDICT = 'UserPredicting'
 
-let ARRAY_EVENTS = [USER_BETTING, USER_CLAIM, USER_PREDICT]
+let ARRAY_EVENTS = [USER_BETTING, USER_PREDICT]
 
 const initTask = async () => {
   if (!BETTING_START_BLOCK) {
@@ -26,9 +26,10 @@ const initTask = async () => {
       const jobKey = new Job().key
       await Bull.getByKey(jobKey).bull.add(jobKey + eventType, data, {
         repeat: {
-          every: 1000 * 60, // 1 minutes
+          every: 1000 * 60 * 0.2, // 1 minutes
           immediately: true,
         },
+        priority: 1,
         removeOnComplete: true,
         removeOnFail: true,
         attempts: 3,

@@ -169,7 +169,6 @@ export default class FetchMatchInfoJob implements JobContract {
           })
           break
         default:
-          console.log('FetchBoxJob: event not supported', event_type)
           return
       }
     }

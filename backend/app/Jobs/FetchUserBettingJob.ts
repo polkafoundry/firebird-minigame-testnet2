@@ -29,36 +29,43 @@ export default class FetchUserBettingInfoJob implements JobContract {
   public key = 'FetchUserBettingInfoJob'
 
   public async handle(job) {
-    const { data } = job
-
-    const eventType = data.event_type
-    let from = data.from
-    let to = data.to
-
-    if (await RedisUserBettingUtils.existRedisBettingBlockNumber(eventType)) {
-      let redisData = await RedisUserBettingUtils.getRedisBettingBlockNumber(eventType)
-      redisData = JSON.parse(redisData)
-      if (redisData && redisData.current) {
-        from = redisData.current
-      }
-    }
-    const notCached = data.notCached
-
     try {
+      const { data } = job
+      console.log('start 1')
+
+      const eventType = data.event_type
+      let from = data.from
+      let to = data.to
+
+      if (await RedisUserBettingUtils.existRedisBettingBlockNumber(eventType)) {
+        console.log('2', from)
+        let redisData = await RedisUserBettingUtils.getRedisBettingBlockNumber(eventType)
+        redisData = JSON.parse(redisData)
+        if (redisData && redisData.current) {
+          from = redisData.current
+          console.log('doneeeeee', from)
+        }
+      }
+      console.log('3', from)
+      const notCached = data.notCached
       if (!isNaN(from)) {
         from = parseInt(from)
       }
       if (!isNaN(to)) {
         to = parseInt(to)
       }
+      console.log('4', from)
       const provider = await HelperUtils.getWeb3Provider()
       const latestBlockNumber = (await provider.eth.getBlockNumber()) - 1
+      console.log('5', from)
       if (!to || to > latestBlockNumber || to < from) {
         to = latestBlockNumber
       }
+      console.log('6', from)
       if (from > latestBlockNumber || from >= to) {
         return
       }
+      console.log('7', from)
       data.to = to
       // fetch
       const startTime = process.hrtime()
@@ -69,17 +76,17 @@ export default class FetchUserBettingInfoJob implements JobContract {
         }
         await this.fetchEvents(provider, eventType, index, tmp)
       }
+      console.log('8', from)
       const endTime = process.hrtime(startTime)
       Logger.info(
-        `fetch ${eventType} from ${from} to ${to} in epic_box: ${endTime[0]}s ${
-          endTime[1] / 1000000
-        }ms`
+        `fetch ${eventType} from ${from} to ${to}: ${endTime[0]}s ${endTime[1] / 1000000}ms`
       )
       if (notCached) {
         return
       }
 
       await RedisUserBettingUtils.setRedisBettingBlockNumber({ current: to, event_type: eventType })
+      console.log('done', to)
     } catch (e) {
       Logger.error(e)
     }
@@ -88,71 +95,53 @@ export default class FetchUserBettingInfoJob implements JobContract {
   private async fetchEvents(provider, event_type, from, to) {
     try {
       const instance = await HelperUtils.getBettingContractInstance()
+      console.log(event_type, from, to)
 
       const events = await instance.getPastEvents(event_type, {
         fromBlock: from,
         toBlock: to,
       })
+      let searchPayload =
+        event_type === USER_BETTING
+          ? ['user_address', 'match_id', 'bet_type']
+          : ['user_address', 'match_id']
+      let payloads: any = []
       for (const event of events) {
         const blockData = await provider.eth.getBlock(event.blockNumber)
         switch (event_type) {
           case USER_BETTING:
-            const userBetting = await BettingModel.query()
-              .where('match_id', event.returnValues.matchID)
-              .andWhere('user_address', event.returnValues.user)
-              .andWhere('bet_type', event.returnValues.betType)
-              .first()
-            if (userBetting) {
-              await BettingModel.query()
-                .where('match_id', event.returnValues.matchID)
-                .andWhere('user_address', event.returnValues.user)
-                .andWhere('bet_type', event.returnValues.betType)
-                .update({
-                  transaction_hash: event.transactionHash,
-                  transaction_index: event.transactionIndex,
-                  block_number: event.blockNumber,
-                  dispatch_at: blockData.timestamp,
-                  event_type: event_type,
-                  user_address: event.returnValues.user,
-                  match_id: event.returnValues.matchID,
-                  bet_type: event.returnValues.betType,
-                  bet_place: event.returnValues.betPlace,
-                  bet_amount: event.returnValues.amount,
-                })
-            } else {
-              let bettingData = new BettingModel()
-              bettingData.transaction_hash = event.transactionHash
-              bettingData.transaction_index = event.transactionIndex
-              bettingData.block_number = event.blockNumber
-              bettingData.dispatch_at = blockData.timestamp
-              bettingData.event_type = event_type
-              bettingData.user_address = event.returnValues.user
-              bettingData.match_id = event.returnValues.matchID
-              bettingData.bet_type = event.returnValues.betType
-              bettingData.bet_place = event.returnValues.betPlace
-              bettingData.bet_amount = event.returnValues.amount
-              await bettingData.save()
+            payloads.push({
+              transaction_hash: event.transactionHash,
+              transaction_index: event.transactionIndex,
+              block_number: event.blockNumber,
+              dispatch_at: blockData.timestamp,
+              event_type: event_type,
+              user_address: event.returnValues.user,
+              match_id: event.returnValues.matchID,
+              bet_type: event.returnValues.betType,
+              bet_place: event.returnValues.betPlace,
+              bet_amount: event.returnValues.amount,
+            })
 
-              let bets = await BetCountModel.query()
-                .where('match_id', event.returnValues.matchID)
-                .andWhere('user_address', event.returnValues.user)
-                .first()
+            // let bets = await BetCountModel.query()
+            //   .where('match_id', event.returnValues.matchID)
+            //   .andWhere('user_address', event.returnValues.user)
+            //   .first()
 
-              if (bets) {
-                await BetCountModel.query()
-                  .where('match_id', event.returnValues.matchID)
-                  .andWhere('user_address', event.returnValues.user)
-                  .update({
-                    bet_count: bets.bet_count + 1,
-                  })
-              } else {
-                let betCountData = new BetCountModel()
-                betCountData.match_id = event.returnValues.matchID
-                betCountData.user_address = event.returnValues.user
-                betCountData.bet_count = 1
-                await betCountData.save()
-              }
-            }
+            // if (bets) {
+            //   await BetCountModel.query()
+            //     .where('match_id', event.returnValues.matchID)
+            //     .andWhere('user_address', event.returnValues.user)
+            //     .update({
+            //       bet_count: bets.bet_count + 1,
+            //     })
+            // } else {
+            //   let betCountData = new BetCountModel()
+            //   betCountData.match_id = event.returnValues.matchID
+            //   betCountData.user_address = event.returnValues.user
+            //   betCountData.bet_count = 1
+            //   await betCountData.save()
+            // }
 
             break
           case USER_CLAIM:
@@ -172,65 +161,49 @@ export default class FetchUserBettingInfoJob implements JobContract {
             }
             break
           case USER_PREDICT:
-            const userPredict = await PredictModel.query()
-              .where('match_id', event.returnValues.matchID)
-              .andWhere('user_address', event.returnValues.user)
-              .first()
-            if (userPredict) {
-              await PredictModel.query()
-                .where('match_id', event.returnValues.matchID)
-                .andWhere('user_address', event.returnValues.user)
-                .update({
-                  transaction_hash: event.transactionHash,
-                  transaction_index: event.transactionIndex,
-                  block_number: event.blockNumber,
-                  dispatch_at: blockData.timestamp,
-                  event_type: event_type,
-                  user_address: event.returnValues.user,
-                  match_id: event.returnValues.matchID,
-                  home_score: event.returnValues.homeScore,
-                  away_score: event.returnValues.awayScore,
-                  predict_time: event.returnValues.time,
-                })
-            } else {
-              let predictData = new PredictModel()
-              predictData.transaction_hash = event.transactionHash
-              predictData.transaction_index = event.transactionIndex
-              predictData.block_number = event.blockNumber
-              predictData.dispatch_at = blockData.timestamp
-              predictData.event_type = event_type
-              predictData.user_address = event.returnValues.user
-              predictData.match_id = event.returnValues.matchID
-              predictData.home_score = event.returnValues.homeScore
-              predictData.away_score = event.returnValues.awayScore
-              predictData.predict_time = event.returnValues.time
-              await predictData.save()
+            payloads.push({
+              transaction_hash: event.transactionHash,
+              transaction_index: event.transactionIndex,
+              block_number: event.blockNumber,
+              dispatch_at: blockData.timestamp,
+              event_type: event_type,
+              user_address: event.returnValues.user,
+              match_id: event.returnValues.matchID,
+              home_score: event.returnValues.homeScore,
+              away_score: event.returnValues.awayScore,
+              predict_time: event.returnValues.time,
+            })
 
-              let betss = await BetCountModel.query()
-                .where('match_id', event.returnValues.matchID)
-                .andWhere('user_address', event.returnValues.user)
-                .first()
+            // let betss = await BetCountModel.query()
+            //   .where('match_id', event.returnValues.matchID)
+            //   .andWhere('user_address', event.returnValues.user)
+            //   .first()
 
-              if (betss) {
-                await BetCountModel.query()
-                  .where('match_id', event.returnValues.matchID)
-                  .andWhere('user_address', event.returnValues.user)
-                  .update({
-                    bet_count: betss.bet_count + 1,
-                  })
-              } else {
-                let betCountData = new BetCountModel()
-                betCountData.match_id = event.returnValues.matchID
-                betCountData.user_address = event.returnValues.user
-                betCountData.bet_count = 1
-                await betCountData.save()
-              }
-            }
+            // if (betss) {
+            //   await BetCountModel.query()
+            //     .where('match_id', event.returnValues.matchID)
+            //     .andWhere('user_address', event.returnValues.user)
+            //     .update({
+            //       bet_count: betss.bet_count + 1,
+            //     })
+            // } else {
+            //   let betCountData = new BetCountModel()
+            //   betCountData.match_id = event.returnValues.matchID
+            //   betCountData.user_address = event.returnValues.user
+            //   betCountData.bet_count = 1
+            //   await betCountData.save()
+            // }
+
             break
           default:
             console.log('FetchUserBettingJob: event not supported', event_type)
             return
         }
+      }
+      if (event_type === USER_BETTING) {
+        await BettingModel.updateOrCreateMany(searchPayload, payloads)
+      } else if (event_type === USER_PREDICT) {
+        await PredictModel.updateOrCreateMany(searchPayload, payloads)
       }
     } catch (error) {
       Logger.error(error)
