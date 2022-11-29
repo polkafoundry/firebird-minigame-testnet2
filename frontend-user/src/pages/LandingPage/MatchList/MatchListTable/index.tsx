@@ -8,7 +8,7 @@ import MatchName from "../../../../components/base/Table/MatchName";
 import MatchPredict from "../../../../components/base/Table/MatchPredict";
 import MatchStatus from "../../../../components/base/Table/MatchStatus";
 import { MATCH_STATUS, rounds } from "../../../../constants";
-import { getCurrentRound, getMatchTime } from "../../../../utils";
+import { getMatchTime } from "../../../../utils";
 import styles from "./matchList.module.scss";
 
 const headingTable = [
@@ -57,10 +57,7 @@ const MatchListTable = (props: MatchListTableProps) => {
     handleChangeStatus,
   } = props;
 
-  const currentRound = getCurrentRound().value;
-  const [groupStageIndex, setGroupStageIndex] = useState<number>(
-    rounds.findIndex((round) => round.value === currentRound),
-  );
+  const [groupStageIndex, setGroupStageIndex] = useState<number>(1);
 
   useEffect(() => {
     setFilter((prevState: FilterTypes) => ({
