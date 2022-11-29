@@ -6,6 +6,7 @@ import BaseSwiper from "../../../components/base/Swiper";
 import { FAUCET_URL } from "../../../constants";
 import { WalletContext } from "../../../context/WalletContext";
 import useFetch from "../../../hooks/useFetch";
+import useGiftCode from "../../../hooks/useGiftCode";
 import { useMyWeb3 } from "../../../hooks/useMyWeb3";
 
 const giftCodeBanners = [
@@ -60,6 +61,7 @@ const GiftCode = () => {
     useState<boolean>(false);
   const { setShowModal } = useContext(WalletContext);
   const { account } = useMyWeb3();
+  const { handleClaimToken } = useGiftCode();
 
   const { data: response } = useFetch<any>(
     "/code/get-avaiable-code",
@@ -93,6 +95,7 @@ const GiftCode = () => {
     if (!account) setShowModal && setShowModal(true);
     else {
       console.log("claim bird");
+      handleClaimToken(giftCode);
     }
   };
   //   const error = "Code expired. Please wait for next gift code.";
