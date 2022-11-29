@@ -6,11 +6,7 @@ import NotFound from "../../../../components/base/NotFound";
 // import DropDown from "../../../../components/base/DropDown";
 import MatchName from "../../../../components/base/Table/MatchName";
 import { rounds } from "../../../../constants";
-import {
-  displayWalletAddress,
-  getCurrentRound,
-  getMatchTime,
-} from "../../../../utils";
+import { displayWalletAddress, getMatchTime } from "../../../../utils";
 import styles from "./matchListTable.module.scss";
 
 const headingTable = ["Time", "Match", "Whitelist", "Rewards", "Winner"];
@@ -54,10 +50,8 @@ const MatchListTable = (props: MatchListTableProps) => {
     // handleChangeStatus,
   } = props;
 
-  const currentRound = getCurrentRound().value;
-  const [groupStageIndex, setGroupStageIndex] = useState<number>(
-    rounds.findIndex((round) => round.value === currentRound),
-  );
+  const [groupStageIndex, setGroupStageIndex] = useState<number>(1);
+
   useEffect(() => {
     setFilter((prevState: FilterTypes) => ({
       ...prevState,
