@@ -13,7 +13,7 @@ const initTask = async (data) => {
       priority: priority,
       removeOnComplete: true,
       repeat: {
-        every: 5 * 60 * 1000,
+        every: 1 * 60 * 1000,
         immediately: true,
       },
       removeOnFail: true,
