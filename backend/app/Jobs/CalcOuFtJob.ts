@@ -12,7 +12,7 @@ import { JobContract } from '@ioc:Rocketseat/Bull'
 | https://docs.bullmq.io/
 */
 import Bull from '@ioc:Rocketseat/Bull'
-import MatchModel from 'App/Models/Match'
+import BettingModel from 'App/Models/Betting'
 import { calcBettingJob } from 'App/Jobs/CalcBettingJob'
 const Const = require('@ioc:App/Common/Const')
 
@@ -49,15 +49,17 @@ export default class CalcOuFtJob implements JobContract {
 
   public async handle() {
     try {
-      // const { data } = job
-      // Do somethign with you job data
-      const match = await MatchModel.query()
-        .where('is_calculated_ou_ft', false)
-        .where('is_full_time', true)
+      const betting = await BettingModel.query()
+        .leftOuterJoin('matchs', builder => {
+          builder.on('bettings.match_id', 'matchs.match_id')
+        })
+        .where('matchs.is_full_time', true)
+        .where('bettings.bet_type', Const.BET_TYPE.OU_FT)
+        .where('bettings.is_calculated', false)
         .first()
-      if (!match) return
-      console.log('CalcOuFtJob: ', match)
-      calcBettingJob({ matchId: match.match_id, betType: Const.BET_TYPE.OU_FT })
+      if (!betting) return
+      console.log('CalcOuFtJob: ', betting.match_id)
+      calcBettingJob({ matchId: betting.match_id, betType: Const.BET_TYPE.OU_FT })
     } catch (error) {
       console.log('error CalcOuFtJob: ', error.message)
       throw new Error(error.message)
