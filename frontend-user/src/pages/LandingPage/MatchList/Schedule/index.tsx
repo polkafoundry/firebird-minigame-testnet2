@@ -1,5 +1,4 @@
 import clsx from "clsx";
-import { useEffect, useState } from "react";
 import { rounds } from "../../../../constants";
 import { getCurrentRound } from "../../../../utils";
 import HeadingPrimary from "../../components/HeadingPrimary";
@@ -19,14 +18,13 @@ const schedules = [
 ];
 
 const Schedule = () => {
-  const [scheduleActivatingIndex, setScheduleActivatingIndex] = useState<any>();
-  useEffect(() => {
-    const currentRound = getCurrentRound();
-    const activatingIndex = schedules.findIndex((schedule) => {
-      return schedule?.rounds?.includes(currentRound?.value);
-    });
-    setScheduleActivatingIndex(activatingIndex < 4 ? activatingIndex : 4);
-  }, []);
+  const currentRound = getCurrentRound();
+  let scheduleActivatingIndex = schedules.findIndex((schedule) => {
+    return schedule?.rounds?.includes(currentRound?.value);
+  });
+
+  scheduleActivatingIndex =
+    scheduleActivatingIndex < 4 ? scheduleActivatingIndex : 4;
 
   return (
     <div
