@@ -27,3 +27,9 @@ declare module '@ioc:Firebird/UserLogsService' {
   const UserLogsService: UserLogsServiceInterface
   export default UserLogsService
 }
+
+declare module '@ioc:Firebird/GiftCodeService' {
+  import GiftCodeServiceInterface from 'Contracts/interfaces/GiftCodeService.interface'
+  const GiftCodeService: GiftCodeServiceInterface
+  export default GiftCodeService
+}
