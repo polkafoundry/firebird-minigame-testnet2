@@ -57,10 +57,14 @@ const MatchListTable = (props: MatchListTableProps) => {
     handleChangeStatus,
   } = props;
 
-  const currentRound = getCurrentRound().value;
-  const [groupStageIndex, setGroupStageIndex] = useState<number>(
-    rounds.findIndex((round) => round.value === currentRound),
-  );
+  const [groupStageIndex, setGroupStageIndex] = useState<number>(0);
+
+  useEffect(() => {
+    const currentRound = getCurrentRound().value;
+    setGroupStageIndex(
+      rounds.findIndex((round) => round.value === currentRound),
+    );
+  }, []);
 
   useEffect(() => {
     setFilter((prevState: FilterTypes) => ({

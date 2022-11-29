@@ -79,7 +79,7 @@ export const convertHexToNumberFormat = (hex: any, decimals = 18) => {
 export const getCurrentRound = () => {
   const currentUTCTime = moment().utc();
 
-  const currentRound = rounds.reverse().find((round) => {
+  const currentRound = [...rounds].reverse().find((round) => {
     if (round.startTime && round.endTime) {
       return (
         (moment(currentUTCTime).isAfter(round.startTime) &&
