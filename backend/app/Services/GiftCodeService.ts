@@ -69,7 +69,7 @@ export default class GiftCodeService {
       let res = {
         isExpried: codeInfo?.expried_time <= Date.now() / 1000,
         remaning: codeInfo?.remaining,
-        isUsed: checkUsed?.id || false,
+        isUsed: checkUsed?.id ? true : false,
         reward: codeInfo?.rewards,
       }
       return HelperUtils.responseSuccess(res)
