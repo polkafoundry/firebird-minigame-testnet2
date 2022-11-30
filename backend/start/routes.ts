@@ -53,9 +53,10 @@ Route.group(() => {
   Route.post('/user/log-error', 'UserLogsController.saveLogs')
   Route.post('/code/use-code', 'GiftCodeController.useCode')
 
-  Route.get('/code/get-avaiable-code', 'GiftCodeController.getCodeAvaiable')
   Route.get('/code/get-code-info', 'GiftCodeController.checkCodeInfo')
+  Route.get('/code/get-active-code', 'GiftCodeController.getActiveCode')
 
+  Route.get('/code/get-avaiable-code', 'GiftCodeController.getCodeAvaiable')
   Route.post('/code/create-code', 'GiftCodeController.createCode')
 }).prefix('/api/v1')
 

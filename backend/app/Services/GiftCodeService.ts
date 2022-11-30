@@ -43,13 +43,15 @@ export default class GiftCodeService {
     const page = request.input('page') || 1
     const limit = request.input('limit') || 10
     const platform = request.input('platform') || ''
+    let filterQuery = platform === '' ? '' : `WHERE platform = '${Const.PLATFORM[platform]}'`
+
     try {
       let listCode = await this.Database.from('gift_codes')
-        .where('platform', Const.PLATFORM[platform])
+        .joinRaw(filterQuery)
         .paginate(page, limit)
       return HelperUtils.responseSuccess(listCode)
     } catch (error) {
-      return HelperUtils.responseErrorInternal('Code not avaiable')
+      return HelperUtils.responseErrorInternal(error)
     }
   }
 
@@ -73,6 +75,21 @@ export default class GiftCodeService {
         reward: codeInfo?.rewards,
       }
       return HelperUtils.responseSuccess(res)
+    } catch (error) {
+      return HelperUtils.responseErrorInternal('Code not avaiable')
+    }
+  }
+
+  public async getActiveCode(request): Promise<any> {
+    try {
+      let codeInfo = await this.Database.from('gift_codes')
+        .where('start_time', '<', Date.now() / 1000)
+        .where('expried_time', '>', Date.now() / 1000)
+        .first()
+      if (!codeInfo) {
+        return HelperUtils.responseErrorInternal('No code active now')
+      }
+      return HelperUtils.responseSuccess(codeInfo)
     } catch (error) {
       return HelperUtils.responseErrorInternal('Code not avaiable')
     }
