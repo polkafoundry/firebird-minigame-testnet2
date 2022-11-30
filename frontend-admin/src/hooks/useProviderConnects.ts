@@ -1,8 +1,9 @@
-import { useNavigate } from "react-router";
 import { UnsupportedChainIdError, useWeb3React } from "@web3-react/core";
 import { InjectedConnector } from "@web3-react/injected-connector";
 import { useCallback, useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 import { SUPPORTED_WALLETS } from "../constants/connectors";
+import { ROUTES_URL } from "./../constants/index";
 
 const useProviderConnects = () => {
   const navigate = useNavigate();
@@ -47,7 +48,7 @@ const useProviderConnects = () => {
     localStorage.removeItem("walletconnect");
     deactivate();
     setConnectLoading(false);
-    navigate("/login");
+    navigate(ROUTES_URL.LOGIN);
   }, []);
 
   return {

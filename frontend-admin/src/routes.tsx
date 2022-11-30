@@ -1,15 +1,17 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import PrivateRoutes from "./components/base/PrivateRoutes";
+import { ROUTES_URL } from "./constants";
 import LangdingPage from "./pages/LandingPage";
 import LoginPage from "./pages/LoginPage";
 
 const routing = function createRouting() {
   return (
     <Routes>
-      <Route path={"/login"} element={<LoginPage />} />
+      <Route path={ROUTES_URL.LOGIN} element={<LoginPage />} />
       <Route element={<PrivateRoutes />}>
-        <Route path={"/dashboard"} element={<LangdingPage />} />
+        <Route path={ROUTES_URL.DASHBOARD} element={<LangdingPage />} />
+        <Route path={ROUTES_URL.GIFT_CODE} element={<LangdingPage />} />
         <Route path="*" element={<LangdingPage />} />
       </Route>
     </Routes>
