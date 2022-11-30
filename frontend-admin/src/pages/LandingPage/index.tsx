@@ -20,7 +20,6 @@ const LandingPage = () => {
   useEffect(() => {
     if (response && response?.status === 200) {
       const resData = response.data;
-      console.log();
       const data = [
         {
           label: "Betting Tx",
