@@ -70,6 +70,7 @@ export default class GiftCodeService {
         isExpried: codeInfo?.expried_time <= Date.now() / 1000,
         isAvaiable: codeInfo?.remaining > 0,
         isUsed: checkUsed?.id || false,
+        reward: codeInfo?.rewards,
       }
       return HelperUtils.responseSuccess(res)
     } catch (error) {
