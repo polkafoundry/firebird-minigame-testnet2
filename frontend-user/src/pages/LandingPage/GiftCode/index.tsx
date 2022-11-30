@@ -65,14 +65,14 @@ const GiftCode = () => {
   const [giftCode, setGiftCode] = useState<string>("");
   const [reward, setReward] = useState<number>(0);
   const [error, setError] = useState<string>("");
-  const [shouldFetchGiftCodeAvailable, setShouldFetchGiftCodeAvailable] =
+  const [shouldFetchGiftCodeDaily, setShouldFetchGiftCodeDaily] =
     useState<boolean>(false);
   const [shouldFetchGiftCodeInfo, setShouldFetchGiftCodeInfo] =
     useState<boolean>(false);
 
-  const { data: response } = useFetch<any>(
-    "/code/get-avaiable-code",
-    shouldFetchGiftCodeAvailable,
+  const { data: responseGiftCodeDaily } = useFetch<any>(
+    "/code/get-active-code",
+    shouldFetchGiftCodeDaily,
   );
   const { data: responseGiftCode } = useFetch<any>(
     `/code/get-code-info?code=${giftCode}&user_address=${account}`,
@@ -81,16 +81,17 @@ const GiftCode = () => {
 
   useEffect(() => {
     if (isClaimSuccess) {
-      setGiftCode("");
-      setError("");
-      setReward(0);
-      setShouldFetchGiftCodeInfo(false);
+      resetStates();
     }
   }, [isClaimSuccess]);
 
   useEffect(() => {
-    console.log("response", response?.data);
-  }, [response]);
+    if (responseGiftCodeDaily?.data) {
+      setGiftCode(responseGiftCodeDaily?.data?.code);
+      setReward(responseGiftCodeDaily?.data?.rewards);
+      setShouldFetchGiftCodeInfo(true);
+    }
+  }, [responseGiftCodeDaily]);
 
   useEffect(() => {
     if (
@@ -110,6 +111,13 @@ const GiftCode = () => {
     }
   }, [responseGiftCode]);
 
+  const resetStates = () => {
+    setGiftCode("");
+    setError("");
+    setReward(0);
+    setShouldFetchGiftCodeInfo(false);
+  };
+
   const handleChangeCode = (e: any) => {
     const input = e.target.value;
     setGiftCode(input);
@@ -122,13 +130,15 @@ const GiftCode = () => {
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
+    setShouldFetchGiftCodeDaily(false);
   };
 
   const handleClickLeftButton = (index: number) => {
     setOpenDialog(true);
+    resetStates();
 
     // get available gift code
-    if (index === 0) setShouldFetchGiftCodeAvailable(true);
+    if (index === 0) setShouldFetchGiftCodeDaily(true);
   };
 
   const copyToClipboard = () => {

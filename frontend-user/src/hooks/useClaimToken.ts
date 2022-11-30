@@ -101,6 +101,7 @@ const useClaimToken = (data?: any, isCorrect?: boolean) => {
       amount: data?.total_claim,
     };
 
+    setIsClaimSuccess(false);
     setLoadingClaim(true);
 
     fetcher(`${API_BASE_URL}/claim/get-sig`, {

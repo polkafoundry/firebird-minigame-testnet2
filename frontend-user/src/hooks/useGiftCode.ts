@@ -55,7 +55,7 @@ const useGiftCode = () => {
             "Fail to claim $BIRD with gift code. Please try again.",
           ),
         );
-        setIsClaimSuccess(false);
+
         setLoadingClaim(false);
       }
     },
@@ -68,6 +68,7 @@ const useGiftCode = () => {
       return;
     }
 
+    setIsClaimSuccess(false);
     setLoadingClaim(true);
 
     fetcher(`${API_BASE_URL}/code/use-code`, {
@@ -94,7 +95,6 @@ const useGiftCode = () => {
       })
       .catch((err: any) => {
         setLoadingClaim(false);
-        setIsClaimSuccess(false);
         console.log("ERR get signature: ", err);
       });
   };
