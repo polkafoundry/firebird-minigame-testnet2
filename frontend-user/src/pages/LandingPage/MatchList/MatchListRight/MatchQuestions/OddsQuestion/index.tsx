@@ -55,6 +55,18 @@ const OddsQuestion = (props: QuestionProps) => {
   }, [isClaimSuccess]);
 
   useEffect(() => {
+    async function getUserBettingInMatch() {
+      const res = await getUserBetting(dataQuestion?.match_id, betType);
+
+      setDataQuestion((prev: any) => ({
+        ...prev,
+        optionSelected: getOptionIndexByBetPlace(res?.place || ""),
+        bet_amount: res?.amount,
+        isClaimed: res?.isClaimed,
+      }));
+      setIsSubmitted(!!res?.place);
+    }
+
     getUserBettingInMatch();
   }, [dataQuestion?.match_id, betType]);
 
@@ -68,18 +80,6 @@ const OddsQuestion = (props: QuestionProps) => {
     if (!dataQuestion) return;
     setOptionWhoWin(dataQuestion?.optionSelected);
   }, [dataQuestion]);
-
-  async function getUserBettingInMatch() {
-    const res = await getUserBetting(dataQuestion?.match_id, betType);
-
-    setDataQuestion((prev: any) => ({
-      ...prev,
-      optionSelected: getOptionIndexByBetPlace(res?.place || ""),
-      bet_amount: res?.amount,
-      isClaimed: res?.isClaimed,
-    }));
-    setIsSubmitted(!!res?.place);
-  }
 
   const questionStatus = useMemo(
     () => dataQuestion?.questionStatus,

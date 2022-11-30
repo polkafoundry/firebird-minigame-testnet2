@@ -35,10 +35,11 @@ type MatchQuestionProps = {
   dataQuestion: any;
   account: string | undefined;
   isWrongChain: boolean;
+  loading: boolean;
 };
 
 const MatchQuestions = (props: MatchQuestionProps) => {
-  const { dataQuestion, account, isWrongChain } = props;
+  const { dataQuestion, account, isWrongChain, loading } = props;
   // TODO: pairing with api
   const predictPrize =
     rounds.find((round) => round.value === Number(dataQuestion?.round_name))
@@ -237,7 +238,10 @@ const MatchQuestions = (props: MatchQuestionProps) => {
   }, [dataQuestion]);
 
   //render Empty Question
-  if (!account || !dataQuestion || dataQuestion.length === 0 || isWrongChain)
+  if (
+    !loading &&
+    (!account || !dataQuestion || dataQuestion.length === 0 || isWrongChain)
+  )
     return (
       <div className="flex text-center text-xl font-semibold h-40 items-center justify-center bg-white m-8">
         {!account ? (

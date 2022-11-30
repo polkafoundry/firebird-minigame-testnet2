@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { WalletContext } from "../../contexts/WalletContext";
 import useFetch from "../../hooks/useFetch";
-import Header from "./Header";
+import DefaultLayout from "../../layouts/DefaultLayout";
 import MainContent from "./MainContent";
 import WinnerTable from "./WinnerTable";
 
@@ -9,7 +9,7 @@ const LandingPage = () => {
   const { connectedAccount } = useContext(WalletContext);
 
   const { data: response, loading } = useFetch<any>(
-    "/dashboard",
+    "/admin/dashboard",
     !!connectedAccount,
     false,
     connectedAccount,
@@ -20,7 +20,6 @@ const LandingPage = () => {
   useEffect(() => {
     if (response && response?.status === 200) {
       const resData = response.data;
-      console.log();
       const data = [
         {
           label: "Betting Tx",
@@ -49,15 +48,15 @@ const LandingPage = () => {
   }, [response]);
 
   return (
-    <div className="flex w-full h-full min-h-screen">
-      <div className="flex flex-col w-full max-w-screen-main mx-auto pb-20">
-        <Header />
+    <DefaultLayout>
+      <div className="flex w-full h-full min-h-screen">
+        <div className="flex flex-col w-full max-w-screen-main mx-auto pb-20">
+          <MainContent statistics={statistics} />
 
-        <MainContent statistics={statistics} />
-
-        <WinnerTable dataTable={dataTable} loading={loading} />
+          <WinnerTable dataTable={dataTable} loading={loading} />
+        </div>
       </div>
-    </div>
+    </DefaultLayout>
   );
 };
 

@@ -34,6 +34,7 @@ const MatchList = () => {
   const { account, isWrongChain } = useMyWeb3();
 
   const [selectedMatchId, setSelectedMatchId] = useState<number | undefined>();
+  const [tempId, setTempId] = useState<number>(0);
   const [open, setOpen] = useState<boolean>(false);
 
   const [dataTable, setDataTable] = useState<any[]>([]);
@@ -43,6 +44,13 @@ const MatchList = () => {
   const { data, loading } = useFetch<any>(
     "/match/get-list-match?" + queryString.stringify({ ...filter }),
   );
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setSelectedMatchId(tempId);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [tempId]);
 
   useEffect(() => {
     const rawData = data?.data?.data.map((item: any) => {
@@ -130,7 +138,7 @@ const MatchList = () => {
   };
 
   const handleSelectMatch = (id: number) => {
-    setSelectedMatchId(id);
+    setTempId(id);
 
     if (document.body.clientWidth < 960) {
       setOpen(true);
@@ -162,7 +170,7 @@ const MatchList = () => {
             )}
           >
             <MatchListTable
-              selectedMatchId={selectedMatchId}
+              selectedMatchId={tempId}
               handleSelectMatch={handleSelectMatch}
               dataTable={dataTable}
               loading={loading}

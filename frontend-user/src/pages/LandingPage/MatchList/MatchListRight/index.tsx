@@ -33,7 +33,7 @@ const MatchListRight = (props: MatchListRightProps) => {
   }, [account, matchId, predictConditions.gasFee, predictConditions.birdToken]);
 
   const fetchMatchDetailUrl = `/match/detail/${matchId}?wallet_address=${account}`;
-  const { data } = useFetch<any>(fetchMatchDetailUrl, !!matchId, true);
+  const { data, loading } = useFetch<any>(fetchMatchDetailUrl, !!matchId, true);
 
   const matchData = data?.data;
   const startTime = new Date(matchData?.start_time * 1000);
@@ -156,6 +156,7 @@ const MatchListRight = (props: MatchListRightProps) => {
           account={account}
           dataQuestion={matchData}
           isWrongChain={isWrongChain}
+          loading={loading}
         />
       ) : (
         <MatchGuide isDetailGuide />
