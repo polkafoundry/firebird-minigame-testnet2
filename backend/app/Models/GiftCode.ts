@@ -20,6 +20,9 @@ export default class GiftCode extends BaseModel {
   @column({ columnName: 'expried_time' })
   public expried_time: number
 
+  @column({ columnName: 'start_time' })
+  public start_time: number
+
   @column({ columnName: 'create_time' })
   public create_time: number
 

@@ -11,6 +11,7 @@ export default class GiftCodeService {
   public async createCode(request): Promise<any> {
     const platform = request.input('platform')
     const total = request.input('total')
+    const startTime = request.input('start_time')
     const expriedTime = request.input('expried_time')
     const rewards = request.input('rewards')
 
@@ -23,6 +24,7 @@ export default class GiftCodeService {
       data.platform = platform
       data.total = total
       data.remaining = total
+      data.start_time = startTime
       data.expried_time = expriedTime
       data.rewards = rewards
       data.create_time = Date.now() / 1000
@@ -41,10 +43,35 @@ export default class GiftCodeService {
     const limit = request.input('limit') || 10
 
     try {
-      return await this.Database.from('gift_codes')
+      let listCode = await this.Database.from('gift_codes')
         .where('remaining', '>', 0)
         .where('expried_time', '>', Date.now() / 1000)
         .paginate(page, limit)
+      return HelperUtils.responseSuccess(listCode)
+    } catch (error) {
+      return HelperUtils.responseErrorInternal('Code not avaiable')
+    }
+  }
+
+  public async checkCodeInfo(request): Promise<any> {
+    const userAddress = request.input('user_address')
+    const code = request.input('code')
+
+    try {
+      let codeInfo = await this.Database.from('gift_codes').where('code', code).first()
+      if (!codeInfo) {
+        return HelperUtils.responseErrorInternal('Code not avaiable')
+      }
+      let checkUsed = await this.Database.from('gift_code_histories')
+        .where('code', code)
+        .where('user_address', userAddress)
+        .first()
+      let res = {
+        isExpried: codeInfo?.expried_time <= Date.now() / 1000,
+        isAvaiable: codeInfo?.remaining > 0,
+        isUsed: checkUsed?.id || false,
+      }
+      return HelperUtils.responseSuccess(res)
     } catch (error) {
       return HelperUtils.responseErrorInternal('Code not avaiable')
     }

@@ -24,7 +24,7 @@ import { calcOddsFtJob } from 'App/Jobs/CalcOddsFtJob'
 const FetchMatchInfoInitTask = require('@ioc:App/Tasks/FetchMatchInfoTask')
 const FetchUserBettingTask = require('@ioc:App/Tasks/FetchUserBettingTask')
 const CalcPredictInitTask = require('@ioc:App/Tasks/CalcPredictTask')
-// const FetchPickWinnerInitTask = require('@ioc:App/Tasks/FetchPickWinnerTask')
+const FetchGiftCodeInitTask = require('@ioc:App/Tasks/FetchGiftCodeTask')
 
 /*
 |--------------------------------------------------------------------------
@@ -68,7 +68,7 @@ new Promise(() => {
   FetchMatchInfoInitTask.initTask()
   FetchUserBettingTask.initTask()
   CalcPredictInitTask.initTask()
-  // FetchPickWinnerInitTask.initTask()
+  FetchGiftCodeInitTask.initTask()
   calcOuFtJob()
   calcOuHtJob()
   calcOddsHtJob()

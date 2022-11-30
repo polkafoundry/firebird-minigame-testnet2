@@ -12,6 +12,7 @@ const jobs = [
   'App/Jobs/RequestRandomPredict',
   'App/Jobs/FetchPickWinner',
   'App/Jobs/CalcPredictJob',
+  'App/Jobs/FetchGiftCodeJob',
 ]
 
 export default jobs
