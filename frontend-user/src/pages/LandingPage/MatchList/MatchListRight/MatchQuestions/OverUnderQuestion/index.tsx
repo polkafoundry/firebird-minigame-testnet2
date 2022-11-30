@@ -31,6 +31,7 @@ const OverUnderQuestion = (props: QuestionProps) => {
     updateBirdBalance,
     setRecheckApprove,
   } = props;
+  const matchId = questionProp?.match_id;
 
   const [optionWhoWin, setOptionWhoWin] = useState<number>(0);
   const [depositAmount, setDepositAmount] = useState<string>("");
@@ -55,12 +56,24 @@ const OverUnderQuestion = (props: QuestionProps) => {
   }, [isClaimSuccess]);
 
   useEffect(() => {
+    async function getUserBettingInMatch() {
+      const res = await getUserBetting(matchId, betType);
+
+      setDataQuestion((prev: any) => ({
+        ...prev,
+        optionSelected: getOptionIndexByBetPlace(res?.place || ""),
+        bet_amount: res?.amount,
+        isClaimed: res?.isClaimed,
+      }));
+      setIsSubmitted(!!res?.place);
+    }
+
     getUserBettingInMatch();
-  }, [dataQuestion?.match_id, betType]);
+  }, [matchId, betType]);
 
   useEffect(() => {
     if (!questionProp) return;
-    setDepositAmount("0");
+    setDepositAmount("");
     setDataQuestion(questionProp);
   }, [questionProp]);
 
@@ -68,18 +81,6 @@ const OverUnderQuestion = (props: QuestionProps) => {
     if (!dataQuestion) return;
     setOptionWhoWin(dataQuestion?.optionSelected);
   }, [dataQuestion]);
-
-  async function getUserBettingInMatch() {
-    const res = await getUserBetting(dataQuestion?.match_id, betType);
-
-    setDataQuestion((prev: any) => ({
-      ...prev,
-      optionSelected: getOptionIndexByBetPlace(res?.place || ""),
-      bet_amount: res?.amount,
-      isClaimed: res?.isClaimed,
-    }));
-    setIsSubmitted(!!res?.place);
-  }
 
   const questionStatus = useMemo(
     () => dataQuestion?.questionStatus,
@@ -136,7 +137,7 @@ const OverUnderQuestion = (props: QuestionProps) => {
     if (!isValidated()) return;
 
     const dataSubmit = {
-      _matchID: dataQuestion?.match_id,
+      _matchID: matchId,
       _amount: BigNumber.from(depositAmount)
         .mul(BigNumber.from(10).pow(18))
         .toString(),

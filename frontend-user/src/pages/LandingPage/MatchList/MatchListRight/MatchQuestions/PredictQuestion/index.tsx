@@ -18,6 +18,7 @@ const PredictQuestion = (props: QuestionProps) => {
     error,
     predictPrize = "",
   } = props;
+  const matchId = questionProp?.match_id;
 
   const { loadingPredicting, predicting } = usePredicting();
   const { loadingBetting: loadingBettingContract, getUserPredicting } =
@@ -40,29 +41,29 @@ const PredictQuestion = (props: QuestionProps) => {
       ? QUESTION_STATUS.CORRECT_ANSWER
       : QUESTION_STATUS.WRONG_ANSWER;
 
-  async function getUserPredictingInMatch() {
-    const res = await getUserPredicting(dataQuestion?.match_id);
-    const _isSummitted = +BigNumber.from(res?.time || "0").toString() > 0;
-
-    setDataQuestion((prev: any) => ({
-      ...prev,
-      questionStatus: _isSummitted
-        ? dataQuestion?.match_status !== MATCH_STATUS.FINISHED
-          ? QUESTION_STATUS.PREDICTED
-          : isAnswerCorrect(res)
-        : QUESTION_STATUS.NOT_PREDICTED,
-
-      home_score: res?.homeScore?.toString() || "",
-      away_score: res?.awayScore?.toString() || "",
-    }));
-    setIsSubmitted(_isSummitted);
-    setInputTeam1(_isSummitted ? res?.homeScore?.toString() : "");
-    setInputTeam2(_isSummitted ? res?.awayScore?.toString() : "");
-  }
-
   useEffect(() => {
+    async function getUserPredictingInMatch() {
+      const res = await getUserPredicting(matchId);
+      const _isSummitted = +BigNumber.from(res?.time || "0").toString() > 0;
+
+      setDataQuestion((prev: any) => ({
+        ...prev,
+        questionStatus: _isSummitted
+          ? dataQuestion?.match_status !== MATCH_STATUS.FINISHED
+            ? QUESTION_STATUS.PREDICTED
+            : isAnswerCorrect(res)
+          : QUESTION_STATUS.NOT_PREDICTED,
+
+        home_score: res?.homeScore?.toString() || "",
+        away_score: res?.awayScore?.toString() || "",
+      }));
+      setIsSubmitted(_isSummitted);
+      setInputTeam1(_isSummitted ? res?.homeScore?.toString() : "");
+      setInputTeam2(_isSummitted ? res?.awayScore?.toString() : "");
+    }
+
     getUserPredictingInMatch();
-  }, [dataQuestion?.match_id]);
+  }, [matchId]);
 
   const matchEnded = useMemo(
     () => dataQuestion?.match_status === MATCH_STATUS.FINISHED,
@@ -78,7 +79,7 @@ const PredictQuestion = (props: QuestionProps) => {
   );
 
   const shouldLoadPredictInfo = useMemo(() => {
-    return !!account && matchEnded && dataQuestion?.match_id;
+    return !!account && matchEnded && matchId;
   }, [account, matchEnded, dataQuestion]);
 
   const questionStatus = useMemo(() => {
@@ -92,7 +93,7 @@ const PredictQuestion = (props: QuestionProps) => {
   const { response } = usePost<any>(
     "/predict/get-match-predict-info",
     {
-      match_id: dataQuestion?.match_id,
+      match_id: matchId,
       address: account,
     },
     shouldLoadPredictInfo,
@@ -119,7 +120,7 @@ const PredictQuestion = (props: QuestionProps) => {
 
   const handleSubmit = async () => {
     const dataSubmit = {
-      _matchID: dataQuestion?.match_id,
+      _matchID: matchId,
       _homeScore: inputTeam1,
       _awayScore: inputTeam2,
     };
