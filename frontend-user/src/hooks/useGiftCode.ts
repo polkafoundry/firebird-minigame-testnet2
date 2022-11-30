@@ -10,18 +10,14 @@ import { fetcher } from "./useFetch";
 
 const useGiftCode = () => {
   const { library, account } = useWeb3React();
-
   const [loadingClaim, setLoadingClaim] = useState<boolean>(false);
-
-  //   const [isClaimSuccess, setIsClaimSuccess] = useState<boolean>(false);
-
-  //   const { checkClaimed } = useBettingContract();
+  const [isClaimSuccess, setIsClaimSuccess] = useState<boolean>(false);
 
   const claimToken = useCallback(
     async (
       _code: string | undefined,
       _amount: any | undefined,
-      _signMessage: any,
+      _signature: any,
     ) => {
       if (!GIFT_CODE_CONTRACT || !account) {
         toast.error("Fail to load contract or account is not connected");
@@ -38,16 +34,18 @@ const useGiftCode = () => {
           account,
         );
         if (contract) {
+          console.log(_code, _amount, _signature, account);
           const transaction = await contract.useCode(
             _code,
             _amount,
-            _signMessage,
+            _signature,
           );
           //   setTransactionHash(transaction?.hash);
           await transaction.wait(1);
+          setIsClaimSuccess(true);
           setLoadingClaim(false);
 
-          toast.success("You are successfully claimed $BIRD with gift code.");
+          toast.success("You have successfully claimed $BIRD with gift code.");
         }
       } catch (error: any) {
         console.log("ERR claiming: ", error);
@@ -57,13 +55,14 @@ const useGiftCode = () => {
             "Fail to claim $BIRD with gift code. Please try again.",
           ),
         );
+        setIsClaimSuccess(false);
         setLoadingClaim(false);
       }
     },
     [library, account],
   );
 
-  const handleClaimToken = async (code: string) => {
+  const handleClaimToken = async (code: string, reward: number) => {
     if (!code) {
       toast.error("Please enter code!");
       return;
@@ -90,18 +89,12 @@ const useGiftCode = () => {
           s: rawSignature?.s?.data,
         };
 
-        console.log(
-          "signMessage",
-          signMessage,
-          BigNumber.from(5000).toString(),
-        );
-        await claimToken(code, 5000, signMessage);
-        // setIsClaimSuccess(claimed);
-
+        await claimToken(code, BigNumber.from(reward), signMessage);
         setLoadingClaim(false);
       })
       .catch((err: any) => {
         setLoadingClaim(false);
+        setIsClaimSuccess(false);
         console.log("ERR get signature: ", err);
       });
   };
@@ -109,7 +102,7 @@ const useGiftCode = () => {
   return {
     claimToken,
     loadingClaim,
-    // isClaimSuccess,
+    isClaimSuccess,
     handleClaimToken,
   };
 };

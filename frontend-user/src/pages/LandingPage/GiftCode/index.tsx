@@ -1,7 +1,9 @@
 import { Dialog } from "@headlessui/react";
+import clsx from "clsx";
 import { useContext, useEffect, useState } from "react";
 import "swiper/css/pagination";
 import { SwiperSlide } from "swiper/react";
+import DefaultLoading from "../../../components/base/DefaultLoading";
 import BaseSwiper from "../../../components/base/Swiper";
 import { FAUCET_URL } from "../../../constants";
 import { WalletContext } from "../../../context/WalletContext";
@@ -48,32 +50,74 @@ const giftCodeBanners = [
     icon: "./images/landing-page/gift-code/twitter.png",
     buttonLeft: { label: "Enter Code" },
     buttonRight: {
-      label: " Join Now",
+      label: "Join Now",
       redirectLink: "https://twitter.com/redkitepad",
     },
   },
 ];
 
 const GiftCode = () => {
-  const [openDialog, setOpenDialog] = useState<boolean>(false);
-  const [giftCode, setGiftCode] = useState<string>("");
-  const [shouldFetchGiftCodeAvailable, setShouldFetchGiftCodeAvailable] =
-    useState<boolean>(false);
   const { setShowModal } = useContext(WalletContext);
   const { account } = useMyWeb3();
-  const { handleClaimToken } = useGiftCode();
+  const { loadingClaim, isClaimSuccess, handleClaimToken } = useGiftCode();
+
+  const [openDialog, setOpenDialog] = useState<boolean>(false);
+  const [giftCode, setGiftCode] = useState<string>("");
+  const [reward, setReward] = useState<number>(0);
+  const [error, setError] = useState<string>("");
+  const [shouldFetchGiftCodeAvailable, setShouldFetchGiftCodeAvailable] =
+    useState<boolean>(false);
+  const [shouldFetchGiftCodeInfo, setShouldFetchGiftCodeInfo] =
+    useState<boolean>(false);
 
   const { data: response } = useFetch<any>(
     "/code/get-avaiable-code",
     shouldFetchGiftCodeAvailable,
   );
+  const { data: responseGiftCode } = useFetch<any>(
+    `/code/get-code-info?code=${giftCode}&user_address=${account}`,
+    shouldFetchGiftCodeInfo,
+  );
+
+  useEffect(() => {
+    if (isClaimSuccess) {
+      setGiftCode("");
+      setError("");
+      setReward(0);
+      setShouldFetchGiftCodeInfo(false);
+    }
+  }, [isClaimSuccess]);
 
   useEffect(() => {
     console.log("response", response?.data);
   }, [response]);
 
+  useEffect(() => {
+    if (
+      (!responseGiftCode && giftCode.length >= 10) ||
+      responseGiftCode?.status === 500
+    )
+      setError("Invalid gift code. Please try again.");
+    else if (responseGiftCode?.data?.isExpried)
+      setError("Code expired. Please wait for next gift code.");
+    else if (responseGiftCode?.data?.remaning <= 0)
+      setError("Code usage limit has been reached.");
+    else if (responseGiftCode?.data?.isUsed)
+      setError("You've already used this code.");
+    else if (responseGiftCode?.data) {
+      setError("");
+      setReward(responseGiftCode?.data?.reward);
+    }
+  }, [responseGiftCode]);
+
   const handleChangeCode = (e: any) => {
-    setGiftCode(e.target.value);
+    const input = e.target.value;
+    setGiftCode(input);
+    if (input.length === 10) {
+      setShouldFetchGiftCodeInfo(true);
+    } else {
+      setShouldFetchGiftCodeInfo(false);
+    }
   };
 
   const handleCloseDialog = () => {
@@ -95,11 +139,9 @@ const GiftCode = () => {
     if (!account) setShowModal && setShowModal(true);
     else {
       console.log("claim bird");
-      handleClaimToken(giftCode);
+      handleClaimToken(giftCode, reward);
     }
   };
-  //   const error = "Code expired. Please wait for next gift code.";
-  const error = "";
 
   const renderGiftCodeModal = () => (
     <Dialog
@@ -112,6 +154,7 @@ const GiftCode = () => {
         <div className="fixed inset-0 overflow-y-auto">
           <div className="flex min-h-full items-center justify-center p-4">
             <Dialog.Panel className="w-full max-w-[400px] h-auto relative m-auto bg-[#F2F2F2] rounded-[12px]">
+              {loadingClaim && <DefaultLoading />}
               <img
                 src="./images/landing-page/gift-code/icon-close.svg"
                 alt=""
@@ -123,7 +166,7 @@ const GiftCode = () => {
                   Gift code
                 </div>
                 <div className="mt-5 text-12/18 font-bold uppercase">
-                  Deposit Amount
+                  Your Code
                 </div>
                 <div className="mt-2 px-3.5 py-3 rounded-lg h-12 flex items-center bg-white">
                   <input
@@ -142,14 +185,17 @@ const GiftCode = () => {
                   You will receive
                 </div>
                 <div className="mt-2 text-24/32 font-tthoves font-semibold">
-                  {0} $BIRD
+                  {!error ? reward : 0} $BIRD
                 </div>
                 <div className="mt-2 h-[18px] text-12/18 text-[#FF0021]">
                   {error}
                 </div>
 
                 <button
-                  className="mt-3 btn-rounded bg-main w-full text-white font-tthoves"
+                  className={clsx(
+                    "mt-3 btn-rounded bg-main w-full text-white font-tthoves select-none",
+                    account && error && "pointer-events-none",
+                  )}
                   onClick={handleClaimBird}
                 >
                   {account ? "Claim $BIRD" : "Connect Wallet"}
@@ -166,8 +212,8 @@ const GiftCode = () => {
     <div className="pt-20 max-w-screen-main px-5 main:px-20 mx-auto w-full relative">
       <BaseSwiper showPagination>
         {giftCodeBanners.map((banner, index) => (
-          <SwiperSlide style={{ height: "100%" }} key={banner.title}>
-            <div className="w-full relative">
+          <SwiperSlide style={{ height: "auto" }} key={banner.title}>
+            <div className="w-full h-full relative">
               <div className="flex">
                 <img
                   src={banner.background.normal}
