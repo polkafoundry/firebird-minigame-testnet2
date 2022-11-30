@@ -5,8 +5,6 @@ import styles from "./landing.module.scss";
 const headingTable = ["No", "Match Name", "Match Time", "Final Winner"];
 
 const WinnerTable = ({ dataTable, loading }: any) => {
-  console.log(dataTable);
-
   const getMatchName = (rowData: any) => {
     const match = rowData?.match;
     return `${match?.home_name || "N/A"} vs ${match?.away_name || "N/A"}`;
