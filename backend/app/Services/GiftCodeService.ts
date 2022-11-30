@@ -83,6 +83,7 @@ export default class GiftCodeService {
   public async getActiveCode(request): Promise<any> {
     try {
       let codeInfo = await this.Database.from('gift_codes')
+        .where('platform', Const.PLATFORM['FIRE_BIRD'])
         .where('start_time', '<', Date.now() / 1000)
         .where('expried_time', '>', Date.now() / 1000)
         .first()
