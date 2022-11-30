@@ -80,7 +80,11 @@ export default class FetchGiftCodeJob implements JobContract {
     for (const event of events) {
       switch (event_type) {
         case USER_USE_CODE:
+          console.log('11', event_type)
+
           const gc = await GiftCodeModel.query().where('code', event.returnValues.code).first()
+          console.log('2', gc)
+
           if (gc) {
             await GiftCodeModel.query()
               .where('code', event.returnValues.code)
@@ -89,7 +93,7 @@ export default class FetchGiftCodeJob implements JobContract {
               })
             let gch = new GiftCodeHistoryModel()
             gch.code = event.returnValues.code
-            gch.user_address = event.returnValues.user_address
+            gch.user_address = event.returnValues.user
             gch.time_use = Date.now() / 1000
             gch.rewards = event.returnValues.amount
             await gch.save()

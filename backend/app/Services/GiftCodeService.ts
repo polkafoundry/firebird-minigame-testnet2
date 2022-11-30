@@ -2,6 +2,7 @@ const HelperUtils = require('@ioc:App/Common/HelperUtils')
 import { ethers, Wallet } from 'ethers'
 import { fromRpcSig } from 'ethereumjs-util'
 const GIFT_CODE_SMART_CONTRACT = process.env.GIFT_CODE_SMART_CONTRACT
+const Const = require('@ioc:App/Common/Const')
 
 export default class GiftCodeService {
   public GiftCodeHistoryModel = require('@ioc:App/Models/GiftCodeHistory')
@@ -41,11 +42,10 @@ export default class GiftCodeService {
   public async getCodeAvaiable(request): Promise<any> {
     const page = request.input('page') || 1
     const limit = request.input('limit') || 10
-
+    const platform = request.input('platform') || ''
     try {
       let listCode = await this.Database.from('gift_codes')
-        .where('remaining', '>', 0)
-        .where('expried_time', '>', Date.now() / 1000)
+        .where('platform', Const.PLATFORM[platform])
         .paginate(page, limit)
       return HelperUtils.responseSuccess(listCode)
     } catch (error) {

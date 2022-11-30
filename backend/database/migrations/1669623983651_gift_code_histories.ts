@@ -8,7 +8,7 @@ export default class GiftCodeHistories extends BaseSchema {
       table.increments('id')
       table.integer('code_id')
       table.string('code')
-      table.integer('user_address')
+      table.string('user_address')
       table.integer('time_use')
       table.decimal('rewards', 40, 0)
 
