@@ -64,11 +64,11 @@ export default class GiftCodeService {
       }
       let checkUsed = await this.Database.from('gift_code_histories')
         .where('code', code)
-        .where('user_address', userAddress)
+        .where('user_address', userAddress || '')
         .first()
       let res = {
         isExpried: codeInfo?.expried_time <= Date.now() / 1000,
-        isAvaiable: codeInfo?.remaining > 0,
+        remaning: codeInfo?.remaining,
         isUsed: checkUsed?.id || false,
         reward: codeInfo?.rewards,
       }

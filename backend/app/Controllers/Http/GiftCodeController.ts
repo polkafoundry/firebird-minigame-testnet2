@@ -12,4 +12,8 @@ export default class GiftCodeController {
   public async useCode({ request }) {
     return await GiftCodeService.useCode(request)
   }
+
+  public async checkCodeInfo({ request }) {
+    return await GiftCodeService.checkCodeInfo(request)
+  }
 }
