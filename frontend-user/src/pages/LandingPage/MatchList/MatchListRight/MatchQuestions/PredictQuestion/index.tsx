@@ -40,27 +40,27 @@ const PredictQuestion = (props: QuestionProps) => {
       ? QUESTION_STATUS.CORRECT_ANSWER
       : QUESTION_STATUS.WRONG_ANSWER;
 
-  async function getUserPredictingInMatch() {
-    const res = await getUserPredicting(dataQuestion?.match_id);
-    const _isSummitted = +BigNumber.from(res?.time || "0").toString() > 0;
-
-    setDataQuestion((prev: any) => ({
-      ...prev,
-      questionStatus: _isSummitted
-        ? dataQuestion?.match_status !== MATCH_STATUS.FINISHED
-          ? QUESTION_STATUS.PREDICTED
-          : isAnswerCorrect(res)
-        : QUESTION_STATUS.NOT_PREDICTED,
-
-      home_score: res?.homeScore?.toString() || "",
-      away_score: res?.awayScore?.toString() || "",
-    }));
-    setIsSubmitted(_isSummitted);
-    setInputTeam1(_isSummitted ? res?.homeScore?.toString() : "");
-    setInputTeam2(_isSummitted ? res?.awayScore?.toString() : "");
-  }
-
   useEffect(() => {
+    async function getUserPredictingInMatch() {
+      const res = await getUserPredicting(dataQuestion?.match_id);
+      const _isSummitted = +BigNumber.from(res?.time || "0").toString() > 0;
+
+      setDataQuestion((prev: any) => ({
+        ...prev,
+        questionStatus: _isSummitted
+          ? dataQuestion?.match_status !== MATCH_STATUS.FINISHED
+            ? QUESTION_STATUS.PREDICTED
+            : isAnswerCorrect(res)
+          : QUESTION_STATUS.NOT_PREDICTED,
+
+        home_score: res?.homeScore?.toString() || "",
+        away_score: res?.awayScore?.toString() || "",
+      }));
+      setIsSubmitted(_isSummitted);
+      setInputTeam1(_isSummitted ? res?.homeScore?.toString() : "");
+      setInputTeam2(_isSummitted ? res?.awayScore?.toString() : "");
+    }
+
     getUserPredictingInMatch();
   }, [dataQuestion?.match_id]);
 
