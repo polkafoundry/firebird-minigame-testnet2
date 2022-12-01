@@ -13,6 +13,7 @@ import useFetch from "../../../hooks/useFetch";
 import useGiftCode from "../../../hooks/useGiftCode";
 import { useMyWeb3 } from "../../../hooks/useMyWeb3";
 import { decryptData } from "../../../utils/encryptData";
+import { requestSupportNetwork } from "../../../utils/setupNetwork";
 
 const giftCodeBanners = [
   {
@@ -63,7 +64,7 @@ const GiftCode = () => {
   const location = useLocation();
 
   const { setShowModal } = useContext(WalletContext);
-  const { account } = useMyWeb3();
+  const { account, isWrongChain } = useMyWeb3();
   const { loadingClaim, isClaimSuccess, handleClaimToken } = useGiftCode();
 
   const [openDialog, setOpenDialog] = useState<boolean>(false);
@@ -151,6 +152,7 @@ const GiftCode = () => {
   const handleCloseDialog = () => {
     setOpenDialog(false);
     setShouldFetchGiftCodeDaily(false);
+    if (location?.search.startsWith("?source=")) history.pushState({}, "", "/");
   };
 
   const openDialogWithDefaultState = (bannerIndex: number) => {
@@ -168,6 +170,7 @@ const GiftCode = () => {
 
   const handleClaimBird = () => {
     if (!account) setShowModal && setShowModal(true);
+    else if (isWrongChain) requestSupportNetwork();
     else handleClaimToken(giftCode, reward);
   };
 
@@ -226,7 +229,11 @@ const GiftCode = () => {
                   )}
                   onClick={handleClaimBird}
                 >
-                  {account ? "Claim $BIRD" : "Connect Wallet"}
+                  {account
+                    ? !isWrongChain
+                      ? "Claim $BIRD"
+                      : "Switch Chain"
+                    : "Connect Wallet"}
                 </button>
               </div>
             </Dialog.Panel>
