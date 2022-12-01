@@ -34,7 +34,6 @@ const useGiftCode = () => {
           account,
         );
         if (contract) {
-          console.log(_code, _amount, _signature, account);
           const transaction = await contract.useCode(
             _code,
             _amount,
@@ -82,15 +81,15 @@ const useGiftCode = () => {
       }),
     })
       .then(async (res) => {
-        const rawSignature = res?.data;
+        const rawData = res?.data;
         const signMessage = {
-          deadline: rawSignature?.deadline,
-          v: rawSignature?.v,
-          r: rawSignature?.r?.data,
-          s: rawSignature?.s?.data,
+          deadline: rawData?.signature?.deadline,
+          v: rawData?.signature?.v,
+          r: rawData?.signature?.r?.data,
+          s: rawData?.signature?.s?.data,
         };
 
-        await claimToken(code, BigNumber.from(reward), signMessage);
+        await claimToken(rawData?.code, BigNumber.from(reward), signMessage);
         setLoadingClaim(false);
       })
       .catch((err: any) => {

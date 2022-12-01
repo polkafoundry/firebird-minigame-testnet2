@@ -1,6 +1,8 @@
 import { Dialog } from "@headlessui/react";
 import clsx from "clsx";
 import { useContext, useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
+import { toast } from "react-toastify";
 import "swiper/css/pagination";
 import { SwiperSlide } from "swiper/react";
 import DefaultLoading from "../../../components/base/DefaultLoading";
@@ -10,6 +12,7 @@ import { WalletContext } from "../../../context/WalletContext";
 import useFetch from "../../../hooks/useFetch";
 import useGiftCode from "../../../hooks/useGiftCode";
 import { useMyWeb3 } from "../../../hooks/useMyWeb3";
+import { decryptData } from "../../../utils/encryptData";
 
 const giftCodeBanners = [
   {
@@ -57,6 +60,8 @@ const giftCodeBanners = [
 ];
 
 const GiftCode = () => {
+  const location = useLocation();
+
   const { setShowModal } = useContext(WalletContext);
   const { account } = useMyWeb3();
   const { loadingClaim, isClaimSuccess, handleClaimToken } = useGiftCode();
@@ -79,6 +84,21 @@ const GiftCode = () => {
     shouldFetchGiftCodeInfo,
   );
 
+  // handle fill gift code from other socials media
+  useEffect(() => {
+    const searchParam = location?.search;
+    const isRedirectLink = searchParam.startsWith("?source=");
+    if (!isRedirectLink) return;
+
+    const giftCodeDecrypt = decryptData(searchParam?.slice(8));
+    if (giftCodeDecrypt?.code) {
+      setOpenDialog(true);
+      setGiftCode(giftCodeDecrypt?.code);
+      setShouldFetchGiftCodeInfo(true);
+    }
+  }, [location?.search]);
+
+  // handle actions after claim successfully
   useEffect(() => {
     if (isClaimSuccess) {
       resetStates();
@@ -133,24 +153,22 @@ const GiftCode = () => {
     setShouldFetchGiftCodeDaily(false);
   };
 
-  const handleClickLeftButton = (index: number) => {
+  const openDialogWithDefaultState = (bannerIndex: number) => {
     setOpenDialog(true);
     resetStates();
 
-    // get available gift code
-    if (index === 0) setShouldFetchGiftCodeDaily(true);
+    // get code daily when user click banner 1
+    if (bannerIndex === 0) setShouldFetchGiftCodeDaily(true);
   };
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(giftCode);
+    toast.success("Copy code successfully!");
   };
 
   const handleClaimBird = () => {
     if (!account) setShowModal && setShowModal(true);
-    else {
-      console.log("claim bird");
-      handleClaimToken(giftCode, reward);
-    }
+    else handleClaimToken(giftCode, reward);
   };
 
   const renderGiftCodeModal = () => (
@@ -254,7 +272,7 @@ const GiftCode = () => {
                     <div className="flex flex-col justify-center space-y-3 md:pr-10 items-center text-18/24 font-tthoves font-semibold mt-5 sm:flex-row sm:space-y-0 sm:space-x-3 md:mt-1 md:justify-end z-20">
                       <button
                         className="btn-rounded bg-main w-full max-w-[244px] md:max-w-[180px] lg:max-w-[244px]"
-                        onClick={() => handleClickLeftButton(index)}
+                        onClick={() => openDialogWithDefaultState(index)}
                       >
                         {banner.buttonLeft.label}
                       </button>
