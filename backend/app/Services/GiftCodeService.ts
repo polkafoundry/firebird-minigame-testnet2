@@ -121,9 +121,12 @@ export default class GiftCodeService {
         userAddress,
         nonce,
         codeAvaiable?.rewards,
-        code
+        code + new Date().getDate()
       )
-      return HelperUtils.responseSuccess(signature)
+      return HelperUtils.responseSuccess({
+        signature: signature,
+        code: code + new Date().getDate(),
+      })
     } catch (error) {
       return HelperUtils.responseErrorInternal(error)
     }

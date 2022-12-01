@@ -414,6 +414,7 @@ export default class BettingService {
           .select('m.away_name')
           .select('m.away_icon')
           .orderBy('match_id', 'DESC')
+          .orderBy('bet_type', 'DESC')
           .paginate(page, limit),
       ])
 

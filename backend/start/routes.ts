@@ -55,13 +55,12 @@ Route.group(() => {
 
   Route.get('/code/get-code-info', 'GiftCodeController.checkCodeInfo')
   Route.get('/code/get-active-code', 'GiftCodeController.getActiveCode')
-
-  Route.get('/code/get-avaiable-code', 'GiftCodeController.getCodeAvaiable')
-  Route.post('/code/create-code', 'GiftCodeController.createCode')
 }).prefix('/api/v1')
 
 Route.group(() => {
   Route.get('/dashboard', 'AdminsController.getDashboardData')
+  Route.get('/code/get-avaiable-code', 'GiftCodeController.getCodeAvaiable')
+  Route.post('/code/create-code', 'GiftCodeController.createCode')
 })
   .prefix('/api/v1/admin')
   .middleware('checkAuthWallet')
