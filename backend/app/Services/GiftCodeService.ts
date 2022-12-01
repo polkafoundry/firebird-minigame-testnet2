@@ -65,7 +65,7 @@ export default class GiftCodeService {
         return HelperUtils.responseErrorInternal('Code not avaiable')
       }
       let checkUsed = await this.Database.from('gift_code_histories')
-        .where('code', code)
+        .where('code', code + new Date().getDate())
         .where('user_address', userAddress || '')
         .first()
       let res = {
