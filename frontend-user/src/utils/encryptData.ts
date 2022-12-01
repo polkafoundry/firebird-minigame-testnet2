@@ -32,7 +32,6 @@ export const decryptData = (encryptData: any) => {
     encryptData,
     process.env.REACT_APP_ENCRYPT_SECRET_KEY,
   );
-  const decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
-
+  const decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8) || "{}");
   return decryptedData;
 };

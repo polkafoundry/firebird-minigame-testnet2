@@ -1,0 +1,18 @@
+.swiper-pagination-bullet {
+  background-color: #d9d9d9 !important;
+  opacity: 0.5 !important;
+}
+
+.swiper-pagination-bullet-active {
+  background-color: #eb522f !important;
+  opacity: 1 !important;
+}
+
+@media screen(md) {
+  .swiper-pagination {
+    text-align: left !important;
+    left: 220px !important;
+    bottom: 30px !important;
+    width: auto !important;
+  }
+}
