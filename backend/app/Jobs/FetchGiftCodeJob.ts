@@ -90,7 +90,7 @@ export default class FetchGiftCodeJob implements JobContract {
 
           if (gc) {
             await GiftCodeModel.query()
-              .where('code', event.returnValues.code)
+              .where('code', event.returnValues.code.slice(0, 10))
               .update({
                 remaining: gc.remaining - 1,
               })
