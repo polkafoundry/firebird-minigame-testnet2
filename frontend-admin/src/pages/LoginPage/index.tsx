@@ -12,7 +12,7 @@ const LoginPage = () => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const { data: response } = useFetch<any>(
-    "/admin/dashboard?startTime=1661252949&endTime=1669050000",
+    "/dashboard?startTime=1661252949&endTime=1669050000",
     !!connectedAccount,
     false,
     connectedAccount,

@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import DropDown from "../../components/base/DropDown";
 import { platforms, PLATFORM } from "../../constants";
+import { WalletContext } from "../../contexts/WalletContext";
 import useFetch from "../../hooks/useFetch";
 import DefaultLayout from "../../layouts/DefaultLayout";
 import CodeListTable from "./CodeListTable";
@@ -14,6 +15,8 @@ export type FilterTypes = {
 };
 
 const GiftCodePage = () => {
+  const { connectedAccount } = useContext(WalletContext);
+
   const [filter, setFilter] = useState<FilterTypes>({
     codeType: "",
     size: 20,
@@ -30,6 +33,7 @@ const GiftCodePage = () => {
     `/code/get-avaiable-code?platfrom=${filter.codeType}`,
     true,
     true,
+    connectedAccount,
   );
 
   useEffect(() => {
