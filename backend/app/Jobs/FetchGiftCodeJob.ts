@@ -77,13 +77,16 @@ export default class FetchGiftCodeJob implements JobContract {
       fromBlock: from,
       toBlock: to,
     })
+
     for (const event of events) {
       switch (event_type) {
         case USER_USE_CODE:
-          console.log('11', event_type)
-
-          const gc = await GiftCodeModel.query().where('code', event.returnValues.code).first()
-          console.log('2', gc)
+          if (!event?.returnValues?.code) {
+            break
+          }
+          const gc = await GiftCodeModel.query()
+            .where('code', event.returnValues.code.slice(0, 10))
+            .first()
 
           if (gc) {
             await GiftCodeModel.query()

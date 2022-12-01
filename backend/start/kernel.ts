@@ -14,16 +14,16 @@ import Server from '@ioc:Adonis/Core/Server'
 // import { fetchUpcomingMatchJob } from 'App/Jobs/FetchUpcomingMatchJob'
 // import { fetchLiveMatchJob } from 'App/Jobs/FetchLiveMatchJob'
 
-// import { calcOuFtJob } from 'App/Jobs/CalcOuFtJob'
-// import { calcOuHtJob } from 'App/Jobs/CalcOuHtJob'
-// import { calcOddsHtJob } from 'App/Jobs/CalcOddsHtJob'
-// import { calcOddsFtJob } from 'App/Jobs/CalcOddsFtJob'
+import { calcOuFtJob } from 'App/Jobs/CalcOuFtJob'
+import { calcOuHtJob } from 'App/Jobs/CalcOuHtJob'
+import { calcOddsHtJob } from 'App/Jobs/CalcOddsHtJob'
+import { calcOddsFtJob } from 'App/Jobs/CalcOddsFtJob'
 
-// // import { requestRandomPredict } from 'App/Jobs/RequestRandomPredict'
+// import { requestRandomPredict } from 'App/Jobs/RequestRandomPredict'
 
-// const FetchMatchInfoInitTask = require('@ioc:App/Tasks/FetchMatchInfoTask')
-// const FetchUserBettingTask = require('@ioc:App/Tasks/FetchUserBettingTask')
-// const CalcPredictInitTask = require('@ioc:App/Tasks/CalcPredictTask')
+const FetchMatchInfoInitTask = require('@ioc:App/Tasks/FetchMatchInfoTask')
+const FetchUserBettingTask = require('@ioc:App/Tasks/FetchUserBettingTask')
+const CalcPredictInitTask = require('@ioc:App/Tasks/CalcPredictTask')
 const FetchGiftCodeInitTask = require('@ioc:App/Tasks/FetchGiftCodeTask')
 
 /*
@@ -65,14 +65,14 @@ new Promise(() => {
   // Scheduler.run();
   // fetchUpcomingMatchJob({})
   // fetchLiveMatchJob()
-  // FetchMatchInfoInitTask.initTask()
-  // FetchUserBettingTask.initTask()
-  // CalcPredictInitTask.initTask()
+  FetchMatchInfoInitTask.initTask()
+  FetchUserBettingTask.initTask()
+  CalcPredictInitTask.initTask()
   FetchGiftCodeInitTask.initTask()
-  // calcOuFtJob()
-  // calcOuHtJob()
-  // calcOddsHtJob()
-  // calcOddsFtJob()
+  calcOuFtJob()
+  calcOuHtJob()
+  calcOddsHtJob()
+  calcOddsFtJob()
   // requestRandomPredict()
   return
 }).then(() => {})
