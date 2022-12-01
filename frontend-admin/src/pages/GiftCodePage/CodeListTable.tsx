@@ -11,16 +11,9 @@ const headingTable = [
   "Use / Max Quota",
   "$BIRD / code",
   "Type",
-  "Action",
 ];
 
-const CodeListTable = ({ dataTable, loading }: any) => {
-  console.log(loading);
-
-  const handleViewCode = (id: number) => {
-    console.log("id", id);
-  };
-
+const CodeListTable = ({ dataTable }: any) => {
   const displayDateTiemFormat = (dateTime: any) => {
     return dateTime
       ? moment(new Date(dateTime * 1000)).format("Do MMM YY, HH:mm")
@@ -64,11 +57,6 @@ const CodeListTable = ({ dataTable, loading }: any) => {
                       (platform: any) => platform?.value === item.platform,
                     )?.label
                   : "N/A"}
-              </div>
-              <div>
-                <div className="flex" onClick={() => handleViewCode(item?.id)}>
-                  View
-                </div>
               </div>
             </div>
           ))}

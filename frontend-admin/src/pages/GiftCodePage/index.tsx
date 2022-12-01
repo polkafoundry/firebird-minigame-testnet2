@@ -77,7 +77,7 @@ const GiftCodePage = () => {
           <p className="m-0 text-32/40 font-semibold">Code List</p>
 
           <div className="flex mt-10">
-            <div className="ml-3">
+            <div className="">
               <DropDown
                 label="Status"
                 items={platforms}
