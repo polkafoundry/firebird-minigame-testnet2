@@ -9,7 +9,7 @@ const LandingPage = () => {
   const { connectedAccount } = useContext(WalletContext);
 
   const { data: response, loading } = useFetch<any>(
-    "/admin/dashboard",
+    "/dashboard",
     !!connectedAccount,
     false,
     connectedAccount,

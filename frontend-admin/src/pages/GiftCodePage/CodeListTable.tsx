@@ -1,6 +1,5 @@
 import clsx from "clsx";
 import moment from "moment";
-import { platforms } from "../../constants";
 import { formatCurrency } from "../../utils";
 import styles from "./codeList.module.scss";
 
@@ -11,16 +10,9 @@ const headingTable = [
   "Use / Max Quota",
   "$BIRD / code",
   "Type",
-  "Action",
 ];
 
-const CodeListTable = ({ dataTable, loading }: any) => {
-  console.log(loading);
-
-  const handleViewCode = (id: number) => {
-    console.log("id", id);
-  };
-
+const CodeListTable = ({ dataTable }: any) => {
   const displayDateTiemFormat = (dateTime: any) => {
     return dateTime
       ? moment(new Date(dateTime * 1000)).format("Do MMM YY, HH:mm")
@@ -54,21 +46,17 @@ const CodeListTable = ({ dataTable, loading }: any) => {
               )}
             >
               <div>{item?.code}</div>
-              <div>{displayDateTiemFormat(item?.create_time)}</div>
+              <div>{displayDateTiemFormat(item?.start_time)}</div>
               <div>{displayDateTiemFormat(item?.expried_time)}</div>
               <div>{`${item?.total - item?.remaining}/${item?.total}`}</div>
               <div>{formatCurrency(item?.rewards)}</div>
               <div>
-                {item?.platform
+                {item?.platform}
+                {/* {item?.platform
                   ? platforms.find(
                       (platform: any) => platform?.value === item.platform,
                     )?.label
-                  : "N/A"}
-              </div>
-              <div>
-                <div className="flex" onClick={() => handleViewCode(item?.id)}>
-                  View
-                </div>
+                  : "N/A"} */}
               </div>
             </div>
           ))}
