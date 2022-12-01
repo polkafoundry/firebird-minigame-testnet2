@@ -13,7 +13,7 @@ class FetchLiveMatch {
 			const liveMatches = await new MatchService().getLiveMatch()
 			Logger.info(`liveMatches: ${JSON.stringify(liveMatches)}`)
 			console.log('liveMatches: ', liveMatches)
-			if (!liveMatches.length) return console.log('askjbajds')
+			if (!liveMatches.length) return
 			await Promise.all(liveMatches.map((match) => this._updateLiveMatch(match)))
 		} catch (error) {
 			console.log('error FetchLiveMatchJob: ', error.message)
