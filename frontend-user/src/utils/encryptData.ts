@@ -3,9 +3,9 @@ const CryptoJS = require("crypto-js");
 
 export type LoggingDataProps = {
   status: "error" | "success";
-  type: "predict" | "bet" | "claim";
+  type: "predict" | "bet" | "claim" | "gift_code";
   user_address: string;
-  match_id: string | undefined;
+  match_id?: string | undefined;
   bet_type?: string | undefined;
   home_score?: number | undefined;
   away_score?: number | undefined;

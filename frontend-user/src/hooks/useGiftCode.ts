@@ -4,7 +4,9 @@ import { useCallback, useState } from "react";
 import { toast } from "react-toastify";
 import GIFT_CODE_ABI from "../abi/SBirdGiftCode.json";
 import { API_BASE_URL, GIFT_CODE_CONTRACT } from "../constants";
+import { sendDataLogging } from "../requests/getMyHistory";
 import { getContract } from "../utils/contract";
+import { encryptData } from "../utils/encryptData";
 import { getErrorMessage } from "../utils/getErrorMessage";
 import { fetcher } from "./useFetch";
 
@@ -25,6 +27,7 @@ const useGiftCode = () => {
       }
 
       setLoadingClaim(true);
+      let dataLogging;
 
       try {
         const contract = getContract(
@@ -44,6 +47,15 @@ const useGiftCode = () => {
           setIsClaimSuccess(true);
           setLoadingClaim(false);
 
+          // logging success data to api
+          dataLogging = encryptData({
+            status: "success",
+            type: "gift_code",
+            user_address: account || "",
+            bet_type: _code,
+            amount: _amount.toString(),
+          });
+
           toast.success("You have successfully claimed $BIRD with gift code.");
         }
       } catch (error: any) {
@@ -54,9 +66,21 @@ const useGiftCode = () => {
             "Fail to claim $BIRD with gift code. Please try again.",
           ),
         );
-
         setLoadingClaim(false);
+
+        // logging error data to api
+        dataLogging = encryptData({
+          status: "error",
+          type: "gift_code",
+          user_address: account || "",
+          bet_type: _code,
+          amount: _amount.toString(),
+          errorText: "ERR claim: " + error?.message,
+        });
       }
+
+      // send data logging to backend
+      sendDataLogging(dataLogging);
     },
     [library, account],
   );
