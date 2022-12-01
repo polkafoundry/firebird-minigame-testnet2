@@ -47,16 +47,17 @@ const CodeListTable = ({ dataTable }: any) => {
               )}
             >
               <div>{item?.code}</div>
-              <div>{displayDateTiemFormat(item?.create_time)}</div>
+              <div>{displayDateTiemFormat(item?.start_time)}</div>
               <div>{displayDateTiemFormat(item?.expried_time)}</div>
               <div>{`${item?.total - item?.remaining}/${item?.total}`}</div>
               <div>{formatCurrency(item?.rewards)}</div>
               <div>
-                {item?.platform
+                {item?.platform}
+                {/* {item?.platform
                   ? platforms.find(
                       (platform: any) => platform?.value === item.platform,
                     )?.label
-                  : "N/A"}
+                  : "N/A"} */}
               </div>
             </div>
           ))}
