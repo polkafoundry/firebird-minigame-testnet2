@@ -1,6 +1,5 @@
 import clsx from "clsx";
 import moment from "moment";
-import { platforms } from "../../constants";
 import { formatCurrency } from "../../utils";
 import styles from "./codeList.module.scss";
 
