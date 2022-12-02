@@ -30,7 +30,7 @@ const GiftCodePage = () => {
     loading,
     mutate,
   } = useFetch<any>(
-    `/code/get-avaiable-code?platfrom=${filter.codeType}`,
+    `/code/get-avaiable-code?platform=${filter.codeType}`,
     true,
     true,
     connectedAccount,
