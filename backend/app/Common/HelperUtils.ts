@@ -9,6 +9,9 @@ const BETTING_ABI = require('../../blockchain_configs/contracts/SBirdBetting.jso
 const PREDICT_WINNER_SMART_CONTRACT = process.env.PREDICT_WINNER_SMART_CONTRACT
 const PREDICT_WINNER_ABI = require('../../blockchain_configs/contracts/PredictWinner.json')
 
+const GIFT_CODE_SMART_CONTRACT = process.env.GIFT_CODE_SMART_CONTRACT
+const GIFT_CODE_ABI = require('../../blockchain_configs/contracts/SBirdGiftCode.json')
+
 const getWeb3ProviderLink = () => {
   if (isDevelopment) {
     const WEB3_API_URLS = ['https://rpc.testnet-firebird.polkafoundry.com/']
@@ -53,6 +56,20 @@ const getBettingContractInstance = async () => {
   }
   const web3 = await getWeb3Provider()
   const instance = new web3.eth.Contract(BETTING_ABI.abi, pool)
+  if (!instance) {
+    return null
+  }
+
+  return instance
+}
+
+const getGiftCodeContractInstance = async () => {
+  const pool = GIFT_CODE_SMART_CONTRACT
+  if (!pool) {
+    return null
+  }
+  const web3 = await getWeb3Provider()
+  const instance = new web3.eth.Contract(GIFT_CODE_ABI.abi, pool)
   if (!instance) {
     return null
   }
@@ -106,9 +123,18 @@ const responseSuccess = (data = null, message) => {
   }
 }
 
-const getMFToken = (input: crypto.BinaryLike, algorithm = "sha256"): string => {
+const getMFToken = (input: crypto.BinaryLike, algorithm = 'sha256'): string => {
   if (!input) return ''
-  return crypto.createHash(algorithm).update(input).digest("hex")
+  return crypto.createHash(algorithm).update(input).digest('hex')
+}
+
+const generateRandomCode = () => {
+  const characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+  let code = ''
+  for (let i = 0; i < 10; i++) {
+    code += characters[Math.floor(Math.random() * characters.length)]
+  }
+  return code
 }
 
 module.exports = {
@@ -120,4 +146,6 @@ module.exports = {
   responseBadRequest,
   responseSuccess,
   getMFToken,
+  generateRandomCode,
+  getGiftCodeContractInstance,
 }

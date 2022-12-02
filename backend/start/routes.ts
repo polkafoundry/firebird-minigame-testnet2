@@ -51,12 +51,20 @@ Route.group(() => {
   Route.get('/leaderboard', 'MetaForceController.getData')
 
   Route.post('/user/log-error', 'UserLogsController.saveLogs')
+  Route.post('/code/use-code', 'GiftCodeController.useCode')
+
+  Route.get('/code/get-code-info', 'GiftCodeController.checkCodeInfo')
+  Route.get('/code/get-active-code', 'GiftCodeController.getActiveCode')
 }).prefix('/api/v1')
 
 Route.group(() => {
   Route.get('/dashboard', 'AdminsController.getDashboardData')
-}).prefix('/api/v1/admin').middleware('checkAuthWallet')
+  Route.get('/code/get-avaiable-code', 'GiftCodeController.getCodeAvaiable')
+  Route.post('/code/create-code', 'GiftCodeController.createCode')
+})
+  .prefix('/api/v1/admin')
+  .middleware('checkAuthWallet')
 
-Route.group(() => { })
+Route.group(() => {})
   .prefix('/api/v1')
   .middleware('checkSignature')
