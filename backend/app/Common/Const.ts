@@ -128,12 +128,12 @@ module.exports = Object.freeze({
   },
   MAX_REQ_SEND_TO_MF: +(process.env.MAX_REQ_SEND_TO_MF || 500),
   PLATFORM: {
-    FIRE_BIRD: 'FIRE BIRD',
+    FIRE_BIRD: 'FIREBIRD',
     TELE: 'TELEGRAM',
     TWITTER: 'TWITTER',
     MONSTERRA: 'MONSTERRA',
     EPIC_WAR: 'EPIC WAR',
     GAMEFI: 'GAMEFI',
-    REDKITE: 'RED KITE',
+    REDKITE: 'REDKITE',
   },
 })

@@ -30,7 +30,7 @@ export default class UserLogsService {
 
       return HelperUtils.responseSuccess(1)
     } catch (error) {
-      return HelperUtils.responseErrorInternal('log hash is incorrect')
+      return HelperUtils.responseErrorInternal(error)
     }
   }
 }
