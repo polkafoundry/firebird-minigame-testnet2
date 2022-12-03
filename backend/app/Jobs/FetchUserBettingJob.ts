@@ -166,7 +166,7 @@ export default class FetchUserBettingInfoJob implements JobContract {
       } else if (event_type === USER_PREDICT) {
         await PredictModel.updateOrCreateMany(searchPayload, payloads)
       } else if (event_type === USER_CLAIM) {
-        BettingModel.updateOrCreateMany(searchPayload, payloads)
+        await BettingModel.updateOrCreateMany(searchPayload, payloads)
       }
     } catch (error) {
       Logger.error(error)
