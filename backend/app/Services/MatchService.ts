@@ -77,43 +77,43 @@ export default class MatchService {
       })
       .first()
     match = JSON.parse(JSON.stringify(match))
-    let bets = await this.BetCountModel.query()
-      .where('match_id', wallet_address)
-      .andWhere('user_address', id)
-      .first()
-    if (!bets) {
-      let betCount = await this.Database.from('bettings')
-        .count('* as total')
-        .where('user_address', wallet_address)
-        .where('match_id', id)
-      let predictCount = await this.Database.from('predicts')
-        .count('*  as total')
-        .where('user_address', wallet_address)
-        .where('match_id', id)
-      let total = betCount[0].total + predictCount[0].total
-      let betCountData = new this.BetCountModel()
-      betCountData.match_id = id
-      betCountData.user_address = wallet_address
-      betCountData.bet_count = total
-      await betCountData.save()
-    }
-    if (bets && bets.bet_count < 5) {
-      let betCount = await this.Database.from('bettings')
-        .count('* as total')
-        .where('user_address', wallet_address)
-        .where('match_id', id)
-      let predictCount = await this.Database.from('predicts')
-        .count('*  as total')
-        .where('user_address', wallet_address)
-        .where('match_id', id)
-      let total = betCount[0].total + predictCount[0].total
-      await this.BetCountModel.query()
-        .where('match_id', id)
-        .andWhere('user_address', wallet_address)
-        .update({
-          bet_count: total,
-        })
-    }
+    // let bets = await this.BetCountModel.query()
+    //   .where('match_id', wallet_address)
+    //   .andWhere('user_address', id)
+    //   .first()
+    // if (!bets) {
+    //   let betCount = await this.Database.from('bettings')
+    //     .count('* as total')
+    //     .where('user_address', wallet_address)
+    //     .where('match_id', id)
+    //   let predictCount = await this.Database.from('predicts')
+    //     .count('*  as total')
+    //     .where('user_address', wallet_address)
+    //     .where('match_id', id)
+    //   let total = betCount[0].total + predictCount[0].total
+    //   let betCountData = new this.BetCountModel()
+    //   betCountData.match_id = id
+    //   betCountData.user_address = wallet_address
+    //   betCountData.bet_count = total
+    //   await betCountData.save()
+    // }
+    // if (bets && bets.bet_count < 5) {
+    //   let betCount = await this.Database.from('bettings')
+    //     .count('* as total')
+    //     .where('user_address', wallet_address)
+    //     .where('match_id', id)
+    //   let predictCount = await this.Database.from('predicts')
+    //     .count('*  as total')
+    //     .where('user_address', wallet_address)
+    //     .where('match_id', id)
+    //   let total = betCount[0].total + predictCount[0].total
+    //   await this.BetCountModel.query()
+    //     .where('match_id', id)
+    //     .andWhere('user_address', wallet_address)
+    //     .update({
+    //       bet_count: total,
+    //     })
+    // }
 
     const obj = {
       ...match,
