@@ -8,7 +8,7 @@ export const BIRD_TOKEN_CONTRACT = process.env.REACT_APP_BIRD_TOKEN_CONTRACT;
 export const GIFT_CODE_CONTRACT =
   process.env.REACT_APP_GIFT_CODE_SMART_CONTRACT;
 
-export const MAX_DEPOSIT_AMOUNT = 1000;
+export const MAX_DEPOSIT_AMOUNT = 3000;
 
 export const BASE_HREF =
   typeof window !== "undefined" && window.location.origin
