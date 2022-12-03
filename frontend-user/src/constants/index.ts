@@ -21,7 +21,7 @@ export const URLS = {
   HISTORY: "/history",
   INTRODUCTION: "/introduction",
   FAQ: "/faq",
-  GAMEFI_POOL: "https://gamefi.org/party/63679886-1868-41fe-bfc7-a9bc8f40bd46",
+  GAMEFI_POOL: "https://gamefi.org/party/phoenix-cup",
   MONSTERRA: "https://monsterra.io/",
 };
 
