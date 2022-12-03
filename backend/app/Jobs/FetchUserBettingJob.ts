@@ -3,7 +3,6 @@ import Logger from '@ioc:Adonis/Core/Logger'
 const RedisUserBettingUtils = require('@ioc:App/Common/RedisUserBettingUtils')
 const HelperUtils = require('@ioc:App/Common/HelperUtils')
 
-const BetCountModel = require('@ioc:App/Models/BetCount')
 const BettingModel = require('@ioc:App/Models/Betting')
 const PredictModel = require('@ioc:App/Models/Predict')
 

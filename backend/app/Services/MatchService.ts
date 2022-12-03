@@ -5,6 +5,8 @@ export default class MatchService {
   public MatchModel = require('@ioc:App/Models/Match')
   public BettingModel = require('@ioc:App/Models/Betting')
   public RecalcBettingModel = require('@ioc:App/Models/RecalcBetting')
+  public BetCountModel = require('@ioc:App/Models/BetCount')
+  public Database = require('@ioc:Adonis/Lucid/Database')
 
   public buildQueryService(params) {
     let builder = this.MatchModel.query()
@@ -75,9 +77,20 @@ export default class MatchService {
       })
       .first()
     match = JSON.parse(JSON.stringify(match))
+
+    let betCount = await this.Database.from('bettings')
+      .count('* as total')
+      .where('user_address', wallet_address)
+      .where('match_id', id)
+    let predictCount = await this.Database.from('predicts')
+      .count('*  as total')
+      .where('user_address', wallet_address)
+      .where('match_id', id)
+    let total = betCount[0].total + predictCount[0].total
+
     const obj = {
       ...match,
-      is_completed_bet: match.bet_count ? match.bet_count.bet_count == 5 : false,
+      is_completed_bet: total == 5 ? true : false,
     }
     delete match.bet_count
     return obj
@@ -98,13 +111,23 @@ export default class MatchService {
       .preload('predicts', (query) => {
         query.where('user_address', params.wallet_address || null)
       })
-      .leftOuterJoin('bet_counts', query => {
-        query.on('matchs.match_id', '=', 'bet_counts.match_id')
+      .leftOuterJoin('bet_counts', (query) => {
+        query
+          .on('matchs.match_id', '=', 'bet_counts.match_id')
           .andOnVal('user_address', params.wallet_address || null)
       })
 
-    if ('is_completed_bet' in params && params.is_completed_bet.length && 'wallet_address' in params) {
-      matchesQuery = params.is_completed_bet == 'true' ? matchesQuery.where('bet_counts.bet_count', 5) : matchesQuery.where(builder => builder.whereNot('bet_counts.bet_count', 5).orWhereNull('bet_counts.bet_count'))
+    if (
+      'is_completed_bet' in params &&
+      params.is_completed_bet.length &&
+      'wallet_address' in params
+    ) {
+      matchesQuery =
+        params.is_completed_bet == 'true'
+          ? matchesQuery.where('bet_counts.bet_count', 5)
+          : matchesQuery.where((builder) =>
+              builder.whereNot('bet_counts.bet_count', 5).orWhereNull('bet_counts.bet_count')
+            )
     }
 
     let matches = await matchesQuery
@@ -162,13 +185,16 @@ export default class MatchService {
   public async recalcMatch({ matchId }) {
     const [match, recalcBetting] = await Promise.all([
       this.buildQueryService({ match_id: matchId }).first(),
-      this.RecalcBettingModel.query().where('match_id', matchId).where('is_executed', false).first()
+      this.RecalcBettingModel.query()
+        .where('match_id', matchId)
+        .where('is_executed', false)
+        .first(),
     ])
     if (!match) throw new Error('Match not found')
     if (recalcBetting) throw new Error('Re-calc betting is processing...')
 
     await this.RecalcBettingModel.create({
-      match_id: matchId
+      match_id: matchId,
     })
   }
 }
