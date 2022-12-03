@@ -40,7 +40,7 @@ const giftCodeBanners = [
     buttonLeft: { label: "Enter Code" },
     buttonRight: {
       label: " Join Now",
-      redirectLink: "https://t.me/redkite_en",
+      redirectLink: "https://t.me/Firebird_en",
     },
   },
   {
@@ -55,7 +55,7 @@ const giftCodeBanners = [
     buttonLeft: { label: "Enter Code" },
     buttonRight: {
       label: "Join Now",
-      redirectLink: "https://twitter.com/redkitepad",
+      redirectLink: "https://twitter.com/Firebirdchain",
     },
   },
 ];
