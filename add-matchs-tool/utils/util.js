@@ -1,6 +1,6 @@
 const { INC_GAS_PRICE, PKF_FAUCET_TOKEN, PKF_FAUCET_SYMBOL, FAUCET_END_POINT } = require("../config");
 const Transaction = require("ethereumjs-tx");
-const axios = require("axios");
+const CryptoJS = require("crypto-js");
 
 const randomBet = () => {
   let bets = [
@@ -113,10 +113,18 @@ const faucetPkf = async (address) => {
 
 }
 
+// Encrypt
+const encryptData = (data) => {
+  if (!data) return null;
+
+  return CryptoJS.AES.encrypt(
+    JSON.stringify({ ...data, time: Date.now() / 1000 }),
+    process.env.REACT_APP_ENCRYPT_SECRET_KEY,
+  ).toString();
+};
+
 module.exports = {
   randomBet,
   randomScore,
-  callTransaction,
-  faucetBird,
-  faucetPkf
+  callTransaction, encryptData
 };
