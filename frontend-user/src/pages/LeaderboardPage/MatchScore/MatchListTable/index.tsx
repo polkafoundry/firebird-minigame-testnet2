@@ -6,11 +6,7 @@ import NotFound from "../../../../components/base/NotFound";
 // import DropDown from "../../../../components/base/DropDown";
 import MatchName from "../../../../components/base/Table/MatchName";
 import { rounds } from "../../../../constants";
-import {
-  displayWalletAddress,
-  getCurrentRound,
-  getMatchTime,
-} from "../../../../utils";
+import { displayWalletAddress, getMatchTime } from "../../../../utils";
 import styles from "./matchListTable.module.scss";
 
 const headingTable = ["Time", "Match", "Whitelist", "Rewards", "Winner"];
@@ -57,13 +53,6 @@ const MatchListTable = (props: MatchListTableProps) => {
   const [groupStageIndex, setGroupStageIndex] = useState<number>(0);
 
   useEffect(() => {
-    const currentRound = getCurrentRound().value;
-    setGroupStageIndex(
-      rounds.findIndex((round) => round.value === currentRound),
-    );
-  }, []);
-
-  useEffect(() => {
     setFilter((prevState: FilterTypes) => ({
       ...prevState,
       round_name: rounds[groupStageIndex].value,
@@ -93,7 +82,7 @@ const MatchListTable = (props: MatchListTableProps) => {
     const startDate = getDate(dataTable[0]?.date);
     const endDate = getDate(dataTable[lastIndex]?.date);
 
-    return `${endDate} - ${startDate}`;
+    return `${startDate} - ${endDate}`;
   }, [dataTable]);
 
   return (
@@ -210,7 +199,7 @@ const MatchListTable = (props: MatchListTableProps) => {
                           team2={match?.awayTeam}
                         />
 
-                        <div>{(match?.total || 0) + " address"}</div>
+                        <div>{match?.total + " address"}</div>
                         <div>{rounds[groupStageIndex].prize}</div>
                         <div>
                           {match.final_winner

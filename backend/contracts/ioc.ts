@@ -21,9 +21,3 @@ declare module '@ioc:Firebird/PredictWinnerService' {
   const PredictWinnerService: PredictWinnerServiceInterface
   export default PredictWinnerService
 }
-
-declare module '@ioc:Firebird/UserLogsService' {
-  import UserLogsServiceInterface from 'Contracts/interfaces/UserLogsService.interface'
-  const UserLogsService: UserLogsServiceInterface
-  export default UserLogsService
-}

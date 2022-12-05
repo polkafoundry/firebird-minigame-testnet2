@@ -9,26 +9,18 @@ import { WalletContext } from "./WalletContext";
 const WalletProvider = (props: any) => {
   const [showModal, setShowModal] = useState<boolean>(false);
 
-  const { deactivate, account } = useWeb3React();
+  const { deactivate } = useWeb3React();
 
   const {
     handleProviderChosen,
     connectWalletLoading,
+    currentConnector,
     handleConnectorDisconnect,
     connectedAccount,
     tryActivate,
   } = useProviderConnects();
 
-  useEffect(() => {
-    const autoCloseDialog = async () => {
-      const unlocked = await checkMetaMaskIsUnlocked();
-      unlocked && setShowModal(false);
-    };
-
-    autoCloseDialog();
-  }, [account]);
-
-  // auto activate account from localStorage
+  // auto activate accoung from localStorage
   useEffect(() => {
     const activateStoredWallet = async () => {
       // check metamask is unlocked
@@ -59,6 +51,7 @@ const WalletProvider = (props: any) => {
         setShowModal,
         handleProviderChosen,
         connectWalletLoading,
+        currentConnector,
         logout,
         connectedAccount,
       }}

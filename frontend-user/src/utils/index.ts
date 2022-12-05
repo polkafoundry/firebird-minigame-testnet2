@@ -1,6 +1,6 @@
 import { BigNumber, ethers } from "ethers";
 import moment from "moment";
-import { API_BASE_LOGO_TEAM, rounds } from "../constants";
+import { API_BASE_LOGO_TEAM } from "../constants";
 
 export const displayWalletAddress = (address: string, digits = 6) => {
   return `${address.substring(0, digits)}...${address.substring(
@@ -74,26 +74,4 @@ export const convertHexToNumberFormat = (hex: any, decimals = 18) => {
   return formatCurrency(
     BigNumber.from(hex).div(BigNumber.from(10).pow(decimals)).toString(),
   );
-};
-
-export const getCurrentRound = () => {
-  const currentUTCTime = moment().utc();
-
-  const currentRound = [...rounds].reverse().find((round) => {
-    if (round.startTime && round.endTime) {
-      return (
-        (moment(currentUTCTime).isAfter(round.startTime) &&
-          moment(currentUTCTime).isBefore(round.endTime)) ||
-        moment(currentUTCTime).isSame(round.startTime)
-      );
-    } else if (!round.endTime) {
-      return (
-        moment(currentUTCTime).isAfter(round.startTime) ||
-        moment(currentUTCTime).isSame(round.startTime)
-      );
-    } else if (!round.startTime) {
-      return moment(currentUTCTime).isBefore(round.endTime);
-    }
-  });
-  return currentRound || rounds[0];
 };

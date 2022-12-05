@@ -1,6 +1,5 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, HasOne, hasOne } from '@ioc:Adonis/Lucid/Orm'
-import Match from './Match'
+import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
 
 export default class PredictWinner extends BaseModel {
   @column({ isPrimary: true })
@@ -44,12 +43,6 @@ export default class PredictWinner extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
-
-  @hasOne(() => Match, {
-    localKey: 'match_id',
-    foreignKey: 'match_id',
-  })
-  public match: HasOne<typeof Match>
 }
 
 module.exports = PredictWinner

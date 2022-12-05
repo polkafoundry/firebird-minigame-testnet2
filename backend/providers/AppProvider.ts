@@ -3,7 +3,7 @@ import MatchService from 'App/Services/MatchService'
 import BettingService from 'App/Services/BettingService'
 import ClaimService from 'App/Services/ClaimService'
 import PredictWinnerService from 'App/Services/PredictWinnerService'
-import UserLogsService from 'App/Services/UserLogsService'
+
 export default class AppProvider {
   constructor(protected app: ApplicationContract) {}
 
@@ -13,7 +13,6 @@ export default class AppProvider {
     this.app.container.singleton('Firebird/BettingService', () => new BettingService())
     this.app.container.singleton('Firebird/ClaimService', () => new ClaimService())
     this.app.container.singleton('Firebird/PredictWinnerService', () => new PredictWinnerService())
-    this.app.container.singleton('Firebird/UserLogsService', () => new UserLogsService())
   }
 
   public async boot() {

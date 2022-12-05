@@ -15,7 +15,7 @@ import {
 } from "../../constants";
 import useFetch from "../../hooks/useFetch";
 import { useMyWeb3 } from "../../hooks/useMyWeb3";
-import { sendPostRequest } from "../../requests/getMyHistory";
+import { getMyHistory } from "../../requests/getMyHistory";
 import { convertHexToStringNumber } from "../../utils";
 import HeadingPrimary from "../LandingPage/components/HeadingPrimary";
 import HistoryTable from "./HistoryTable";
@@ -168,7 +168,7 @@ const MyHistoryPage = () => {
       };
 
       try {
-        const res = await sendPostRequest(uri, params);
+        const res = await getMyHistory(uri, params);
         setLoading(false);
         // console.log("getMyHistory: ", res);
         if (res?.status !== 200) {
@@ -191,9 +191,7 @@ const MyHistoryPage = () => {
         };
 
         setStatistics(newStatistics);
-        setTotalCount(
-          resData?.bettings?.meta?.total || resData?.predicts?.meta?.total,
-        );
+        setTotalCount(resData?.bettings?.meta?.total);
         setDataTable(resData?.bettings?.data || resData?.predicts?.data);
       } catch (error: any) {
         toast.error(error?.message || "Fail to load history");

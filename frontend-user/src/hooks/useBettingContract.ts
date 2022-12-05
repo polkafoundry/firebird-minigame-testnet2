@@ -32,7 +32,6 @@ const useBettingContract = () => {
             _matchId,
             _betType,
           );
-          setLoadingBetting(false);
           return res?.isClaimed;
         }
       } catch (error: any) {
@@ -44,12 +43,8 @@ const useBettingContract = () => {
     [library, account],
   );
 
-  const getUserBetting = useCallback(
+  const getBettingUpdate = useCallback(
     async (_matchId: string | undefined, _betType: string | undefined) => {
-      if (!_matchId || !_betType) {
-        return false;
-      }
-
       if (!BETTING_CONTRACT || !account) {
         toast.error("Fail to load contract or account is not connected");
         return false;
@@ -70,11 +65,10 @@ const useBettingContract = () => {
             _matchId,
             _betType,
           );
-          setLoadingBetting(false);
           return res;
         }
       } catch (error: any) {
-        console.log("ERR getUserBetting: ", error?.message);
+        console.log("ERR getBettingUpdate: ", error?.message);
         setLoadingBetting(false);
         return false;
       }
@@ -82,10 +76,8 @@ const useBettingContract = () => {
     [library, account],
   );
 
-  const getUserPredicting = useCallback(
+  const getPredictingUpdate = useCallback(
     async (_matchId: string | undefined) => {
-      if (!_matchId) return false;
-
       if (!BETTING_CONTRACT || !account) {
         toast.error("Fail to load contract or account is not connected");
         return false;
@@ -102,11 +94,10 @@ const useBettingContract = () => {
 
         if (contract) {
           const res = await contract.userPredictByMatch(account, _matchId);
-          setLoadingBetting(false);
           return res;
         }
       } catch (error: any) {
-        console.log("ERR getUserPredicting: ", error?.message);
+        console.log("ERR getPredictingUpdate: ", error?.message);
         setLoadingBetting(false);
         return false;
       }
@@ -116,8 +107,8 @@ const useBettingContract = () => {
 
   return {
     checkClaimed,
-    getUserBetting,
-    getUserPredicting,
+    getBettingUpdate,
+    getPredictingUpdate,
     loadingBetting,
   };
 };

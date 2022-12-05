@@ -27,9 +27,7 @@ Route.group(() => {
   Route.get('/match/upcoming', 'MatchController.getUpcomingMatch')
   Route.get('/match/live', 'MatchController.getLiveMatch')
   Route.get('/match/detail/:match_id', 'MatchController.getMatchDetail')
-  Route.post('/match/re-calc-match/:match_id', 'MatchController.recalcMatch').middleware(
-    'checkAuthSignature'
-  )
+  Route.post('/match/re-calc-match/:match_id', 'MatchController.recalcMatch').middleware('checkAuthSignature')
 
   Route.post('betting/ou-ht-calculate', 'BettingsController.ouHTCalculate')
   Route.post('betting/ou-ft-calculate', 'BettingsController.ouFTCalculate')
@@ -49,14 +47,8 @@ Route.group(() => {
   Route.post('/predict/update-status', 'PredictWinnerController.updatePredictStatus')
 
   Route.get('/leaderboard', 'MetaForceController.getData')
-
-  Route.post('/user/log-error', 'UserLogsController.saveLogs')
 }).prefix('/api/v1')
 
-Route.group(() => {
-  Route.get('/dashboard', 'AdminsController.getDashboardData')
-}).prefix('/api/v1/admin').middleware('checkAuthWallet')
-
-Route.group(() => { })
+Route.group(() => {})
   .prefix('/api/v1')
   .middleware('checkSignature')

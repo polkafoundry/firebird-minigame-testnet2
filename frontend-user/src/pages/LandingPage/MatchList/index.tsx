@@ -3,7 +3,7 @@ import clsx from "clsx";
 import moment from "moment";
 import queryString from "query-string";
 import { useEffect, useState } from "react";
-import { MATCH_STATUS, rounds } from "../../../constants";
+import { rounds } from "../../../constants";
 import useFetch from "../../../hooks/useFetch";
 import { useMyWeb3 } from "../../../hooks/useMyWeb3";
 import { getImgSrc, groupArrayById } from "../../../utils";
@@ -34,23 +34,14 @@ const MatchList = () => {
   const { account, isWrongChain } = useMyWeb3();
 
   const [selectedMatchId, setSelectedMatchId] = useState<number | undefined>();
-  const [tempId, setTempId] = useState<number>(0);
   const [open, setOpen] = useState<boolean>(false);
 
   const [dataTable, setDataTable] = useState<any[]>([]);
   const [filter, setFilter] = useState<FilterTypes>(initFilter);
-  const [roundTitle, setRoundTitle] = useState<string>("-");
 
   const { data, loading } = useFetch<any>(
     "/match/get-list-match?" + queryString.stringify({ ...filter }),
   );
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setSelectedMatchId(tempId);
-    }, 300);
-    return () => clearTimeout(timer);
-  }, [tempId]);
 
   useEffect(() => {
     const rawData = data?.data?.data.map((item: any) => {
@@ -76,24 +67,8 @@ const MatchList = () => {
       newTableData.push({
         date: key,
         matches: value,
-        ended:
-          value &&
-          Array.isArray(value) &&
-          value[value.length - 1].match_status === MATCH_STATUS.FINISHED,
       });
     }
-    const title = getRoundTitle([...newTableData]);
-    setRoundTitle(title);
-
-    // sort for date
-    newTableData.sort((a: any, b: any) => {
-      if (!a.ended && !b.ended)
-        return new Date(b.date).valueOf() - new Date(a.date).valueOf();
-      if (a.ended && b.ended)
-        return new Date(a.date).valueOf() - new Date(b.date).valueOf();
-      return a === b ? 0 : a ? -1 : 1;
-    });
-
     setDataTable(newTableData);
   }, [data]);
 
@@ -105,23 +80,6 @@ const MatchList = () => {
       wallet_address: account,
     }));
   }, [account]);
-
-  const getDate = (date: string) => {
-    const REGEX_DATE = /(\w.*) -/g;
-    if (!date) return "";
-    const str = date.match(REGEX_DATE);
-    return str ? str[0].slice(0, str.length - 2) : "";
-  };
-
-  function getRoundTitle(dataTable: any) {
-    if (!dataTable) return "-";
-
-    const lastIndex = dataTable.length - 1;
-    const startDate = getDate(dataTable[0]?.date);
-    const endDate = getDate(dataTable[lastIndex]?.date);
-
-    return `${startDate} - ${endDate}`;
-  }
 
   const handleChangePredicted = (value: any) => {
     setFilter((prevFilter: FilterTypes) => ({
@@ -138,7 +96,7 @@ const MatchList = () => {
   };
 
   const handleSelectMatch = (id: number) => {
-    setTempId(id);
+    setSelectedMatchId(id);
 
     if (document.body.clientWidth < 960) {
       setOpen(true);
@@ -170,12 +128,11 @@ const MatchList = () => {
             )}
           >
             <MatchListTable
-              selectedMatchId={tempId}
+              selectedMatchId={selectedMatchId}
               handleSelectMatch={handleSelectMatch}
               dataTable={dataTable}
               loading={loading}
               filter={filter}
-              roundTitle={roundTitle}
               setFilter={setFilter}
               handleChangePredicted={handleChangePredicted}
               handleChangeStatus={handleChangeStatus}

@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { FilterTypes } from "..";
 import DefaultLoading from "../../../../components/base/DefaultLoading";
 import DropDown from "../../../../components/base/DropDown";
@@ -8,7 +8,7 @@ import MatchName from "../../../../components/base/Table/MatchName";
 import MatchPredict from "../../../../components/base/Table/MatchPredict";
 import MatchStatus from "../../../../components/base/Table/MatchStatus";
 import { MATCH_STATUS, rounds } from "../../../../constants";
-import { getCurrentRound, getMatchTime } from "../../../../utils";
+import { getMatchTime } from "../../../../utils";
 import styles from "./matchList.module.scss";
 
 const headingTable = [
@@ -32,6 +32,8 @@ const statusOptions = [
   { label: "Not yet", value: MATCH_STATUS.UPCOMING },
 ];
 
+const REGEX_DATE = /(\w.*) -/g;
+
 type MatchListTableProps = {
   handleSelectMatch: (id: number) => void;
   loading: boolean;
@@ -39,7 +41,6 @@ type MatchListTableProps = {
   selectedMatchId: number | undefined;
   filter: any;
   setFilter: any;
-  roundTitle: string;
   handleChangePredicted: (value: any) => void;
   handleChangeStatus: (value: any) => void;
 };
@@ -52,19 +53,11 @@ const MatchListTable = (props: MatchListTableProps) => {
     selectedMatchId,
     filter,
     setFilter,
-    roundTitle,
     handleChangePredicted,
     handleChangeStatus,
   } = props;
 
   const [groupStageIndex, setGroupStageIndex] = useState<number>(0);
-
-  useEffect(() => {
-    const currentRound = getCurrentRound().value;
-    setGroupStageIndex(
-      rounds.findIndex((round) => round.value === currentRound),
-    );
-  }, []);
 
   useEffect(() => {
     setFilter((prevState: FilterTypes) => ({
@@ -82,6 +75,22 @@ const MatchListTable = (props: MatchListTableProps) => {
     if (groupStageIndex < 1) return;
     setGroupStageIndex((prevState: any) => prevState - 1);
   };
+
+  const getDate = (date: string) => {
+    if (!date) return "";
+    const str = date.match(REGEX_DATE);
+    return str ? str[0].slice(0, str.length - 2) : "";
+  };
+
+  const priodDate = useMemo(() => {
+    if (!dataTable) return "N/A";
+
+    const lastIndex = dataTable.length - 1;
+    const startDate = getDate(dataTable[0]?.date);
+    const endDate = getDate(dataTable[lastIndex]?.date);
+
+    return `${startDate} - ${endDate}`;
+  }, [dataTable]);
 
   const renderFilter = () => (
     <div className="flex flex-col lg:flex-row items-center justify-between">
@@ -135,7 +144,7 @@ const MatchListTable = (props: MatchListTableProps) => {
             <img src="/images/icon-previous.svg" alt="" />
           </div>
           <div className="text-18/24 md:text-20/28 font-bold md:uppercase">
-            {roundTitle}
+            {priodDate}
           </div>
           <div
             className="h-12 w-12 cursor-pointer flex justify-center items-center select-none"

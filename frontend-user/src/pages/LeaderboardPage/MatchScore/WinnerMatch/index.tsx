@@ -1,6 +1,5 @@
 import clsx from "clsx";
 import DefaultLoading from "../../../../components/base/DefaultLoading";
-import NotFound from "../../../../components/base/NotFound";
 import useFetch from "../../../../hooks/useFetch";
 import { displayWalletAddress } from "../../../../utils";
 import styles from "./winnerMatch.module.scss";
@@ -24,14 +23,14 @@ const WinnerMatch = (props: MatchListRightProps) => {
   const isWinner = matchData?.finalWinner && account === matchData?.finalWinner;
 
   return (
-    <div className="flex flex-col rounded-lg bg-[#F2F2F2] h-full">
+    <div className="flex flex-col rounded-lg bg-[#F2F2F2] min-h-full">
       <div
         className={clsx(
           "flex flex-col items-center justify-center text-center h-auto min-h-[280px] text-white",
           styles.backgroundStadium,
         )}
       >
-        {matchId ? (
+        {matchData ? (
           <>
             <div className="flex flex-col xs:flex-row text-center md:text-left items-center">
               <img
@@ -44,11 +43,9 @@ const WinnerMatch = (props: MatchListRightProps) => {
                   {reward} rewards winner is
                 </span>
                 <span className="text-24/32 md:mt-1 font-tthoves font-semibold">
-                  {!loading
-                    ? matchData
-                      ? displayWalletAddress(matchData?.finalWinner)
-                      : "No winner"
-                    : "Updating..."}
+                  {matchData?.finalWinner
+                    ? displayWalletAddress(matchData?.finalWinner)
+                    : "No winner"}
                 </span>
               </div>
             </div>
@@ -82,7 +79,7 @@ const WinnerMatch = (props: MatchListRightProps) => {
         )}
       </div>
 
-      <div className={clsx("md:p-5 max-h-full", styles.scrollLayout)}>
+      <div className="md:p-5">
         {!matchId ? (
           <div className="p-5 md:p-0 text-16/24 font-semibold text-center">
             Please Select Match First
@@ -98,15 +95,13 @@ const WinnerMatch = (props: MatchListRightProps) => {
               </div>
             </div>
             {!loading && (!listWinner || !listWinner.length) ? (
-              <div className="flex flex-col justify-center items-center h-[300px]">
-                <NotFound title="No one (wallet) predicted the correct score for this match." />
-              </div>
+              <div>Not found</div>
             ) : (
-              <div className="">
+              <>
                 {listWinner?.map((item: any, index: number) => (
                   <div
                     key={item.id}
-                    className="flex items-center text-14/24 font-inter px-5 py-2 bg-white border-b-2 border-[#F2F2F2]"
+                    className="flex items-center text-14/24 font-inter px-5 py-3 md:min-h-[65px] bg-white border-b-2 border-[#F2F2F2]"
                   >
                     <div className="w-[20%]">{index + 1}</div>
                     <div className="flex-1 text-right xs:text-left">
@@ -115,7 +110,7 @@ const WinnerMatch = (props: MatchListRightProps) => {
                     </div>
                   </div>
                 ))}
-              </div>
+              </>
             )}
           </div>
         )}

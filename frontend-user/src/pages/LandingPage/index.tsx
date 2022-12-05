@@ -3,7 +3,6 @@ import LandingLayout from "../../components/layout/LandingLayout";
 import { scrollToId } from "../../utils/domElement";
 import BannerSocials from "./BannerSocials";
 import CalculatedReward from "./CalculatedReward";
-import GiftCode from "./GiftCode";
 import HomeBanner from "./HomeBanner";
 import MatchList from "./MatchList";
 import Schedule from "./MatchList/Schedule";
@@ -26,7 +25,6 @@ const LangdingPage = () => {
       </div>
 
       <div className=" flex flex-col w-full">
-        <GiftCode />
         <MatchList />
         <CalculatedReward />
         <PredictionRule />

@@ -1,33 +1,17 @@
 import clsx from "clsx";
-import { useEffect, useState } from "react";
-import { rounds } from "../../../../constants";
-import { getCurrentRound } from "../../../../utils";
 import HeadingPrimary from "../../components/HeadingPrimary";
 import styles from "./schedule.module.scss";
 
-const schedules = [
-  {
-    title: "Group stage",
-    time: "Nov 20-Dec 02",
-    rounds: [rounds[0].value, rounds[1].value, rounds[2].value],
-  },
-  { title: "Round of 16", time: "Dec 03-06", rounds: [rounds[3].value] },
-  { title: "Quarter-finals", time: "Dec 09-10", rounds: [rounds[4].value] },
-  { title: "Semi-finals", time: "Dec 13-14", rounds: [rounds[5].value] },
-  { title: "Third-place match", time: "Dec 17", rounds: [rounds[6].value] },
-  { title: "Final", time: "Dec 18", rounds: [rounds[7].value] },
+const schedule = [
+  { title: "Group stage", time: "Nov 20-Dec 02" },
+  { title: "Round of 16", time: "Dec 03-06" },
+  { title: "Quarter-finals", time: "Dec 09-10" },
+  { title: "Semi-finals", time: "Dec 13-14" },
+  { title: "Third-place match", time: "Dec 17" },
+  { title: "Final", time: "Dec 18" },
 ];
 
 const Schedule = () => {
-  const [scheduleActivatingIndex, setScheduleActivatingIndex] = useState<any>();
-  useEffect(() => {
-    const currentRound = getCurrentRound();
-    const activatingIndex = schedules.findIndex((schedule) => {
-      return schedule?.rounds?.includes(currentRound?.value);
-    });
-    setScheduleActivatingIndex(activatingIndex < 4 ? activatingIndex : 4);
-  }, []);
-
   return (
     <div
       className={clsx(
@@ -52,7 +36,7 @@ const Schedule = () => {
               styles.schedule,
             )}
           >
-            {schedules.map((item, index) => (
+            {schedule.map((item, index) => (
               <div
                 key={item.title}
                 className={clsx(
@@ -69,7 +53,7 @@ const Schedule = () => {
                 >
                   <div
                     className={clsx(
-                      index === scheduleActivatingIndex || index === 5
+                      index === 0 || index === 5
                         ? styles.titleActive
                         : styles.title,
                     )}
@@ -80,26 +64,16 @@ const Schedule = () => {
                 </div>
                 <div
                   className={clsx(
-                    "flex w-28 sm:py-8 sm:w-full ",
-                    index % 2 === 0
-                      ? "sm:justify-start sm:h-full"
-                      : "sm:justify-end",
+                    "flex w-28 sm:py-8 sm:w-fit",
+                    index % 2 === 0 ? "sm:justify-start" : "sm:justify-end",
                   )}
                 >
-                  {index === scheduleActivatingIndex && (
-                    <div className="w-full">
+                  {index === 0 && (
+                    <div className="w-[60px] sm:w-[90px]">
                       <img
                         src="./images/landing-page/football.png"
                         alt=""
-                        className={clsx(
-                          "w-[60px] sm:w-[90px] translate-y-[-15px]",
-                          scheduleActivatingIndex === 0
-                            ? "sm:translate-x-[-45px]"
-                            : "translate-x-[-20px] sm:translate-x-0 mx-auto",
-                          scheduleActivatingIndex % 2 === 0
-                            ? "sm:translate-y-0"
-                            : "sm:translate-y-[30px]",
-                        )}
+                        className="w-full translate-y-[-15px] sm:translate-y-0 sm:translate-x-[-45px]"
                       />
                     </div>
                   )}

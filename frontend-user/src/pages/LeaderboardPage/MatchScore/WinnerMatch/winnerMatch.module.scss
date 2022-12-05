@@ -3,20 +3,3 @@
   background-size: cover;
   border-radius: 2px;
 }
-
-.scrollLayout {
-  overflow-y: auto;
-  &::-webkit-scrollbar {
-    width: 8px;
-  }
-  &::-webkit-scrollbar-track {
-    border-radius: 20px;
-    background: #e0e0e0;
-  }
-  &::-webkit-scrollbar-thumb {
-    border-radius: 20px;
-    background: #3a0013;
-    border: 1px solid #e0e0e0;
-    background-clip: content-box;
-  }
-}

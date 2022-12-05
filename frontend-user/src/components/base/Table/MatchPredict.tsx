@@ -22,7 +22,7 @@ const MatchPredict = (props: MatchPredictProps) => {
           <img src={iconSrc} alt="" className={iconSize} />
           {isDisplayText && (
             <span className={clsx(textColor, "font-semibold ml-1")}>
-              {isCorrect ? "Correct" : "Incorrect"}
+              {isCorrect ? "Correct" : "InCorrect"}
             </span>
           )}
         </>

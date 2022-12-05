@@ -5,6 +5,7 @@ import { convertHexToStringNumber } from "../../../../../../utils";
 type ResultMatchProps = {
   questions: any;
   questionStatus?: any;
+  isClaimed?: boolean;
   loadingClaim?: boolean;
   handleClaimToken?: any;
   updateBirdBalance?: any;
@@ -13,12 +14,11 @@ const ResultMatch = (props: ResultMatchProps) => {
   const {
     questions,
     questionStatus,
+    isClaimed,
     loadingClaim,
     handleClaimToken,
     updateBirdBalance,
   } = props;
-
-  const isClaimed = questions?.isClaimed;
 
   const displayEarnedAmount = () => {
     const amount = questions?.result_num;

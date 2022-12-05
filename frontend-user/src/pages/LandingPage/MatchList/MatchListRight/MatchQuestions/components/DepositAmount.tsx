@@ -3,7 +3,6 @@ import {
   MAX_DEPOSIT_AMOUNT,
   NUMBER_PATTERN,
 } from "../../../../../../constants";
-import { formatCurrency } from "../../../../../../utils";
 
 type DepositAmountProps = {
   depositAmount: string;
@@ -71,9 +70,7 @@ const DepositAmount = (props: DepositAmountProps) => {
             </div>
             <div className="flex flex-col xs:flex-row items-baseline">
               <p className="text-12/18 mt-2">
-                {`Maximum is ${formatCurrency(
-                  MAX_DEPOSIT_AMOUNT,
-                )} BIRD/question.`}
+                Maximum is 1,000 BIRD/question.{" "}
               </p>
               <a
                 href={FAUCET_URL}
