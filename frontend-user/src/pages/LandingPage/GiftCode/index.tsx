@@ -267,7 +267,7 @@ const GiftCode = () => {
                       ⏰ Lucky hour ⏰
                     </div>
                     <div className="flex flex-col md:flex-row justify-between md:space-x-5 mt-2">
-                      <div className="text-28/36 lg:text-36/48 font-tthoves uppercase md:normal-case  lg:max-w-[420px]">
+                      <div className="text-28/36 lg:text-36/48 font-tthoves font-semibold uppercase md:normal-case  lg:max-w-[420px]">
                         {banner.title}
                       </div>
                       <div className="mt-2 md:mt-0">
