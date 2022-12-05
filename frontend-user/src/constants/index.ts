@@ -5,8 +5,10 @@ export const API_BASE_URL = process.env.REACT_APP_API_BASE_URL + "api/v1";
 
 export const BETTING_CONTRACT = process.env.REACT_APP_BETTING_CONTRACT;
 export const BIRD_TOKEN_CONTRACT = process.env.REACT_APP_BIRD_TOKEN_CONTRACT;
+export const GIFT_CODE_CONTRACT =
+  process.env.REACT_APP_GIFT_CODE_SMART_CONTRACT;
 
-export const MAX_DEPOSIT_AMOUNT = 1000;
+export const MAX_DEPOSIT_AMOUNT = 3000;
 
 export const BASE_HREF =
   typeof window !== "undefined" && window.location.origin
@@ -19,7 +21,7 @@ export const URLS = {
   HISTORY: "/history",
   INTRODUCTION: "/introduction",
   FAQ: "/faq",
-  GAMEFI_POOL: "https://gamefi.org/party/63679886-1868-41fe-bfc7-a9bc8f40bd46",
+  GAMEFI_POOL: "https://gamefi.org/party/phoenix-cup",
   MONSTERRA: "https://monsterra.io/",
 };
 
@@ -93,6 +95,8 @@ export type RoundTypes = {
   value: number;
   label: string;
   prize: string;
+  startTime?: Date;
+  endTime?: Date;
 };
 
 export const rounds: Array<RoundTypes> = [
@@ -100,41 +104,55 @@ export const rounds: Array<RoundTypes> = [
     label: "GROUP STAGE - ROUND 1",
     prize: "$20",
     value: 1,
+    endTime: new Date("Nov 24 2022 24:00 UTC"),
   },
   {
     label: "GROUP STAGE - ROUND 2",
     prize: "$20",
     value: 2,
+    startTime: new Date("Nov 25 2022 0:00 UTC"),
+    endTime: new Date("Nov 28 2022 24:00 UTC"),
   },
   {
     label: "GROUP STAGE - ROUND 3",
     prize: "$20",
     value: 3,
+    startTime: new Date("Nov 29 2022 0:00 UTC"),
+    endTime: new Date("Dec 02 2022 24:00 UTC"),
   },
   {
     label: "PLAYOFFS ROUND OF 16",
     prize: "$30",
     value: 116,
+    startTime: new Date("Dec 03 2022 0:00 UTC"),
+    endTime: new Date("Dec 06 2022 24:00 UTC"),
   },
   {
     label: "QUARTERFINAL",
     prize: "$50",
     value: 18,
+    startTime: new Date("Dec 07 2022 0:00 UTC"),
+    endTime: new Date("Dec 10 2022 24:00 UTC"),
   },
   {
     label: "SEMIFINAL",
     prize: "$70",
     value: 14,
+    startTime: new Date("Dec 11 2022 0:00 UTC"),
+    endTime: new Date("Dec 14 2022 24:00 UTC"),
   },
   {
     label: "PLAYOFFS 3RD PLACE FINAL",
     prize: "$80",
     value: 34,
+    startTime: new Date("Dec 15 2022 0:00 UTC"),
+    endTime: new Date("Dec 17 2022 24:00 UTC"),
   },
   {
     label: "FINAL",
     prize: "$100",
     value: 12,
+    startTime: new Date("Dec 18 2022 0:00 UTC"),
   },
 ];
 

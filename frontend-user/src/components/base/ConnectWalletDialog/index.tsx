@@ -36,42 +36,52 @@ const ConnectWalletDialog = (props: ConnectWalletDialogTypes) => {
 
   const renderWalletInfo = () => {
     return (
-      <div className="flex flex-col w-full">
-        <p className="text-20/32 font-semibold text-left">Account</p>
-        <div className="flex justify-between items-center mt-4 bg-[#2f2f2f] rounded-lg p-3">
-          <div className="flex items-center">
-            <img src="./images/connectors/metamask.svg" alt="" />
-            <span className="ml-2 text-14/24">
-              {displayWalletAddress(connectedAccount)}
-            </span>
-          </div>
-
-          <div
-            className="px-2 flex cursor-pointer"
-            onClick={handleAccountLogout}
-          >
-            <img src="./images/connectors/disconnect.svg" alt="" />
-            <span className="text-[#D01F36] ml-1 font-semibold">
-              Disconnect
-            </span>
+      <div className="flex flex-col w-full font-tthoves">
+        <div className="flex flex-col items-center">
+          <p className="text-24/32 font-semibold text-center">Account</p>
+          <img
+            src="./images/connectors/metamask.png"
+            alt=""
+            className="w-20 mx-auto mt-5"
+          />
+          <div className="text-16/20 mt-3">
+            {displayWalletAddress(connectedAccount)}
           </div>
         </div>
 
-        <div className="flex justify-between mt-2">
-          <span className="opacity-70">Balance</span>
-          <span className="font-semibold">{`${realTimeBalance} ${nativeCurrency}`}</span>
+        <div className="font-inter mt-5">
+          <div className="flex justify-between mt-2 xs:mt-3">
+            <span className="opacity-70 text-14/24 xs:text-16/24">Balance</span>
+            <span className="font-semibold text- 14/20 xs:text-16/24">{`${realTimeBalance} ${nativeCurrency}`}</span>
+          </div>
+          <div className="flex justify-between mt-2 xs:mt-3">
+            <span className="opacity-70 text-14/24 xs:text-16/24">Network</span>
+            {isWrongChain ? (
+              <div className="text-red-600 font-semibold text- 14/20 xs:text-16/24">
+                Wrong chain
+              </div>
+            ) : (
+              <span className="font-semibold text- 14/20 xs:text-16/24">
+                FireflyTestnet
+              </span>
+            )}
+          </div>
+          <div className="flex justify-between mt-2 xs:mt-3">
+            <span className="opacity-70 text-14/24 xs:text-16/24">Wallet</span>
+            <span className="font-semibold text- 14/20 xs:text-16/24">
+              Web3
+            </span>
+          </div>
         </div>
-        <div className="flex justify-between mt-2">
-          <span className="opacity-70">Network</span>
-          {isWrongChain ? (
-            <div className="text-red-600 font-semibold">Wrong chain</div>
-          ) : (
-            <span className="font-semibold">FireflyTestnet</span>
-          )}
-        </div>
-        <div className="flex justify-between mt-2">
-          <span className="opacity-70">Wallet</span>
-          <span className="font-semibold">Web3</span>
+
+        <div
+          className="btn-rounded flex justify-center mt-5 p-3.5 border border-main"
+          onClick={handleAccountLogout}
+        >
+          <img src="./images/connectors/disconnect.svg" alt="" />
+          <span className="text-16/20 text-[#D01F36] ml-1.5 font-semibold">
+            Disconnect
+          </span>
         </div>
       </div>
     );
@@ -92,7 +102,6 @@ const ConnectWalletDialog = (props: ConnectWalletDialogTypes) => {
                 wallet={wallet}
                 handleProviderChosen={handleProviderChosen}
                 connectWalletLoading={connectWalletLoading}
-                closeDialog={closeDialog}
               />
             );
           })}
@@ -106,7 +115,7 @@ const ConnectWalletDialog = (props: ConnectWalletDialogTypes) => {
       <div className="fixed inset-0 flex items-center justify-center p-4">
         <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
 
-        <Dialog.Panel className="w-full h-fit relative m-auto bg-[#242424] text-white max-w-[360px] p-10 rounded-2xl">
+        <Dialog.Panel className="w-full h-fit relative m-auto bg-[#242424] text-white max-w-[400px] p-10 rounded-2xl">
           <img
             src="/images/icon-close.svg"
             alt=""

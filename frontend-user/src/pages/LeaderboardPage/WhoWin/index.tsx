@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import queryString from "query-string";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DefaultLoading from "../../../components/base/DefaultLoading";
 import NotFound from "../../../components/base/NotFound";
 import Pagination from "../../../components/base/Pagination";
@@ -23,6 +23,8 @@ const WhoWin = () => {
     limit: 10,
     offset: 1,
   });
+  const [currentRank, setCurrentRank] = useState<string>("");
+
   // const [searchWallet, setSearchWallet] = useState<string>("");
   // const handleSearch = (e: any) => {
   //   setSearchWallet(e.target.value);
@@ -56,6 +58,10 @@ const WhoWin = () => {
   );
 
   const leaderboardData = data?.data;
+
+  useEffect(() => {
+    if (!loading) setCurrentRank("#" + data?.data?.position);
+  }, [loading, data?.data?.position]);
 
   return (
     <div className="">
@@ -97,7 +103,7 @@ const WhoWin = () => {
                         Your current rank:
                       </span>
                       <span className="font-semibold font-tthoves text-14/20 ml-2">
-                        #{data?.data?.position}
+                        {currentRank}
                       </span>
                     </>
                   ) : (
@@ -156,7 +162,7 @@ const WhoWin = () => {
                           </div>
                           <div>{displayWalletAddress(item?.userId)}</div>
                           <div>${item?.prize}</div>
-                          <div>${formatCurrency(item?.sum_earned)}</div>
+                          <div>{formatCurrency(item?.sum_earned)}</div>
                         </div>
                       ))}
                     </>

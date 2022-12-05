@@ -3,7 +3,7 @@ import { BigNumber } from "ethers";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
 import { QuestionProps } from "..";
-import { QUESTION_STATUS } from "../../../../../../constants";
+import { MATCH_STATUS, QUESTION_STATUS } from "../../../../../../constants";
 import useBetting from "../../../../../../hooks/useBetting";
 import useBettingContract from "../../../../../../hooks/useBettingContract";
 import useBirdToken from "../../../../../../hooks/useBirdToken";
@@ -13,7 +13,6 @@ import DepositAmount from "../components/DepositAmount";
 import Question from "../components/Question";
 import ResultMatch from "../components/ResultMatch";
 import {
-  checkIsMatchCalculated,
   getFinalResultIndex,
   getOptionColorFromIndex,
   getOptionIndexByBetPlace,
@@ -31,20 +30,44 @@ const OverUnderQuestion = (props: QuestionProps) => {
     birdBalance = "0",
     updateBirdBalance,
     setRecheckApprove,
-    isFullTimeQuestion = false,
   } = props;
 
   const [optionWhoWin, setOptionWhoWin] = useState<number>(0);
   const [depositAmount, setDepositAmount] = useState<string>("");
   const [dataQuestion, setDataQuestion] = useState<any>();
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
 
   const { approveBirdToken, loadingApprove } = useBirdToken();
   const { betting, loadingBetting } = useBetting();
-  const { getBettingUpdate } = useBettingContract();
-  const { isClaimed, loadingClaim, handleClaimToken } = useClaimToken(
+  const { loadingBetting: loadingBettingContract, getUserBetting } =
+    useBettingContract();
+  const { isClaimSuccess, loadingClaim, handleClaimToken } = useClaimToken(
     dataQuestion,
     dataQuestion?.questionStatus === QUESTION_STATUS.CORRECT_ANSWER,
   );
+
+  // update Claim Token button
+  useEffect(() => {
+    setDataQuestion((prev: any) => ({
+      ...prev,
+      isClaimed: isClaimSuccess,
+    }));
+  }, [isClaimSuccess]);
+
+  useEffect(() => {
+    async function getUserBettingInMatch() {
+      const res = await getUserBetting(dataQuestion?.match_id, betType);
+
+      setDataQuestion((prev: any) => ({
+        ...prev,
+        optionSelected: getOptionIndexByBetPlace(res?.place || ""),
+        bet_amount: res?.amount,
+        isClaimed: res?.isClaimed,
+      }));
+      setIsSubmitted(!!res?.place);
+    }
+    getUserBettingInMatch();
+  }, [dataQuestion?.match_id, betType]);
 
   useEffect(() => {
     if (!questionProp) return;
@@ -61,12 +84,14 @@ const OverUnderQuestion = (props: QuestionProps) => {
     () => dataQuestion?.questionStatus,
     [dataQuestion?.questionStatus],
   );
-  const isSubmitted = questionStatus !== QUESTION_STATUS.NOT_PREDICTED;
-  const matchEnded = checkIsMatchCalculated(
-    isFullTimeQuestion,
-    dataQuestion?.is_full_time,
-    dataQuestion?.is_half_time,
+  const matchLiveOrEnded = useMemo(
+    () =>
+      [MATCH_STATUS.FINISHED, MATCH_STATUS.LIVE].includes(
+        dataQuestion?.match_status,
+      ),
+    [dataQuestion?.match_status],
   );
+
   const finalResultIndex = getFinalResultIndex(dataQuestion);
 
   const handleChangeOptionWhoWin = (option: number) => {
@@ -80,11 +105,19 @@ const OverUnderQuestion = (props: QuestionProps) => {
     dataQuestion?.match_status === "finished" && !dataQuestion?.result;
 
   const getWinRateColor = (index?: number) => {
-    if ((isSubmitted && finalResultIndex !== index) || notHasBettingResult)
+    if (
+      (isSubmitted && finalResultIndex !== index) ||
+      notHasBettingResult ||
+      matchLiveOrEnded
+    )
       return "opacity-50";
   };
+
   const isEnableClick = (isDisableClick: any) =>
-    !isSubmitted && !isDisableClick && !notHasBettingResult;
+    !matchLiveOrEnded &&
+    !isSubmitted &&
+    !isDisableClick &&
+    !notHasBettingResult;
 
   const isValidated = () => {
     if (!depositAmount || +depositAmount <= 0) {
@@ -121,7 +154,7 @@ const OverUnderQuestion = (props: QuestionProps) => {
     if (!bettingResult) return;
 
     // update result
-    const res = await getBettingUpdate(_matchID, _betType);
+    const res = await getUserBetting(_matchID, _betType);
     if (!res) return;
     const newDataQuestion = {
       ...dataQuestion,
@@ -130,6 +163,7 @@ const OverUnderQuestion = (props: QuestionProps) => {
       bet_amount: BigNumber.from(res.amount).toString(),
     };
     setDataQuestion(newDataQuestion);
+    setIsSubmitted(true);
 
     updateBirdBalance();
   };
@@ -139,8 +173,13 @@ const OverUnderQuestion = (props: QuestionProps) => {
       title={title}
       handleSubmit={handleSubmit}
       isSubmitted={isSubmitted}
-      matchEnded={matchEnded}
-      loading={loadingApprove || loadingBetting || loadingClaim}
+      matchLiveOrEnded={matchLiveOrEnded}
+      loading={
+        loadingBettingContract ||
+        loadingApprove ||
+        loadingBetting ||
+        loadingClaim
+      }
       error={error}
     >
       <div>
@@ -191,7 +230,7 @@ const OverUnderQuestion = (props: QuestionProps) => {
           ))}
         </div>
 
-        {!isSubmitted && !matchEnded && (
+        {!isSubmitted && !matchLiveOrEnded && (
           <DepositAmount
             birdBalance={birdBalance}
             depositAmount={depositAmount}
@@ -209,7 +248,6 @@ const OverUnderQuestion = (props: QuestionProps) => {
           <ResultMatch
             questions={dataQuestion}
             questionStatus={questionStatus}
-            isClaimed={isClaimed}
             loadingClaim={loadingClaim}
             handleClaimToken={handleClaimToken}
             updateBirdBalance={updateBirdBalance}

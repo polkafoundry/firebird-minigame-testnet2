@@ -1,12 +1,14 @@
-import { fetcher } from "./useFetch";
 import { useWeb3React } from "@web3-react/core";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useState } from "react";
 import { toast } from "react-toastify";
 import BETTING_ABI from "../abi/SBirdBetting.json";
 import { API_BASE_URL, BETTING_CONTRACT } from "../constants";
-import { BIRD_CHAIN_ID } from "../constants/networks";
+import { sendDataLogging } from "../requests/getMyHistory";
 import { getContract } from "../utils/contract";
+import { encryptData } from "../utils/encryptData";
+import { getErrorMessage } from "../utils/getErrorMessage";
 import useBettingContract from "./useBettingContract";
+import { fetcher } from "./useFetch";
 
 const useClaimToken = (data?: any, isCorrect?: boolean) => {
   const { library, account } = useWeb3React();
@@ -14,12 +16,9 @@ const useClaimToken = (data?: any, isCorrect?: boolean) => {
   const [transactionHash, setTransactionHash] = useState<string>("");
   const [loadingClaim, setLoadingClaim] = useState<boolean>(false);
 
-  const [isClaimed, setIsClaimed] = useState<boolean>(false);
-  const [recheckClaim, setRecheckClaim] = useState<boolean>(false); // using after user claim successful
+  const [isClaimSuccess, setIsClaimSuccess] = useState<boolean>(false);
 
   const { checkClaimed } = useBettingContract();
-  const { chainId } = useWeb3React();
-  const isWrongChain = useMemo(() => !(chainId === +BIRD_CHAIN_ID), [chainId]);
 
   const claimToken = useCallback(
     async (
@@ -34,6 +33,8 @@ const useClaimToken = (data?: any, isCorrect?: boolean) => {
       }
 
       setLoadingClaim(true);
+      let dataLogging;
+
       try {
         const contract = getContract(
           BETTING_CONTRACT,
@@ -41,7 +42,6 @@ const useClaimToken = (data?: any, isCorrect?: boolean) => {
           library,
           account,
         );
-
         if (contract) {
           const transaction = await contract.tokenClaim(
             _matchId,
@@ -54,27 +54,39 @@ const useClaimToken = (data?: any, isCorrect?: boolean) => {
           setLoadingClaim(false);
 
           toast.success("Claim token successful");
+
+          // logging success data to api
+          dataLogging = encryptData({
+            status: "success",
+            type: "claim",
+            user_address: account || "",
+            match_id: _matchId,
+            bet_type: _betType,
+            amount: _amount,
+          });
         }
       } catch (error: any) {
         console.log("ERR claiming: ", error);
-        toast.error("Fail to Claim token");
+        toast.error(getErrorMessage(error, "Fail to Claim token"));
         setLoadingClaim(false);
+
+        // logging error data to api
+        dataLogging = encryptData({
+          status: "error",
+          type: "claim",
+          user_address: account || "",
+          match_id: _matchId,
+          bet_type: _betType,
+          amount: _amount,
+          errorText: "ERR claim: " + error?.message,
+        });
       }
+
+      // send data logging to backend
+      sendDataLogging(dataLogging);
     },
     [library, account],
   );
-
-  useEffect(() => {
-    if (!data || !isCorrect) return;
-    if (isWrongChain) return;
-
-    const checkUserClaimed = async () => {
-      const claimed = await checkClaimed(data.match_id, data.bet_type);
-      setIsClaimed(claimed);
-    };
-
-    checkUserClaimed();
-  }, [data, recheckClaim]);
 
   const handleClaimToken = async () => {
     if (!data) {
@@ -89,6 +101,7 @@ const useClaimToken = (data?: any, isCorrect?: boolean) => {
       amount: data?.total_claim,
     };
 
+    setIsClaimSuccess(false);
     setLoadingClaim(true);
 
     fetcher(`${API_BASE_URL}/claim/get-sig`, {
@@ -110,7 +123,8 @@ const useClaimToken = (data?: any, isCorrect?: boolean) => {
         };
 
         await claimToken(match_id, bet_type, amount, signMessage);
-        setRecheckClaim((prevState) => !prevState);
+        const claimed = await checkClaimed(match_id, bet_type);
+        setIsClaimSuccess(claimed && isCorrect);
 
         setLoadingClaim(false);
       })
@@ -124,7 +138,7 @@ const useClaimToken = (data?: any, isCorrect?: boolean) => {
     claimToken,
     loadingClaim,
     transactionHash,
-    isClaimed,
+    isClaimSuccess,
     handleClaimToken,
   };
 };

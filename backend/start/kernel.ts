@@ -12,18 +12,19 @@
 import Server from '@ioc:Adonis/Core/Server'
 
 // import { fetchUpcomingMatchJob } from 'App/Jobs/FetchUpcomingMatchJob'
-import { fetchLiveMatchJob } from 'App/Jobs/FetchLiveMatchJob'
+// import { fetchLiveMatchJob } from 'App/Jobs/FetchLiveMatchJob'
 
 import { calcOuFtJob } from 'App/Jobs/CalcOuFtJob'
 import { calcOuHtJob } from 'App/Jobs/CalcOuHtJob'
 import { calcOddsHtJob } from 'App/Jobs/CalcOddsHtJob'
 import { calcOddsFtJob } from 'App/Jobs/CalcOddsFtJob'
 
-import { requestRandomPredict } from 'App/Jobs/RequestRandomPredict'
+// import { requestRandomPredict } from 'App/Jobs/RequestRandomPredict'
 
 const FetchMatchInfoInitTask = require('@ioc:App/Tasks/FetchMatchInfoTask')
 const FetchUserBettingTask = require('@ioc:App/Tasks/FetchUserBettingTask')
-const FetchPredictWinnerInitTask = require('@ioc:App/Tasks/FetchPredictWinnerTask')
+const CalcPredictInitTask = require('@ioc:App/Tasks/CalcPredictTask')
+// const FetchPickWinnerInitTask = require('@ioc:App/Tasks/FetchPickWinnerTask')
 
 /*
 |--------------------------------------------------------------------------
@@ -55,6 +56,7 @@ Server.middleware.register([() => import('@ioc:Adonis/Core/BodyParser')])
 Server.middleware.registerNamed({
   checkSignature: () => import('App/Middleware/CheckSignature'),
   checkAuthSignature: () => import('App/Middleware/CheckAuthSignature'),
+  checkAuthWallet: () => import('App/Middleware/CheckAuthWallet'),
 })
 
 //const Scheduler = require('@ioc:Adonis/Addons/Scheduler')
@@ -62,14 +64,15 @@ Server.middleware.registerNamed({
 new Promise(() => {
   // Scheduler.run();
   // fetchUpcomingMatchJob({})
-  fetchLiveMatchJob()
+  // fetchLiveMatchJob()
   FetchMatchInfoInitTask.initTask()
   FetchUserBettingTask.initTask()
-  FetchPredictWinnerInitTask.initTask()
+  CalcPredictInitTask.initTask()
+  // FetchPickWinnerInitTask.initTask()
   calcOuFtJob()
   calcOuHtJob()
   calcOddsHtJob()
   calcOddsFtJob()
-  requestRandomPredict()
+  // requestRandomPredict()
   return
 }).then(() => {})

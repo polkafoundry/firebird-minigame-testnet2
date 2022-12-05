@@ -116,7 +116,7 @@ const MatchScore = () => {
       />
       <div className="mt-[-19px] md:mt-[-29px]">
         <RewardBanner
-          reward="$6,820"
+          reward="$1,720"
           winner="64 winners"
           // redirectUrl={BASE_HREF + URLS.HOME + "#reward-distribution"}
         />
@@ -148,8 +148,7 @@ const MatchScore = () => {
         </div>
         <div
           className={clsx(
-            "hidden md:block w-full md:w-[50%] max-h-screen overflow-y-auto",
-            styles.scrollLayout,
+            "hidden md:block w-full md:w-[50%] max-h-screen overflow-hidden",
           )}
         >
           <WinnerMatch

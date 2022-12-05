@@ -1,16 +1,15 @@
 import { AbstractConnector } from "@web3-react/abstract-connector";
 import { UnsupportedChainIdError, useWeb3React } from "@web3-react/core";
 import { InjectedConnector } from "@web3-react/injected-connector";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { BIRD_CHAIN_ID } from "../constants/networks";
+import { WalletContext } from "../context/WalletContext";
 import { requestSupportNetwork } from "./../utils/setupNetwork";
 
 const useProviderConnects = () => {
-  const [currentConnector, setCurrentConnector] = useState<
-    undefined | AbstractConnector
-  >(undefined);
   const [connectLoading, setConnectLoading] = useState(false);
+  const { setShowModal } = useContext(WalletContext);
 
   const {
     activate,
@@ -35,7 +34,6 @@ const useProviderConnects = () => {
           async (error: any) => {
             if (error instanceof UnsupportedChainIdError) {
               console.log("Error when activate: ", error.message);
-              setCurrentConnector(undefined);
               localStorage.removeItem("walletconnect");
 
               toast.error(
@@ -48,17 +46,13 @@ const useProviderConnects = () => {
           },
         );
       } catch (error: any) {
-        setCurrentConnector(undefined);
+        console.log("ERROR when try to activate: ", error.message);
       }
     },
-    [connector],
+    [connector, setShowModal],
   );
 
-  const handleProviderChosen = async (
-    name: string,
-    connector: AbstractConnector,
-    handleCloseModal: () => void,
-  ) => {
+  const handleProviderChosen = async (connector: AbstractConnector) => {
     // Add Firebird chain to metamask or switch chain
     const provider = (window as any).ethereum;
     setConnectLoading(true);
@@ -76,14 +70,11 @@ const useProviderConnects = () => {
     }
     await tryActivate(connector);
     setConnectLoading(false);
-    handleCloseModal();
-    setCurrentConnector(connector);
   };
 
   const handleConnectorDisconnect = useCallback(() => {
     localStorage.removeItem("walletconnect");
     deactivate();
-    setCurrentConnector(undefined);
     setConnectLoading(false);
   }, []);
 
@@ -92,7 +83,6 @@ const useProviderConnects = () => {
     connectedAccount,
     handleProviderChosen,
     connectWalletLoading: connectLoading,
-    currentConnector,
     handleConnectorDisconnect,
   };
 };

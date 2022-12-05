@@ -1,28 +1,16 @@
 const getWeb3 = require("../utils/web3");
-const {
-  BOX_CONTRACT_ADDRESS,
-  PRIVATE_KEY,
-  NFT_CONTRACT_ADDRESS,
-  INC_GAS_PRICE,
-  WALLET_ADDRESS,
-  BETTING_CONTRACT_ADDRESS,
-} = require("../config.js");
+const { PRIVATE_KEY, INC_GAS_PRICE, WALLET_ADDRESS, BETTING_CONTRACT_ADDRESS } = require("../config.js");
 const { sBirdAbi } = require("../abi/index");
-const BigNumber = require("bignumber.js");
 const Transaction = require("ethereumjs-tx");
 const { matchData } = require("./ReadXLSX");
-const { getRandomArr } = require("../utils/util");
 
 let web3;
-let boxContract;
 let walletAddress;
-
-const boxMintInBatch = 140;
 
 const createMatch = async () => {
   try {
     const mData = await matchData();
-    // console.log("xxx", mData);
+    // console.log(mData.length);
     // return;
     web3 = getWeb3();
     // Get wallet address
@@ -36,7 +24,7 @@ const createMatch = async () => {
     // return;
     for (let i = 0; i < mData.length; i++) {
       if (mData[i].mSta.length === 12 && mData[i].mInf.length === 13 && mData[i].mID && mData[i].sofaID) {
-        console.log(mData[i]);
+        console.log(mData[i].mID);
         let createMatchCallData = betContract.methods
           .setMatchInfo(mData[i].mID, mData[i].mSta, mData[i].mInf, mData[i].sofaID)
           .encodeABI();
