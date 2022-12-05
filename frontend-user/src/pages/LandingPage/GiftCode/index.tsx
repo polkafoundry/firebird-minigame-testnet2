@@ -31,7 +31,7 @@ const giftCodeBanners = [
   {
     title: "Join Global Chat to get more $BIRD deposit.",
     description:
-      "Join Global Chat at 12PM UTC every Monday, Wednesday and Friday to get more $BIRD deposit.",
+      "Join Global Chat at 12PM UTC every Monday, Wednesday, Friday and Sunday to get more $BIRD deposit.",
     background: {
       normal: "./images/landing-page/gift-code/banner-telegram.png",
       large: "./images/landing-page/gift-code/banner-telegram-large.png",
@@ -39,14 +39,14 @@ const giftCodeBanners = [
     icon: "./images/landing-page/gift-code/telegram.png",
     buttonLeft: { label: "Enter Code" },
     buttonRight: {
-      label: " Join Now",
+      label: "Join Now",
       redirectLink: "https://t.me/Firebird_en",
     },
   },
   {
     title: "Join Twitter to get more $BIRD deposit",
     description:
-      "Join Twitter at 8AM UTC every Tuesday & Thursday to get more $BIRD deposit",
+      "Join Twitter at 8AM UTC every Tuesday, Thursday & Saturday to get more $BIRD deposit.",
     background: {
       normal: "./images/landing-page/gift-code/banner-twitter.png",
       large: "./images/landing-page/gift-code/banner-twitter-large.png",
