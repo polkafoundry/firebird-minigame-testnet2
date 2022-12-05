@@ -5,6 +5,7 @@ module.exports = {
   WALLET_ADDRESS: process.env.WALLET_ADDRESS,
   BETTING_CONTRACT_ADDRESS: process.env.BETTING_CONTRACT_ADDRESS,
   BIRD_CONTRACT_ADDRESS: process.env.BIRD_CONTRACT_ADDRESS,
+  ENSCRYPT_KEY: process.env.REACT_APP_ENCRYPT_SECRET_KEY,
   INC_GAS_PRICE: 5,
   CHAIN_ID: process.env.CHAIN_ID,
   FAUCET_END_POINT: "https://faucet.firefly.firebirdchain.com/api/v1/faucet",

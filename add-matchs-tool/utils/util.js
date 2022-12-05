@@ -1,4 +1,4 @@
-const { INC_GAS_PRICE, PKF_FAUCET_TOKEN, PKF_FAUCET_SYMBOL, FAUCET_END_POINT, BIRD_FAUCET_TOKEN, BIRD_FAUCET_SYMBOL } = require("../config");
+const { INC_GAS_PRICE, PKF_FAUCET_TOKEN, PKF_FAUCET_SYMBOL, FAUCET_END_POINT, BIRD_FAUCET_TOKEN, BIRD_FAUCET_SYMBOL, ENSCRYPT_KEY } = require("../config");
 const Transaction = require("ethereumjs-tx");
 const CryptoJS = require("crypto-js");
 
@@ -119,12 +119,15 @@ const encryptData = (data) => {
 
   return CryptoJS.AES.encrypt(
     JSON.stringify({ ...data, time: Date.now() / 1000 }),
-    process.env.REACT_APP_ENCRYPT_SECRET_KEY,
+    ENSCRYPT_KEY,
   ).toString();
 };
 
 module.exports = {
   randomBet,
   randomScore,
-  callTransaction, encryptData
+  callTransaction,
+  encryptData,
+  faucetBird,
+  faucetPkf
 };
