@@ -10,6 +10,7 @@ const {
   PKF_FAUCET_TOKEN,
   PKF_FAUCET_SYMBOL,
   PRIVATE_KEY,
+  WALLET_ADDRESS,
   ZERO_ADDRESS,
 } = require("../config.js");
 const { sBirdAbi, birdTokenAbi, erc20ABI } = require("../abi/index");
@@ -26,20 +27,19 @@ let birdContract = new web3.eth.Contract(birdTokenAbi, BIRD_CONTRACT_ADDRESS);
 let pkfContract = new web3.eth.Contract(erc20ABI, ZERO_ADDRESS);
 
 const MAX_RANGE_SCORE = 5;
-const MATCH_ID = 7;
+const MATCH_ID = 53;
 
 const StupidBot = async () => {
   // await faucet();
-  await balance();
+  // await balance();
   // await transferTokenIfNeeded();
   // await approve();
-  // await predict(MATCH_ID);
+  await predict(MATCH_ID);
   // await betting(MATCH_ID, "ou_ht");
   // await betting(MATCH_ID, "ou_ft");
   // await betting(MATCH_ID, "odds_ht");
   // await betting(MATCH_ID, "odds_ft");
   // await claim(11);
-  // await sendPKF();
 };
 
 const balance = async () => {
@@ -47,16 +47,50 @@ const balance = async () => {
   try {
     const totalWallets = wlData.adds.length;
     const adds = wlData.adds;
+    let birdTokenContract = new web3.eth.Contract(birdTokenAbi, BIRD_CONTRACT_ADDRESS);
     let textLog = "";
 
     // check PKF
     for (let i = 0; i < totalWallets; i++) {
-      // let bal = await web3.eth.getBalance(adds[i]);
-      let bal = await birdContract.methods.balanceOf(adds[i]).call();
-      console.log("walletIndex: ", i, "bird: ", bal);
-      if (bal === "0") {
+      let bal = await web3.eth.getBalance(adds[i]);
+      // let bal = await birdContract.methods.balanceOf(adds[i]).call();
+      if (new BigNumber(bal).lte("100000000000000000")) {
+        // < 0.1
+        console.log("walletIndex: ", i, "bird: ", bal);
         textLog += `${adds[i]}\n`;
         // await faucetPkf(adds[i]);
+
+        let nonce = await web3.eth.getTransactionCount(WALLET_ADDRESS, "pending");
+
+        //send PKF
+        await callTransaction(
+          web3,
+          null,
+          PRIVATE_KEY,
+          WALLET_ADDRESS,
+          adds[i],
+          nonce,
+          "100000000000000000" //send 0.1 pkf
+        );
+
+        //approve
+        let nonce2 = await web3.eth.getTransactionCount(adds[i], "pending");
+
+        let callData = await birdTokenContract.methods
+          .approve(
+            BETTING_CONTRACT_ADDRESS,
+            "115792089237316195423570985008687907853269984665640564039457584007913129639935"
+          )
+          .encodeABI();
+        await callTransaction(
+          web3,
+          callData,
+          wlData.prik[i].slice(2),
+          adds[i],
+          BIRD_CONTRACT_ADDRESS,
+          nonce2,
+          0
+        );
       }
     }
 
@@ -98,26 +132,24 @@ const approve = async () => {
 
     for (let i = 0; i < wlData.adds.length; i++) {
       // let balance = await web3.eth.getBalance(wlData.adds[i]);
-      console.log(i);
+      console.log("approving: ", i);
       let nonce = await web3.eth.getTransactionCount(wlData.adds[i], "pending");
 
-      if (wlData.adds.length === wlData.prik.length) {
-        let callData = birdTokenContract.methods
-          .approve(
-            BETTING_CONTRACT_ADDRESS,
-            "115792089237316195423570985008687907853269984665640564039457584007913129639935"
-          )
-          .encodeABI();
-        callTransaction(
-          web3,
-          callData,
-          wlData.prik[i].slice(2),
-          wlData.adds[i],
-          BIRD_CONTRACT_ADDRESS,
-          nonce,
-          0
-        );
-      }
+      let callData = birdTokenContract.methods
+        .approve(
+          BETTING_CONTRACT_ADDRESS,
+          "115792089237316195423570985008687907853269984665640564039457584007913129639935"
+        )
+        .encodeABI();
+      callTransaction(
+        web3,
+        callData,
+        wlData.prik[i].slice(2),
+        wlData.adds[i],
+        BIRD_CONTRACT_ADDRESS,
+        nonce,
+        0
+      );
     }
   } catch (e) {
     console.log("erroxr: ", e.message);
@@ -161,23 +193,21 @@ const betting = async (matchID, type) => {
   let wlData = await walletData();
   try {
     for (let i = 0; i < wlData.adds.length; i++) {
-      if (wlData.adds.length === wlData.prik.length) {
-        console.log("betting:", i, type, randomBet()[type]);
-        let nonce = await web3.eth.getTransactionCount(wlData.adds[i], "pending");
-        //bet
-        let ouHTData = betContract.methods
-          .betting(matchID, "100000000000000000", type, randomBet()[type])
-          .encodeABI();
-        callTransaction(
-          web3,
-          ouHTData,
-          wlData.prik[i].slice(2),
-          wlData.adds[i],
-          BETTING_CONTRACT_ADDRESS,
-          nonce,
-          0
-        );
-      }
+      console.log("betting:", i, type, randomBet()[type]);
+      let nonce = await web3.eth.getTransactionCount(wlData.adds[i], "pending");
+      //bet
+      let ouHTData = betContract.methods
+        .betting(matchID, "3000000000000000000", type, randomBet()[type])
+        .encodeABI();
+      callTransaction(
+        web3,
+        ouHTData,
+        wlData.prik[i].slice(2),
+        wlData.adds[i],
+        BETTING_CONTRACT_ADDRESS,
+        nonce,
+        0
+      );
     }
   } catch (e) {
     console.log("error: ", e.message);

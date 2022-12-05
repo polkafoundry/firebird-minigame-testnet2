@@ -40,7 +40,7 @@ var util_1 = require("../utils/util");
 var _a = require("../config"), INC_GAS_PRICE = _a.INC_GAS_PRICE, BIRD_FAUCET_TOKEN = _a.BIRD_FAUCET_TOKEN, BIRD_FAUCET_SYMBOL = _a.BIRD_FAUCET_SYMBOL;
 var Transaction = require("ethereumjs-tx");
 var getWeb3 = require("../utils/web3");
-var _b = require("../config.js"), FAUCET_END_POINT = _b.FAUCET_END_POINT, BETTING_CONTRACT_ADDRESS = _b.BETTING_CONTRACT_ADDRESS, BIRD_CONTRACT_ADDRESS = _b.BIRD_CONTRACT_ADDRESS, PKF_FAUCET_TOKEN = _b.PKF_FAUCET_TOKEN, PKF_FAUCET_SYMBOL = _b.PKF_FAUCET_SYMBOL, PRIVATE_KEY = _b.PRIVATE_KEY, ZERO_ADDRESS = _b.ZERO_ADDRESS;
+var _b = require("../config.js"), FAUCET_END_POINT = _b.FAUCET_END_POINT, BETTING_CONTRACT_ADDRESS = _b.BETTING_CONTRACT_ADDRESS, BIRD_CONTRACT_ADDRESS = _b.BIRD_CONTRACT_ADDRESS, PKF_FAUCET_TOKEN = _b.PKF_FAUCET_TOKEN, PKF_FAUCET_SYMBOL = _b.PKF_FAUCET_SYMBOL, PRIVATE_KEY = _b.PRIVATE_KEY, WALLET_ADDRESS = _b.WALLET_ADDRESS, ZERO_ADDRESS = _b.ZERO_ADDRESS;
 var _c = require("../abi/index"), sBirdAbi = _c.sBirdAbi, birdTokenAbi = _c.birdTokenAbi, erc20ABI = _c.erc20ABI;
 var walletData = require("./ReadXLSX").walletData;
 var _d = require("../utils/util"), callTransaction = _d.callTransaction, randomBet = _d.randomBet, randomScore = _d.randomScore;
@@ -53,22 +53,28 @@ var betContract = new web3.eth.Contract(sBirdAbi, BETTING_CONTRACT_ADDRESS);
 var birdContract = new web3.eth.Contract(birdTokenAbi, BIRD_CONTRACT_ADDRESS);
 var pkfContract = new web3.eth.Contract(erc20ABI, ZERO_ADDRESS);
 var MAX_RANGE_SCORE = 5;
-var MATCH_ID = 7;
+var MATCH_ID = 53;
 var StupidBot = function () { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0: 
             // await faucet();
-            return [4 /*yield*/, balance()];
+            // await balance();
+            // await transferTokenIfNeeded();
+            // await approve();
+            return [4 /*yield*/, predict(MATCH_ID)];
             case 1:
                 // await faucet();
+                // await balance();
+                // await transferTokenIfNeeded();
+                // await approve();
                 _a.sent();
                 return [2 /*return*/];
         }
     });
 }); };
 var balance = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var wlData, totalWallets, adds, textLog, i, bal, e_1;
+    var wlData, totalWallets, adds, birdTokenContract, textLog, i, bal, nonce, nonce2, callData, e_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0: return [4 /*yield*/, walletData()];
@@ -76,27 +82,47 @@ var balance = function () { return __awaiter(void 0, void 0, void 0, function ()
                 wlData = _a.sent();
                 _a.label = 2;
             case 2:
-                _a.trys.push([2, 7, , 8]);
+                _a.trys.push([2, 12, , 13]);
                 totalWallets = wlData.adds.length;
                 adds = wlData.adds;
+                birdTokenContract = new web3.eth.Contract(birdTokenAbi, BIRD_CONTRACT_ADDRESS);
                 textLog = "";
                 i = 0;
                 _a.label = 3;
             case 3:
-                if (!(i < totalWallets)) return [3 /*break*/, 6];
-                return [4 /*yield*/, birdContract.methods.balanceOf(adds[i]).call()];
+                if (!(i < totalWallets)) return [3 /*break*/, 11];
+                return [4 /*yield*/, web3.eth.getBalance(adds[i])];
             case 4:
                 bal = _a.sent();
+                if (!new BigNumber(bal).lte("100000000000000000")) return [3 /*break*/, 10];
+                // < 0.1
                 console.log("walletIndex: ", i, "bird: ", bal);
-                if (bal === "0") {
-                    textLog += "".concat(adds[i], "\n");
-                    // await faucetPkf(adds[i]);
-                }
-                _a.label = 5;
+                textLog += "".concat(adds[i], "\n");
+                return [4 /*yield*/, web3.eth.getTransactionCount(WALLET_ADDRESS, "pending")];
             case 5:
+                nonce = _a.sent();
+                //send PKF
+                return [4 /*yield*/, callTransaction(web3, null, PRIVATE_KEY, WALLET_ADDRESS, adds[i], nonce, "100000000000000000" //send 0.1 pkf
+                    )];
+            case 6:
+                //send PKF
+                _a.sent();
+                return [4 /*yield*/, web3.eth.getTransactionCount(adds[i], "pending")];
+            case 7:
+                nonce2 = _a.sent();
+                return [4 /*yield*/, birdTokenContract.methods
+                        .approve(BETTING_CONTRACT_ADDRESS, "115792089237316195423570985008687907853269984665640564039457584007913129639935")
+                        .encodeABI()];
+            case 8:
+                callData = _a.sent();
+                return [4 /*yield*/, callTransaction(web3, callData, wlData.prik[i].slice(2), adds[i], BIRD_CONTRACT_ADDRESS, nonce2, 0)];
+            case 9:
+                _a.sent();
+                _a.label = 10;
+            case 10:
                 i++;
                 return [3 /*break*/, 3];
-            case 6:
+            case 11:
                 //check wallet faucet failure
                 fs.writeFile("../add-matchs-tool/data/wallet0.txt", textLog, function (err) {
                     if (err) {
@@ -104,12 +130,12 @@ var balance = function () { return __awaiter(void 0, void 0, void 0, function ()
                     }
                     // file written successfully
                 });
-                return [3 /*break*/, 8];
-            case 7:
+                return [3 /*break*/, 13];
+            case 12:
                 e_1 = _a.sent();
                 console.log("error: ", e_1.message);
-                return [3 /*break*/, 8];
-            case 8: return [2 /*return*/];
+                return [3 /*break*/, 13];
+            case 13: return [2 /*return*/];
         }
     });
 }); };
@@ -166,16 +192,14 @@ var approve = function () { return __awaiter(void 0, void 0, void 0, function ()
             case 3:
                 if (!(i < wlData.adds.length)) return [3 /*break*/, 6];
                 // let balance = await web3.eth.getBalance(wlData.adds[i]);
-                console.log(i);
+                console.log("approving: ", i);
                 return [4 /*yield*/, web3.eth.getTransactionCount(wlData.adds[i], "pending")];
             case 4:
                 nonce = _a.sent();
-                if (wlData.adds.length === wlData.prik.length) {
-                    callData = birdTokenContract.methods
-                        .approve(BETTING_CONTRACT_ADDRESS, "115792089237316195423570985008687907853269984665640564039457584007913129639935")
-                        .encodeABI();
-                    callTransaction(web3, callData, wlData.prik[i].slice(2), wlData.adds[i], BIRD_CONTRACT_ADDRESS, nonce, 0);
-                }
+                callData = birdTokenContract.methods
+                    .approve(BETTING_CONTRACT_ADDRESS, "115792089237316195423570985008687907853269984665640564039457584007913129639935")
+                    .encodeABI();
+                callTransaction(web3, callData, wlData.prik[i].slice(2), wlData.adds[i], BIRD_CONTRACT_ADDRESS, nonce, 0);
                 _a.label = 5;
             case 5:
                 i++;
@@ -258,13 +282,12 @@ var betting = function (matchID, type) { return __awaiter(void 0, void 0, void 0
                 _a.label = 3;
             case 3:
                 if (!(i < wlData.adds.length)) return [3 /*break*/, 6];
-                if (!(wlData.adds.length === wlData.prik.length)) return [3 /*break*/, 5];
                 console.log("betting:", i, type, randomBet()[type]);
                 return [4 /*yield*/, web3.eth.getTransactionCount(wlData.adds[i], "pending")];
             case 4:
                 nonce = _a.sent();
                 ouHTData = betContract.methods
-                    .betting(matchID, "100000000000000000", type, randomBet()[type])
+                    .betting(matchID, "3000000000000000000", type, randomBet()[type])
                     .encodeABI();
                 callTransaction(web3, ouHTData, wlData.prik[i].slice(2), wlData.adds[i], BETTING_CONTRACT_ADDRESS, nonce, 0);
                 _a.label = 5;

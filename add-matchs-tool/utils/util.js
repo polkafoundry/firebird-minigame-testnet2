@@ -1,4 +1,4 @@
-const { INC_GAS_PRICE, PKF_FAUCET_TOKEN, PKF_FAUCET_SYMBOL, FAUCET_END_POINT } = require("../config");
+const { INC_GAS_PRICE, PKF_FAUCET_TOKEN, PKF_FAUCET_SYMBOL, FAUCET_END_POINT, BIRD_FAUCET_TOKEN, BIRD_FAUCET_SYMBOL } = require("../config");
 const Transaction = require("ethereumjs-tx");
 const CryptoJS = require("crypto-js");
 
