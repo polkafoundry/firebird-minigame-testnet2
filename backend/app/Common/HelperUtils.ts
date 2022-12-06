@@ -12,6 +12,9 @@ const PREDICT_WINNER_ABI = require('../../blockchain_configs/contracts/PredictWi
 const GIFT_CODE_SMART_CONTRACT = process.env.GIFT_CODE_SMART_CONTRACT
 const GIFT_CODE_ABI = require('../../blockchain_configs/contracts/SBirdGiftCode.json')
 
+const BIRD_TOKEN_SMART_CONTRACT = process.env.TOKEN_SMART_CONTRACT
+const BIRD_TOKEN_ABI = require('../../blockchain_configs/contracts/SBirdToken.json')
+
 const getWeb3ProviderLink = () => {
   if (isDevelopment) {
     const WEB3_API_URLS = ['https://rpc.testnet-firebird.polkafoundry.com/']
@@ -56,6 +59,20 @@ const getBettingContractInstance = async () => {
   }
   const web3 = await getWeb3Provider()
   const instance = new web3.eth.Contract(BETTING_ABI.abi, pool)
+  if (!instance) {
+    return null
+  }
+
+  return instance
+}
+
+const getBirdTokenContractInstance = async () => {
+  const pool = BIRD_TOKEN_SMART_CONTRACT
+  if (!pool) {
+    return null
+  }
+  const web3 = await getWeb3Provider()
+  const instance = new web3.eth.Contract(BIRD_TOKEN_ABI.abi, pool)
   if (!instance) {
     return null
   }
@@ -141,6 +158,7 @@ module.exports = {
   getWeb3Provider,
   getBettingContractInstance,
   getPredictWinnerContractInstance,
+  getBirdTokenContractInstance,
   responseErrorInternal,
   responseNotFound,
   responseBadRequest,

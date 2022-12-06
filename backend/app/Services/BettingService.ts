@@ -428,4 +428,38 @@ export default class BettingService {
       return HelperUtils.responseErrorInternal(error)
     }
   }
+  public async topUserInfo(request): Promise<any> {
+    try {
+      let topUser = await this.Database.rawQuery(
+        `SELECT user_address, SUM(CASE WHEN result_num > 0 THEN result_num ELSE 0 END) AS total_win, COUNT(*) as total_bet FROM bettings GROUP BY user_address ORDER BY total_win DESC LIMIT 30 OFFSET 0`
+      )
+      const bettingContract = await HelperUtils.getBirdTokenContractInstance()
+      let res: any = []
+      for (let i = 0; i < topUser[0].length; i++) {
+        let obj = topUser[0][i]
+        let [userLogs, giftCodes, predicts, balance] = await Promise.all([
+          this.Database.from('user_logs')
+            .count('* as total')
+            .where('user_address', obj.user_address),
+          this.Database.from('gift_code_histories')
+            .count('* as total')
+            .where('user_address', obj.user_address),
+          this.Database.from('predicts')
+            .count('* as total')
+            .where('user_address', obj.user_address),
+          parseInt(await bettingContract.methods.balanceOf(obj.user_address).call()),
+        ])
+        res.push({
+          ...obj,
+          logs: userLogs[0].total,
+          code: giftCodes[0].total,
+          predict: predicts[0].total,
+          balance: balance / 1000000000000000000,
+        })
+      }
+      return res
+    } catch (error) {
+      return HelperUtils.responseErrorInternal(error)
+    }
+  }
 }

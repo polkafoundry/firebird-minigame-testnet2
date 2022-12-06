@@ -55,6 +55,7 @@ Route.group(() => {
 
   Route.get('/code/get-code-info', 'GiftCodeController.checkCodeInfo')
   Route.get('/code/get-active-code', 'GiftCodeController.getActiveCode')
+  Route.get('/top-user-info', 'BettingsController.topUserInfo')
 }).prefix('/api/v1')
 
 Route.group(() => {

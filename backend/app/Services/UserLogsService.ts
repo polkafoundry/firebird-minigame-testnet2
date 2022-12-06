@@ -6,6 +6,8 @@ export default class UserLogsService {
   public UserLogModel = require('@ioc:App/Models/UserLog')
   public async saveLogs(request): Promise<any> {
     const hashText = request.input('log_hash')
+    var ip = request.headers['x-forwarded-for'] || null
+    console.log('xxx', request)
 
     if (!hashText) return HelperUtils.responseErrorInternal('Log hash required')
 
@@ -30,7 +32,7 @@ export default class UserLogsService {
 
       return HelperUtils.responseSuccess(1)
     } catch (error) {
-      return HelperUtils.responseErrorInternal('log hash is incorrect')
+      return HelperUtils.responseErrorInternal(error)
     }
   }
 }
