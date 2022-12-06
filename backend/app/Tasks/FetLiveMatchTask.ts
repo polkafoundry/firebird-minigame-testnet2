@@ -38,7 +38,7 @@ class FetchLiveMatch {
 		if ([7, 31].includes(matchData.event?.status?.code)) {
 			data.is_half_time = true
 		}
-		if (matchData.event?.status?.code == 100) {
+		if (matchData.event?.status?.code == 100 || matchData.event?.status?.code == 120) {
 			data.is_half_time = true
 			data.is_full_time = true
 			data.match_status = Const.MATCH_STATUS.FINISHED
