@@ -428,4 +428,39 @@ export default class BettingService {
       return HelperUtils.responseErrorInternal(error)
     }
   }
+
+  public async userBetting(request): Promise<any> {
+    const matchID = request.input('match_id')
+    const betType = request.input('bet_type')
+    const betPlace = request.input('bet_place')
+    const walletAddress = request.input('wallet')
+    const amount = request.input('amount')
+
+    if (!walletAddress) return HelperUtils.responseErrorInternal('Wallet address required')
+    if (!betType) return HelperUtils.responseErrorInternal('Predict type required')
+    if (!betPlace) return HelperUtils.responseErrorInternal('Predict place required')
+    if (!amount) return HelperUtils.responseErrorInternal('Amount required')
+    if (!matchID) return HelperUtils.responseErrorInternal('Match ID required')
+
+    try {
+      const maxAmount = await HelperUtils.getLeaderboard(walletAddress)
+      if (amount / 1000000000000000000 > maxAmount) {
+        return HelperUtils.responseErrorInternal('Predict value exceed')
+      }
+
+      const bettingContract = await HelperUtils.getBettingContractInstance()
+      const nonce = parseInt(await bettingContract.methods.UserBettingNonces(walletAddress).call())
+      const signature = await HelperUtils.signUserBetting(
+        walletAddress,
+        nonce,
+        amount,
+        matchID,
+        betType,
+        betPlace
+      )
+      return HelperUtils.responseSuccess(signature)
+    } catch (error) {
+      return HelperUtils.responseErrorInternal(error)
+    }
+  }
 }

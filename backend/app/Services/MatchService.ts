@@ -1,5 +1,6 @@
 import InvalidParamException from 'App/Exceptions/InvalidParamException'
 const Const = require('@ioc:App/Common/Const')
+const HelperUtils = require('@ioc:App/Common/HelperUtils')
 
 export default class MatchService {
   public MatchModel = require('@ioc:App/Models/Match')
@@ -77,7 +78,7 @@ export default class MatchService {
       })
       .first()
     match = JSON.parse(JSON.stringify(match))
-
+    //update bet count
     let betCount = await this.Database.from('bettings')
       .count('* as total')
       .where('user_address', wallet_address)
@@ -92,9 +93,13 @@ export default class MatchService {
       { user_address: wallet_address, match_id: id, bet_count: total }
     )
 
+    //get user rank
+    const maxValue = await HelperUtils.getLeaderboard(wallet_address)
+
     const obj = {
       ...match,
       is_completed_bet: match.bet_count ? match.bet_count.bet_count == 5 : false,
+      maxPredictValue: maxValue,
     }
     delete match.bet_count
     return obj
