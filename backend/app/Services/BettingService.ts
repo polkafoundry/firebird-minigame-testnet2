@@ -445,7 +445,9 @@ export default class BettingService {
     try {
       const maxAmount = await HelperUtils.getLeaderboard(walletAddress)
       if (amount / 1000000000000000000 > maxAmount) {
-        return HelperUtils.responseErrorInternal('Predict value exceed')
+        return HelperUtils.responseErrorInternal(
+          `Predict value exceed, max predict: ${maxAmount} BIRD`
+        )
       }
 
       const bettingContract = await HelperUtils.getBettingContractInstance()

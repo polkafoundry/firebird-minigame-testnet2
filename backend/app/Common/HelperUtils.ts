@@ -3,8 +3,6 @@ import axios from 'axios'
 import { ethers, Wallet } from 'ethers'
 import { fromRpcSig } from 'ethereumjs-util'
 
-const HelperUtils = require('@ioc:App/Common/HelperUtils')
-
 const isDevelopment = process.env.NODE_ENV === 'development'
 const Const = require('@ioc:App/Common/Const')
 
