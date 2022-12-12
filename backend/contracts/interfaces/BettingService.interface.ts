@@ -4,4 +4,5 @@ export default interface BettingServiceInterface {
   oddsHTCalculate(request): Promise<any>
   oddsFTCalculate(request): Promise<any>
   getUserBettingHistory(request): Promise<any>
+  userBetting(request): Promise<any>
 }

@@ -4,9 +4,9 @@ export default class AddBettingTableUniques extends BaseSchema {
   protected tableName = 'bettings'
 
   public async up() {
-    this.schema.table(this.tableName, (table) => {
-      table.unique(['user_address', 'match_id', 'bet_type'])
-    })
+    // this.schema.table(this.tableName, (table) => {
+    //   table.unique(['user_address', 'match_id', 'bet_type'])
+    // })
   }
 
   public async down() {

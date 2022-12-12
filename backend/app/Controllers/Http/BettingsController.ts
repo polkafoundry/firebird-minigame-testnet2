@@ -17,4 +17,7 @@ export default class BettingsController {
   public async getUserBettingHistory({ request }) {
     return await BettingService.getUserBettingHistory(request)
   }
+  public async userBetting({ request }) {
+    return await BettingService.userBetting(request)
+  }
 }

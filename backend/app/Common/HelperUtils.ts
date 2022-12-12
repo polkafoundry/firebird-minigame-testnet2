@@ -1,4 +1,7 @@
 import crypto from 'crypto'
+import axios from 'axios'
+import { ethers, Wallet } from 'ethers'
+import { fromRpcSig } from 'ethereumjs-util'
 
 const isDevelopment = process.env.NODE_ENV === 'development'
 const Const = require('@ioc:App/Common/Const')
@@ -137,6 +140,95 @@ const generateRandomCode = () => {
   return code
 }
 
+const getLeaderboard = async (wallet_address) => {
+  const currentTime = new Date()
+  const token = getMFToken(
+    `${currentTime.getTime()}${Const.MF_KEY.TENANT_ID}${Const.MF_KEY.SECRET_KEY}`
+  )
+  const res = await axios.get(
+    `${Const.MF_ENDPOINT}/firebird/query/${
+      Const.MF_KEY.TENANT_ID
+    }/dashboard/${currentTime.getTime()}?startTime=${'2022-11-20T00:00:00.000Z'}&endTime=${'2022-12-20T00:00:00.000Z'}&event=${
+      Const.MF_KEY.EVENT_NAME
+    }&tenantId=${Const.MF_KEY.TENANT_ID}&sumBy=earned&limit=${5000}&offset=${0}&search=${''}` +
+      (wallet_address ? `&currentUserId=${wallet_address}` : ''),
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  )
+  let position = res?.data?.position || 0
+  if (position === 0) {
+    return 10000
+  } else if (position <= 10) {
+    return 3000
+  } else if (position <= 20) {
+    return 4000
+  } else if (position <= 30) {
+    return 5000
+  } else if (position <= 50) {
+    return 7000
+  } else {
+    return 10000
+  }
+}
+
+const signUserBetting = async (
+  address: string,
+  nonce: number,
+  amount: number,
+  matchID: number,
+  betType: string,
+  betPlace: string
+): Promise<{
+  r: any
+  s: any
+  v: any
+  deadline: string
+}> => {
+  const wallet: Wallet = new ethers.Wallet(process.env.SIGNER_PRIVATE_KEY || '')
+  const provider = await getWeb3Provider()
+  const latestBlockNumber = (await provider.eth.getBlockNumber()) - 1
+  const blockTime = await provider.eth.getBlock(latestBlockNumber)
+  const blockTimeStamp = Math.floor(blockTime ? blockTime.timestamp : Date.now() / 1000)
+  const deadline = Math.floor(blockTimeStamp) + 60 * 15 // 15 minutes
+  const types = {
+    UserBetting: [
+      { name: 'caller', type: 'string' },
+      { name: 'matchID', type: 'uint16' },
+      { name: 'betType', type: 'string' },
+      { name: 'betPlace', type: 'string' },
+      { name: 'amount', type: 'uint256' },
+      { name: 'nonce', type: 'uint256' },
+      { name: 'deadline', type: 'uint256' },
+    ],
+  }
+  let caller = address.toString().toLowerCase()
+  const message = {
+    caller,
+    matchID,
+    betType,
+    betPlace,
+    amount,
+    nonce,
+    deadline,
+  }
+  const domain = {
+    name: 'FirebirdGame',
+    version: '1',
+    verifyingContract: BETTING_SMART_CONTRACT,
+  }
+  const sig = await wallet._signTypedData(domain, types, message)
+  const response = fromRpcSig(sig)
+  return {
+    r: response.r,
+    s: response.s,
+    v: response.v,
+    deadline: deadline.toString(),
+  }
+}
+
 module.exports = {
   getWeb3Provider,
   getBettingContractInstance,
@@ -148,4 +240,6 @@ module.exports = {
   getMFToken,
   generateRandomCode,
   getGiftCodeContractInstance,
+  getLeaderboard,
+  signUserBetting,
 }
