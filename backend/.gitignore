@@ -9,3 +9,4 @@ tmp
 *.log
 *.env
 .env.testing
+google_sheet_credential.json
