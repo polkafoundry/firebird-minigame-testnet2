@@ -9,10 +9,13 @@ import {
 import { BET_TYPE, MATCH_STATUS, rounds } from "../../../../../constants";
 import { WalletContext } from "../../../../../context/WalletContext";
 import useBirdToken from "../../../../../hooks/useBirdToken";
+import { useMyWeb3 } from "../../../../../hooks/useMyWeb3";
 import usePredictConditions from "../../../../../hooks/usePredictConditions";
 import { getImgSrc } from "../../../../../utils";
 import { requestSupportNetwork } from "../../../../../utils/setupNetwork";
 import { getQuestionStatus } from "./components/utils";
+import OddsQuestion from "./OddsQuestion";
+import OverUnderQuestion from "./OverUnderQuestion";
 import PredictQuestion from "./PredictQuestion";
 
 export type QuestionProps = {
@@ -43,10 +46,9 @@ const MatchQuestions = (props: MatchQuestionProps) => {
       ?.prize || "N/A";
 
   const [needApprove, setNeedApprove] = useState<boolean>(false);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [recheckApprove, setRecheckApprove] = useState<boolean>(false);
 
-  // const { updateBirdBalance, birdBalance } = useMyWeb3();
+  const { updateBirdBalance, birdBalance } = useMyWeb3();
   const { getBirdAllowance } = useBirdToken();
   const predictConditions = usePredictConditions();
   const { setShowModal } = useContext(WalletContext);
@@ -67,6 +69,7 @@ const MatchQuestions = (props: MatchQuestionProps) => {
 
   useEffect(() => {
     if (!dataQuestion) return;
+    console.log("dataQuestion", dataQuestion);
 
     const lowerScore = (ratio: any) =>
       Math.floor(ratio) === ratio ? ratio - 1 : Math.floor(ratio);
@@ -74,8 +77,6 @@ const MatchQuestions = (props: MatchQuestionProps) => {
       Math.floor(ratio) === ratio ? ratio + 1 : Math.round(ratio);
 
     const bindData = () => {
-      // console.log("dataQuestion", dataQuestion);
-
       // get Name, Icon both of teams
       const homeTeamInfo = {
         home_name: dataQuestion?.home_name,
@@ -99,6 +100,7 @@ const MatchQuestions = (props: MatchQuestionProps) => {
         match_id: dataQuestion?.match_id,
         ft_home_score: dataQuestion?.ft_home_score,
         ft_away_score: dataQuestion?.ft_away_score,
+        maxDepositAmount: dataQuestion?.maxPredictValue,
       };
 
       const bettingsData = dataQuestion?.bettings || [];
@@ -136,6 +138,7 @@ const MatchQuestions = (props: MatchQuestionProps) => {
         ],
         match_id: dataQuestion?.match_id,
         questionStatus: getQuestionStatus(question2),
+        maxDepositAmount: dataQuestion?.maxPredictValue,
       };
 
       // QUESTION 3
@@ -162,6 +165,7 @@ const MatchQuestions = (props: MatchQuestionProps) => {
         ],
         match_id: dataQuestion?.match_id,
         questionStatus: getQuestionStatus(question3),
+        maxDepositAmount: dataQuestion?.maxPredictValue,
       };
 
       let question4 = bettingsData.find(
@@ -191,6 +195,7 @@ const MatchQuestions = (props: MatchQuestionProps) => {
         ],
         match_id: dataQuestion?.match_id,
         questionStatus: getQuestionStatus(question4),
+        maxDepositAmount: dataQuestion?.maxPredictValue,
       };
 
       let question5 = bettingsData.find(
@@ -220,6 +225,7 @@ const MatchQuestions = (props: MatchQuestionProps) => {
         ],
         match_id: dataQuestion?.match_id,
         questionStatus: getQuestionStatus(question5),
+        maxDepositAmount: dataQuestion?.maxPredictValue,
       };
 
       const newQuestions = [
@@ -284,7 +290,8 @@ const MatchQuestions = (props: MatchQuestionProps) => {
         error={predictConditions}
         predictPrize={predictPrize}
       />
-      {/* <OddsQuestion
+      <OddsQuestion
+        account={account}
         dataQuestion={questions[1]}
         needApprove={needApprove}
         setRecheckApprove={setRecheckApprove}
@@ -295,6 +302,7 @@ const MatchQuestions = (props: MatchQuestionProps) => {
         updateBirdBalance={updateBirdBalance}
       />
       <OddsQuestion
+        account={account}
         dataQuestion={questions[2]}
         needApprove={needApprove}
         setRecheckApprove={setRecheckApprove}
@@ -305,6 +313,7 @@ const MatchQuestions = (props: MatchQuestionProps) => {
         updateBirdBalance={updateBirdBalance}
       />
       <OverUnderQuestion
+        account={account}
         dataQuestion={questions[3]}
         needApprove={needApprove}
         setRecheckApprove={setRecheckApprove}
@@ -315,6 +324,7 @@ const MatchQuestions = (props: MatchQuestionProps) => {
         updateBirdBalance={updateBirdBalance}
       />
       <OverUnderQuestion
+        account={account}
         dataQuestion={questions[4]}
         needApprove={needApprove}
         setRecheckApprove={setRecheckApprove}
@@ -323,7 +333,7 @@ const MatchQuestions = (props: MatchQuestionProps) => {
         error={predictConditions}
         birdBalance={birdBalance}
         updateBirdBalance={updateBirdBalance}
-      /> */}
+      />
     </div>
   );
 };
