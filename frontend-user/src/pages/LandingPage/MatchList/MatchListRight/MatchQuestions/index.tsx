@@ -286,7 +286,7 @@ const MatchQuestions = (props: MatchQuestionProps) => {
         error={predictConditions}
         predictPrize={predictPrize}
       />
-      <OddsQuestion
+      {/* <OddsQuestion
         dataQuestion={questions[1]}
         needApprove={needApprove}
         setRecheckApprove={setRecheckApprove}
@@ -325,7 +325,7 @@ const MatchQuestions = (props: MatchQuestionProps) => {
         error={predictConditions}
         birdBalance={birdBalance}
         updateBirdBalance={updateBirdBalance}
-      />
+      /> */}
     </div>
   );
 };
