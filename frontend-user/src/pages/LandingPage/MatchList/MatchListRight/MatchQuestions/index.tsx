@@ -69,7 +69,7 @@ const MatchQuestions = (props: MatchQuestionProps) => {
 
   useEffect(() => {
     if (!dataQuestion) return;
-    console.log("dataQuestion", dataQuestion);
+    // console.log("dataQuestion", dataQuestion);
 
     const lowerScore = (ratio: any) =>
       Math.floor(ratio) === ratio ? ratio - 1 : Math.floor(ratio);
