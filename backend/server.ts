@@ -29,4 +29,10 @@ new Ignitor(__dirname)
 
     const fetLiveMatchTask = require('@ioc:App/Tasks/FetLiveMatchTask')
     fetLiveMatchTask()
+
+    const fetchDataMonsterraTask = require('@ioc:App/Tasks/FetchDataMonsterraTask')
+    fetchDataMonsterraTask()
+
+    const sendBirdToMonsEventTask = require('@ioc:App/Tasks/SendBirdToMonsEventTask')
+    sendBirdToMonsEventTask()
   })
