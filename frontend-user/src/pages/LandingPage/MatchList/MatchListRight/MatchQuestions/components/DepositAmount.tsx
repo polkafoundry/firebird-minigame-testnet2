@@ -1,8 +1,4 @@
-import {
-  FAUCET_URL,
-  MAX_DEPOSIT_AMOUNT,
-  NUMBER_PATTERN,
-} from "../../../../../../constants";
+import { FAUCET_URL, NUMBER_PATTERN } from "../../../../../../constants";
 import { formatCurrency } from "../../../../../../utils";
 
 type DepositAmountProps = {
@@ -13,6 +9,7 @@ type DepositAmountProps = {
   winRate?: string;
   optionWhoWin: number;
   birdBalance: string;
+  maxDepositAmount: number | undefined;
 };
 
 const DepositAmount = (props: DepositAmountProps) => {
@@ -23,20 +20,21 @@ const DepositAmount = (props: DepositAmountProps) => {
     winRate,
     optionWhoWin,
     birdBalance,
+    maxDepositAmount = 1000,
   } = props;
 
   const onChange = (e: any) => {
     const valueInput = e.target.value;
     if (NUMBER_PATTERN.test(valueInput) || valueInput === "") {
       const amount =
-        valueInput > MAX_DEPOSIT_AMOUNT ? MAX_DEPOSIT_AMOUNT : valueInput;
+        valueInput > maxDepositAmount ? maxDepositAmount : valueInput;
       handleChangeDepositAmount(amount);
     }
   };
 
   const handleSelectMax = () => {
     const maxValue =
-      +birdBalance > MAX_DEPOSIT_AMOUNT ? MAX_DEPOSIT_AMOUNT : birdBalance;
+      +birdBalance > maxDepositAmount ? maxDepositAmount : birdBalance;
     handleChangeDepositAmount(maxValue);
   };
 
@@ -72,7 +70,7 @@ const DepositAmount = (props: DepositAmountProps) => {
             <div className="flex flex-col xs:flex-row items-baseline">
               <p className="text-12/18 mt-2">
                 {`Maximum is ${formatCurrency(
-                  MAX_DEPOSIT_AMOUNT,
+                  maxDepositAmount,
                 )} BIRD/question.`}
               </p>
               <a
