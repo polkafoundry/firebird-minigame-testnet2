@@ -53,7 +53,7 @@ class FetchLiveMatch {
 
 const fetchLivematchSchedule = async () => {
 	const job = new CronJob(
-		'0 */5 * * * *', // 5 minute
+		'0 0 * * * *', // 1 hour
 		function () {
 			new FetchLiveMatch().fetchLiveMatch()
 		}

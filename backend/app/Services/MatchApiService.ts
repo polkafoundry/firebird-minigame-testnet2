@@ -15,15 +15,15 @@ export default class MatchService {
                         method: 'get',
                         url,
                         timeout: 1000 * 10,  // 10 second
-                        proxy: {
-                            protocol: 'http',
-                            host: randProxy.split(':')[0],
-                            port: randProxy.split(':')[1]
-                        },
+                        // proxy: {
+                        //     protocol: 'http',
+                        //     host: randProxy.split(':')[0],
+                        //     port: randProxy.split(':')[1]
+                        // },
                         headers: {
                             'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36',
                             'authority': 'api.sofascore.com',
-                            'accept-encoding': 'gzip, deflate, br',
+                            // 'accept-encoding': 'gzip, deflate, br',
                             'accept-language': 'vi, en; q = 0.9',
                             'cache-control': 'max-age=0',
                             'if-none-match': `W/"afa5a590d8"`,
