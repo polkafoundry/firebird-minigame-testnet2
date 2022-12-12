@@ -150,7 +150,7 @@ const getLeaderboard = async (wallet_address) => {
       Const.MF_KEY.TENANT_ID
     }/dashboard/${currentTime.getTime()}?startTime=${'2022-11-20T00:00:00.000Z'}&endTime=${'2022-12-20T00:00:00.000Z'}&event=${
       Const.MF_KEY.EVENT_NAME
-    }&tenantId=${Const.MF_KEY.TENANT_ID}&sumBy=earned&limit=${5000}&offset=${0}&search=${''}` +
+    }&tenantId=${Const.MF_KEY.TENANT_ID}&sumBy=earned&limit=${1}&offset=${0}&search=${''}` +
       (wallet_address ? `&currentUserId=${wallet_address}` : ''),
     {
       headers: {
