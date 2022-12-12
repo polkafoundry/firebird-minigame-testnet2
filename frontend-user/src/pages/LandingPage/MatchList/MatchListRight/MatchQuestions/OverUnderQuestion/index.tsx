@@ -8,6 +8,7 @@ import useBetting from "../../../../../../hooks/useBetting";
 import useBettingContract from "../../../../../../hooks/useBettingContract";
 import useBirdToken from "../../../../../../hooks/useBirdToken";
 import useClaimToken from "../../../../../../hooks/useClaimToken";
+import { getBettingSignature } from "../../../../../../requests/getBettingSignature";
 import BorderBox from "../components/BorderBox";
 import DepositAmount from "../components/DepositAmount";
 import Question from "../components/Question";
@@ -30,15 +31,17 @@ const OverUnderQuestion = (props: QuestionProps) => {
     birdBalance = "0",
     updateBirdBalance,
     setRecheckApprove,
+    account,
   } = props;
 
   const [optionWhoWin, setOptionWhoWin] = useState<number>(0);
   const [depositAmount, setDepositAmount] = useState<string>("");
   const [dataQuestion, setDataQuestion] = useState<any>();
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
+  const [totalLoading, setTotalLoading] = useState<boolean>(false);
 
   const { approveBirdToken, loadingApprove } = useBirdToken();
-  const { betting, loadingBetting } = useBetting();
+  const { betting } = useBetting();
   const { loadingBetting: loadingBettingContract, getUserBetting } =
     useBettingContract();
   const { isClaimSuccess, loadingClaim, handleClaimToken } = useClaimToken(
@@ -150,12 +153,36 @@ const OverUnderQuestion = (props: QuestionProps) => {
       setRecheckApprove && setRecheckApprove((prev) => !prev);
     }
 
-    const bettingResult = await betting(_matchID, _amount, _betType, _betPlace);
-    if (!bettingResult) return;
+    setTotalLoading(true);
+    const _signature = await getBettingSignature({
+      ...dataSubmit,
+      _wallet: account,
+    });
+    if (!_signature) {
+      toast.error("Fail to submit answer: can not get signature");
+      setTotalLoading(false);
+      return;
+    }
+
+    const bettingResult = await betting(
+      _matchID,
+      _amount,
+      _betType,
+      _betPlace,
+      _signature,
+    );
+    if (!bettingResult) {
+      setTotalLoading(false);
+      return;
+    }
 
     // update result
     const res = await getUserBetting(_matchID, _betType);
-    if (!res) return;
+    if (!res) {
+      setTotalLoading(false);
+      return;
+    }
+
     const newDataQuestion = {
       ...dataQuestion,
       questionStatus: QUESTION_STATUS.PREDICTED,
@@ -164,6 +191,7 @@ const OverUnderQuestion = (props: QuestionProps) => {
     };
     setDataQuestion(newDataQuestion);
     setIsSubmitted(true);
+    setTotalLoading(false);
 
     updateBirdBalance();
   };
@@ -175,10 +203,7 @@ const OverUnderQuestion = (props: QuestionProps) => {
       isSubmitted={isSubmitted}
       matchLiveOrEnded={matchLiveOrEnded}
       loading={
-        loadingBettingContract ||
-        loadingApprove ||
-        loadingBetting ||
-        loadingClaim
+        loadingBettingContract || loadingApprove || totalLoading || loadingClaim
       }
       error={error}
     >
@@ -242,6 +267,7 @@ const OverUnderQuestion = (props: QuestionProps) => {
                 : 0
             }
             optionWhoWin={optionWhoWin}
+            maxDepositAmount={dataQuestion?.maxDepositAmount}
           />
         )}
         {isSubmitted && (

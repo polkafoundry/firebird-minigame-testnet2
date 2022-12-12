@@ -20,6 +20,7 @@ const useBetting = () => {
       _amount: string | undefined,
       _betType: string | undefined,
       _betPlace: string | undefined,
+      _signMessage: any,
     ) => {
       if (!BETTING_CONTRACT || !account) {
         toast.error("Fail to load contract or account is not connected");
@@ -41,6 +42,7 @@ const useBetting = () => {
             _amount,
             _betType,
             _betPlace,
+            _signMessage,
           );
           setTransactionHash(transaction?.hash);
           await transaction.wait(1);
