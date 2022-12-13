@@ -80,7 +80,7 @@ export default class MatchService {
     match = JSON.parse(JSON.stringify(match))
     //update bet count
     let count = await this.BetCountModel.query()
-      .where('match_id', id)
+      .where('match_id', match.match_id)
       .where('user_address', wallet_address)
       .first()
 
@@ -88,15 +88,15 @@ export default class MatchService {
       let betCount = await this.Database.from('bettings')
         .count('* as total')
         .where('user_address', wallet_address)
-        .where('match_id', id)
+        .where('match_id', match.match_id)
       let predictCount = await this.Database.from('predicts')
         .count('*  as total')
         .where('user_address', wallet_address)
-        .where('match_id', id)
+        .where('match_id', match.match_id)
       let total = betCount[0].total + predictCount[0].total
       await this.BetCountModel.updateOrCreate(
-        { user_address: wallet_address, match_id: id },
-        { user_address: wallet_address, match_id: id, bet_count: total }
+        { user_address: wallet_address, match_id: match.match_id },
+        { user_address: wallet_address, match_id: match.match_id, bet_count: total }
       )
     }
 
