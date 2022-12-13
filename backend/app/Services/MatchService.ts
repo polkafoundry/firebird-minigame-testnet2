@@ -127,7 +127,7 @@ export default class MatchService {
       .preload('predicts', (query) => {
         query.where('user_address', params.wallet_address || null)
       })
-      .leftOuteupdarJoin('bet_counts', (query) => {
+      .leftOuterJoin('bet_counts', (query) => {
         query
           .on('matchs.match_id', '=', 'bet_counts.match_id')
           .andOnVal('user_address', params.wallet_address || null)
