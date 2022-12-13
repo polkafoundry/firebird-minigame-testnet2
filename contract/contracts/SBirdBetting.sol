@@ -34,6 +34,10 @@ contract SBirdBetting is
         keccak256(
             "TokenClaim(string caller,uint16 matchID,string betType,uint256 amount,uint256 nonce,uint256 deadline)"
         );
+    bytes32 public constant BETTING_WITH_SIG_TYPEHASH =
+        keccak256(
+            "UserBetting(string caller,uint16 matchID,string betType,string betPlace,uint256 amount,uint256 nonce,uint256 deadline)"
+        );
     uint256 private spacerTime;
     uint256 public maxBetAmount;
     address public fundWallet;
@@ -58,6 +62,8 @@ contract SBirdBetting is
 
     mapping(address => uint256) public TokenClaimTimeStamp;
     mapping(address => uint256) public TokenClaimNonces;
+    mapping(address => uint256) public UserBettingTimeStamp;
+    mapping(address => uint256) public UserBettingNonces;
 
     function __SBirdBetting_init(address _token, address _fundWallet)
         public
@@ -131,7 +137,8 @@ contract SBirdBetting is
         uint16 _matchID,
         uint256 _amount,
         string memory _betType,
-        string memory _betPlace
+        string memory _betPlace,
+        EIP712Signature calldata _signature
     ) external virtual nonReentrant {
         require(BETTING_TOKEN_ADDRESS != address(0), "Rewards token not set");
         require(maxBetAmount != 0, "Max amount not set");
@@ -139,13 +146,53 @@ contract SBirdBetting is
             userBettingInMatch[msg.sender][_matchID][_betType].amount == 0,
             "You were predict in this bet"
         );
-        require(_amount <= maxBetAmount, "Exceed amount in pool");
+        require(
+            _signature.deadline == 0 || _signature.deadline >= block.timestamp,
+            "Signature expired"
+        );
+        require(
+            (UserBettingTimeStamp[msg.sender] + spacerTime) <= block.timestamp,
+            "Claim within spacer time"
+        );
+
         MatchData storage mData = matchByID[_matchID];
         require(
             block.timestamp < mData.mInf.startTime,
             "Can predict before match start"
         );
 
+        bytes32 domainSeparator = _calculateDomainSeparator();
+        bytes32 digest = keccak256(
+            abi.encodePacked(
+                "\x19\x01",
+                domainSeparator,
+                keccak256(
+                    abi.encode(
+                        BETTING_WITH_SIG_TYPEHASH,
+                        keccak256(
+                            abi.encodePacked(
+                                Strings.toHexString(uint160(msg.sender), 20)
+                            )
+                        ),
+                        _matchID,
+                        keccak256(abi.encodePacked(_betType)),
+                        keccak256(abi.encodePacked(_betPlace)),
+                        _amount,
+                        UserBettingNonces[msg.sender]++,
+                        _signature.deadline
+                    )
+                )
+            )
+        );
+
+        address recoveredAddress = ecrecover(
+            digest,
+            _signature.v,
+            _signature.r,
+            _signature.s
+        );
+
+        require(recoveredAddress == signer, "Signature invalid");
         userBettingInMatch[msg.sender][_matchID][_betType] = UserBetDetail(
             _amount,
             _betPlace,
