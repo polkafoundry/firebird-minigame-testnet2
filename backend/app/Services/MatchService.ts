@@ -79,19 +79,26 @@ export default class MatchService {
       .first()
     match = JSON.parse(JSON.stringify(match))
     //update bet count
-    let betCount = await this.Database.from('bettings')
-      .count('* as total')
-      .where('user_address', wallet_address)
+    let count = await this.BetCountModel.query()
       .where('match_id', id)
-    let predictCount = await this.Database.from('predicts')
-      .count('*  as total')
       .where('user_address', wallet_address)
-      .where('match_id', id)
-    let total = betCount[0].total + predictCount[0].total
-    await this.BetCountModel.updateOrCreate(
-      { user_address: wallet_address, match_id: id },
-      { user_address: wallet_address, match_id: id, bet_count: total }
-    )
+      .first()
+
+    if (count && count?.bet_count < 5) {
+      let betCount = await this.Database.from('bettings')
+        .count('* as total')
+        .where('user_address', wallet_address)
+        .where('match_id', id)
+      let predictCount = await this.Database.from('predicts')
+        .count('*  as total')
+        .where('user_address', wallet_address)
+        .where('match_id', id)
+      let total = betCount[0].total + predictCount[0].total
+      await this.BetCountModel.updateOrCreate(
+        { user_address: wallet_address, match_id: id },
+        { user_address: wallet_address, match_id: id, bet_count: total }
+      )
+    }
 
     //get user rank
     const maxValue = await HelperUtils.getLeaderboard(wallet_address)
@@ -120,7 +127,7 @@ export default class MatchService {
       .preload('predicts', (query) => {
         query.where('user_address', params.wallet_address || null)
       })
-      .leftOuterJoin('bet_counts', (query) => {
+      .leftOuteupdarJoin('bet_counts', (query) => {
         query
           .on('matchs.match_id', '=', 'bet_counts.match_id')
           .andOnVal('user_address', params.wallet_address || null)

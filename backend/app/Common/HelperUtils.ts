@@ -159,6 +159,7 @@ const generateRandomCode = () => {
 
 const getLeaderboard = async (wallet_address) => {
   const currentTime = new Date()
+  let wallet = Web3.utils.toChecksumAddress(wallet_address)
   const token = getMFToken(
     `${currentTime.getTime()}${Const.MF_KEY.TENANT_ID}${Const.MF_KEY.SECRET_KEY}`
   )
@@ -168,27 +169,32 @@ const getLeaderboard = async (wallet_address) => {
     }/dashboard/${currentTime.getTime()}?startTime=${'2022-11-20T00:00:00.000Z'}&endTime=${'2022-12-20T00:00:00.000Z'}&event=${
       Const.MF_KEY.EVENT_NAME
     }&tenantId=${Const.MF_KEY.TENANT_ID}&sumBy=earned&limit=${1}&offset=${0}&search=${''}` +
-      (wallet_address ? `&currentUserId=${wallet_address}` : ''),
+      (wallet ? `&currentUserId=${wallet}` : ''),
     {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     }
   )
-  let position = res?.data?.position || 0
-  if (position === 0) {
-    return 10000
-  } else if (position <= 10) {
-    return 3000
-  } else if (position <= 20) {
-    return 4000
-  } else if (position <= 30) {
-    return 5000
-  } else if (position <= 50) {
-    return 7000
-  } else {
-    return 10000
+
+  if (res?.status === 200) {
+    let position = res?.data?.position
+    if (position === 0) {
+      return 10000
+    } else if (position <= 10) {
+      return 3000
+    } else if (position <= 20) {
+      return 4000
+    } else if (position <= 30) {
+      return 5000
+    } else if (position <= 50) {
+      return 7000
+    } else if (position > 50) {
+      return 10000
+    }
+    return 0
   }
+  return 0
 }
 
 const signUserBetting = async (
