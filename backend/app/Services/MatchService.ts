@@ -84,7 +84,7 @@ export default class MatchService {
       .where('user_address', wallet_address)
       .first()
 
-    if (count && count?.bet_count < 5) {
+    if (!count || count?.bet_count < 5) {
       let betCount = await this.Database.from('bettings')
         .count('* as total')
         .where('user_address', wallet_address)
