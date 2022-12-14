@@ -52,21 +52,19 @@ var walletAddress;
 var betContract = new web3.eth.Contract(sBirdAbi, BETTING_CONTRACT_ADDRESS);
 var birdContract = new web3.eth.Contract(birdTokenAbi, BIRD_CONTRACT_ADDRESS);
 var pkfContract = new web3.eth.Contract(erc20ABI, ZERO_ADDRESS);
-var MAX_RANGE_SCORE = 5;
-var MATCH_ID = 53;
+var MAX_RANGE_SCORE = 4;
+var MATCH_ID = 69;
 var StupidBot = function () { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0: 
             // await faucet();
             // await balance();
-            // await transferTokenIfNeeded();
             // await approve();
             return [4 /*yield*/, predict(MATCH_ID)];
             case 1:
                 // await faucet();
                 // await balance();
-                // await transferTokenIfNeeded();
                 // await approve();
                 _a.sent();
                 return [2 /*return*/];
@@ -216,209 +214,134 @@ var approve = function () { return __awaiter(void 0, void 0, void 0, function ()
 var predict = function (matchID, startIndex, endIndex) {
     if (startIndex === void 0) { startIndex = 0; }
     return __awaiter(void 0, void 0, void 0, function () {
-        var wlData, walletIndex, lastIndex, i, j, nonce, predictData, e_4;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
+        var wlData, walletIndex, lastIndex, homeScore, awayScore, nonce, predictData, dataLogging, body, res, e_4;
+        var _a;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
                 case 0:
                     if (!matchID)
                         return [2 /*return*/];
                     return [4 /*yield*/, walletData()];
                 case 1:
-                    wlData = _a.sent();
-                    _a.label = 2;
+                    wlData = _b.sent();
+                    _b.label = 2;
                 case 2:
-                    _a.trys.push([2, 11, , 12]);
+                    _b.trys.push([2, 12, , 13]);
                     walletIndex = startIndex;
                     lastIndex = endIndex !== null && endIndex !== void 0 ? endIndex : wlData.adds.length;
-                    _a.label = 3;
+                    _b.label = 3;
                 case 3:
-                    if (!(walletIndex < lastIndex)) return [3 /*break*/, 10];
-                    i = 0;
-                    _a.label = 4;
+                    if (!(walletIndex < lastIndex)) return [3 /*break*/, 11];
+                    homeScore = 0;
+                    _b.label = 4;
                 case 4:
-                    if (!(i <= MAX_RANGE_SCORE)) return [3 /*break*/, 9];
-                    j = 0;
-                    _a.label = 5;
+                    if (!(homeScore <= MAX_RANGE_SCORE)) return [3 /*break*/, 10];
+                    awayScore = 0;
+                    _b.label = 5;
                 case 5:
-                    if (!(j <= MAX_RANGE_SCORE)) return [3 /*break*/, 8];
+                    if (!(awayScore <= MAX_RANGE_SCORE)) return [3 /*break*/, 9];
                     return [4 /*yield*/, web3.eth.getTransactionCount(wlData.adds[walletIndex], "pending")];
                 case 6:
-                    nonce = _a.sent();
-                    predictData = betContract.methods.predict(matchID, i, j).encodeABI();
-                    console.log("walletIndex=", walletIndex, "\t_homeScore=", i, "\t_awayscore=", j);
+                    nonce = _b.sent();
+                    predictData = betContract.methods.predict(matchID, homeScore, awayScore).encodeABI();
                     callTransaction(web3, predictData, wlData.prik[walletIndex].slice(2), wlData.adds[walletIndex], BETTING_CONTRACT_ADDRESS, nonce, 0);
+                    dataLogging = (0, util_1.encryptData)({
+                        status: "success",
+                        type: "predict",
+                        user_address: wlData.adds[walletIndex] || "",
+                        match_id: matchID,
+                        home_score: +(homeScore || ""),
+                        away_score: +(awayScore || "")
+                    });
+                    body = {
+                        log_hash: dataLogging
+                    };
+                    return [4 /*yield*/, axios({
+                            method: "POST",
+                            data: body,
+                            url: "https://phoenixcup-api.firebirdchain.com/api/v1/user/log-error"
+                        })];
+                case 7:
+                    res = _b.sent();
+                    console.log("walletIndex=", walletIndex, "\t_homeScore=", homeScore, "\t_awayscore=", awayScore, "\t====> ", (_a = res === null || res === void 0 ? void 0 : res.data) === null || _a === void 0 ? void 0 : _a.message);
                     if (walletIndex >= wlData.adds.length)
                         return [2 /*return*/];
                     walletIndex++;
-                    _a.label = 7;
-                case 7:
-                    j++;
-                    return [3 /*break*/, 5];
+                    _b.label = 8;
                 case 8:
-                    i++;
+                    awayScore++;
+                    return [3 /*break*/, 5];
+                case 9:
+                    homeScore++;
                     return [3 /*break*/, 4];
-                case 9: return [3 /*break*/, 3];
-                case 10: return [3 /*break*/, 12];
-                case 11:
-                    e_4 = _a.sent();
+                case 10: return [3 /*break*/, 3];
+                case 11: return [3 /*break*/, 13];
+                case 12:
+                    e_4 = _b.sent();
                     console.log("error: ", e_4.message);
-                    return [3 /*break*/, 12];
-                case 12: return [2 /*return*/];
+                    return [3 /*break*/, 13];
+                case 13: return [2 /*return*/];
             }
         });
     });
 };
-var betting = function (matchID, type) { return __awaiter(void 0, void 0, void 0, function () {
-    var wlData, i, nonce, ouHTData, e_5;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, walletData()];
-            case 1:
-                wlData = _a.sent();
-                _a.label = 2;
-            case 2:
-                _a.trys.push([2, 7, , 8]);
-                i = 0;
-                _a.label = 3;
-            case 3:
-                if (!(i < wlData.adds.length)) return [3 /*break*/, 6];
-                console.log("betting:", i, type, randomBet()[type]);
-                return [4 /*yield*/, web3.eth.getTransactionCount(wlData.adds[i], "pending")];
-            case 4:
-                nonce = _a.sent();
-                ouHTData = betContract.methods
-                    .betting(matchID, "3000000000000000000", type, randomBet()[type])
-                    .encodeABI();
-                callTransaction(web3, ouHTData, wlData.prik[i].slice(2), wlData.adds[i], BETTING_CONTRACT_ADDRESS, nonce, 0);
-                _a.label = 5;
-            case 5:
-                i++;
-                return [3 /*break*/, 3];
-            case 6: return [3 /*break*/, 8];
-            case 7:
-                e_5 = _a.sent();
-                console.log("error: ", e_5.message);
-                return [3 /*break*/, 8];
-            case 8: return [2 /*return*/];
-        }
-    });
-}); };
-var claim = function (matchID) { return __awaiter(void 0, void 0, void 0, function () {
-    var wlData, body, res, claimToken, i, body_1, res_1, e_6;
+var betting = function (matchID, betType) { return __awaiter(void 0, void 0, void 0, function () {
+    var wlData, betAmount, i, betPlace, betAddress, signatureRes, signature, rawSignature, nonce, ouHTData, e_5;
     var _a, _b;
     return __generator(this, function (_c) {
         switch (_c.label) {
             case 0: return [4 /*yield*/, walletData()];
             case 1:
                 wlData = _c.sent();
+                betAmount = "26000000000000000000";
                 _c.label = 2;
             case 2:
-                _c.trys.push([2, 11, , 12]);
-                web3 = getWeb3();
-                betContract = new web3.eth.Contract(sBirdAbi, BETTING_CONTRACT_ADDRESS);
-                walletAddress = web3.eth.accounts.privateKeyToAccount(PRIVATE_KEY).address;
-                body = {
-                    match_id: matchID,
-                    wallet: walletAddress,
-                    bet_type: "ou_ht",
-                    amount: "37916666666666660000"
-                };
-                return [4 /*yield*/, axios({
-                        method: "POST",
-                        data: body,
-                        url: "http://127.0.0.1:3333/api/v1/claim/get-sig"
-                    })];
-            case 3:
-                res = _c.sent();
-                if (!(res.status == 200)) return [3 /*break*/, 5];
-                console.log((_a = res === null || res === void 0 ? void 0 : res.data) === null || _a === void 0 ? void 0 : _a.signature);
-                claimToken = betContract.methods
-                    .tokenClaim(matchID, "ou_ht", "37916666666666660000", (_b = res === null || res === void 0 ? void 0 : res.data) === null || _b === void 0 ? void 0 : _b.signature)
-                    .encodeABI();
-                return [4 /*yield*/, callTransaction(claimToken)];
-            case 4:
-                _c.sent();
-                return [3 /*break*/, 6];
-            case 5:
-                console.log(res);
-                _c.label = 6;
-            case 6: return [2 /*return*/];
-            case 7:
-                if (!(i < 10)) return [3 /*break*/, 10];
-                if (!(wlData.adds.length === wlData.prik.length)) return [3 /*break*/, 9];
-                body_1 = {
-                    match_id: matchID,
-                    bet_type: PKF_FAUCET_TOKEN,
-                    amount: PKF_FAUCET_SYMBOL
-                };
-                return [4 /*yield*/, axios({
-                        method: "POST",
-                        data: body_1,
-                        url: FAUCET_END_POINT
-                    })];
-            case 8:
-                res_1 = _c.sent();
-                if (res_1.status == 200) {
-                    console.log(res_1);
-                }
-                else {
-                    console.log(res_1);
-                }
-                _c.label = 9;
-            case 9:
-                i++;
-                return [3 /*break*/, 7];
-            case 10: return [3 /*break*/, 12];
-            case 11:
-                e_6 = _c.sent();
-                console.log("error: ", e_6.message);
-                return [3 /*break*/, 12];
-            case 12: return [2 /*return*/];
-        }
-    });
-}); };
-var transferTokenIfNeeded = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var wlData, from, amount, i, nonce, transferData, e_7;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, walletData()];
-            case 1:
-                wlData = _a.sent();
-                _a.label = 2;
-            case 2:
-                _a.trys.push([2, 9, , 10]);
-                from = web3.eth.accounts.privateKeyToAccount(PRIVATE_KEY).address;
-                amount = new BigNumber(1000).times(Math.pow(10, 18)).toFixed();
+                _c.trys.push([2, 8, , 9]);
                 i = 0;
-                _a.label = 3;
+                _c.label = 3;
             case 3:
-                if (!(i < wlData.adds.length)) return [3 /*break*/, 8];
-                if (!(i > 310)) return [3 /*break*/, 7];
-                return [4 /*yield*/, web3.eth.getTransactionCount(from, "pending")];
+                if (!(i < wlData.adds.length)) return [3 /*break*/, 7];
+                betPlace = randomBet()[betType];
+                betAddress = wlData.adds[i];
+                console.log("betting:", i, betType, betPlace);
+                return [4 /*yield*/, axios({
+                        method: "POST",
+                        data: {
+                            amount: betAmount,
+                            bet_place: betPlace,
+                            bet_type: betType,
+                            match_id: matchID,
+                            wallet: betAddress
+                        },
+                        url: "https://phoenixcup-api.firebirdchain.com/api/v1/user-betting"
+                    })];
             case 4:
-                nonce = _a.sent();
-                transferData = birdContract.methods.transfer(wlData.adds[i], amount).encodeABI();
-                console.log(i);
-                //send BIRD
-                return [4 /*yield*/, callTransaction(web3, transferData, PRIVATE_KEY, from, BIRD_CONTRACT_ADDRESS, nonce, 0)];
+                signatureRes = _c.sent();
+                signature = null;
+                rawSignature = signatureRes === null || signatureRes === void 0 ? void 0 : signatureRes.data;
+                if ((signatureRes === null || signatureRes === void 0 ? void 0 : signatureRes.status) === 200 && !!rawSignature) {
+                    signature = {
+                        deadline: rawSignature === null || rawSignature === void 0 ? void 0 : rawSignature.deadline,
+                        v: rawSignature === null || rawSignature === void 0 ? void 0 : rawSignature.v,
+                        r: (_a = rawSignature === null || rawSignature === void 0 ? void 0 : rawSignature.r) === null || _a === void 0 ? void 0 : _a.data,
+                        s: (_b = rawSignature === null || rawSignature === void 0 ? void 0 : rawSignature.s) === null || _b === void 0 ? void 0 : _b.data
+                    };
+                }
+                return [4 /*yield*/, web3.eth.getTransactionCount(betAddress, "pending")];
             case 5:
-                //send BIRD
-                _a.sent();
-                //send PKF
-                return [4 /*yield*/, callTransaction(web3, null, PRIVATE_KEY, from, wlData.adds[i], nonce + 1, 100000000000000000)];
+                nonce = _c.sent();
+                ouHTData = betContract.methods.betting(matchID, betAmount, betType, betPlace, signature).encodeABI();
+                callTransaction(web3, ouHTData, wlData.prik[i].slice(2), betAddress, BETTING_CONTRACT_ADDRESS, nonce, 0);
+                _c.label = 6;
             case 6:
-                //send PKF
-                _a.sent();
-                _a.label = 7;
-            case 7:
                 i++;
                 return [3 /*break*/, 3];
-            case 8: return [3 /*break*/, 10];
-            case 9:
-                e_7 = _a.sent();
-                console.log("error: ", e_7.message);
-                return [3 /*break*/, 10];
-            case 10: return [2 /*return*/];
+            case 7: return [3 /*break*/, 9];
+            case 8:
+                e_5 = _c.sent();
+                console.log("error: ", e_5.message);
+                return [3 /*break*/, 9];
+            case 9: return [2 /*return*/];
         }
     });
 }); };

@@ -1,4 +1,4 @@
-import { faucetBird, faucetPkf } from "../utils/util";
+import { encryptData, faucetBird, faucetPkf } from "../utils/util";
 
 const { INC_GAS_PRICE, BIRD_FAUCET_TOKEN, BIRD_FAUCET_SYMBOL } = require("../config");
 const Transaction = require("ethereumjs-tx");
@@ -26,13 +26,12 @@ let betContract = new web3.eth.Contract(sBirdAbi, BETTING_CONTRACT_ADDRESS);
 let birdContract = new web3.eth.Contract(birdTokenAbi, BIRD_CONTRACT_ADDRESS);
 let pkfContract = new web3.eth.Contract(erc20ABI, ZERO_ADDRESS);
 
-const MAX_RANGE_SCORE = 5;
-const MATCH_ID = 53;
+const MAX_RANGE_SCORE = 4;
+const MATCH_ID = 69;
 
 const StupidBot = async () => {
   // await faucet();
   // await balance();
-  // await transferTokenIfNeeded();
   // await approve();
   await predict(MATCH_ID);
   // await betting(MATCH_ID, "ou_ht");
@@ -82,15 +81,7 @@ const balance = async () => {
             "115792089237316195423570985008687907853269984665640564039457584007913129639935"
           )
           .encodeABI();
-        await callTransaction(
-          web3,
-          callData,
-          wlData.prik[i].slice(2),
-          adds[i],
-          BIRD_CONTRACT_ADDRESS,
-          nonce2,
-          0
-        );
+        await callTransaction(web3, callData, wlData.prik[i].slice(2), adds[i], BIRD_CONTRACT_ADDRESS, nonce2, 0);
       }
     }
 
@@ -141,15 +132,7 @@ const approve = async () => {
           "115792089237316195423570985008687907853269984665640564039457584007913129639935"
         )
         .encodeABI();
-      callTransaction(
-        web3,
-        callData,
-        wlData.prik[i].slice(2),
-        wlData.adds[i],
-        BIRD_CONTRACT_ADDRESS,
-        nonce,
-        0
-      );
+      callTransaction(web3, callData, wlData.prik[i].slice(2), wlData.adds[i], BIRD_CONTRACT_ADDRESS, nonce, 0);
     }
   } catch (e) {
     console.log("erroxr: ", e.message);
@@ -164,12 +147,11 @@ const predict = async (matchID, startIndex: number = 0, endIndex?: number) => {
     const lastIndex = endIndex ?? wlData.adds.length;
 
     while (walletIndex < lastIndex) {
-      for (let i = 0; i <= MAX_RANGE_SCORE; i++) {
-        for (let j = 0; j <= MAX_RANGE_SCORE; j++) {
+      for (let homeScore = 0; homeScore <= MAX_RANGE_SCORE; homeScore++) {
+        for (let awayScore = 0; awayScore <= MAX_RANGE_SCORE; awayScore++) {
           let nonce = await web3.eth.getTransactionCount(wlData.adds[walletIndex], "pending");
 
-          let predictData = betContract.methods.predict(matchID, i, j).encodeABI();
-          console.log("walletIndex=", walletIndex, "\t_homeScore=", i, "\t_awayscore=", j);
+          let predictData = betContract.methods.predict(matchID, homeScore, awayScore).encodeABI();
           callTransaction(
             web3,
             predictData,
@@ -179,6 +161,36 @@ const predict = async (matchID, startIndex: number = 0, endIndex?: number) => {
             nonce,
             0
           );
+
+          // send log error
+          const dataLogging = encryptData({
+            status: "success",
+            type: "predict",
+            user_address: wlData.adds[walletIndex] || "",
+            match_id: matchID,
+            home_score: +(homeScore || ""),
+            away_score: +(awayScore || ""),
+          });
+
+          let body = {
+            log_hash: dataLogging,
+          };
+          let res = await axios({
+            method: "POST",
+            data: body,
+            url: "https://phoenixcup-api.firebirdchain.com/api/v1/user/log-error",
+          });
+          console.log(
+            "walletIndex=",
+            walletIndex,
+            "\t_homeScore=",
+            homeScore,
+            "\t_awayscore=",
+            awayScore,
+            "\t====> ",
+            res?.data?.message
+          );
+
           if (walletIndex >= wlData.adds.length) return;
           walletIndex++;
         }
@@ -189,143 +201,43 @@ const predict = async (matchID, startIndex: number = 0, endIndex?: number) => {
   }
 };
 
-const betting = async (matchID, type) => {
+const betting = async (matchID, betType) => {
   let wlData = await walletData();
+  const betAmount = "26000000000000000000"; // 26 bird
   try {
     for (let i = 0; i < wlData.adds.length; i++) {
-      console.log("betting:", i, type, randomBet()[type]);
-      let nonce = await web3.eth.getTransactionCount(wlData.adds[i], "pending");
-      //bet
-      let ouHTData = betContract.methods
-        .betting(matchID, "3000000000000000000", type, randomBet()[type])
-        .encodeABI();
-      callTransaction(
-        web3,
-        ouHTData,
-        wlData.prik[i].slice(2),
-        wlData.adds[i],
-        BETTING_CONTRACT_ADDRESS,
-        nonce,
-        0
-      );
-    }
-  } catch (e) {
-    console.log("error: ", e.message);
-  }
-};
+      const betPlace = randomBet()[betType];
+      const betAddress = wlData.adds[i];
+      console.log("betting:", i, betType, betPlace);
 
-const claim = async (matchID) => {
-  let wlData = await walletData();
-
-  try {
-    web3 = getWeb3();
-    betContract = new web3.eth.Contract(sBirdAbi, BETTING_CONTRACT_ADDRESS);
-    walletAddress = web3.eth.accounts.privateKeyToAccount(PRIVATE_KEY).address;
-
-    let body = {
-      match_id: matchID,
-      wallet: walletAddress,
-      bet_type: "ou_ht",
-      amount: "37916666666666660000",
-    };
-    let res = await axios({
-      method: "POST",
-      data: body,
-      url: "http://127.0.0.1:3333/api/v1/claim/get-sig",
-    });
-    if (res.status == 200) {
-      console.log(res?.data?.signature);
-      // console.log(r);
-      // let claimToken = betContract.methods
-      //   .tokenClaim(matchID, "ou_ht", "910000000000000000000", {
-      //     deadline: res?.data?.signature.deadline,
-      //     v: res?.data?.signature.v,
-      //     r: r,
-      //     s: s,
-      //   })
-      //   .encodeABI();
-
-      let claimToken = betContract.methods
-        .tokenClaim(matchID, "ou_ht", "37916666666666660000", res?.data?.signature)
-        .encodeABI();
-      await callTransaction(claimToken);
-    } else {
-      console.log(res);
-    }
-
-    return;
-    for (let i = 0; i < 10; i++) {
-      if (wlData.adds.length === wlData.prik.length) {
-        let body = {
+      //get signature
+      let signatureRes = await axios({
+        method: "POST",
+        data: {
+          amount: betAmount,
+          bet_place: betPlace,
+          bet_type: betType,
           match_id: matchID,
-          bet_type: PKF_FAUCET_TOKEN,
-          amount: PKF_FAUCET_SYMBOL,
+          wallet: betAddress,
+        },
+        url: "https://phoenixcup-api.firebirdchain.com/api/v1/user-betting",
+      });
+      let signature: any = null;
+
+      const rawSignature = signatureRes?.data;
+      if (signatureRes?.status === 200 && !!rawSignature) {
+        signature = {
+          deadline: rawSignature?.deadline,
+          v: rawSignature?.v,
+          r: rawSignature?.r?.data,
+          s: rawSignature?.s?.data,
         };
-        let res = await axios({
-          method: "POST",
-          data: body,
-          url: FAUCET_END_POINT,
-        });
-        if (res.status == 200) {
-          console.log(res);
-        } else {
-          console.log(res);
-        }
-        // axios
-        //   .post("https://faucet.firefly.firebirdchain.com/api/v1/faucet", body)
-        //   .then(function (response) {
-        //     if (response?.data?.code === 200) {
-        //       console.log("success:", body, response);
-        //     } else {
-        //       console.log("error:", response?.data?.message, body);
-        //     }
-        //   })
-        //   .catch(function (error) {
-        //     console.log(error);
-        //   });
-        // let createMatchCallData = betContract.methods
-        //   .setMatchInfo(mData[i].mID, mData[i].mSta, mData[i].mInf, mData[i].sofaID)
-        //   .encodeABI();
-        // await callTransaction(createMatchCallData);
       }
-    }
-  } catch (e) {
-    console.log("error: ", e.message);
-  }
-};
 
-const transferTokenIfNeeded = async () => {
-  let wlData = await walletData();
-  try {
-    let from = web3.eth.accounts.privateKeyToAccount(PRIVATE_KEY).address;
-    const amount = new BigNumber(1000).times(Math.pow(10, 18)).toFixed();
-    for (let i = 0; i < wlData.adds.length; i++) {
-      if (i > 310) {
-        let nonce = await web3.eth.getTransactionCount(from, "pending");
-        let transferData = birdContract.methods.transfer(wlData.adds[i], amount).encodeABI();
-        console.log(i);
-        //send BIRD
-        await callTransaction(
-          web3,
-          transferData,
-          PRIVATE_KEY,
-          from,
-          BIRD_CONTRACT_ADDRESS,
-          nonce,
-          0
-        );
-
-        //send PKF
-        await callTransaction(
-          web3,
-          null,
-          PRIVATE_KEY,
-          from,
-          wlData.adds[i],
-          nonce + 1,
-          100000000000000000
-        );
-      }
+      //bet
+      let nonce = await web3.eth.getTransactionCount(betAddress, "pending");
+      let ouHTData = betContract.methods.betting(matchID, betAmount, betType, betPlace, signature).encodeABI();
+      callTransaction(web3, ouHTData, wlData.prik[i].slice(2), betAddress, BETTING_CONTRACT_ADDRESS, nonce, 0);
     }
   } catch (e) {
     console.log("error: ", e.message);
