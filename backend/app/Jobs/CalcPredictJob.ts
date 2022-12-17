@@ -52,6 +52,7 @@ export default class CalcPredictJob implements JobContract {
       }
       //get user log
       let logUser = await Database.from('user_logs')
+        .where('type', 'predicting')
         .select('user_address')
         .count('* as total')
         .groupBy('user_address')
