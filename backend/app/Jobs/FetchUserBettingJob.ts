@@ -92,7 +92,7 @@ export default class FetchUserBettingInfoJob implements JobContract {
         fromBlock: from,
         toBlock: to,
       })
-      console.log(from, to, event_type, events.length)
+
       let searchPayload =
         event_type === USER_BETTING
           ? ['user_address', 'match_id', 'bet_type']
@@ -163,7 +163,7 @@ export default class FetchUserBettingInfoJob implements JobContract {
         }
       }
       if (event_type === USER_BETTING) {
-        await BettingModel.fetchOrCreateMany(searchPayload, payloads)
+        await BettingModel.updateOrCreateMany(searchPayload, payloads)
       } else if (event_type === USER_PREDICT) {
         await PredictModel.updateOrCreateMany(searchPayload, payloads)
       } else if (event_type === USER_CLAIM) {
