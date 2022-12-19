@@ -92,6 +92,7 @@ export default class FetchUserBettingInfoJob implements JobContract {
         fromBlock: from,
         toBlock: to,
       })
+      console.log(from, to, event_type, events.length)
       let searchPayload =
         event_type === USER_BETTING
           ? ['user_address', 'match_id', 'bet_type']
